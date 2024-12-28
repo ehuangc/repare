@@ -19,7 +19,7 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     logging_level = logging.INFO if args.verbose else logging.WARNING
-    logging.basicConfig(level=logging_level, format="%(asctime)s - %(levelname)s - %(message)s")
+    logging.basicConfig(level=logging_level, format="%(levelname)s - %(message)s")
 
     output_dir = args.output
     if not os.path.exists(output_dir):
