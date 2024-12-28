@@ -1,0 +1,15 @@
+[project]
+name = "pedigree_package"
+version = "0.0.1"
+dependencies = [
+    "pandas",
+    "networkx",
+    "tqdm",
+    "matplotlib",
+]
+
+[project.scripts]
+trees = "pedigree_package.main:main"
+
+[tool.setuptools.packages.find]
+where = "src"
