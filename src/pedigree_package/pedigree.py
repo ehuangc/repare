@@ -372,29 +372,29 @@ class Pedigree:
                 return False
         return True
 
-    def count_inconsistencies(self, constraints_dict: defaultdict[tuple[str, str], list[tuple[str, ...]]], relations_so_far_dict: defaultdict[tuple[str, str], list[tuple[str, str]]], check_half_siblings: bool) -> tuple[int, list[tuple[str, str, str]]]:
+    def count_inconsistencies(self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]], relations_so_far_dict: defaultdict[tuple[str, str], list[tuple[str, str]]], check_half_siblings: bool) -> tuple[int, list[tuple[str, str, str]]]:
         """
         Validates this tree based on the input relations data.
         If check_half_siblings is False, don't check for extraneous half-sibling relations because the 2 non-shared parents might be merged later.
         Returns count of inconsistencies with the input data as well as a log of the inconsistencies.
-        Note: constraints_dict values must be sorted by increasing length so that specific constraints are checked first.
+        Note: pair_to_constraints values must be sorted by increasing length so that specific constraints are checked first.
         """
-        for (node1, node2) in constraints_dict:
-            assert (node2, node1) not in constraints_dict  # Ensure no duplicate/symmetric entries
-        constraints_dict_seen_entries: defaultdict[tuple[str, str], set[int]] = defaultdict(set)  # Marks which entries in constraints_dict have been seen/used
+        for (node1, node2) in pair_to_constraints:
+            assert (node2, node1) not in pair_to_constraints  # Ensure no duplicate/symmetric entries
+        pair_to_constraints_seen_entries: defaultdict[tuple[str, str], set[int]] = defaultdict(set)  # Marks which entries in pair_to_constraints have been seen/used
 
         def is_relation_in_input_data(node1: str, node2: str, relation: str) -> bool:
-            if (node1, node2) in constraints_dict:
-                for idx, constraints in enumerate(constraints_dict[(node1, node2)]):
-                    if idx not in constraints_dict_seen_entries[(node1, node2)] and relation in constraints:
+            if (node1, node2) in pair_to_constraints:
+                for idx, constraints in enumerate(pair_to_constraints[(node1, node2)]):
+                    if idx not in pair_to_constraints_seen_entries[(node1, node2)] and relation in constraints:
                         return True
             return False
 
         def remove_relation_from_input_data(node1: str, node2: str, relation: str) -> None:
-            if (node1, node2) in constraints_dict:
-                for idx, constraints in enumerate(constraints_dict[(node1, node2)]):
+            if (node1, node2) in pair_to_constraints:
+                for idx, constraints in enumerate(pair_to_constraints[(node1, node2)]):
                     if relation in constraints:
-                        constraints_dict_seen_entries[(node1, node2)].add(idx)
+                        pair_to_constraints_seen_entries[(node1, node2)].add(idx)
                         break
         
         strike_log: list[str, str, str, str] = []  # (node1, node2, +/- relation degree, constraints)
@@ -473,27 +473,27 @@ class Pedigree:
                 node_pair_strike_balances[(node2, node1)] -= 1
         return strike_count, strike_log
 
-    def count_third_degree_inconcistencies(self, constraints_dict: defaultdict[tuple[str, str], list[tuple[str, ...]]]) -> int:
+    def count_third_degree_inconcistencies(self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]]) -> int:
         """
         Counts only one-sided inconsistencies in third-degree relations. 
         Used as a "tie-breaker" for 1st- and 2nd-degree inconsistences.
         """
-        for (node1, node2) in constraints_dict:
-            assert (node2, node1) not in constraints_dict  # Ensure no duplicate/symmetric entries
-        constraints_dict_seen_entries: defaultdict[tuple[str, str], set[int]] = defaultdict(set)  # Marks which entries in constraints_dict have been seen/used
+        for (node1, node2) in pair_to_constraints:
+            assert (node2, node1) not in pair_to_constraints  # Ensure no duplicate/symmetric entries
+        pair_to_constraints_seen_entries: defaultdict[tuple[str, str], set[int]] = defaultdict(set)  # Marks which entries in pair_to_constraints have been seen/used
 
         def is_relation_in_input_data(node1: str, node2: str, relation: str) -> bool:
-            if (node1, node2) in constraints_dict:
-                for idx, constraints in enumerate(constraints_dict[(node1, node2)]):
-                    if idx not in constraints_dict_seen_entries[(node1, node2)] and relation in constraints:
+            if (node1, node2) in pair_to_constraints:
+                for idx, constraints in enumerate(pair_to_constraints[(node1, node2)]):
+                    if idx not in pair_to_constraints_seen_entries[(node1, node2)] and relation in constraints:
                         return True
             return False
 
         def remove_relation_from_input_data(node1: str, node2: str, relation: str) -> None:
-            if (node1, node2) in constraints_dict:
-                for idx, constraints in enumerate(constraints_dict[(node1, node2)]):
+            if (node1, node2) in pair_to_constraints:
+                for idx, constraints in enumerate(pair_to_constraints[(node1, node2)]):
                     if relation in constraints:
-                        constraints_dict_seen_entries[(node1, node2)].add(idx)
+                        pair_to_constraints_seen_entries[(node1, node2)].add(idx)
                         break
         
         strike_count: int = 0
