@@ -1,5 +1,7 @@
+import os
 import pandas as pd
 import random
+import tempfile
 from itertools import combinations
 from collections import defaultdict
 from pedigree_package import Pedigree, PedigreeEnsemble
@@ -151,7 +153,7 @@ class SimulatedPedigree:
             relations_list.append((first_cousin1, first_cousin2, "3", ""))
         return pd.DataFrame(relations_list, columns=["id1", "id2", "degree", "constraints"])
 
-    def mask_and_write_data(self, prefix: str):
+    def mask_data(self):
         nodes_df = self._get_nodes()
         relations_df = pd.concat([self._get_first_degree_relations(), self._get_second_degree_relations(), self._get_third_degree_relations()])
         self._ground_truth_pedigree.clean_up_relations()
@@ -214,20 +216,23 @@ class SimulatedPedigree:
 
         self._final_nodes_df = nodes_df.copy()
         self._final_relations_df = relations_df.copy()
-        nodes_df.to_csv(prefix + "_nodes.csv", index=False)
-        relations_df.to_csv(prefix + "_relations.csv", index=False)
     
-    def run_algorithm(self, prefix: str) -> None:
-        nodes_path = prefix + "_nodes.csv"
-        relations_path = prefix + "_relations.csv"
-        outputs_dir = "simulator_temp/"
-        pedigree_ensemble = PedigreeEnsemble(relations_path, 
-                                             nodes_path, 
-                                             outputs_dir,
-                                             sample_count=100,
-                                             random_seed=self._random_seed)
-        self._algorithm_pedigree = pedigree_ensemble.find_best_pedigree()
-        self._final_strike_count = pedigree_ensemble._final_strike_count
+    def run_algorithm(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            nodes_path = os.path.join(temp_dir, "nodes.csv")
+            relations_path = os.path.join(temp_dir, "relations.csv")
+            self._final_nodes_df.to_csv(nodes_path, index=False)
+            self._final_relations_df.to_csv(relations_path, index=False)
+
+            outputs_dir = os.path.join(temp_dir, "outputs")
+            os.makedirs(outputs_dir, exist_ok=True)
+            pedigree_ensemble = PedigreeEnsemble(relations_path, 
+                                                 nodes_path, 
+                                                 outputs_dir,
+                                                 sample_count=100,
+                                                 random_seed=self._random_seed)
+            self._algorithm_pedigree = pedigree_ensemble.find_best_pedigree()
+            self._final_strike_count = pedigree_ensemble._final_strike_count
     
     def get_pedigree_statistics(self) -> dict[str, int | float]:
         statistics = defaultdict()
