@@ -155,7 +155,7 @@ class PedigreeEnsemble:
         )
         for idx, row in progress_bar:
             node1, node2, degree, _ = row
-            logging.info(f"{node1}, {node2}, {degree}")
+            logging.info(f"Current relation: {node1}, {node2}, {degree}")
             progress_bar.set_description(f"Processing relation {{{node1}, {node2}, {degree}}}")
             self._add_relation(node1, node2, degree=degree)
             self._clean_relation_dicts()
@@ -165,7 +165,7 @@ class PedigreeEnsemble:
                 self._prune_pedigrees(relations_so_far, check_half_siblings=False)
             else:
                 self._prune_pedigrees(relations_so_far, check_half_siblings=True)
-            logging.info(f"Total Pedigrees: {len(self._pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n")
+            logging.info(f"Remaining pedigrees after pruning: {len(self._pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n")
 
         self._final_pedigree.clean_up_relations()
         self._write_corrected_relations()
@@ -414,7 +414,7 @@ class PedigreeEnsemble:
             strikes.append(num_strikes)
             third_degree_strikes.append(num_third_degree_strikes)
             counts[num_strikes] += 1
-        logging.info(str(dict(sorted(counts.items()))))
+        logging.info(f"Strike counts before pruning: {str(dict(sorted(counts.items())))}")
 
         def epsilon_greedy_sample(pedigrees: list[Pedigree], strikes: list[int], third_degree_strikes: list[int], epsilon: float, sample_count: int) -> list[Pedigree]:
             assert len(pedigrees) == len(strikes)
