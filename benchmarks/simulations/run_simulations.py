@@ -3,8 +3,8 @@ from collections import defaultdict
 from simulated_pedigree import SimulatedPedigree
 
 
-def simulate() -> dict[str, float]:
-    simulated_pedigree = SimulatedPedigree()
+def simulate(random_seed: int) -> dict[str, float]:
+    simulated_pedigree = SimulatedPedigree(random_seed=random_seed)
     simulated_pedigree.create_pedigree()
     simulated_pedigree.mask_data()
     simulated_pedigree.run_algorithm()
@@ -13,8 +13,8 @@ def simulate() -> dict[str, float]:
 
 def run_experiment(num_simulations: int = 100) -> dict[str, float]:
     experiment_metrics = defaultdict(list)
-    for _ in range(num_simulations):
-        metrics = simulate()
+    for idx in range(num_simulations):
+        metrics = simulate(random_seed=idx)
         for metric, value in metrics.items():
             experiment_metrics[metric].append(value)
     
@@ -24,7 +24,7 @@ def run_experiment(num_simulations: int = 100) -> dict[str, float]:
         print(f"{metric}: {round(mean_metrics[metric], 2)} ± {round(stdev_metrics[metric], 2)}")
 
 def main():
-    run_experiment(num_simulations=5)
+    run_experiment(num_simulations=10)
 
 if __name__ == "__main__":
     main()
