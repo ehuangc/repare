@@ -240,14 +240,15 @@ class SimulatedPedigree:
         statistics["Unmasked Node Count"] = len(self._final_nodes_df)
 
     def get_metrics(self) -> dict[str, float]:
-        pairwise_accuracy, relation_precision, relation_recall, relation_f1 = self._calculate_relation_metrics()
-        degree_precision, degree_recall, degree_f1 = self._calculate_degree_metrics()
+        pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1 = self._calculate_relation_metrics()
+        pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1 = self._calculate_degree_metrics()
 
         metrics = dict()
-        metrics["Pairwise Accuracy"] = pairwise_accuracy
+        metrics["Pairwise Relation Accuracy"] = pairwise_relation_accuracy
         metrics["Relation Precision"] = relation_precision
         metrics["Relation Recall"] = relation_recall
         metrics["Relation F1"] = relation_f1
+        metrics["Pairwise Degree Accuracy"] = pairwise_degree_accuracy
         metrics["Degree Precision"] = degree_precision
         metrics["Degree Recall"] = degree_recall
         metrics["Degree F1"] = degree_f1
@@ -294,14 +295,16 @@ class SimulatedPedigree:
             relation_fp += fp
             relation_fn += fn
         
-        pairwise_accuracy = correct_node_pairs / total_node_pairs
+        pairwise_relation_accuracy = correct_node_pairs / total_node_pairs
         relation_precision = relation_tp / (relation_tp + relation_fp)
         relation_recall = relation_tp / (relation_tp + relation_fn)
         relation_f1 = (2 * relation_precision * relation_recall) / (relation_precision + relation_recall) if relation_precision + relation_recall > 0 else 0
-        return pairwise_accuracy, relation_precision, relation_recall, relation_f1
+        return pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1
     
-    def _calculate_degree_metrics(self) -> tuple[float, float, float]:
+    def _calculate_degree_metrics(self) -> tuple[float, float, float, float]:
         nodes: list[str] = self._final_nodes_df["id"].tolist()  # Use unmasked nodes
+        correct_node_pairs: int = 0
+        total_node_pairs: int = 0
         degree_tp: int = 0
         degree_fp: int = 0
         degree_fn: int = 0
@@ -315,19 +318,24 @@ class SimulatedPedigree:
             for relation in ["parent-child", "child-parent", "siblings"]:
                 ground_truth_degrees["1"] += ground_truth_relations[relation]
                 algorithm_degrees["1"] += algorithm_relations[relation]
-            
+
             for relation in ["maternal aunt/uncle-nephew/niece", "paternal aunt/uncle-nephew/niece", "maternal nephew/niece-aunt/uncle", "paternal nephew/niece-aunt/uncle", 
                              "maternal grandparent-grandchild", "paternal grandparent-grandchild", "maternal grandchild-grandparent", "paternal grandchild-grandparent", 
                              "maternal half-siblings", "paternal half-siblings"]:
                 ground_truth_degrees["2"] += ground_truth_relations[relation]
                 algorithm_degrees["2"] += algorithm_relations[relation]
             
+            if ground_truth_degrees == algorithm_degrees:
+                correct_node_pairs += 1
+            total_node_pairs += 1
+            
             tp, fp, fn = self._calculate_tp_fp_fn(ground_truth_degrees, algorithm_degrees)
             degree_tp += tp
             degree_fp += fp
             degree_fn += fn
         
+        pairwise_degree_accuracy = correct_node_pairs / total_node_pairs
         degree_precision = degree_tp / (degree_tp + degree_fp)
         degree_recall = degree_tp / (degree_tp + degree_fn)
         degree_f1 = (2 * degree_precision * degree_recall) / (degree_precision + degree_recall) if degree_precision + degree_recall > 0 else 0
-        return degree_precision, degree_recall, degree_f1
+        return pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1
