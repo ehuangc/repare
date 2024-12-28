@@ -372,7 +372,7 @@ class Pedigree:
                 return False
         return True
 
-    def count_inconsistencies(self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]], relations_so_far_dict: defaultdict[tuple[str, str], list[tuple[str, str]]], check_half_siblings: bool) -> tuple[int, list[tuple[str, str, str]]]:
+    def count_inconsistencies(self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]], pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str]]], check_half_siblings: bool) -> tuple[int, list[tuple[str, str, str]]]:
         """
         Validates this tree based on the input relations data.
         If check_half_siblings is False, don't check for extraneous half-sibling relations because the 2 non-shared parents might be merged later.
@@ -437,7 +437,7 @@ class Pedigree:
         # Check for "dropped" input relations
         # Note: We use constrained relations instead of all relations because we want to catch half-siblings that explicitly should be some other relation even when check_half_siblings is False
         # The purpose of check_half_siblings is to avoid marking *incidental* half-siblings, not half-siblings that should be something else
-        for (node1, node2), degrees_constraints in relations_so_far_dict.items():
+        for (node1, node2), degrees_constraints in pair_to_relations_so_far.items():
             if len(degrees_constraints) == 1:  # If only one input relation between these two nodes, simple check is much faster
                 degree, constraints = degrees_constraints[0]
                 if not self.is_relation_in_pedigree(node1, node2, constraints.split(";")):

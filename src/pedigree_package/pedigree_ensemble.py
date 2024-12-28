@@ -160,11 +160,12 @@ class PedigreeEnsemble:
             self._add_relation(node1, node2, degree=degree)
             self._clean_relation_dicts()
 
-            relations_so_far = self._all_relations.iloc[:idx+1]
-            if degree == "1" and len(relations_so_far) < len(self._first_and_second_degree_relations):
-                self._prune_pedigrees(relations_so_far, check_half_siblings=False)
+            processed_relations = self._all_relations.iloc[:idx+1]
+            pair_to_relations_so_far = self._get_pair_to_relations_so_far(processed_relations)
+            if degree == "1" and len(processed_relations) < len(self._first_and_second_degree_relations):
+                self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=False)
             else:
-                self._prune_pedigrees(relations_so_far, check_half_siblings=True)
+                self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=True)
             logging.info(f"Remaining pedigrees after pruning: {len(self._pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n")
 
         self._final_pedigree.clean_up_relations()
@@ -383,16 +384,20 @@ class PedigreeEnsemble:
         for node_pair in pair_to_constraints:
             pair_to_constraints[node_pair].sort(key=lambda x: len(x))  # Sort by number of constraints so specific constraints are checked first when pruning
         return pair_to_constraints
+    
+    def _get_pair_to_relations_so_far(self, processed_relations: pd.DataFrame) -> defaultdict[tuple[str, str], list[tuple[str, str]]]:
+        """
+        Turn DataFrame of relations/constraints processed so far into dict(s) of {node pairs: list of (degree, constraints) tuples}.
+        """
+        pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str]]] = defaultdict(list)
+        for node1, node2, degree, constraints in processed_relations.itertuples(index=False):
+            pair_to_relations_so_far[(node1, node2)].append((degree, constraints))
+        return pair_to_relations_so_far
 
-    def _prune_pedigrees(self, relations_so_far: pd.DataFrame, check_half_siblings: bool) -> None:
+    def _prune_pedigrees(self, pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str]]], check_half_siblings: bool) -> None:
         """
         Remove pedigrees with inconsistencies.
         """
-        # Group all input relations (so far) by node pair
-        relations_so_far_dict: defaultdict[tuple[str, str], tuple[str, str]] = defaultdict(list)
-        for node1, node2, degree, constraints in relations_so_far.itertuples(index=False):
-            relations_so_far_dict[(node1, node2)].append((degree, constraints))
-
         seen_topologies = set()
         new_potential_pedigrees = []
         for pedigree in self._pedigrees:
@@ -409,7 +414,7 @@ class PedigreeEnsemble:
         third_degree_strikes = []
         counts = defaultdict(int)
         for pedigree in new_potential_pedigrees:
-            num_strikes, _ = pedigree.count_inconsistencies(self._pair_to_constraints, relations_so_far_dict, check_half_siblings)
+            num_strikes, _ = pedigree.count_inconsistencies(self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings)
             num_third_degree_strikes = pedigree.count_third_degree_inconcistencies(self._pair_to_constraints)
             strikes.append(num_strikes)
             third_degree_strikes.append(num_third_degree_strikes)
@@ -429,13 +434,14 @@ class PedigreeEnsemble:
             exploration_pedigrees = random.sample(sorted_pedigrees[exploitation_sample_count:], exploration_sample_count)
             return exploitation_pedigrees + exploration_pedigrees
 
-        if len(relations_so_far) < len(self._first_and_second_degree_relations):
+        num_processed_relations = sum(len(relations) for relations in pair_to_relations_so_far.values())
+        if num_processed_relations < len(self._first_and_second_degree_relations):
             self._pedigrees = epsilon_greedy_sample(new_potential_pedigrees, strikes, third_degree_strikes, epsilon=self._epsilon, sample_count=self._sample_count)
         else:  # Final iteration
             best_pedigrees = [pedigree for pedigree, num_strikes in zip(new_potential_pedigrees, strikes) if num_strikes == min(strikes)]
             third_degree_strikes = [pedigree.count_third_degree_inconcistencies(self._pair_to_constraints) for pedigree in best_pedigrees]  # Use 3rd-degree strikes as tiebreaker
             self._final_pedigree = best_pedigrees[third_degree_strikes.index(min(third_degree_strikes))]
-            self._final_strike_count, self._final_strike_log = self._final_pedigree.count_inconsistencies(self._pair_to_constraints, relations_so_far_dict, check_half_siblings=True)
+            self._final_strike_count, self._final_strike_log = self._final_pedigree.count_inconsistencies(self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings=True)
 
     def _write_corrected_relations(self) -> None:
         """
