@@ -832,15 +832,18 @@ class Pedigree:
         female_placeholder_nodes = [node for node in self.node_to_data if self.node_to_data[node]["sex"] == "F" and node.isnumeric()]
         non_placeholder_labels = {node: node for node in self.node_to_data if not node.isnumeric()}
 
-        node_size = 20000
-        plt.figure(figsize=(120, 70))
+        plt.figure(figsize=(12, 4.8), dpi=1200)
+        # Scale sizes based on pedigree node count
+        node_size = min(1000, 10000 / len(tree.nodes))
+        font_size = min(7, 300 / len(tree.nodes))
+
         pos = nx.nx_agraph.graphviz_layout(tree, prog="dot")
-        nx.draw_networkx_nodes(tree, pos=pos, nodelist=male_named_nodes, node_shape="s", node_size=node_size, node_color="#ded9cc", edgecolors="black", linewidths=2)
-        nx.draw_networkx_nodes(tree, pos=pos, nodelist=female_named_nodes, node_shape="o", node_size=node_size, node_color="#ded9cc", edgecolors="black", linewidths=2)
-        nx.draw_networkx_nodes(tree, pos=pos, nodelist=male_placeholder_nodes, node_shape="s", node_size=node_size, node_color="#e5e5e5", edgecolors="black", linewidths=2)
-        nx.draw_networkx_nodes(tree, pos=pos, nodelist=female_placeholder_nodes, node_shape="o", node_size=node_size, node_color="#e5e5e5", edgecolors="black", linewidths=2)
-        nx.draw_networkx_labels(tree, pos=pos, labels=non_placeholder_labels, font_size=64)
-        nx.draw_networkx_edges(tree, pos=pos, width=2, node_shape="s", node_size=node_size, arrowsize=64)
+        nx.draw_networkx_nodes(tree, pos=pos, nodelist=male_named_nodes, node_shape="s", node_size=node_size, node_color="#ded9cc", edgecolors="black", linewidths=0.2)
+        nx.draw_networkx_nodes(tree, pos=pos, nodelist=female_named_nodes, node_shape="o", node_size=node_size, node_color="#ded9cc", edgecolors="black", linewidths=0.2)
+        nx.draw_networkx_nodes(tree, pos=pos, nodelist=male_placeholder_nodes, node_shape="s", node_size=node_size, node_color="#e5e5e5", edgecolors="black", linewidths=0.2)
+        nx.draw_networkx_nodes(tree, pos=pos, nodelist=female_placeholder_nodes, node_shape="o", node_size=node_size, node_color="#e5e5e5", edgecolors="black", linewidths=0.2)
+        nx.draw_networkx_labels(tree, pos=pos, labels=non_placeholder_labels, font_size=font_size)
+        nx.draw_networkx_edges(tree, pos=pos, node_shape="s", node_size=node_size, width=0.2, arrowsize=font_size*1.2)
 
         plt.axis("off")
-        plt.savefig(path, bbox_inches="tight", pad_inches=0)
+        plt.savefig(path, bbox_inches="tight")
