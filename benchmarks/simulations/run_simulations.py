@@ -1,3 +1,4 @@
+from statistics import mean
 from collections import defaultdict
 from simulated_pedigree import SimulatedPedigree
 
@@ -17,11 +18,11 @@ def run_experiment(num_simulations: int = 100) -> dict[str, float]:
         for metric, value in metrics.items():
             experiment_metrics[metric].append(value)
     
-    mean_metrics = {metric: sum(values) / len(values) for metric, values in experiment_metrics.items()}
+    mean_metrics = {metric: mean(values) for metric, values in experiment_metrics.items()}
     print(mean_metrics)
 
 def main():
-    run_experiment(num_simulations=10)
+    run_experiment(num_simulations=5)
 
 if __name__ == "__main__":
     main()
