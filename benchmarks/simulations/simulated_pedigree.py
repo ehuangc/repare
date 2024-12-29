@@ -256,11 +256,13 @@ class SimulatedPedigree:
         relations_df = relations_df.apply(corrupt_relation, axis=1)
         relations_df = relations_df[relations_df["degree"] != "Unrelated"]  # Remove unrelated entries
 
+        empty_iters = 0
         while len(nodes_df) < 2 or len(relations_df) < 1:  # Ensure at least 2 nodes and 1 relation in input data
-            relations_df = self._ground_truth_relations_df.sample(n=1, axis=0, random_state=self._random_seed)
+            relations_df = self._ground_truth_relations_df.sample(n=1, axis=0, random_state=empty_iters)
             relations_df.apply(corrupt_relation, axis=1)
             nodes = relations_df["id1"].tolist() + relations_df["id2"].tolist()
             nodes_df = self._ground_truth_nodes_df.loc[self._ground_truth_nodes_df["id"].isin(nodes)]
+            empty_iters += 1
         
         self._final_nodes_df = nodes_df.copy()
         self._final_relations_df = relations_df.copy()
