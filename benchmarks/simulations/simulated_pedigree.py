@@ -204,6 +204,13 @@ class SimulatedPedigree:
                 else:
                     scaled_probs.append(prob * scale)
             scaled_relation_probs[relation] = tuple(scaled_probs)
+
+        for degree, probs in scaled_degree_probs.items():
+            if any(prob > 1 for prob in probs):
+                raise ValueError(f"Scale is too high. Error rates exceed 1.")
+        for relation, probs in scaled_relation_probs.items():
+            if any(prob > 1 for prob in probs):
+                raise ValueError(f"Scale is too high. Error rates exceed 1.")
         return scaled_degree_probs, scaled_relation_probs
 
     def mask_and_corrupt_data(self):
