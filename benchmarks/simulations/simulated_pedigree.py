@@ -153,12 +153,23 @@ class SimulatedPedigree:
             relations_list.append((first_cousin1, first_cousin2, "3", ""))
         return pd.DataFrame(relations_list, columns=["id1", "id2", "degree", "constraints"])
 
+    def _get_unrelated_relations(self) -> pd.DataFrame:
+        relations_list: list[str, str, str, str] = []  # id1, id2, degree, constraints (no constraints for unrelated)
+        for node1, node2 in combinations(self._ground_truth_pedigree.node_to_data.keys(), 2):
+            if not self._ground_truth_pedigree.get_relations_between_nodes(node1, node2):
+                relations_list.append((node1, node2, "Unrelated", ""))
+        return pd.DataFrame(relations_list, columns=["id1", "id2", "degree", "constraints"])
+
     def mask_and_corrupt_data(self):
         nodes_df = self._get_nodes()
-        relations_df = pd.concat([self._get_first_degree_relations(), self._get_second_degree_relations(), self._get_third_degree_relations()])
+        relations_df = pd.concat([self._get_first_degree_relations(), 
+                                  self._get_second_degree_relations(), 
+                                  self._get_third_degree_relations(),
+                                  self._get_unrelated_relations()
+                                  ])
         self._ground_truth_pedigree.clean_up_relations()
         self._ground_truth_nodes_df = nodes_df.copy()
-        self._ground_truth_relations_df = relations_df.copy()
+        self._ground_truth_relations_df = relations_df[relations_df["degree"] != "Unrelated"].copy()  # Remove unrelated entries
 
         nodes_to_mask = [node for node in nodes_df["id"] if random.random() < self._p_mask_node]
         nodes_df = nodes_df.loc[~nodes_df["id"].isin(nodes_to_mask)]
@@ -168,51 +179,34 @@ class SimulatedPedigree:
         relations_df["pair"] = relations_df.apply(lambda row: tuple(sorted([row["id1"], row["id2"]])), axis=1)
         relations_df = relations_df.sort_values(by=["pair", "degree"]).drop_duplicates(subset="pair", keep="first").drop(columns=["pair"])
 
+        base_degree_probs: dict[str, tuple(float, float, float, float)] = {
+            "1": (0.99, 0.01, 0.0, 0.0),
+            "2": (0.01, 0.94, 0.05, 0.0),
+            "3": (0.0, 0.02, 0.88, 0.1),
+            "Unrelated": (0.0, 0.0, 0.01, 0.99)
+        }
+        base_relation_probs: dict[str, tuple(float, float)] = {
+            "parent-child;child-parent": (0.95, 0.05),
+            "siblings": (0.05, 0.95)
+        }
+
         def corrupt_relation(row: pd.Series) -> pd.Series:
             node1, node2, degree, constraints = row
-            roll = random.random()
-            if degree == "1":
-                if roll < 0.01:
-                    row["degree"] = "2"
-                    row["constraints"] = ""
-                elif constraints == "parent-child;child-parent" and roll < 0.05:
-                    row["constraints"] = "siblings"
-                elif constraints == "siblings" and roll < 0.05:
-                    row["constraints"] = "parent-child;child-parent"
+            new_degree_probs = base_degree_probs[degree]
+            new_degree = random.choices(population=["1", "2", "3", "Unrelated"], weights=new_degree_probs, k=1)[0]
 
-            elif degree == "2":
-                if roll < 0.01:
-                    row["degree"] = "1"
-                    row["constraints"] = ""
-                elif roll < 0.05:
-                    row["degree"] = "3"
-                    row["constraints"] = ""
-                elif roll < 0.15:
-                    row["degree"] = "0"  # Mark relation for deletion
-
-            elif degree == "3":
-                if roll < 0.01:
-                    row["degree"] = "2"
-                    row["constraints"] = ""
-                elif roll < 0.25:
-                    row["degree"] = "0"  # Mark relation for deletion
-            return row
+            new_constraints = ""
+            if constraints:
+                assert degree == "1"
+                if new_degree == "1":
+                    new_constraints_probs = base_relation_probs[constraints]
+                    new_constraints = random.choices(population=["parent-child;child-parent", "siblings"], weights=new_constraints_probs, k=1)[0]
+                else:
+                    new_constraints = ""
+            return pd.Series({"id1": node1, "id2": node2, "degree": new_degree, "constraints": new_constraints})
 
         relations_df = relations_df.apply(corrupt_relation, axis=1)
-        relations_df = relations_df[relations_df["degree"] != "0"]  # Remove relations marked for deletion
-        # Add false positives
-        new_rows = []
-        for i in range(len(nodes_df)):
-            for j in range(i + 1, len(nodes_df)):
-                if random.random() < 0.01:
-                    new_rows.append({
-                        "id1": nodes_df.iloc[i]["id"],
-                        "id2": nodes_df.iloc[j]["id"],
-                        "degree": "3",
-                        "constraints": ""
-                    })
-        relations_df = pd.concat([relations_df, pd.DataFrame(new_rows)], ignore_index=True)
-        
+        relations_df = relations_df[relations_df["degree"] != "Unrelated"]  # Remove unrelated entries
         self._final_nodes_df = nodes_df.copy()
         self._final_relations_df = relations_df.copy()
     
