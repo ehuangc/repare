@@ -8,7 +8,7 @@ from pedigree_package import Pedigree, PedigreeEnsemble
 
 
 class SimulatedPedigree:
-    def __init__(self, random_seed: int | None = None, p_mask_node: float = 0.4) -> None:
+    def __init__(self, p_mask_node: float = 0.4, error_rate_scale: float = 1, random_seed: int | None = None) -> None:
         self._ground_truth_pedigree = Pedigree()
         self._y_haplogroup_pool = ["a", "b"]
         self._mt_haplogroup_pool = ["a", "b", "c", "d", "e"]
@@ -19,6 +19,12 @@ class SimulatedPedigree:
         self._generation_zero_size = 3
 
         self._p_mask_node = p_mask_node  # Probability that a node will be masked (i.e., not included in node data)
+        self._error_rate_scale = error_rate_scale  # Scale to apply to relation classification error rates
+
+        if p_mask_node < 0 or p_mask_node > 1:
+            raise ValueError("p_mask_node must be between 0 and 1.")
+        if error_rate_scale < 0:
+            raise ValueError("error_rate_scale must be non-negative.")
 
         self._node_count = 0
         self._generation_to_nodes = defaultdict(set)  # Maps generation number to set of node IDs
@@ -171,9 +177,7 @@ class SimulatedPedigree:
                 relations_list.append((node1, node2, "Unrelated", ""))
         return pd.DataFrame(relations_list, columns=["id1", "id2", "degree", "constraints"])
 
-    def _scale_error_rates(self, scale: float) -> tuple[dict[str, tuple[float, float, float, float], dict[str, tuple[float, float]]]]:
-        assert scale >= 0
-        
+    def _scale_error_rates(self, scale: float) -> tuple[dict[str, tuple[float, float, float, float], dict[str, tuple[float, float]]]]:        
         scaled_degree_probs = {}
         for degree, probs in self._base_degree_classification_probs.items():
             correct_prob_idx = None
@@ -232,7 +236,7 @@ class SimulatedPedigree:
         relations_df["pair"] = relations_df.apply(lambda row: tuple(sorted([row["id1"], row["id2"]])), axis=1)
         relations_df = relations_df.sort_values(by=["pair", "degree"]).drop_duplicates(subset="pair", keep="first").drop(columns=["pair"])
 
-        degree_classification_probs, relation_classification_probs = self._scale_error_rates(scale=1)
+        degree_classification_probs, relation_classification_probs = self._scale_error_rates(scale=self._error_rate_scale)
 
         def corrupt_relation(row: pd.Series) -> pd.Series:
             node1, node2, degree, constraints = row
