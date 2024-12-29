@@ -27,7 +27,7 @@ class PedigreeEnsemble:
         self._epsilon = epsilon  # Parameter for epsilon-greedy sampling when pruning pedigrees
         random.seed(random_seed)
 
-        self._MAX_RUNS = 10  # Maximum number of times to run the algorithm
+        self._MAX_RUNS = 10  # Maximum number of times to run the algorithm if no valid pedigree is found
         self._pedigrees: list[Pedigree] = [self._get_initial_pedigree()]
         self._pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]] = self._get_pair_to_constraints()
         self._final_pedigree: Pedigree | None = None
