@@ -25,6 +25,17 @@ class SimulatedPedigree:
         self._node_to_generation = {}  # Maps node ID to generation number
         self._random_seed = random_seed
         random.seed(self._random_seed)
+
+        self._base_degree_classification_probs: dict[str, tuple(float, float, float, float)] = {
+            "1": (0.99, 0.01, 0.0, 0.0),
+            "2": (0.01, 0.94, 0.05, 0.0),
+            "3": (0.0, 0.02, 0.88, 0.1),
+            "Unrelated": (0.0, 0.0, 0.01, 0.99)
+        }
+        self._base_relation_classification_probs: dict[str, tuple(float, float)] = {
+            "parent-child;child-parent": (0.95, 0.05),
+            "siblings": (0.05, 0.95)
+        }
     
     def create_pedigree(self) -> None:
         self._create_node(generation=0, sex="M", can_have_children=True)
@@ -160,6 +171,41 @@ class SimulatedPedigree:
                 relations_list.append((node1, node2, "Unrelated", ""))
         return pd.DataFrame(relations_list, columns=["id1", "id2", "degree", "constraints"])
 
+    def _scale_error_rates(self, scale: float) -> tuple[dict[str, tuple[float, float, float, float], dict[str, tuple[float, float]]]]:
+        assert scale >= 0
+        
+        scaled_degree_probs = {}
+        for degree, probs in self._base_degree_classification_probs.items():
+            correct_prob_idx = None
+            if degree == "1":
+                correct_prob_idx = 0
+            elif degree == "2":
+                correct_prob_idx = 1
+            elif degree == "3":
+                correct_prob_idx = 2
+            else:
+                correct_prob_idx = 3
+            
+            scaled_probs = []
+            for idx, prob in enumerate(probs):
+                if idx == correct_prob_idx:
+                    scaled_probs.append(1 - ((1 - prob) * scale))
+                else:
+                    scaled_probs.append(prob * scale)
+            scaled_degree_probs[degree] = tuple(scaled_probs)
+
+        scaled_relation_probs = {}
+        for relation, probs in self._base_relation_classification_probs.items():
+            correct_prob_idx = 0 if relation == "parent-child;child-parent" else 1
+            scaled_probs = []
+            for idx, prob in enumerate(probs):
+                if idx == correct_prob_idx:
+                    scaled_probs.append(1 - ((1 - prob) * scale))
+                else:
+                    scaled_probs.append(prob * scale)
+            scaled_relation_probs[relation] = tuple(scaled_probs)
+        return scaled_degree_probs, scaled_relation_probs
+
     def mask_and_corrupt_data(self):
         nodes_df = self._get_nodes()
         relations_df = pd.concat([self._get_first_degree_relations(), 
@@ -174,32 +220,23 @@ class SimulatedPedigree:
         nodes_to_mask = [node for node in nodes_df["id"] if random.random() < self._p_mask_node]
         nodes_df = nodes_df.loc[~nodes_df["id"].isin(nodes_to_mask)]
         relations_df = relations_df.loc[~relations_df["id1"].isin(nodes_to_mask) & ~relations_df["id2"].isin(nodes_to_mask)]
-                
+
         # Ensure only the first (closest) relation is kept for each pair of nodes to simulate e.g., READv2 outputs
         relations_df["pair"] = relations_df.apply(lambda row: tuple(sorted([row["id1"], row["id2"]])), axis=1)
         relations_df = relations_df.sort_values(by=["pair", "degree"]).drop_duplicates(subset="pair", keep="first").drop(columns=["pair"])
 
-        base_degree_probs: dict[str, tuple(float, float, float, float)] = {
-            "1": (0.99, 0.01, 0.0, 0.0),
-            "2": (0.01, 0.94, 0.05, 0.0),
-            "3": (0.0, 0.02, 0.88, 0.1),
-            "Unrelated": (0.0, 0.0, 0.01, 0.99)
-        }
-        base_relation_probs: dict[str, tuple(float, float)] = {
-            "parent-child;child-parent": (0.95, 0.05),
-            "siblings": (0.05, 0.95)
-        }
+        degree_classification_probs, relation_classification_probs = self._scale_error_rates(scale=1)
 
         def corrupt_relation(row: pd.Series) -> pd.Series:
             node1, node2, degree, constraints = row
-            new_degree_probs = base_degree_probs[degree]
+            new_degree_probs = degree_classification_probs[degree]
             new_degree = random.choices(population=["1", "2", "3", "Unrelated"], weights=new_degree_probs, k=1)[0]
 
             new_constraints = ""
             if constraints:
                 assert degree == "1"
                 if new_degree == "1":
-                    new_constraints_probs = base_relation_probs[constraints]
+                    new_constraints_probs = relation_classification_probs[constraints]
                     new_constraints = random.choices(population=["parent-child;child-parent", "siblings"], weights=new_constraints_probs, k=1)[0]
                 else:
                     new_constraints = ""
