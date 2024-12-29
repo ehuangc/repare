@@ -8,7 +8,7 @@ from pedigree_package import Pedigree, PedigreeEnsemble
 
 
 class SimulatedPedigree:
-    def __init__(self, random_seed: int | None = None) -> None:
+    def __init__(self, random_seed: int | None = None, p_mask_node: float = 0.4) -> None:
         self._ground_truth_pedigree = Pedigree()
         self._y_haplogroup_pool = ["a", "b"]
         self._mt_haplogroup_pool = ["a", "b", "c", "d", "e"]
@@ -18,7 +18,7 @@ class SimulatedPedigree:
         self._num_generations = 5
         self._generation_zero_size = 3
 
-        self._p_mask_node = 0.4  # Probability that a node will be masked (i.e., not included in node data)
+        self._p_mask_node = p_mask_node  # Probability that a node will be masked (i.e., not included in node data)
 
         self._node_count = 0
         self._generation_to_nodes = defaultdict(set)  # Maps generation number to set of node IDs
