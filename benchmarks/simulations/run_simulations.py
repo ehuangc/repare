@@ -6,7 +6,7 @@ from simulated_pedigree import SimulatedPedigree
 def simulate(random_seed: int) -> dict[str, float]:
     simulated_pedigree = SimulatedPedigree(random_seed=random_seed)
     simulated_pedigree.create_pedigree()
-    simulated_pedigree.mask_data()
+    simulated_pedigree.mask_and_corrupt_data()
     simulated_pedigree.run_algorithm()
     metrics = simulated_pedigree.get_metrics()
     return metrics
