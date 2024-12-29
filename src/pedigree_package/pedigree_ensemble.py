@@ -27,8 +27,10 @@ class PedigreeEnsemble:
         self._epsilon = epsilon  # Parameter for epsilon-greedy sampling when pruning pedigrees
         random.seed(random_seed)
 
+        self._MAX_RUNS = 10  # Maximum number of times to run the algorithm
         self._pedigrees: list[Pedigree] = [self._get_initial_pedigree()]
         self._pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]] = self._get_pair_to_constraints()
+        self._final_pedigree: Pedigree | None = None
 
     def _process_node_data(self, nodes_path: str) -> None:
         """
@@ -147,26 +149,37 @@ class PedigreeEnsemble:
         Finds the configuration of relations that yields the "best" pedigree.
         Writes to output_dir the set of relations with the least changes from the original input data.
         """
-        progress_bar = tqdm(
-            self._first_and_second_degree_relations.iterrows(),
-            total=self._first_and_second_degree_relations.shape[0],
-            smoothing=0.5,
-            bar_format="{l_bar}{bar} | {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
-        )
-        for idx, row in progress_bar:
-            node1, node2, degree, _ = row
-            logging.info(f"Current relation: {node1}, {node2}, {degree}")
-            progress_bar.set_description(f"Processing relation {{{node1}, {node2}, {degree}}}")
-            self._add_relation(node1, node2, degree=degree)
-            self._clean_relation_dicts()
+        for _ in range(self._MAX_RUNS):
+            progress_bar = tqdm(
+                self._first_and_second_degree_relations.iterrows(),
+                total=self._first_and_second_degree_relations.shape[0],
+                smoothing=0.5,
+                bar_format="{l_bar}{bar} | {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
+            )
+            for idx, row in progress_bar:
+                node1, node2, degree, _ = row
+                logging.info(f"Current relation: {node1}, {node2}, {degree}")
+                progress_bar.set_description(f"Processing relation {{{node1}, {node2}, {degree}}}")
+                self._add_relation(node1, node2, degree=degree)
+                self._clean_relation_dicts()
 
-            processed_relations = self._all_relations.iloc[:idx+1]
-            pair_to_relations_so_far = self._get_pair_to_relations_so_far(processed_relations)
-            if degree == "1" and len(processed_relations) < len(self._first_and_second_degree_relations):
-                self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=False)
+                processed_relations = self._all_relations.iloc[:idx+1]
+                pair_to_relations_so_far = self._get_pair_to_relations_so_far(processed_relations)
+                if degree == "1" and len(processed_relations) < len(self._first_and_second_degree_relations):
+                    self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=False)
+                else:
+                    self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=True)
+                logging.info(f"Remaining pedigrees after pruning: {len(self._pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n")
+
+            if self._final_pedigree is None:
+                logging.warning("No valid pedigree found. Restarting algorithm.\n")
+                self._pedigrees = [self._get_initial_pedigree()]
             else:
-                self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=True)
-            logging.info(f"Remaining pedigrees after pruning: {len(self._pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n")
+                break
+
+        if self._final_pedigree is None:
+            logging.error(f"No valid pedigree found after {self._MAX_RUNS} runs. Exiting.")
+            raise Exception(f"No valid pedigree found after {self._MAX_RUNS} runs.")
 
         self._final_pedigree.clean_up_relations()
         self._write_corrected_relations()
@@ -438,10 +451,11 @@ class PedigreeEnsemble:
         if num_processed_relations < len(self._first_and_second_degree_relations):
             self._pedigrees = epsilon_greedy_sample(new_potential_pedigrees, strikes, third_degree_strikes, epsilon=self._epsilon, sample_count=self._sample_count)
         else:  # Final iteration
-            best_pedigrees = [pedigree for pedigree, num_strikes in zip(new_potential_pedigrees, strikes) if num_strikes == min(strikes)]
-            third_degree_strikes = [pedigree.count_third_degree_inconcistencies(self._pair_to_constraints) for pedigree in best_pedigrees]  # Use 3rd-degree strikes as tiebreaker
-            self._final_pedigree = best_pedigrees[third_degree_strikes.index(min(third_degree_strikes))]
-            self._final_strike_count, self._final_strike_log = self._final_pedigree.count_inconsistencies(self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings=True)
+            if new_potential_pedigrees:  # Only set final pedigree if there are valid pedigrees left
+                best_pedigrees = [pedigree for pedigree, num_strikes in zip(new_potential_pedigrees, strikes) if num_strikes == min(strikes)]
+                third_degree_strikes = [pedigree.count_third_degree_inconcistencies(self._pair_to_constraints) for pedigree in best_pedigrees]  # Use 3rd-degree strikes as tiebreaker
+                self._final_pedigree = best_pedigrees[third_degree_strikes.index(min(third_degree_strikes))]
+                self._final_strike_count, self._final_strike_log = self._final_pedigree.count_inconsistencies(self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings=True)
 
     def _write_corrected_relations(self) -> None:
         """
