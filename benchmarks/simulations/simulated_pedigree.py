@@ -163,6 +163,10 @@ class SimulatedPedigree:
         nodes_to_mask = [node for node in nodes_df["id"] if random.random() < self._p_mask_node]
         nodes_df = nodes_df.loc[~nodes_df["id"].isin(nodes_to_mask)]
         relations_df = relations_df.loc[~relations_df["id1"].isin(nodes_to_mask) & ~relations_df["id2"].isin(nodes_to_mask)]
+                
+        # Ensure only the first (closest) relation is kept for each pair of nodes to simulate e.g., READv2 outputs
+        relations_df["pair"] = relations_df.apply(lambda row: tuple(sorted([row["id1"], row["id2"]])), axis=1)
+        relations_df = relations_df.sort_values(by=["pair", "degree"]).drop_duplicates(subset="pair", keep="first").drop(columns=["pair"])
 
         def corrupt_relation(row: pd.Series) -> pd.Series:
             node1, node2, degree, constraints = row
@@ -196,7 +200,6 @@ class SimulatedPedigree:
 
         relations_df = relations_df.apply(corrupt_relation, axis=1)
         relations_df = relations_df[relations_df["degree"] != "0"]  # Remove relations marked for deletion
-
         # Add false positives
         new_rows = []
         for i in range(len(nodes_df)):
@@ -209,11 +212,7 @@ class SimulatedPedigree:
                         "constraints": ""
                     })
         relations_df = pd.concat([relations_df, pd.DataFrame(new_rows)], ignore_index=True)
-
-        # Ensure only the first (closest) relation is kept for each pair of nodes to simulate e.g., READv2 outputs
-        relations_df["pair"] = relations_df.apply(lambda row: tuple(sorted([row["id1"], row["id2"]])), axis=1)
-        relations_df = relations_df.sort_values(by=["pair", "degree"]).drop_duplicates(subset="pair", keep="first").drop(columns=["pair"])
-
+        
         self._final_nodes_df = nodes_df.copy()
         self._final_relations_df = relations_df.copy()
     
