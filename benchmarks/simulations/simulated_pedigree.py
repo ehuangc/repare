@@ -281,8 +281,11 @@ class SimulatedPedigree:
                                                  outputs_dir,
                                                  sample_count=100,
                                                  random_seed=self._random_seed)
-            self._algorithm_pedigree = pedigree_ensemble.find_best_pedigree()
-            self._final_strike_count = pedigree_ensemble._final_strike_count
+            try:
+                self._algorithm_pedigree = pedigree_ensemble.find_best_pedigree()
+                self._algorithm_found_pedigree = True
+            except:
+                self._algorithm_found_pedigree = False
     
     def get_pedigree_statistics(self) -> dict[str, int | float]:
         statistics = defaultdict()
@@ -290,18 +293,27 @@ class SimulatedPedigree:
         statistics["Unmasked Node Count"] = len(self._final_nodes_df)
 
     def get_metrics(self) -> dict[str, float]:
-        pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1 = self._calculate_relation_metrics()
-        pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1 = self._calculate_degree_metrics()
-
-        metrics = dict()
-        metrics["Pairwise Relation Accuracy"] = pairwise_relation_accuracy
-        metrics["Relation Precision"] = relation_precision
-        metrics["Relation Recall"] = relation_recall
-        metrics["Relation F1"] = relation_f1
-        metrics["Pairwise Degree Accuracy"] = pairwise_degree_accuracy
-        metrics["Degree Precision"] = degree_precision
-        metrics["Degree Recall"] = degree_recall
-        metrics["Degree F1"] = degree_f1
+        metrics: dict[str, float] = dict()
+        if self._algorithm_found_pedigree:
+            pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1 = self._calculate_relation_metrics()
+            pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1 = self._calculate_degree_metrics()
+            metrics["Pairwise Relation Accuracy"] = pairwise_relation_accuracy
+            metrics["Relation Precision"] = relation_precision
+            metrics["Relation Recall"] = relation_recall
+            metrics["Relation F1"] = relation_f1
+            metrics["Pairwise Degree Accuracy"] = pairwise_degree_accuracy
+            metrics["Degree Precision"] = degree_precision
+            metrics["Degree Recall"] = degree_recall
+            metrics["Degree F1"] = degree_f1
+        else:
+            metrics["Pairwise Relation Accuracy"] = 0
+            metrics["Relation Precision"] = 0
+            metrics["Relation Recall"] = 0
+            metrics["Relation F1"] = 0
+            metrics["Pairwise Degree Accuracy"] = 0
+            metrics["Degree Precision"] = 0
+            metrics["Degree Recall"] = 0
+            metrics["Degree F1"] = 0
         return metrics
 
     @staticmethod
