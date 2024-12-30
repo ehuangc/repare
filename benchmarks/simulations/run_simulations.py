@@ -15,6 +15,7 @@ def simulate(p_mask_node: float, error_rate_scale: float, random_seed: int) -> d
     return metrics
 
 def run_experiment(p_mask_node: float, error_rate_scale: float, num_simulations: int = 100) -> dict[str, float]:
+    print(f"Running {num_simulations} simulations: p_mask_node={p_mask_node}, error_rate_scale={error_rate_scale}")
     experiment_metrics = defaultdict(list)
     for idx in range(num_simulations):
         metrics = simulate(p_mask_node=p_mask_node, error_rate_scale=error_rate_scale, random_seed=idx)
