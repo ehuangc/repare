@@ -25,7 +25,8 @@ class PedigreeEnsemble:
         self._outputs_dir = outputs_dir
         self._sample_count = sample_count  # Number of pedigrees to sample at each step of algorithm
         self._epsilon = epsilon  # Parameter for epsilon-greedy sampling when pruning pedigrees
-        random.seed(random_seed)
+        self._random_seed = random_seed
+        random.seed(self._random_seed)
 
         self._MAX_RUNS = 10  # Maximum number of times to run the algorithm if no valid pedigree is found
         self._pedigrees: list[Pedigree] = [self._get_initial_pedigree()]
@@ -135,6 +136,16 @@ class PedigreeEnsemble:
         self._first_and_second_degree_relations = pd.concat([self._first_degree_relations, self._second_degree_relations]).reset_index(drop=True)
         self._all_relations = pd.concat([self._first_degree_relations, self._second_degree_relations, self._third_degree_relations]).reset_index(drop=True)
 
+    def _shuffle_relations(self) -> None:
+        """
+        Shuffle relations DataFrames (when we want to restart the algorithm).
+        """
+        self._first_degree_relations = self._first_degree_relations.sample(frac=1, random_state=self._random_seed).reset_index(drop=True)
+        self._second_degree_relations = self._second_degree_relations.sample(frac=1, random_state=self._random_seed).reset_index(drop=True)
+        self._third_degree_relations = self._third_degree_relations.sample(frac=1, random_state=self._random_seed).reset_index(drop=True)
+        self._first_and_second_degree_relations = pd.concat([self._first_degree_relations, self._second_degree_relations]).reset_index(drop=True)
+        self._all_relations = pd.concat([self._first_degree_relations, self._second_degree_relations, self._third_degree_relations]).reset_index(drop=True)
+
     def _get_initial_pedigree(self):
         """
         Create the initial pedigree and add all nodes.
@@ -172,8 +183,9 @@ class PedigreeEnsemble:
                 logging.info(f"Remaining pedigrees after pruning: {len(self._pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n")
 
             if self._final_pedigree is None:
-                logging.warning("No valid pedigree found. Restarting algorithm.\n")
+                logging.warning("No valid pedigree found. Shuffling relations and restarting algorithm.\n")
                 self._pedigrees = [self._get_initial_pedigree()]
+                self._shuffle_relations()
             else:
                 break
 
