@@ -292,6 +292,7 @@ class SimulatedPedigree:
         statistics = defaultdict()
         statistics["Total Node Count"] = len(self._ground_truth_pedigree.node_to_data)
         statistics["Density"] = self._calculate_pedigree_density()
+        statistics["Proportion of Inbred Nodes"] = self._calculate_inbred_proportion()
         return statistics
     
     def _calculate_pedigree_density(self) -> float:
@@ -301,6 +302,20 @@ class SimulatedPedigree:
             if node not in pedigree_graph:
                 pedigree_graph.add_node(node)
         return nx.density(pedigree_graph)
+    
+    def _calculate_inbred_proportion(self) -> float:
+        num_nodes_with_parents = 0
+        num_nodes_with_related_parents = 0
+
+        related_pairs = set(self._ground_truth_relations_df[["id1", "id2"]].itertuples(index=False, name=None))
+        for node in self._ground_truth_pedigree.node_to_data:
+            father = self._ground_truth_pedigree.node_to_father[node]
+            mother = self._ground_truth_pedigree.node_to_mother[node]
+            if father and mother:
+                num_nodes_with_parents += 1
+                if (father, mother) in related_pairs or (mother, father) in related_pairs:
+                    num_nodes_with_related_parents += 1
+        return num_nodes_with_related_parents / num_nodes_with_parents if num_nodes_with_parents > 0 else 0
 
     def get_metrics(self) -> dict[str, float]:
         metrics: dict[str, float] = dict()
