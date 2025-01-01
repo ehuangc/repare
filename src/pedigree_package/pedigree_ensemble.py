@@ -13,6 +13,8 @@ from tqdm import tqdm
 from typing import Any
 from .pedigree import Pedigree
 
+logger = logging.getLogger(__name__)
+
 
 class PedigreeEnsemble:
     """
@@ -169,7 +171,7 @@ class PedigreeEnsemble:
             )
             for idx, row in progress_bar:
                 node1, node2, degree, _ = row
-                logging.info(f"Current relation: {node1}, {node2}, {degree}")
+                logger.info(f"Current relation: {node1}, {node2}, {degree}")
                 progress_bar.set_description(f"Processing relation {{{node1}, {node2}, {degree}}}")
                 self._add_relation(node1, node2, degree=degree)
                 self._clean_relation_dicts()
@@ -180,17 +182,17 @@ class PedigreeEnsemble:
                     self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=False)
                 else:
                     self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=True)
-                logging.info(f"Remaining pedigrees after pruning: {len(self._pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n")
+                logger.info(f"Remaining pedigrees after pruning: {len(self._pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n")
 
             if self._final_pedigree is None:
-                logging.warning("No valid pedigree found. Shuffling relations and restarting algorithm.\n")
+                logger.warning("No valid pedigree found. Shuffling relations and restarting algorithm.\n")
                 self._pedigrees = [self._get_initial_pedigree()]
                 self._shuffle_relations()
             else:
                 break
 
         if self._final_pedigree is None:
-            logging.error(f"No valid pedigree found after {self._MAX_RUNS} runs. Exiting.")
+            logger.error(f"No valid pedigree found after {self._MAX_RUNS} runs. Exiting.")
             raise Exception(f"No valid pedigree found after {self._MAX_RUNS} runs.")
 
         self._final_pedigree.clean_up_relations()
@@ -444,7 +446,7 @@ class PedigreeEnsemble:
             strikes.append(num_strikes)
             third_degree_strikes.append(num_third_degree_strikes)
             counts[num_strikes] += 1
-        logging.info(f"Strike counts before pruning: {str(dict(sorted(counts.items())))}")
+        logger.info(f"Strike counts before pruning: {str(dict(sorted(counts.items())))}")
 
         def epsilon_greedy_sample(pedigrees: list[Pedigree], strikes: list[int], third_degree_strikes: list[int], epsilon: float, sample_count: int) -> list[Pedigree]:
             assert len(pedigrees) == len(strikes)
