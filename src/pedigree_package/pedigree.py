@@ -74,7 +74,7 @@ class Pedigree:
                     result[i] = f"F {placeholder_to_idx[node]} {mt_haplogroup}"
         return tuple(result)
 
-    def add_node(self, node_id: str, sex: str, y_haplogroup: str, mt_haplogroup: str, can_have_children: bool) -> None:
+    def add_node(self, node_id: str, sex: str, y_haplogroup: str, mt_haplogroup: str, can_have_children: bool, can_be_inbred: bool) -> None:
         """
         Add a node to the pedigree. If haplogroup is unknown, set argument to empty string ("").
         """
@@ -84,6 +84,7 @@ class Pedigree:
         self.node_to_data[node_id]["y_haplogroup"] = y_haplogroup
         self.node_to_data[node_id]["mt_haplogroup"] = mt_haplogroup
         self.node_to_data[node_id]["can_have_children"] = can_have_children
+        self.node_to_data[node_id]["can_be_inbred"] = can_be_inbred
 
     def add_parent_relation(self, node1: str, node2: str) -> None:
         """
@@ -370,6 +371,19 @@ class Pedigree:
         for node in self.get_non_placeholder_nodes():
             if len(self.node_to_children[node]) > 0 and not self.node_to_data[node]["can_have_children"]:
                 return False
+        return True
+
+    def validate_inbreeding(self) -> bool:
+        """
+        Validates that nodes that are known to be not inbred are not inbred.
+        """
+        related_pairs = self.get_related_pairs()
+        for node in self.get_non_placeholder_nodes():
+            if not self.node_to_data[node]["can_be_inbred"]:
+                father = self.node_to_father[node]
+                mother = self.node_to_mother[node]
+                if (father, mother) in related_pairs or (mother, father) in related_pairs:
+                    return False
         return True
 
     def count_inconsistencies(self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]], pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str]]], check_half_siblings: bool) -> tuple[int, list[tuple[str, str, str]]]:
@@ -775,6 +789,22 @@ class Pedigree:
                     if aunt_uncle_child != child and (aunt_uncle_child, child) not in cousin_pairs:  # Don't add symmetric duplicates
                         cousin_pairs.append((child, aunt_uncle_child))
         return cousin_pairs
+
+    def get_related_pairs(self, include_placeholders: bool = True) -> set[tuple[str, str]]:
+        """
+        Gets all related pairs (up to and including 3rd-degree relations) in the pedigree.
+        """
+        related_pairs: set[tuple[str, str]] = set()
+        related_pairs.update(self.get_parent_child_pairs(include_placeholders=include_placeholders))
+        related_pairs.update(self.get_sibling_pairs(include_placeholders=include_placeholders))
+        related_pairs.update(self.get_aunt_uncle_nephew_niece_pairs(include_placeholders=include_placeholders))
+        related_pairs.update(self.get_grandparent_grandchild_pairs(include_placeholders=include_placeholders))
+        related_pairs.update(self.get_half_sibling_pairs(include_placeholders=include_placeholders))
+        related_pairs.update(self.get_half_aunt_uncle_nephew_niece_pairs(include_placeholders=include_placeholders))
+        related_pairs.update(self.get_greatgrandparent_greatgrandchild_pairs(include_placeholders=include_placeholders))
+        related_pairs.update(self.get_grandaunt_granduncle_grandnephew_grandniece_pairs(include_placeholders=include_placeholders))
+        related_pairs.update(self.get_first_cousin_pairs(include_placeholders=include_placeholders))
+        return related_pairs
 
     def get_non_placeholder_nodes(self) -> set[str]:
         """

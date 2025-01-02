@@ -72,7 +72,8 @@ class SimulatedPedigree:
         if can_have_children is None:
             can_have_children = random.random() < self._p_can_have_children
 
-        self._ground_truth_pedigree.add_node(node_id, sex, y_haplogroup, mt_haplogroup, can_have_children)
+        # Set can_be_inbred to True; we will update later in self._get_nodes()
+        self._ground_truth_pedigree.add_node(node_id, sex, y_haplogroup, mt_haplogroup, can_have_children, True)
         self._generation_to_nodes[generation].add(node_id)
         self._node_to_generation[node_id] = generation
         return node_id
@@ -123,17 +124,26 @@ class SimulatedPedigree:
             self._ground_truth_pedigree.add_parent_relation(parent2, child)
 
     def _get_nodes(self) -> pd.DataFrame:
-        nodes_list: list[str, str, str, str, str] = []  # id, sex, y_haplogroup, mt_haplogroup, can_have_children
+        nodes_list: list[str, str, str, str, str, str] = []  # id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred
+        pedigree_relation_pairs: set[tuple[str, str]] = self._ground_truth_pedigree.get_related_pairs()
         for node, node_info in self._ground_truth_pedigree.node_to_data.items():
             sex = node_info["sex"]
             y_haplogroup = node_info["y_haplogroup"]
             mt_haplogroup = node_info["mt_haplogroup"]
 
             can_have_children = "True"
-            if not node_info["can_have_children"] and random.random() < 0.25:  # Even if node has no children, conservatively set can_have_children to False
+            # Even if node has no children, conservatively set can_have_children to False
+            if not node_info["can_have_children"] and random.random() < 0.25:
                 can_have_children = "False"
-            nodes_list.append((node, sex, y_haplogroup, mt_haplogroup, can_have_children))
-        return pd.DataFrame(nodes_list, columns=["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children"])
+
+            can_be_inbred = "True"
+            father = self._ground_truth_pedigree.node_to_father[node]
+            mother = self._ground_truth_pedigree.node_to_mother[node]
+            # Even if node is not inbred, conservatively set can_be_inbred to False
+            if (father, mother) not in pedigree_relation_pairs and (mother, father) not in pedigree_relation_pairs and random.random() < 0.5:
+                can_be_inbred = "False"
+            nodes_list.append((node, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred))
+        return pd.DataFrame(nodes_list, columns=["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children", "can_be_inbred"])
 
     def _get_first_degree_relations(self) -> pd.DataFrame:
         relations_list: list[str, str, str, str] = []  # id1, id2, degree, constraints
