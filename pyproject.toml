@@ -13,3 +13,7 @@ trees = "pedigree_package.main:main"
 
 [tool.setuptools.packages.find]
 where = "src"
+
+[project.optional-dependencies]
+benchmark = ["scikit-learn"]
+plot = ["pygraphviz"]
