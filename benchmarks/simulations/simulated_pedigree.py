@@ -447,9 +447,9 @@ class SimulatedPedigree:
                 algorithm_relation_counter[node1] += count
                 algorithm_relation_counter[node2] += count
 
-        true_connectivity: list[float] = []
-        algorithm_connectivity: list[float] = []
+        true_connectivities: list[float] = []
+        algorithm_connectivities: list[float] = []
         for node in nodes:
-            true_connectivity.append(ground_truth_relation_counter[node])
-            algorithm_connectivity.append(algorithm_relation_counter[node])
-        return r2_score(true_connectivity, algorithm_connectivity)
+            true_connectivities.append(ground_truth_relation_counter[node])
+            algorithm_connectivities.append(algorithm_relation_counter[node])
+        return r2_score(true_connectivities, algorithm_connectivities)
