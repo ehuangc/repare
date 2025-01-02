@@ -3,6 +3,7 @@ import pandas as pd
 import random
 import tempfile
 import networkx as nx
+from sklearn.metrics import r2_score
 from itertools import combinations
 from collections import defaultdict
 from pedigree_package import Pedigree, PedigreeEnsemble
@@ -330,6 +331,7 @@ class SimulatedPedigree:
             metrics["Degree Precision"] = degree_precision
             metrics["Degree Recall"] = degree_recall
             metrics["Degree F1"] = degree_f1
+            metrics["Connectivity R-squared"] = self._calculate_connectivity_r_squared()
         else:
             metrics["Pairwise Relation Accuracy"] = 0
             metrics["Relation Precision"] = 0
@@ -339,6 +341,7 @@ class SimulatedPedigree:
             metrics["Degree Precision"] = 0
             metrics["Degree Recall"] = 0
             metrics["Degree F1"] = 0
+            metrics["Connectivity R-squared"] = 0
         return metrics
 
     @staticmethod
@@ -426,3 +429,27 @@ class SimulatedPedigree:
         degree_recall = degree_tp / (degree_tp + degree_fn)
         degree_f1 = (2 * degree_precision * degree_recall) / (degree_precision + degree_recall) if degree_precision + degree_recall > 0 else 0
         return pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1
+
+    def _calculate_connectivity_r_squared(self) -> bool:
+        ground_truth_relation_counter: defaultdict[str, int] = defaultdict(int)
+        algorithm_relation_counter: defaultdict[str, int] = defaultdict(int)
+        
+        nodes: list[str] = self._final_nodes_df["id"].tolist()  # Use unmasked nodes
+        for node1, node2 in combinations(nodes, 2):
+            ground_truth_relations: defaultdict(int) = self._ground_truth_pedigree.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
+            algorithm_relations: defaultdict(int) = self._algorithm_pedigree.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
+
+            for relation, count in ground_truth_relations.items():
+                ground_truth_relation_counter[node1] += count
+                ground_truth_relation_counter[node2] += count
+            
+            for relation, count in algorithm_relations.items():
+                algorithm_relation_counter[node1] += count
+                algorithm_relation_counter[node2] += count
+
+        true_connectivity: list[float] = []
+        algorithm_connectivity: list[float] = []
+        for node in nodes:
+            true_connectivity.append(ground_truth_relation_counter[node])
+            algorithm_connectivity.append(algorithm_relation_counter[node])
+        return r2_score(true_connectivity, algorithm_connectivity)
