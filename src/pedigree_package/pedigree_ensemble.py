@@ -52,7 +52,7 @@ class PedigreeEnsemble:
         if not self._node_data["can_have_children"].isin(["True", "False", ""]).all():
             raise ValueError("can_have_children value must be \"True\", \"False\", or empty.")
         # Convert "can_have_children" column to booleans
-        self._node_data["can_have_children"] = self._node_data["can_have_children"].map({"False": False, "": True})
+        self._node_data["can_have_children"] = self._node_data["can_have_children"].map({"False": False, "True": True, "": True})
 
     def _process_relations_data(self, relations_path: str) -> None:
         """
