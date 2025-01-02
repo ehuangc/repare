@@ -128,11 +128,10 @@ class SimulatedPedigree:
             sex = node_info["sex"]
             y_haplogroup = node_info["y_haplogroup"]
             mt_haplogroup = node_info["mt_haplogroup"]
-            can_have_children = None
+
+            can_have_children = "True"
             if not node_info["can_have_children"] and random.random() < 0.25:  # Even if node has no children, conservatively set can_have_children to False
                 can_have_children = "False"
-            else:
-                can_have_children = "True"
             nodes_list.append((node, sex, y_haplogroup, mt_haplogroup, can_have_children))
         return pd.DataFrame(nodes_list, columns=["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children"])
 
