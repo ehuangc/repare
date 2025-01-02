@@ -664,7 +664,7 @@ class Pedigree:
             del relations[relation]
         return relations
 
-    def get_parent_child_pairs(self, include_placeholders: bool = True):
+    def get_parent_child_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
         """
         Gets all (parent, child) pairs in the tree.
         """
@@ -675,7 +675,7 @@ class Pedigree:
                     parent_child_pairs.append((parent, child))
         return parent_child_pairs
 
-    def get_sibling_pairs(self, include_placeholders: bool = True):
+    def get_sibling_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
         """
         Gets all (sibling, sibling) pairs in the tree.
         Note: Only gets *full* siblings. See self.get_half_sibling_pairs().
@@ -688,7 +688,7 @@ class Pedigree:
                         sibling_pairs.append((sibling1, sibling2))
         return sibling_pairs
 
-    def get_aunt_uncle_nephew_niece_pairs(self, include_placeholders: bool = True):
+    def get_aunt_uncle_nephew_niece_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
         """
         Gets all (aunt/uncle, nephew/niece) pairs in the tree.
         Includes duplicates if, for example, an aunt is both a maternal and paternal aunt to a nephew (i.e. full-sib mating).
@@ -700,7 +700,7 @@ class Pedigree:
                     aunt_uncle_nephew_niece_pairs.append((parent_sibling, child))
         return aunt_uncle_nephew_niece_pairs
 
-    def get_grandparent_grandchild_pairs(self, include_placeholders: bool = True):
+    def get_grandparent_grandchild_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
         """
         Gets all (grandparent, grandchild) pairs in the tree.
         Includes duplicates if, for example, a grandparent is both a maternal and paternal grandparent to a grandchild.
@@ -712,7 +712,7 @@ class Pedigree:
                     grandparent_grandchild_pairs.append((parent, child_child))
         return grandparent_grandchild_pairs
 
-    def get_half_sibling_pairs(self, include_placeholders: bool = True):
+    def get_half_sibling_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
         """
         Gets all (half-sibling, half-sibling) pairs in the tree.
         """
@@ -725,7 +725,7 @@ class Pedigree:
                             half_sibling_pairs.append((child, other_child))
         return half_sibling_pairs
 
-    def get_half_aunt_uncle_nephew_niece_pairs(self, include_placeholders: bool = True):
+    def get_half_aunt_uncle_nephew_niece_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
         """
         Gets all (half-aunt/half-uncle, half-nephew/half-niece) pairs in the tree.
         """
@@ -742,7 +742,7 @@ class Pedigree:
                         half_aunt_uncle_nephew_niece_pairs.append((half_sibling1, half_sibling2_child))
         return half_aunt_uncle_nephew_niece_pairs
 
-    def get_greatgrandparent_greatgrandchild_pairs(self, include_placeholders: bool = True):
+    def get_greatgrandparent_greatgrandchild_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
         """
         Gets all (greatgrandparent, greatgrandchild) pairs in the tree.
         """
@@ -753,7 +753,7 @@ class Pedigree:
                     greatgrandparent_greatgrandchild_pairs.append((grandparent, grandchild_child))
         return greatgrandparent_greatgrandchild_pairs
 
-    def get_grandaunt_granduncle_grandnephew_grandniece_pairs(self, include_placeholders: bool = True):
+    def get_grandaunt_granduncle_grandnephew_grandniece_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
         """
         Gets all (grandaunt/uncle, grandnephew/niece) pairs in the tree.
         """
@@ -764,7 +764,7 @@ class Pedigree:
                     grandaunt_granduncle_grandnephew_grandniece_pairs.append((aunt_uncle, nephew_niece_child))
         return grandaunt_granduncle_grandnephew_grandniece_pairs
 
-    def get_first_cousin_pairs(self, include_placeholders: bool = True):
+    def get_first_cousin_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
         """
         Gets all (first cousin, first cousin) pairs in the tree.
         """
