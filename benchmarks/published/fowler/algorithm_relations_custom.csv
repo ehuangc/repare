@@ -33,9 +33,9 @@ SE2m,SC3m,1,
 NC1m,NC8m,2,
 SC3m,SC8m,2,
 SP1m,SC3m,2,
-NC8m,NC9m,2,
-NC9m,NC7f,2,
-NC9m,SP3m,2,
+NC8m,NC9m,2,half-siblings
+NC9m,NC7f,2,half-siblings
+NC9m,SP3m,2,half-siblings
 NC1m,SP3m,2,
 SC5m,SP3m,2,
 NC8m,SC5m,2,
