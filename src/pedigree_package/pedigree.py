@@ -622,7 +622,7 @@ class Pedigree:
                         return True
         return False
 
-    def get_relations_between_nodes(self, node1: str, node2: str, include_maternal_paternal: bool = False) -> defaultdict(int):
+    def get_relations_between_nodes(self, node1: str, node2: str, include_maternal_paternal: bool = False) -> defaultdict[str, int]:
         """
         Returns a dictionary of the *1st- and 2nd-degree* relations between node1 and node2.
         """
