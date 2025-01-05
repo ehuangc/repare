@@ -1,4 +1,4 @@
-# Data from Fowler et al., 2022 supplementary data
+# Data from Fowler et al., 2022 supplement
 # Relations and 1st-degree constraints are primarily inferred from relatedness coefficients and IBD information in Supplementary Table 5
 # Additional constraints based on haplogroup rarity and recombination breakpoints are taken from Supplementary Information Section 2.3 and 2.4
 id1,id2,degree,constraints
