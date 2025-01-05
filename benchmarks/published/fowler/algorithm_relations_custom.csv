@@ -8,6 +8,7 @@ NC8m,SP3m,1,siblings
 SE3m,SC4f,1,child-parent
 NC8m,NC7f,1,siblings
 SP1m,SC1f,1,parent-child;child-parent
+SP1m,NC1m,1,parent-child;child-parent
 NC3f,NE1m,1,parent-child
 NC1m,SC3m,1,parent-child;child-parent
 NE2m,SC5m,1,parent-child;child-parent
