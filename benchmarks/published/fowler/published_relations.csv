@@ -1,12 +1,14 @@
 # Data from Fowler et al., 2022 Fig. 1
 id1,id2,relation
 NC2f,SE1m,parent-child
-NC2f,SP2m,maternal grandparent-grandchild
+SE1m,SP2m,parent-child
+NC2f,SP2m,paternal grandparent-grandchild
 NC2f,NC4m,parent-child
 NC1m,NC4m,parent-child
 SE1m,NC4m,maternal half-siblings
 NC3f,NE1m,parent-child
 NC3f,NC6m,2
+NC3f,NE2m,parent-child
 NC1m,NE2m,parent-child
 NE1m,NE2m,maternal half-siblings
 NE2m,SC5m,parent-child
@@ -57,6 +59,7 @@ SC2m,SC3m,paternal half-siblings
 SP1m,SC3m,paternal half-siblings
 SC3m,SE2m,parent-child
 SC4f,SE2m,parent-child
+NC1m,SE2m,paternal grandparent-grandchild
 SC4f,SE3m,parent-child
 SE2m,SE3m,maternal half-siblings
 SE2m,SC8m,parent-child
