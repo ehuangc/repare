@@ -1,6 +1,6 @@
 # Data from Fowler et al., 2022 supplementary data
 # Relations and 1st-degree constraints are primarily inferred from relatedness coefficients and IBD information in Supplementary Table 5
-# Additional constraints based on haplogroup rarity are taken from Supplementary Information Section 2.3
+# Additional constraints based on haplogroup rarity and recombination breakpoints are taken from Supplementary Information Section 2.3 and 2.4
 id1,id2,degree,constraints
 SP1m,SC2m,1,siblings
 SC7m,SC6m,1,siblings
@@ -10,7 +10,7 @@ NC8m,NC7f,1,siblings
 SP1m,SC1f,1,parent-child;child-parent
 SP1m,NC1m,1,parent-child;child-parent
 NC3f,NE1m,1,parent-child
-NC1m,SC3m,1,parent-child;child-parent
+NC1m,SC3m,1,parent-child
 NE2m,SC5m,1,parent-child;child-parent
 SC1f,SC2m,1,parent-child;child-parent
 NC3f,NE2m,1,parent-child;child-parent
