@@ -354,7 +354,7 @@ class SimulatedPedigree:
         return metrics
 
     @staticmethod
-    def _calculate_tp_fp_fn(ground_truth_counts: defaultdict(int), algorithm_counts: defaultdict(int)) -> tuple[int, int, int]:
+    def _calculate_tp_fp_fn(ground_truth_counts: defaultdict[str, int], algorithm_counts: defaultdict[str, int]) -> tuple[int, int, int]:
         tp = 0  # True positives
         fp = 0  # False positives
         fn = 0  # False negatives
