@@ -8,8 +8,8 @@ class RelationComparison:
     Relation = namedtuple("Relation", ["id1", "id2", "relation"])
 
     def __init__(self, published_relations_path: str, algorithm_nodes_path: str, algorithm_relations_path: str) -> None:
-        self.published_relation_counts = self._load_published_relations(published_relations_path)
-        self.algorithm_relation_counts = self._load_algorithm_relations(algorithm_nodes_path, algorithm_relations_path)
+        self._published_relation_counts = self._load_published_relations(published_relations_path)
+        self._algorithm_relation_counts = self._load_algorithm_relations(algorithm_nodes_path, algorithm_relations_path)
 
     def _load_published_relations(self, path: str) -> defaultdict[Relation, int]:
         published_relations_df = pd.read_csv(path, comment="#")
@@ -108,9 +108,9 @@ class RelationComparison:
         # Map node pairs to their shared relation counts to calculate pairwise relation accuracy
         published_node_pair_to_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
         algorithm_node_pair_to_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
-        for (id1, id2, shared_relation), count in self.published_relation_counts.items():
+        for (id1, id2, shared_relation), count in self._published_relation_counts.items():
             published_node_pair_to_relation_counts[(id1, id2)][shared_relation] += count
-        for (id1, id2, shared_relation), count in self.algorithm_relation_counts.items():
+        for (id1, id2, shared_relation), count in self._algorithm_relation_counts.items():
             algorithm_node_pair_to_relation_counts[(id1, id2)][shared_relation] += count
         
         correct_node_pairs = 0
@@ -123,7 +123,7 @@ class RelationComparison:
                 total_node_pairs += 1
         pairwise_relation_accuracy = correct_node_pairs / total_node_pairs
 
-        tp, fp, fn = self._calculate_tp_fp_fn(self.published_relation_counts, self.algorithm_relation_counts)
+        tp, fp, fn = self._calculate_tp_fp_fn(self._published_relation_counts, self._algorithm_relation_counts)
         relation_precision = tp / (tp + fp)
         relation_recall = tp / (tp + fn)
         relation_f1 = 2 * (relation_precision * relation_recall) / (relation_precision + relation_recall)
