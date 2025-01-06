@@ -439,7 +439,7 @@ class SimulatedPedigree:
         degree_f1 = (2 * degree_precision * degree_recall) / (degree_precision + degree_recall) if degree_precision + degree_recall > 0 else 0
         return pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1
 
-    def _calculate_connectivity_r_squared(self) -> bool:
+    def _calculate_connectivity_r_squared(self) -> float:
         ground_truth_relation_counter: defaultdict[str, int] = defaultdict(int)
         algorithm_relation_counter: defaultdict[str, int] = defaultdict(int)
         
