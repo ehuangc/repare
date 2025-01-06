@@ -8,6 +8,7 @@ class RelationComparison:
     def __init__(self, published_relations_path: str, algorithm_nodes_path: str, algorithm_relations_path: str) -> None:
         self._published_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = self._load_published_relations(published_relations_path)
         self._algorithm_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = self._load_algorithm_relations(algorithm_nodes_path, algorithm_relations_path)
+        self._fill_uncertain_relations()
 
     def _load_published_relations(self, path: str) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
         published_relations_df = pd.read_csv(path, comment="#")
@@ -62,9 +63,36 @@ class RelationComparison:
                                                  sample_count=100)
             return pedigree_ensemble.find_best_pedigree()
 
-    @staticmethod
-    def _fill_uncertain_relations(relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]]) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
-        pass
+    def _fill_uncertain_relations(self) -> None:
+        uncertain_to_exact_relations = {
+            "1": ["parent-child", "child-parent", "siblings"],
+            "2": ["maternal aunt/uncle-nephew/niece",
+                  "maternal nephew/niece-aunt/uncle",
+                  "paternal aunt/uncle-nephew/niece",
+                  "paternal nephew/niece-aunt/uncle",
+                  "maternal grandparent-grandchild",
+                  "maternal grandchild-grandparent",
+                  "paternal grandparent-grandchild",
+                  "paternal grandchild-grandparent",
+                  "maternal half-siblings",
+                  "paternal half-siblings"
+                  ]
+        }
+
+        for (id1, id2), relation_counts_between_nodes in self._published_relation_counts.items():
+            for uncertain_relation, count in list(relation_counts_between_nodes.items()):  # Cast to list to copy items
+                if uncertain_relation not in uncertain_to_exact_relations:
+                    continue
+
+                for exact_relation in uncertain_to_exact_relations[uncertain_relation]:
+                    available_count = self._algorithm_relation_counts[(id1, id2)][exact_relation]
+                    assign_count = min(count, available_count)
+                    self._published_relation_counts[(id1, id2)][exact_relation] += assign_count
+                    self._published_relation_counts[(id1, id2)][uncertain_relation] -= assign_count
+
+                    count -= assign_count
+                    if count == 0:
+                        break
 
     def get_metrics(self) -> dict[str, float]:
         metrics: dict[str, float] = dict()
