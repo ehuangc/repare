@@ -295,7 +295,7 @@ class SimulatedPedigree:
             try:
                 self._algorithm_pedigree = pedigree_ensemble.find_best_pedigree()
                 self._algorithm_found_pedigree = True
-            except:
+            except RuntimeError:
                 self._algorithm_found_pedigree = False
     
     def get_pedigree_statistics(self) -> dict[str, int | float]:

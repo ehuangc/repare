@@ -197,7 +197,7 @@ class PedigreeEnsemble:
 
         if self._final_pedigree is None:
             logger.error(f"No valid pedigree found after {self._MAX_RUNS} runs. Exiting.")
-            raise Exception(f"No valid pedigree found after {self._MAX_RUNS} runs.")
+            raise RuntimeError(f"No valid pedigree found after {self._MAX_RUNS} runs.")
 
         self._final_pedigree.clean_up_relations()
         self._write_corrected_relations()
