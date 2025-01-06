@@ -21,7 +21,6 @@ class RelationComparison:
 
     def _load_algorithm_relations(self, nodes_path: str, relations_path: str) -> defaultdict[Relation, int]:
         self._algorithm_pedigree: Pedigree = self._run_algorithm(nodes_path, relations_path)
-        self._algorithm_pedigree.plot(path="algorithm_pedigree.png")
         algorithm_relations: defaultdict[Relation, int] = defaultdict(int)
 
         for id1, id2 in combinations(self._algorithm_pedigree.node_to_data, 2):
