@@ -5,34 +5,32 @@ from itertools import combinations
 from pedigree_package import Pedigree, PedigreeEnsemble
 
 class RelationComparison:
-    Relation = namedtuple("Relation", ["id1", "id2", "relation"])
-
     def __init__(self, published_relations_path: str, algorithm_nodes_path: str, algorithm_relations_path: str) -> None:
-        self._published_relation_counts = self._load_published_relations(published_relations_path)
-        self._algorithm_relation_counts = self._load_algorithm_relations(algorithm_nodes_path, algorithm_relations_path)
+        self._published_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = self._load_published_relations(published_relations_path)
+        self._algorithm_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = self._load_algorithm_relations(algorithm_nodes_path, algorithm_relations_path)
 
-    def _load_published_relations(self, path: str) -> defaultdict[Relation, int]:
+    def _load_published_relations(self, path: str) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
         published_relations_df = pd.read_csv(path, comment="#")
-        relation_counts: defaultdict[Relation, int] = defaultdict(int)
+        relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
         for id1, id2, relation in published_relations_df.itertuples(index=False):
-            relation = self._sort_relation(RelationComparison.Relation(id1, id2, relation))
-            relation_counts[relation] += 1
+            id1, id2, relation = self._sort_relation(id1, id2, relation)
+            relation_counts[(id1, id2)][relation] += 1
         return relation_counts
 
-    def _load_algorithm_relations(self, nodes_path: str, relations_path: str) -> defaultdict[Relation, int]:
+    def _load_algorithm_relations(self, nodes_path: str, relations_path: str) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
         self._algorithm_pedigree: Pedigree = self._run_algorithm(nodes_path, relations_path)
-        algorithm_relations: defaultdict[Relation, int] = defaultdict(int)
+        algorithm_relations: defaultdict[tuple[str, str], defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
 
         for id1, id2 in combinations(self._algorithm_pedigree.node_to_data, 2):
             if not id1.isnumeric() and not id2.isnumeric():  # Skip placeholder nodes
-                shared_relations = self._algorithm_pedigree.get_relations_between_nodes(id1, id2, include_maternal_paternal=True)
-                for shared_relation, count in shared_relations.items():
-                    relation = self._sort_relation(RelationComparison.Relation(id1, id2, shared_relation))
-                    algorithm_relations[relation] += count
+                relations_between_nodes = self._algorithm_pedigree.get_relations_between_nodes(id1, id2, include_maternal_paternal=True)
+                for relation, count in relations_between_nodes.items():
+                    id1, id2, relation = self._sort_relation(id1, id2, relation)
+                    algorithm_relations[(id1, id2)][relation] += count
         return algorithm_relations
 
     @staticmethod
-    def _sort_relation(relation: Relation) -> Relation:
+    def _sort_relation(id1: str, id2: str, relation: str) -> tuple[str, str, str]:
         FLIPPED_RELATIONS = {
             "parent-child": "child-parent",
             "child-parent": "parent-child",
@@ -50,10 +48,10 @@ class RelationComparison:
             "1": "1",  # Symmetric
             "2": "2"  # Symmetric
         }
-        if relation.id2 < relation.id1:
-            return RelationComparison.Relation(relation.id2, relation.id1, FLIPPED_RELATIONS[relation.relation])
+        if id2 < id1:
+            return id2, id1, FLIPPED_RELATIONS[relation]
         else:
-            return relation
+            return id1, id2, relation
 
     @staticmethod
     def _run_algorithm(nodes_path: str, relations_path: str) -> Pedigree:
@@ -65,7 +63,7 @@ class RelationComparison:
             return pedigree_ensemble.find_best_pedigree()
 
     @staticmethod
-    def _fill_uncertain_relations(relation_counts: defaultdict[Relation, int]) -> defaultdict[Relation, int]:
+    def _fill_uncertain_relations(relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]]) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
         pass
 
     def get_metrics(self) -> dict[str, float]:
@@ -105,27 +103,30 @@ class RelationComparison:
         return tp, fp, fn
 
     def _calculate_relation_metrics(self) -> tuple[float, float, float, float]:
-        # Map node pairs to their shared relation counts to calculate pairwise relation accuracy
-        published_node_pair_to_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
-        algorithm_node_pair_to_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
-        for (id1, id2, shared_relation), count in self._published_relation_counts.items():
-            published_node_pair_to_relation_counts[(id1, id2)][shared_relation] += count
-        for (id1, id2, shared_relation), count in self._algorithm_relation_counts.items():
-            algorithm_node_pair_to_relation_counts[(id1, id2)][shared_relation] += count
-        
-        correct_node_pairs = 0
-        total_node_pairs = 0
-        for node1, node2 in combinations(self._algorithm_pedigree.node_to_data, 2):
-            if not node1.isnumeric() and not node2.isnumeric():  # Skip placeholder nodes
-                node1, node2 = sorted([node1, node2])
-                if published_node_pair_to_relation_counts[(node1, node2)] == algorithm_node_pair_to_relation_counts[(node1, node2)]:
+        correct_node_pairs: int = 0
+        total_node_pairs: int = 0
+        relation_tp: int = 0
+        relation_fp: int = 0
+        relation_fn: int = 0
+
+        for id1, id2 in combinations(sorted(self._algorithm_pedigree.node_to_data), 2):
+            if not id1.isnumeric() and not id2.isnumeric():
+                published_relations_between_nodes = self._published_relation_counts[(id1, id2)]
+                algorithm_relations_between_nodes = self._algorithm_relation_counts[(id1, id2)]
+
+                if published_relations_between_nodes == algorithm_relations_between_nodes:
                     correct_node_pairs += 1
                 total_node_pairs += 1
-        pairwise_relation_accuracy = correct_node_pairs / total_node_pairs
 
-        tp, fp, fn = self._calculate_tp_fp_fn(self._published_relation_counts, self._algorithm_relation_counts)
-        relation_precision = tp / (tp + fp)
-        relation_recall = tp / (tp + fn)
+                tp, fp, fn = self._calculate_tp_fp_fn(published_relations_between_nodes, algorithm_relations_between_nodes)
+                relation_tp += tp
+                relation_fp += fp
+                relation_fn += fn
+                
+        pairwise_relation_accuracy = correct_node_pairs / total_node_pairs
+        relation_precision = relation_tp / (relation_tp + relation_fp)
+        relation_recall = relation_tp / (relation_tp + relation_fn)
         relation_f1 = 2 * (relation_precision * relation_recall) / (relation_precision + relation_recall)
+        relation_f1 = (2 * relation_precision * relation_recall) / (relation_precision + relation_recall) if relation_precision + relation_recall > 0 else 0
         return pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1
     
