@@ -2,6 +2,7 @@ import tempfile
 import pandas as pd
 from collections import defaultdict, namedtuple
 from itertools import combinations
+from sklearn.metrics import r2_score
 from pedigree_package import Pedigree, PedigreeEnsemble
 
 class RelationComparison:
@@ -107,7 +108,7 @@ class RelationComparison:
         metrics["Degree Precision"] = degree_precision
         metrics["Degree Recall"] = degree_recall
         metrics["Degree F1"] = degree_f1
-        # metrics["Connectivity R-squared"] = self._calculate_connectivity_r_squared()
+        metrics["Connectivity R-squared"] = self._calculate_connectivity_r_squared()
         return metrics
 
     @staticmethod
@@ -198,4 +199,22 @@ class RelationComparison:
         return pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1
     
     def _calculate_connectivity_r_squared(self) -> float:
-        pass
+        ground_truth_relation_counter: defaultdict[str, int] = defaultdict(int)
+        algorithm_relation_counter: defaultdict[str, int] = defaultdict(int)
+
+        for node1, node2 in combinations(sorted(self._algorithm_pedigree.node_to_data), 2):
+            if not node1.isnumeric() and not node2.isnumeric():
+                relations_between_nodes = self._published_relation_counts[(node1, node2)]
+                for relation, count in relations_between_nodes.items():
+                    ground_truth_relation_counter[relation] += count
+
+                relations_between_nodes = self._algorithm_relation_counts[(node1, node2)]
+                for relation, count in relations_between_nodes.items():
+                    algorithm_relation_counter[relation] += count
+                
+        published_connectivities: list[int] = []
+        algorithm_connectivities: list[int] = []
+        for node in sorted(self._algorithm_pedigree.node_to_data):
+            published_connectivities.append(ground_truth_relation_counter[node])
+            algorithm_connectivities.append(algorithm_relation_counter[node])
+        return r2_score(published_connectivities, algorithm_connectivities)
