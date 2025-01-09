@@ -138,19 +138,19 @@ class RelationComparison:
         relation_fp: int = 0
         relation_fn: int = 0
 
-        for id1, id2 in combinations(sorted(self._algorithm_pedigree.node_to_data), 2):
-            if not id1.isnumeric() and not id2.isnumeric():
-                published_relations_between_nodes = self._published_relation_counts[(id1, id2)]
-                algorithm_relations_between_nodes = self._algorithm_relation_counts[(id1, id2)]
+        nodes = [node for node in self._algorithm_pedigree.node_to_data if not node.isnumeric()]
+        for id1, id2 in combinations(sorted(nodes), 2):
+            published_relations_between_nodes = self._published_relation_counts[(id1, id2)]
+            algorithm_relations_between_nodes = self._algorithm_relation_counts[(id1, id2)]
 
-                if published_relations_between_nodes == algorithm_relations_between_nodes:
-                    correct_node_pairs += 1
-                total_node_pairs += 1
+            if published_relations_between_nodes == algorithm_relations_between_nodes:
+                correct_node_pairs += 1
+            total_node_pairs += 1
 
-                tp, fp, fn = self._calculate_tp_fp_fn(published_relations_between_nodes, algorithm_relations_between_nodes)
-                relation_tp += tp
-                relation_fp += fp
-                relation_fn += fn
+            tp, fp, fn = self._calculate_tp_fp_fn(published_relations_between_nodes, algorithm_relations_between_nodes)
+            relation_tp += tp
+            relation_fp += fp
+            relation_fn += fn
                 
         pairwise_relation_accuracy = correct_node_pairs / total_node_pairs
         relation_precision = relation_tp / (relation_tp + relation_fp)
@@ -166,31 +166,31 @@ class RelationComparison:
         degree_fp: int = 0
         degree_fn: int = 0
 
-        for id1, id2 in combinations(sorted(self._algorithm_pedigree.node_to_data), 2):
-            if not id1.isnumeric() and not id2.isnumeric():
-                published_relations_between_nodes = self._published_relation_counts[(id1, id2)]
-                algorithm_relations_between_nodes = self._algorithm_relation_counts[(id1, id2)]
+        nodes = [node for node in self._algorithm_pedigree.node_to_data if not node.isnumeric()]
+        for id1, id2 in combinations(sorted(nodes), 2):
+            published_relations_between_nodes = self._published_relation_counts[(id1, id2)]
+            algorithm_relations_between_nodes = self._algorithm_relation_counts[(id1, id2)]
 
-                published_degrees_between_nodes = defaultdict(int)
-                algorithm_degrees_between_nodes = defaultdict(int)
-                for relation in ["parent-child", "child-parent", "siblings"]:
-                    published_degrees_between_nodes["1"] += published_relations_between_nodes[relation]
-                    algorithm_degrees_between_nodes["1"] += algorithm_relations_between_nodes[relation]
+            published_degrees_between_nodes = defaultdict(int)
+            algorithm_degrees_between_nodes = defaultdict(int)
+            for relation in ["parent-child", "child-parent", "siblings"]:
+                published_degrees_between_nodes["1"] += published_relations_between_nodes[relation]
+                algorithm_degrees_between_nodes["1"] += algorithm_relations_between_nodes[relation]
 
-                for relation in ["maternal aunt/uncle-nephew/niece", "paternal aunt/uncle-nephew/niece", "maternal nephew/niece-aunt/uncle", "paternal nephew/niece-aunt/uncle", 
-                                "maternal grandparent-grandchild", "paternal grandparent-grandchild", "maternal grandchild-grandparent", "paternal grandchild-grandparent", 
-                                "maternal half-siblings", "paternal half-siblings"]:
-                    published_degrees_between_nodes["2"] += published_relations_between_nodes[relation]
-                    algorithm_degrees_between_nodes["2"] += algorithm_relations_between_nodes[relation]
+            for relation in ["maternal aunt/uncle-nephew/niece", "paternal aunt/uncle-nephew/niece", "maternal nephew/niece-aunt/uncle", "paternal nephew/niece-aunt/uncle", 
+                            "maternal grandparent-grandchild", "paternal grandparent-grandchild", "maternal grandchild-grandparent", "paternal grandchild-grandparent", 
+                            "maternal half-siblings", "paternal half-siblings"]:
+                published_degrees_between_nodes["2"] += published_relations_between_nodes[relation]
+                algorithm_degrees_between_nodes["2"] += algorithm_relations_between_nodes[relation]
 
-                if published_degrees_between_nodes == algorithm_degrees_between_nodes:
-                    correct_node_pairs += 1
-                total_node_pairs += 1
-            
-                tp, fp, fn = self._calculate_tp_fp_fn(published_degrees_between_nodes, algorithm_degrees_between_nodes)
-                degree_tp += tp
-                degree_fp += fp
-                degree_fn += fn
+            if published_degrees_between_nodes == algorithm_degrees_between_nodes:
+                correct_node_pairs += 1
+            total_node_pairs += 1
+        
+            tp, fp, fn = self._calculate_tp_fp_fn(published_degrees_between_nodes, algorithm_degrees_between_nodes)
+            degree_tp += tp
+            degree_fp += fp
+            degree_fn += fn
         
         pairwise_degree_accuracy = correct_node_pairs / total_node_pairs
         degree_precision = degree_tp / (degree_tp + degree_fp)
@@ -202,7 +202,8 @@ class RelationComparison:
         ground_truth_relation_counter: defaultdict[str, int] = defaultdict(int)
         algorithm_relation_counter: defaultdict[str, int] = defaultdict(int)
 
-        for node1, node2 in combinations(sorted(self._algorithm_pedigree.node_to_data), 2):
+        nodes = [node for node in self._algorithm_pedigree.node_to_data if not node.isnumeric()]
+        for node1, node2 in combinations(sorted(nodes), 2):
             if not node1.isnumeric() and not node2.isnumeric():
                 relations_between_nodes = self._published_relation_counts[(node1, node2)]
                 for relation, count in relations_between_nodes.items():
@@ -214,7 +215,7 @@ class RelationComparison:
                 
         published_connectivities: list[int] = []
         algorithm_connectivities: list[int] = []
-        for node in sorted(self._algorithm_pedigree.node_to_data):
+        for node in nodes:
             published_connectivities.append(ground_truth_relation_counter[node])
             algorithm_connectivities.append(algorithm_relation_counter[node])
         return r2_score(published_connectivities, algorithm_connectivities)
