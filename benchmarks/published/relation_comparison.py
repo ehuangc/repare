@@ -97,16 +97,16 @@ class RelationComparison:
     def get_metrics(self) -> dict[str, float]:
         metrics: dict[str, float] = dict()
         pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1 = self._calculate_relation_metrics()
-        # pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1 = self._calculate_degree_metrics()
+        pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1 = self._calculate_degree_metrics()
 
         metrics["Pairwise Relation Accuracy"] = pairwise_relation_accuracy
         metrics["Relation Precision"] = relation_precision
         metrics["Relation Recall"] = relation_recall
         metrics["Relation F1"] = relation_f1
-        # metrics["Pairwise Degree Accuracy"] = pairwise_degree_accuracy
-        # metrics["Degree Precision"] = degree_precision
-        # metrics["Degree Recall"] = degree_recall
-        # metrics["Degree F1"] = degree_f1
+        metrics["Pairwise Degree Accuracy"] = pairwise_degree_accuracy
+        metrics["Degree Precision"] = degree_precision
+        metrics["Degree Recall"] = degree_recall
+        metrics["Degree F1"] = degree_f1
         # metrics["Connectivity R-squared"] = self._calculate_connectivity_r_squared()
         return metrics
 
@@ -158,3 +158,44 @@ class RelationComparison:
         relation_f1 = (2 * relation_precision * relation_recall) / (relation_precision + relation_recall) if relation_precision + relation_recall > 0 else 0
         return pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1
     
+    def _calculate_degree_metrics(self) -> tuple[float, float, float, float]:
+        correct_node_pairs: int = 0
+        total_node_pairs: int = 0
+        degree_tp: int = 0
+        degree_fp: int = 0
+        degree_fn: int = 0
+
+        for id1, id2 in combinations(sorted(self._algorithm_pedigree.node_to_data), 2):
+            if not id1.isnumeric() and not id2.isnumeric():
+                published_relations_between_nodes = self._published_relation_counts[(id1, id2)]
+                algorithm_relations_between_nodes = self._algorithm_relation_counts[(id1, id2)]
+
+                published_degrees_between_nodes = defaultdict(int)
+                algorithm_degrees_between_nodes = defaultdict(int)
+                for relation in ["parent-child", "child-parent", "siblings"]:
+                    published_degrees_between_nodes["1"] += published_relations_between_nodes[relation]
+                    algorithm_degrees_between_nodes["1"] += algorithm_relations_between_nodes[relation]
+
+                for relation in ["maternal aunt/uncle-nephew/niece", "paternal aunt/uncle-nephew/niece", "maternal nephew/niece-aunt/uncle", "paternal nephew/niece-aunt/uncle", 
+                                "maternal grandparent-grandchild", "paternal grandparent-grandchild", "maternal grandchild-grandparent", "paternal grandchild-grandparent", 
+                                "maternal half-siblings", "paternal half-siblings"]:
+                    published_degrees_between_nodes["2"] += published_relations_between_nodes[relation]
+                    algorithm_degrees_between_nodes["2"] += algorithm_relations_between_nodes[relation]
+
+                if published_degrees_between_nodes == algorithm_degrees_between_nodes:
+                    correct_node_pairs += 1
+                total_node_pairs += 1
+            
+                tp, fp, fn = self._calculate_tp_fp_fn(published_degrees_between_nodes, algorithm_degrees_between_nodes)
+                degree_tp += tp
+                degree_fp += fp
+                degree_fn += fn
+        
+        pairwise_degree_accuracy = correct_node_pairs / total_node_pairs
+        degree_precision = degree_tp / (degree_tp + degree_fp)
+        degree_recall = degree_tp / (degree_tp + degree_fn)
+        degree_f1 = (2 * degree_precision * degree_recall) / (degree_precision + degree_recall) if degree_precision + degree_recall > 0 else 0
+        return pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1
+    
+    def _calculate_connectivity_r_squared(self) -> float:
+        pass
