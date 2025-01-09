@@ -112,13 +112,13 @@ class RelationComparison:
         return metrics
 
     @staticmethod
-    def _calculate_tp_fp_fn(ground_truth_counts: defaultdict(int), algorithm_counts: defaultdict(int)) -> tuple[int, int, int]:
+    def _calculate_tp_fp_fn(published_counts: defaultdict(int), algorithm_counts: defaultdict(int)) -> tuple[int, int, int]:
         tp = 0  # True positives
         fp = 0  # False positives
         fn = 0  # False negatives
-        relations = ground_truth_counts.keys() | algorithm_counts.keys()
+        relations = published_counts.keys() | algorithm_counts.keys()
         for relation in relations:
-            true_count = ground_truth_counts[relation]
+            true_count = published_counts[relation]
             algorithm_count = algorithm_counts[relation]
 
             if true_count == algorithm_count:
@@ -199,7 +199,7 @@ class RelationComparison:
         return pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1
     
     def _calculate_connectivity_r_squared(self) -> float:
-        ground_truth_relation_counter: defaultdict[str, int] = defaultdict(int)
+        published_relation_counter: defaultdict[str, int] = defaultdict(int)
         algorithm_relation_counter: defaultdict[str, int] = defaultdict(int)
 
         nodes = [node for node in self._algorithm_pedigree.node_to_data if not node.isnumeric()]
@@ -207,7 +207,7 @@ class RelationComparison:
             if not node1.isnumeric() and not node2.isnumeric():
                 relations_between_nodes = self._published_relation_counts[(node1, node2)]
                 for relation, count in relations_between_nodes.items():
-                    ground_truth_relation_counter[relation] += count
+                    published_relation_counter[relation] += count
 
                 relations_between_nodes = self._algorithm_relation_counts[(node1, node2)]
                 for relation, count in relations_between_nodes.items():
@@ -216,6 +216,6 @@ class RelationComparison:
         published_connectivities: list[int] = []
         algorithm_connectivities: list[int] = []
         for node in nodes:
-            published_connectivities.append(ground_truth_relation_counter[node])
+            published_connectivities.append(published_relation_counter[node])
             algorithm_connectivities.append(algorithm_relation_counter[node])
         return r2_score(published_connectivities, algorithm_connectivities)
