@@ -1,7 +1,7 @@
 # Data from Rivollat et al., 2023 Fig. 1
 id1,id2,relation
 GLN320,GLN231A,2
-GLN270B,GLN231A,2
+GLN320,GLN270B,2
 GLN231A,GLN270B,siblings
 GLN231A,GLN322,parent-child
 GLN270B,GLN322,aunt/uncle-nephew/niece
@@ -63,16 +63,16 @@ GLN269,GLN268B,siblings
 GLN269,GLN243A,siblings
 GLN268B,GLN243A,siblings
 GLN269,GLN227,parent-child
-GLN268B,GLN227,maternal aunt/uncle-nephew/niece
-GLN243A,GLN227,maternal aunt/uncle-nephew/niece
+GLN268B,GLN227,paternal aunt/uncle-nephew/niece
+GLN243A,GLN227,paternal aunt/uncle-nephew/niece
 GLN266,GLN227,paternal grandparent-grandchild
 GLN269,GLN267,parent-child
-GLN268B,GLN267,maternal aunt/uncle-nephew/niece
-GLN243A,GLN267,maternal aunt/uncle-nephew/niece
+GLN268B,GLN267,paternal aunt/uncle-nephew/niece
+GLN243A,GLN267,paternal aunt/uncle-nephew/niece
 GLN266,GLN267,paternal grandparent-grandchild
 GLN269,GLN268A,parent-child
-GLN268B,GLN268A,maternal aunt/uncle-nephew/niece
-GLN243A,GLN268A,maternal aunt/uncle-nephew/niece
+GLN268B,GLN268A,paternal aunt/uncle-nephew/niece
+GLN243A,GLN268A,paternal aunt/uncle-nephew/niece
 GLN266,GLN268A,paternal grandparent-grandchild
 GLN227,GLN267,siblings
 GLN227,GLN268A,siblings
@@ -172,7 +172,7 @@ GLN270B,GLN260,paternal grandparent-grandchild
 GLN270B,GLN220,paternal grandparent-grandchild
 GLN270B,GLN241,paternal grandparent-grandchild
 GLN270B,GLN319,paternal grandparent-grandchild
-GLN270B,GLN226,paternal grandparent-grandchild
+GLN270B,GLN256,paternal grandparent-grandchild
 GLN270B,GLN261,paternal grandparent-grandchild
 GLN237A,GLN260,paternal aunt/uncle-nephew/niece
 GLN237A,GLN220,paternal aunt/uncle-nephew/niece
