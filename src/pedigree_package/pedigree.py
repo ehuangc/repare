@@ -74,7 +74,7 @@ class Pedigree:
                     result[i] = f"F {placeholder_to_idx[node]} {mt_haplogroup}"
         return tuple(result)
 
-    def add_node(self, node_id: str, sex: str, y_haplogroup: str, mt_haplogroup: str, can_have_children: bool, can_be_inbred: bool) -> None:
+    def add_node(self, node_id: str, sex: str, y_haplogroup: str, mt_haplogroup: str, can_have_children: bool, can_be_inbred: bool, years_before_present: str) -> None:
         """
         Add a node to the pedigree. If haplogroup is unknown, set argument to empty string ("").
         """
@@ -85,6 +85,7 @@ class Pedigree:
         self.node_to_data[node_id]["mt_haplogroup"] = mt_haplogroup
         self.node_to_data[node_id]["can_have_children"] = can_have_children
         self.node_to_data[node_id]["can_be_inbred"] = can_be_inbred
+        self.node_to_data[node_id]["years_before_present"] = years_before_present
 
     def add_parent_relation(self, node1: str, node2: str) -> None:
         """
@@ -384,6 +385,34 @@ class Pedigree:
                 mother = self.node_to_mother[node]
                 if (father, mother) in related_pairs or (mother, father) in related_pairs:
                     return False
+        return True
+
+    def validate_years_before_present(self) -> bool:
+        """
+        Validates that nodes do not postdate their descendants.
+        """
+        leaf_nodes: list[str] = [node for node in self.node_to_data if not self.node_to_children[node]]
+        # DFS
+        def visit(node: str, curr_years_before_present: float) -> None:
+            years_before_present = self.node_to_data[node]["years_before_present"]
+            if years_before_present:
+                years_before_present = float(years_before_present)
+                if years_before_present < curr_years_before_present:  # Node postdates its descendants
+                    return False
+                else:
+                    curr_years_before_present = years_before_present
+
+            if self.node_to_father[node]:
+                assert self.node_to_mother[node]
+                if not visit(self.node_to_father[node], curr_years_before_present):
+                    return False
+                if not visit(self.node_to_mother[node], curr_years_before_present):
+                    return False
+            return True
+
+        for node in leaf_nodes:
+            if not visit(node, float("-inf")):
+                return False
         return True
 
     def count_inconsistencies(self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]], pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str]]], check_half_siblings: bool) -> tuple[int, list[tuple[str, str, str]]]:

@@ -40,19 +40,24 @@ class PedigreeEnsemble:
         Read in node data and set types.
         """
         self._node_data = pd.read_csv(nodes_path, dtype=str, comment="#", keep_default_na=False)
-        for column_name in ["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children", "can_be_inbred"]:
+        for column_name in ["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children", "can_be_inbred", "years_before_present"]:
             if column_name not in self._node_data.columns:
                 raise ValueError(f"Column \"{column_name}\" not found in input node data.")
 
-        # Numeric IDs are used for placeholder nodes
-        if self._node_data["id"].str.isnumeric().any():
+        if self._node_data["id"].str.isnumeric().any():  # Numeric IDs are used for placeholder nodes
             raise ValueError("Sample IDs cannot be completely numeric.")
+
         if not self._node_data["sex"].isin(["M", "F"]).all():
             raise ValueError("Node sex must be \"M\" or \"F\".")
+
         if not self._node_data["can_have_children"].isin(["True", "False", ""]).all():
             raise ValueError("can_have_children value must be \"True\", \"False\", or empty.")
+
         if not self._node_data["can_be_inbred"].isin(["True", "False", ""]).all():
             raise ValueError("can_be_inbred value must be \"True\", \"False\", or empty.")
+
+        if not self._node_data["years_before_present"].apply(lambda x: x.isnumeric() or x == "").all():
+            raise ValueError("years_before_present value must be numeric or empty.")
 
         # Convert "can_have_children" and "can_be_inbred" columns to booleans
         self._node_data["can_have_children"] = self._node_data["can_have_children"].map({"False": False, "True": True, "": True})
@@ -157,8 +162,8 @@ class PedigreeEnsemble:
         Create the initial pedigree and add all nodes.
         """
         initial_pedigree = Pedigree()
-        for node_id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred in self._node_data.itertuples(index=False):
-            initial_pedigree.add_node(node_id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred)
+        for node_id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred, years_before_present in self._node_data.itertuples(index=False):
+            initial_pedigree.add_node(node_id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred, years_before_present)
         return initial_pedigree
 
     def find_best_pedigree(self) -> Pedigree:
@@ -432,7 +437,11 @@ class PedigreeEnsemble:
         seen_topologies = set()
         new_potential_pedigrees = []
         for pedigree in self._pedigrees:
-            if pedigree.validate_members(set(self._node_data["id"])) and pedigree.validate_can_have_children() and pedigree.validate_inbreeding():
+            if (pedigree.validate_members(set(self._node_data["id"])) 
+                and pedigree.validate_can_have_children() 
+                and pedigree.validate_inbreeding()
+                and pedigree.validate_years_before_present()
+                ):
                 pedigree.update_haplogroups()
                 if pedigree.validate_haplogroups():
                     topology = pedigree.get_topo_sort()
