@@ -61,6 +61,8 @@ class PedigreeEnsemble:
         # Convert "can_have_children" and "can_be_inbred" columns to booleans
         self._node_data["can_have_children"] = self._node_data["can_have_children"].map({"False": False, "True": True, "": True})
         self._node_data["can_be_inbred"] = self._node_data["can_be_inbred"].map({"False": False, "True": True, "": True})
+        # Convert "years_before_present" column to floats
+        self._node_data["years_before_present"] = pd.to_numeric(self._node_data["years_before_present"], errors="coerce")
 
     def _process_relations_data(self, relations_path: str) -> None:
         """

@@ -1,3 +1,4 @@
+import math
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -10,7 +11,7 @@ class Pedigree:
     """
     def __init__(self) -> None:
         self.num_placeholders = 0
-        self.node_to_data = defaultdict(lambda: defaultdict(str))
+        self.node_to_data: dict[str, dict[str, str | bool | float]] = dict()
         self.node_to_father = defaultdict(str)
         self.node_to_mother = defaultdict(str)
         self.node_to_children = defaultdict(set)
@@ -25,7 +26,7 @@ class Pedigree:
         memo[id(self)] = new_pedigree
         
         new_pedigree.num_placeholders = self.num_placeholders
-        new_pedigree.node_to_data = defaultdict(lambda: defaultdict(str))
+        new_pedigree.node_to_data = dict()
         for k, v in self.node_to_data.items():
             new_pedigree.node_to_data[k] = v.copy()
 
@@ -74,10 +75,11 @@ class Pedigree:
                     result[i] = f"F {placeholder_to_idx[node]} {mt_haplogroup}"
         return tuple(result)
 
-    def add_node(self, node_id: str, sex: str, y_haplogroup: str, mt_haplogroup: str, can_have_children: bool, can_be_inbred: bool, years_before_present: str) -> None:
+    def add_node(self, node_id: str, sex: str, y_haplogroup: str, mt_haplogroup: str, can_have_children: bool, can_be_inbred: bool, years_before_present: float) -> None:
         """
         Add a node to the pedigree. If haplogroup is unknown, set argument to empty string ("").
         """
+        self.node_to_data[node_id]: dict[str, str | bool | float] = dict()
         self.node_to_data[node_id]["sex"] = sex
         if y_haplogroup and sex == "F":
             raise ValueError("Only males can have y_haplogroup values.")
@@ -286,7 +288,8 @@ class Pedigree:
 
         if not father:
             father_id = str(self.num_placeholders)
-            self.node_to_data[father_id]["sex"] = "M"
+            self.add_node(node_id=father_id, sex="M", y_haplogroup="", mt_haplogroup="", can_have_children=True, can_be_inbred=True, years_before_present=math.nan)
+
             self.add_parent_relation(father_id, node)
             for sibling in self.node_to_siblings[node]:
                 self.add_parent_relation(father_id, sibling)
@@ -294,7 +297,8 @@ class Pedigree:
 
         if not mother:
             mother_id = str(self.num_placeholders)
-            self.node_to_data[mother_id]["sex"] = "F"
+            self.add_node(node_id=mother_id, sex="F", y_haplogroup="", mt_haplogroup="", can_have_children=True, can_be_inbred=True, years_before_present=math.nan)
+            
             self.add_parent_relation(mother_id, node)
             for sibling in self.node_to_siblings[node]:
                 self.add_parent_relation(mother_id, sibling)
@@ -395,8 +399,7 @@ class Pedigree:
         # DFS
         def visit(node: str, curr_years_before_present: float) -> None:
             years_before_present = self.node_to_data[node]["years_before_present"]
-            if years_before_present:
-                years_before_present = float(years_before_present)
+            if not math.isnan(years_before_present):
                 if years_before_present < curr_years_before_present:  # Node postdates its descendants
                     return False
                 else:
