@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import random
 import tempfile
+import math
 import networkx as nx
 from sklearn.metrics import r2_score
 from itertools import combinations
@@ -73,7 +74,7 @@ class SimulatedPedigree:
             can_have_children = random.random() < self._p_can_have_children
 
         # Set can_be_inbred to True; we will update later in self._get_nodes()
-        self._ground_truth_pedigree.add_node(node_id, sex, y_haplogroup, mt_haplogroup, can_have_children, True)
+        self._ground_truth_pedigree.add_node(node_id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred=True, years_before_present=math.nan)
         self._generation_to_nodes[generation].add(node_id)
         self._node_to_generation[node_id] = generation
         return node_id
@@ -142,8 +143,10 @@ class SimulatedPedigree:
             # Even if node is not inbred, conservatively set can_be_inbred to False
             if (father, mother) not in pedigree_relation_pairs and (mother, father) not in pedigree_relation_pairs and random.random() < 0.5:
                 can_be_inbred = "False"
-            nodes_list.append((node, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred))
-        return pd.DataFrame(nodes_list, columns=["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children", "can_be_inbred"])
+            
+            years_before_present = math.nan  # Conservatively do not set sample age
+            nodes_list.append((node, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred, years_before_present))
+        return pd.DataFrame(nodes_list, columns=["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children", "can_be_inbred", "years_before_present"])
 
     def _get_first_degree_relations(self) -> pd.DataFrame:
         relations_list: list[str, str, str, str] = []  # id1, id2, degree, constraints
