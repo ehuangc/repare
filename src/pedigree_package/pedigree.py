@@ -446,43 +446,41 @@ class Pedigree:
                     if relation in constraints:
                         pair_to_constraints_seen_entries[(node1, node2)].add(idx)
                         break
+
+        def validate_relation(node1: str, node2: str, relation: str, strike_log: list[str, str, str, str]) -> None:
+            relation_to_degree = {
+                "parent-child": "1", "child-parent": "1", "siblings": "1",
+                "aunt/uncle-nephew/niece": "2", "nephew/niece-aunt/uncle": "2", 
+                "grandparent-grandchild": "2", "grandchild-grandparent": "2", "half-siblings": "2"
+            }
+            flipped_relations = {
+                "parent-child": "child-parent",
+                "child-parent": "parent-child",
+                "aunt/uncle-nephew/niece": "nephew/niece-aunt/uncle",
+                "nephew/niece-aunt/uncle": "aunt/uncle-nephew/niece",
+                "grandparent-grandchild": "grandchild-grandparent",
+                "grandchild-grandparent": "grandparent-grandchild",
+                "siblings": "siblings",  # Symmetric
+                "half-siblings": "half-siblings"  # Symmetric
+            }
+            if not is_relation_in_input_data(node1, node2, relation) and not is_relation_in_input_data(node2, node1, flipped_relations[relation]):
+                strike_log.append((node1, node2, f"+{relation_to_degree[relation]}", ""))
+            remove_relation_from_input_data(node1, node2, relation)
+            remove_relation_from_input_data(node2, node1, flipped_relations[relation])
         
         strike_log: list[str, str, str, str] = []  # (node1, node2, +/- relation degree, constraints)
-        # Check that all parent-child relations in the tree are present in the input data
+        # Check that relations in the pedigree are present in the input data
         for parent, child in self.get_parent_child_pairs(include_placeholders=False):
-            if not is_relation_in_input_data(parent, child, "parent-child") and not is_relation_in_input_data(child, parent, "child-parent"):
-                strike_log.append((parent, child, "+1", ""))
-            remove_relation_from_input_data(parent, child, "parent-child")
-            remove_relation_from_input_data(child, parent, "child-parent")
-
-        # Check that all sibling relations in the tree are present in the input data
+            validate_relation(parent, child, "parent-child", strike_log)
         for sibling1, sibling2 in self.get_sibling_pairs(include_placeholders=False):
-            if not is_relation_in_input_data(sibling1, sibling2, "siblings") and not is_relation_in_input_data(sibling2, sibling1, "siblings"):
-                strike_log.append((sibling1, sibling2, "+1", ""))
-            remove_relation_from_input_data(sibling1, sibling2, "siblings")
-            remove_relation_from_input_data(sibling2, sibling1, "siblings")
-
-        # Check that all aunt/uncle-nephew/niece relations in the tree are present in the input data
+            validate_relation(sibling1, sibling2, "siblings", strike_log)
         for aunt_uncle, nephew_niece in self.get_aunt_uncle_nephew_niece_pairs(include_placeholders=False):
-            if not is_relation_in_input_data(aunt_uncle, nephew_niece, "aunt/uncle-nephew/niece") and not is_relation_in_input_data(nephew_niece, aunt_uncle, "nephew/niece-aunt/uncle"):
-                strike_log.append((aunt_uncle, nephew_niece, "+2", ""))
-            remove_relation_from_input_data(aunt_uncle, nephew_niece, "aunt/uncle-nephew/niece")
-            remove_relation_from_input_data(nephew_niece, aunt_uncle, "nephew/niece-aunt/uncle")
-
-        # Check that all grandparent-grandchild relations in the tree are present in the input data
+            validate_relation(aunt_uncle, nephew_niece, "aunt/uncle-nephew/niece", strike_log)
         for grandparent, grandchild in self.get_grandparent_grandchild_pairs(include_placeholders=False):
-            if not is_relation_in_input_data(grandparent, grandchild, "grandparent-grandchild") and not is_relation_in_input_data(grandchild, grandparent, "grandchild-grandparent"):
-                strike_log.append((grandparent, grandchild, "+2", ""))
-            remove_relation_from_input_data(grandparent, grandchild, "grandparent-grandchild")
-            remove_relation_from_input_data(grandchild, grandparent, "grandchild-grandparent")
-
-        # Check that all half-sibling relations in the tree are present in the input data
+            validate_relation(grandparent, grandchild, "grandparent-grandchild", strike_log)
         if check_half_siblings:
             for half_sibling1, half_sibling2 in self.get_half_sibling_pairs(include_placeholders=False):
-                if not is_relation_in_input_data(half_sibling1, half_sibling2, "half-siblings") and not is_relation_in_input_data(half_sibling2, half_sibling1, "half-siblings"):
-                    strike_log.append((half_sibling1, half_sibling2, "+2", ""))
-                remove_relation_from_input_data(half_sibling1, half_sibling2, "half-siblings")
-                remove_relation_from_input_data(half_sibling2, half_sibling1, "half-siblings")
+                validate_relation(half_sibling1, half_sibling2, "half-siblings", strike_log)
 
         # Check for "dropped" input relations
         # Note: We use constrained relations instead of all relations because we want to catch half-siblings that explicitly should be some other relation even when check_half_siblings is False
