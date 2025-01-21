@@ -36,7 +36,7 @@ class PedigreeEnsemble:
 
     def _process_node_data(self, nodes_path: str) -> None:
         """
-        Read in node data and set types.
+        Read, validate, and process node data.
         """
         self._node_data = pd.read_csv(nodes_path, dtype=str, comment="#", keep_default_na=False)
         for mandatory_column in ["id", "sex", "y_haplogroup", "mt_haplogroup"]:
@@ -75,7 +75,7 @@ class PedigreeEnsemble:
 
     def _process_relations_data(self, relations_path: str) -> None:
         """
-        Read in and separate relations data into first- and second-degree relations.
+        Read, validate, and proccess relations data.
         """
         relations_data = pd.read_csv(relations_path, dtype=str, comment="#", keep_default_na=False)
         for column_name in ["id1", "id2", "degree", "constraints"]:
