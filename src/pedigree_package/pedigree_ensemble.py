@@ -107,7 +107,7 @@ class PedigreeEnsemble:
             if constraints:
                 constraints_list = [c for c in constraints.split(";")]
                 if any(c not in allowed_constraints for c in constraints_list):
-                    raise ValueError(f"Invalid constraints found: {invalid_constraints}")
+                    raise ValueError(f"Invalid constraints found: {[c for c in constraints_list if c not in allowed_constraints]}.")
         relations_data["constraints"].apply(split_and_validate_constraints)
 
         def sort_nodes(row: pd.Series) -> pd.Series:
