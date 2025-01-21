@@ -288,7 +288,7 @@ class Pedigree:
 
         if not father:
             father_id = str(self.num_placeholders)
-            self.add_node(node_id=father_id, sex="M", y_haplogroup="", mt_haplogroup="", can_have_children=True, can_be_inbred=True, years_before_present=math.nan)
+            self.add_node(node_id=father_id, sex="M", y_haplogroup="*", mt_haplogroup="*", can_have_children=True, can_be_inbred=True, years_before_present=math.nan)
 
             self.add_parent_relation(father_id, node)
             for sibling in self.node_to_siblings[node]:
@@ -297,7 +297,7 @@ class Pedigree:
 
         if not mother:
             mother_id = str(self.num_placeholders)
-            self.add_node(node_id=mother_id, sex="F", y_haplogroup="", mt_haplogroup="", can_have_children=True, can_be_inbred=True, years_before_present=math.nan)
+            self.add_node(node_id=mother_id, sex="F", y_haplogroup="", mt_haplogroup="*", can_have_children=True, can_be_inbred=True, years_before_present=math.nan)
             
             self.add_parent_relation(mother_id, node)
             for sibling in self.node_to_siblings[node]:
@@ -309,36 +309,38 @@ class Pedigree:
         Update haplogroups of placeholder nodes.
         """
         for node in self.node_to_data:
-            if self.node_to_data[node]["y_haplogroup"]:
-                y_haplogroup: str = self.node_to_data[node]["y_haplogroup"]
-                y_lineage: deque[str] = deque([self.node_to_father[node]] + [child for child in self.node_to_children[node] if self.node_to_data[child]["sex"] == "M"])
-                
-                while y_lineage:
-                    curr_node = y_lineage.popleft()
-                    # Overwrite/extend Y haplogroup if it is a strict subset of the "leaf" haplogroup
-                    if curr_node and self.node_to_data[curr_node]["y_haplogroup"] in y_haplogroup and self.node_to_data[curr_node]["y_haplogroup"] != y_haplogroup:
-                        self.node_to_data[curr_node]["y_haplogroup"] = y_haplogroup
-                        y_lineage.append(self.node_to_father[curr_node])
-                        for curr_node_child in self.node_to_children[curr_node]:
-                            # Only males have Y chromosome
-                            if self.node_to_data[curr_node_child]["sex"] == "M":
-                                y_lineage.append(curr_node_child)
+            y_haplogroup: str = self.node_to_data[node]["y_haplogroup"]
+            y_lineage: deque[str] = deque([self.node_to_father[node]] + [child for child in self.node_to_children[node] if self.node_to_data[child]["sex"] == "M"])
+            
+            while y_lineage:
+                curr_node = y_lineage.popleft()
+                if not curr_node or "*" not in self.node_to_data[curr_node]["y_haplogroup"] or self.node_to_data[curr_node]["y_haplogroup"].rstrip("*") == y_haplogroup.rstrip("*"):
+                    continue
+                # Overwrite/extend Y haplogroup if it contains a "*" and is a strict subset of the "leaf" haplogroup
+                if y_haplogroup.startswith(self.node_to_data[curr_node]["y_haplogroup"].rstrip("*")):
+                    self.node_to_data[curr_node]["y_haplogroup"] = y_haplogroup if y_haplogroup[-1] == "*" else y_haplogroup + "*"
+                    y_lineage.append(self.node_to_father[curr_node])
+                    for curr_node_child in self.node_to_children[curr_node]:
+                        # Only males have Y chromosome
+                        if self.node_to_data[curr_node_child]["sex"] == "M":
+                            y_lineage.append(curr_node_child)
 
-            if self.node_to_data[node]["mt_haplogroup"]:
-                mt_haplogroup: str = self.node_to_data[node]["mt_haplogroup"]
-                mt_lineage: deque[str] = deque([self.node_to_mother[node]])
-                # Only females pass on mitochondrial DNA to children
-                if self.node_to_data[node]["sex"] == "F":
-                    mt_lineage.extend(self.node_to_children[node])
+            mt_haplogroup: str = self.node_to_data[node]["mt_haplogroup"]
+            mt_lineage: deque[str] = deque([self.node_to_mother[node]])
+            # Only females pass on mitochondrial DNA to children
+            if self.node_to_data[node]["sex"] == "F":
+                mt_lineage.extend(self.node_to_children[node])
 
-                while mt_lineage:
-                    curr_node = mt_lineage.popleft()
-                    # Overwrite/extend mitochondrial haplogroup if it is a strict subset of the "leaf" haplogroup
-                    if curr_node and self.node_to_data[curr_node]["mt_haplogroup"] in mt_haplogroup and self.node_to_data[curr_node]["mt_haplogroup"] != mt_haplogroup:
-                        self.node_to_data[curr_node]["mt_haplogroup"] = mt_haplogroup
-                        mt_lineage.append(self.node_to_mother[curr_node])
-                        if self.node_to_data[curr_node]["sex"] == "F":
-                            mt_lineage.extend(self.node_to_children[curr_node])
+            while mt_lineage:
+                curr_node = mt_lineage.popleft()
+                if not curr_node or "*" not in self.node_to_data[curr_node]["mt_haplogroup"] or self.node_to_data[curr_node]["mt_haplogroup"].rstrip("*") == mt_haplogroup.rstrip("*"):
+                    continue
+                # Overwrite/extend mitochondrial haplogroup if it contains a "*" and is a strict subset of the "leaf" haplogroup
+                if mt_haplogroup.startswith(self.node_to_data[curr_node]["mt_haplogroup"].rstrip("*")):
+                    self.node_to_data[curr_node]["mt_haplogroup"] = mt_haplogroup if mt_haplogroup[-1] == "*" else mt_haplogroup + "*"
+                    mt_lineage.append(self.node_to_mother[curr_node])
+                    if self.node_to_data[curr_node]["sex"] == "F":
+                        mt_lineage.extend(self.node_to_children[curr_node])
 
     def validate_members(self, members: set) -> bool:
         """
@@ -352,20 +354,22 @@ class Pedigree:
         """
         Validates that all haplogroups are consistent.
         """
-        def is_subset(haplogroup1: str, haplogroup2: str) -> bool:
-            return haplogroup1 in haplogroup2 or haplogroup2 in haplogroup1
-
+        def haplogroups_agree(haplogroup1: str, haplogroup2: str) -> bool:
+            if "*" not in haplogroup1 and "*" not in haplogroup2:
+                return haplogroup1 == haplogroup2
+            elif "*" in haplogroup1 and "*" in haplogroup2:
+                return haplogroup1.startswith(haplogroup2.rstrip("*")) or haplogroup2.startswith(haplogroup1.rstrip("*"))
+            elif "*" in haplogroup1:
+                return haplogroup2.startswith(haplogroup1.rstrip("*"))
+            else:
+                return haplogroup1.startswith(haplogroup2.rstrip("*"))
+            
         for parent, child in self.get_parent_child_pairs():
             if self.node_to_data[parent]["sex"] == "F":
-                haplogroup1 = self.node_to_data[parent]["mt_haplogroup"]
-                haplogroup2 = self.node_to_data[child]["mt_haplogroup"]
-                if not is_subset(haplogroup1, haplogroup2):
+                if not haplogroups_agree(self.node_to_data[parent]["mt_haplogroup"], self.node_to_data[child]["mt_haplogroup"]):
                     return False
-
             elif self.node_to_data[parent]["sex"] == "M" and self.node_to_data[child]["sex"] == "M":
-                haplogroup1 = self.node_to_data[parent]["y_haplogroup"]
-                haplogroup2 = self.node_to_data[child]["y_haplogroup"]
-                if not is_subset(haplogroup1, haplogroup2):
+                if not haplogroups_agree(self.node_to_data[parent]["y_haplogroup"], self.node_to_data[child]["y_haplogroup"]):
                     return False
         return True
 

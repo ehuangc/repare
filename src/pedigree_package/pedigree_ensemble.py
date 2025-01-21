@@ -39,15 +39,24 @@ class PedigreeEnsemble:
         Read in node data and set types.
         """
         self._node_data = pd.read_csv(nodes_path, dtype=str, comment="#", keep_default_na=False)
-        for column_name in ["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children", "can_be_inbred", "years_before_present"]:
-            if column_name not in self._node_data.columns:
-                raise ValueError(f"Column \"{column_name}\" not found in input node data.")
+        for mandatory_column in ["id", "sex", "y_haplogroup", "mt_haplogroup"]:
+            if mandatory_column not in self._node_data.columns:
+                raise ValueError(f"Column \"{mandatory_column}\" not found in input node data.")
+        
+        for optional_column in ["can_have_children", "can_be_inbred", "years_before_present"]:
+            if optional_column not in self._node_data.columns:
+                self._node_data[optional_column] = ""
 
         if self._node_data["id"].str.isnumeric().any():  # Numeric IDs are used for placeholder nodes
             raise ValueError("Sample IDs cannot be completely numeric.")
 
         if not self._node_data["sex"].isin(["M", "F"]).all():
             raise ValueError("Node sex must be \"M\" or \"F\".")
+        
+        for haplogroup_column in ["y_haplogroup", "mt_haplogroup"]:
+            for haplogroup in self._node_data[haplogroup_column]:
+                if "*" in haplogroup[:-1]:
+                    raise ValueError("Expandable haplogroups should contain one trailing asterisk. No other asterisks are allowed in haplogroups.")
 
         if not self._node_data["can_have_children"].isin(["True", "False", ""]).all():
             raise ValueError("can_have_children value must be \"True\", \"False\", or empty.")
