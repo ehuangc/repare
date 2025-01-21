@@ -114,7 +114,7 @@ class PedigreeEnsemble:
             """
             Ensure id1 and id2 are in a fixed (sorted) order and flip constraints as needed.
             """
-            flipped_pair_to_constraints = {  # Mapping for flipping constraints
+            flipped_constraints = {  # Mapping for flipping constraints
                 "parent-child": "child-parent",
                 "child-parent": "parent-child",
                 "aunt/uncle-nephew/niece": "nephew/niece-aunt/uncle",
@@ -128,12 +128,12 @@ class PedigreeEnsemble:
                 constraints = row["constraints"]
                 if constraints:  # Split constraints and map each to its flipped value
                     constraints_list = [c.strip() for c in constraints.split(";")]
-                    flipped = [flipped_pair_to_constraints[c] for c in constraints_list]
-                    flipped_constraints = ";".join(flipped)
+                    flipped = [flipped_constraints[c] for c in constraints_list]
+                    relation_flipped_constraints = ";".join(flipped)
                 else:
-                    flipped_constraints = ""
+                    relation_flipped_constraints = ""
                 # Swap id1 and id2, and flip constraints
-                return pd.Series({"id1": row["id2"], "id2": row["id1"], "degree": row["degree"], "constraints": flipped_constraints})
+                return pd.Series({"id1": row["id2"], "id2": row["id1"], "degree": row["degree"], "constraints": relation_flipped_constraints})
             else:
                 return row
         relations_data = relations_data.apply(sort_nodes, axis=1)
