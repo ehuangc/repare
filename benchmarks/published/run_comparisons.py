@@ -5,7 +5,7 @@ def main():
     data_dir = os.path.join(os.path.dirname(__file__), "rivollat")
     published_relations_path = os.path.join(data_dir, "published_exact_relations.csv")
     algorithm_nodes_path = os.path.join(data_dir, "nodes.csv")
-    algorithm_relations_path = os.path.join(data_dir, "inferred_relations_READv2.csv")
+    algorithm_relations_path = os.path.join(data_dir, "inferred_relations_custom.csv")
 
     relation_comparison = RelationComparison(published_relations_path=published_relations_path,
                                              algorithm_nodes_path=algorithm_nodes_path,
