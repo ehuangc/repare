@@ -450,18 +450,26 @@ class Pedigree:
         def validate_relation(node1: str, node2: str, relation: str, strike_log: list[str, str, str, str]) -> None:
             relation_to_degree = {
                 "parent-child": "1", "child-parent": "1", "siblings": "1",
-                "aunt/uncle-nephew/niece": "2", "nephew/niece-aunt/uncle": "2", 
-                "grandparent-grandchild": "2", "grandchild-grandparent": "2", "half-siblings": "2"
+                "maternal aunt/uncle-nephew/niece": "2", "maternal nephew/niece-aunt/uncle": "2",
+                "paternal aunt/uncle-nephew/niece": "2", "paternal nephew/niece-aunt/uncle": "2",
+                "maternal grandparent-grandchild": "2", "maternal grandchild-grandparent": "2", 
+                "paternal grandparent-grandchild": "2", "paternal grandchild-grandparent": "2",
+                "maternal half-siblings": "2", "paternal half-siblings": "2"
             }
             flipped_relations = {
                 "parent-child": "child-parent",
                 "child-parent": "parent-child",
-                "aunt/uncle-nephew/niece": "nephew/niece-aunt/uncle",
-                "nephew/niece-aunt/uncle": "aunt/uncle-nephew/niece",
-                "grandparent-grandchild": "grandchild-grandparent",
-                "grandchild-grandparent": "grandparent-grandchild",
+                "maternal aunt/uncle-nephew/niece": "maternal nephew/niece-aunt/uncle",
+                "paternal aunt/uncle-nephew/niece": "paternal nephew/niece-aunt/uncle",
+                "maternal nephew/niece-aunt/uncle": "maternal aunt/uncle-nephew/niece",
+                "paternal nephew/niece-aunt/uncle": "paternal aunt/uncle-nephew/niece",
+                "maternal grandparent-grandchild": "maternal grandchild-grandparent",
+                "paternal grandparent-grandchild": "paternal grandchild-grandparent",
+                "maternal grandchild-grandparent": "maternal grandparent-grandchild",
+                "paternal grandchild-grandparent": "paternal grandparent-grandchild",
                 "siblings": "siblings",  # Symmetric
-                "half-siblings": "half-siblings"  # Symmetric
+                "maternal half-siblings": "maternal half-siblings",  # Symmetric
+                "paternal half-siblings": "paternal half-siblings"  # Symmetric
             }
             if not is_relation_in_input_data(node1, node2, relation) and not is_relation_in_input_data(node2, node1, flipped_relations[relation]):
                 strike_log.append((node1, node2, f"+{relation_to_degree[relation]}", ""))
@@ -474,13 +482,22 @@ class Pedigree:
             validate_relation(parent, child, "parent-child", strike_log)
         for sibling1, sibling2 in self.get_sibling_pairs(include_placeholders=False):
             validate_relation(sibling1, sibling2, "siblings", strike_log)
-        for aunt_uncle, nephew_niece in self.get_aunt_uncle_nephew_niece_pairs(include_placeholders=False):
-            validate_relation(aunt_uncle, nephew_niece, "aunt/uncle-nephew/niece", strike_log)
-        for grandparent, grandchild in self.get_grandparent_grandchild_pairs(include_placeholders=False):
-            validate_relation(grandparent, grandchild, "grandparent-grandchild", strike_log)
+
+        for aunt_uncle, nephew_niece in self.get_aunt_uncle_nephew_niece_pairs(include_placeholders=False, shared_relative_sex="F"):
+            validate_relation(aunt_uncle, nephew_niece, "maternal aunt/uncle-nephew/niece", strike_log)
+        for aunt_uncle, nephew_niece in self.get_aunt_uncle_nephew_niece_pairs(include_placeholders=False, shared_relative_sex="M"):
+            validate_relation(aunt_uncle, nephew_niece, "paternal aunt/uncle-nephew/niece", strike_log)
+
+        for grandparent, grandchild in self.get_grandparent_grandchild_pairs(include_placeholders=False, shared_relative_sex="F"):
+            validate_relation(grandparent, grandchild, "maternal grandparent-grandchild", strike_log)
+        for grandparent, grandchild in self.get_grandparent_grandchild_pairs(include_placeholders=False, shared_relative_sex="M"):
+            validate_relation(grandparent, grandchild, "paternal grandparent-grandchild", strike_log)
+
         if check_half_siblings:
-            for half_sibling1, half_sibling2 in self.get_half_sibling_pairs(include_placeholders=False):
-                validate_relation(half_sibling1, half_sibling2, "half-siblings", strike_log)
+            for half_sibling1, half_sibling2 in self.get_half_sibling_pairs(include_placeholders=False, shared_relative_sex="F"):
+                validate_relation(half_sibling1, half_sibling2, "maternal half-siblings", strike_log)
+            for half_sibling1, half_sibling2 in self.get_half_sibling_pairs(include_placeholders=False, shared_relative_sex="M"):
+                validate_relation(half_sibling1, half_sibling2, "paternal half-siblings", strike_log)
 
         # Check for "dropped" input relations
         # Note: We use constrained relations instead of all relations because we want to catch half-siblings that explicitly should be some other relation even when check_half_siblings is False
@@ -491,7 +508,7 @@ class Pedigree:
                 if not self.is_relation_in_pedigree(node1, node2, constraints.split(";")):
                     strike_log.append((node1, node2, f"-{degree}", constraints))
             else:
-                pedigree_shared_relations: defaultdict(int) = self.get_relations_between_nodes(node1, node2)
+                pedigree_shared_relations: defaultdict(int) = self.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
                 for degree, constraints in degrees_constraints:
                     present_flag = False
                     for constraint in constraints.split(";"):
@@ -544,30 +561,32 @@ class Pedigree:
                         pair_to_constraints_seen_entries[(node1, node2)].add(idx)
                         break
         
+        def validate_relation(node1: str, node2: str, relation: str) -> bool:
+            flipped_relations = {
+                "half aunt/uncle-half nephew/niece": "half nephew/niece-half aunt/uncle",
+                "half nephew/niece-half aunt/uncle": "half aunt/uncle-half nephew/niece",
+                "greatgrandparent-greatgrandchild": "greatgrandchild-greatgrandparent",
+                "greatgrandchild-greatgrandparent": "greatgrandparent-greatgrandchild",
+                "grandaunt/granduncle-grandnephew/grandniece": "grandnephew/grandniece-grandaunt/granduncle",
+                "grandnephew/grandniece-grandaunt/granduncle": "grandaunt/granduncle-grandnephew/grandniece",
+                "first cousins": "first cousins"  # Symmetric
+            }
+            ret = False
+            if not is_relation_in_input_data(node1, node2, relation) and not is_relation_in_input_data(node2, node1, flipped_relations[relation]):
+                ret = True
+            remove_relation_from_input_data(node1, node2, relation)
+            remove_relation_from_input_data(node2, node1, flipped_relations[relation])
+            return ret
+            
         strike_count: int = 0
         for half_aunt_uncle, half_nephew_niece in self.get_half_aunt_uncle_nephew_niece_pairs(include_placeholders=False):
-            if not is_relation_in_input_data(half_aunt_uncle, half_nephew_niece, "half aunt/uncle-half nephew/niece") and not is_relation_in_input_data(half_nephew_niece, half_aunt_uncle, "half nephew/niece-half aunt/uncle"):
-                strike_count += 1
-            remove_relation_from_input_data(half_aunt_uncle, half_nephew_niece, "half aunt/uncle-half nephew/niece")
-            remove_relation_from_input_data(half_nephew_niece, half_aunt_uncle, "half nephew/niece-half aunt/uncle")
-
+            strike_count += validate_relation(half_aunt_uncle, half_nephew_niece, "half aunt/uncle-half nephew/niece")
         for greatgrandparent, greatgrandchild in self.get_greatgrandparent_greatgrandchild_pairs(include_placeholders=False):
-            if not is_relation_in_input_data(greatgrandparent, greatgrandchild, "greatgrandparent-greatgrandchild") and not is_relation_in_input_data(greatgrandchild, greatgrandparent, "greatgrandchild-greatgrandparent"):
-                strike_count += 1
-            remove_relation_from_input_data(greatgrandparent, greatgrandchild, "greatgrandparent-greatgrandchild")
-            remove_relation_from_input_data(greatgrandchild, greatgrandparent, "greatgrandchild-greatgrandparent")
-
+            strike_count += validate_relation(greatgrandparent, greatgrandchild, "greatgrandparent-greatgrandchild")
         for grandaunt_granduncle, grandnephew_grandniece in self.get_grandaunt_granduncle_grandnephew_grandniece_pairs(include_placeholders=False):
-            if not is_relation_in_input_data(grandaunt_granduncle, grandnephew_grandniece, "grandaunt/granduncle-grandnephew/grandniece") and not is_relation_in_input_data(grandnephew_grandniece, grandaunt_granduncle, "grandnephew/grandniece-grandaunt/granduncle"):
-                strike_count += 1
-            remove_relation_from_input_data(grandaunt_granduncle, grandnephew_grandniece, "grandaunt/granduncle-grandnephew/grandniece")
-            remove_relation_from_input_data(grandnephew_grandniece, grandaunt_granduncle, "grandnephew/grandniece-grandaunt/granduncle")
-
+            strike_count += validate_relation(grandaunt_granduncle, grandnephew_grandniece, "grandaunt/granduncle-grandnephew/grandniece")
         for first_cousin1, first_cousin2 in self.get_first_cousin_pairs(include_placeholders=False):
-            if not is_relation_in_input_data(first_cousin1, first_cousin2, "first cousins") and not is_relation_in_input_data(first_cousin2, first_cousin1, "first cousins"):
-                strike_count += 1
-            remove_relation_from_input_data(first_cousin1, first_cousin2, "first cousins")
-            remove_relation_from_input_data(first_cousin2, first_cousin1, "first cousins")
+            strike_count += validate_relation(first_cousin1, first_cousin2, "first cousins")
         return strike_count
 
     def is_relation_in_pedigree(self, node1: str, node2: str, relations_list: list[str]) -> bool:
@@ -736,19 +755,20 @@ class Pedigree:
                         sibling_pairs.append((sibling1, sibling2))
         return sibling_pairs
 
-    def get_aunt_uncle_nephew_niece_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
+    def get_aunt_uncle_nephew_niece_pairs(self, include_placeholders: bool = True, shared_relative_sex: str | None = None) -> list[tuple[str, str]]:
         """
         Gets all (aunt/uncle, nephew/niece) pairs in the tree.
-        Includes duplicates if, for example, an aunt is both a maternal and paternal aunt to a nephew (i.e. full-sib mating).
+        Includes duplicates if, for example, shared_relative_sex=None and an aunt is both a maternal and paternal aunt to a nephew (i.e., full-sib mating).
         """
         aunt_uncle_nephew_niece_pairs: list[tuple[str, str]] = []
         for parent, child in self.get_parent_child_pairs():
             for parent_sibling in self.node_to_siblings[parent]:
-                if include_placeholders or (not parent_sibling.isnumeric() and not child.isnumeric()):
-                    aunt_uncle_nephew_niece_pairs.append((parent_sibling, child))
+                if not shared_relative_sex or self.node_to_data[parent]["sex"] == shared_relative_sex:
+                    if include_placeholders or (not parent_sibling.isnumeric() and not child.isnumeric()):
+                        aunt_uncle_nephew_niece_pairs.append((parent_sibling, child))
         return aunt_uncle_nephew_niece_pairs
 
-    def get_grandparent_grandchild_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
+    def get_grandparent_grandchild_pairs(self, include_placeholders: bool = True, shared_relative_sex: str | None = None) -> list[tuple[str, str]]:
         """
         Gets all (grandparent, grandchild) pairs in the tree.
         Includes duplicates if, for example, a grandparent is both a maternal and paternal grandparent to a grandchild.
@@ -756,11 +776,12 @@ class Pedigree:
         grandparent_grandchild_pairs: list[tuple[str, str]] = []
         for parent, child in self.get_parent_child_pairs():
             for child_child in self.node_to_children[child]:
-                if include_placeholders or (not parent.isnumeric() and not child_child.isnumeric()):
-                    grandparent_grandchild_pairs.append((parent, child_child))
+                if not shared_relative_sex or self.node_to_data[child]["sex"] == shared_relative_sex:
+                    if include_placeholders or (not parent.isnumeric() and not child_child.isnumeric()):
+                        grandparent_grandchild_pairs.append((parent, child_child))
         return grandparent_grandchild_pairs
 
-    def get_half_sibling_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
+    def get_half_sibling_pairs(self, include_placeholders: bool = True, shared_relative_sex: str | None = None) -> list[tuple[str, str]]:
         """
         Gets all (half-sibling, half-sibling) pairs in the tree.
         """
@@ -768,9 +789,10 @@ class Pedigree:
         for parent, child in self.get_parent_child_pairs():
             for other_child in self.node_to_children[parent]:
                 if child != other_child and other_child not in self.node_to_siblings[child]:
-                    if include_placeholders or (not child.isnumeric() and not other_child.isnumeric()):
-                        if (other_child, child) not in half_sibling_pairs:  # Don't add symmetric duplicates
-                            half_sibling_pairs.append((child, other_child))
+                    if not shared_relative_sex or self.node_to_data[parent]["sex"] == shared_relative_sex:
+                        if include_placeholders or (not child.isnumeric() and not other_child.isnumeric()):
+                            if (other_child, child) not in half_sibling_pairs:  # Don't add symmetric duplicates
+                                half_sibling_pairs.append((child, other_child))
         return half_sibling_pairs
 
     def get_half_aunt_uncle_nephew_niece_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:

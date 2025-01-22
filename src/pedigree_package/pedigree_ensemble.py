@@ -100,9 +100,11 @@ class PedigreeEnsemble:
         def split_and_validate_constraints(constraints: str) -> None:
             allowed_constraints = {
                 "parent-child", "child-parent", "siblings", 
-                "aunt/uncle-nephew/niece", "nephew/niece-aunt/uncle", 
-                "grandparent-grandchild", "grandchild-grandparent", 
-                "half-siblings"
+                "maternal aunt/uncle-nephew/niece", "maternal nephew/niece-aunt/uncle",
+                "paternal aunt/uncle-nephew/niece", "paternal nephew/niece-aunt/uncle",
+                "maternal grandparent-grandchild", "maternal grandchild-grandparent",
+                "paternal grandparent-grandchild", "paternal grandchild-grandparent",
+                "maternal half-siblings", "paternal half-siblings"
             }
             if constraints:
                 constraints_list = [c for c in constraints.split(";")]
@@ -114,15 +116,20 @@ class PedigreeEnsemble:
             """
             Ensure id1 and id2 are in a fixed (sorted) order and flip constraints as needed.
             """
-            flipped_constraints = {  # Mapping for flipping constraints
+            flipped_constraints = {  # Map constraints to their flipped value
                 "parent-child": "child-parent",
                 "child-parent": "parent-child",
-                "aunt/uncle-nephew/niece": "nephew/niece-aunt/uncle",
-                "nephew/niece-aunt/uncle": "aunt/uncle-nephew/niece",
-                "grandparent-grandchild": "grandchild-grandparent",
-                "grandchild-grandparent": "grandparent-grandchild",
+                "maternal aunt/uncle-nephew/niece": "maternal nephew/niece-aunt/uncle",
+                "paternal aunt/uncle-nephew/niece": "paternal nephew/niece-aunt/uncle",
+                "maternal nephew/niece-aunt/uncle": "maternal aunt/uncle-nephew/niece",
+                "paternal nephew/niece-aunt/uncle": "paternal aunt/uncle-nephew/niece",
+                "maternal grandparent-grandchild": "maternal grandchild-grandparent",
+                "paternal grandparent-grandchild": "paternal grandchild-grandparent",
+                "maternal grandchild-grandparent": "maternal grandparent-grandchild",
+                "paternal grandchild-grandparent": "paternal grandparent-grandchild",
                 "siblings": "siblings",  # Symmetric
-                "half-siblings": "half-siblings"  # Symmetric
+                "maternal half-siblings": "maternal half-siblings",  # Symmetric
+                "paternal half-siblings": "paternal half-siblings"  # Symmetric
             }
             if row["id2"] < row["id1"]:
                 constraints = row["constraints"]
@@ -138,9 +145,9 @@ class PedigreeEnsemble:
                 return row
         relations_data = relations_data.apply(sort_nodes, axis=1)
 
-        self._DEFAULT_CONSTRAINTS = {
+        self._DEFAULT_CONSTRAINTS = {  # Note: We don't use maternal/paternal 3rd-degree relations because those are not well-defined
             "1": "parent-child;child-parent;siblings",
-            "2": "aunt/uncle-nephew/niece;nephew/niece-aunt/uncle;grandparent-grandchild;grandchild-grandparent;half-siblings",
+            "2": "maternal aunt/uncle-nephew/niece;maternal nephew/niece-aunt/uncle;paternal aunt/uncle-nephew/niece;paternal nephew/niece-aunt/uncle;maternal grandparent-grandchild;maternal grandchild-grandparent;paternal grandparent-grandchild;paternal grandchild-grandparent;maternal half-siblings;paternal half-siblings",
             "3": "half aunt/uncle-half nephew/niece;half nephew/niece-half aunt/uncle;greatgrandparent-greatgrandchild;greatgrandchild-greatgrandparent;grandaunt/granduncle-grandnephew/grandniece;grandnephew/grandniece-grandaunt/granduncle;first cousins"
         }
 
@@ -266,16 +273,28 @@ class PedigreeEnsemble:
         possible_relations: list[str] = constraints.split(";")
 
         for relation in possible_relations:
-            if relation == "aunt/uncle-nephew/niece":
-                new_pedigrees.extend(PedigreeEnsemble._connect_aunt_uncle_relation(pedigree, node1, node2))
-            if relation == "nephew/niece-aunt/uncle":
-                new_pedigrees.extend(PedigreeEnsemble._connect_aunt_uncle_relation(pedigree, node2, node1))
-            if relation == "grandparent-grandchild":
-                new_pedigrees.extend(PedigreeEnsemble._connect_grandparent_relation(pedigree, node1, node2))
-            if relation == "grandchild-grandparent":
-                new_pedigrees.extend(PedigreeEnsemble._connect_grandparent_relation(pedigree, node2, node1))
-            if relation == "half-siblings":
-                new_pedigrees.extend(PedigreeEnsemble._connect_half_sibling_relation(pedigree, node1, node2))
+            if relation == "maternal aunt/uncle-nephew/niece":
+                new_pedigrees.extend(PedigreeEnsemble._connect_aunt_uncle_relation(pedigree, node1, node2, shared_relative_sex="F"))
+            if relation == "maternal nephew/niece-aunt/uncle":
+                new_pedigrees.extend(PedigreeEnsemble._connect_aunt_uncle_relation(pedigree, node2, node1, shared_relative_sex="F"))
+            if relation == "paternal aunt/uncle-nephew/niece":
+                new_pedigrees.extend(PedigreeEnsemble._connect_aunt_uncle_relation(pedigree, node1, node2, shared_relative_sex="M"))
+            if relation == "paternal nephew/niece-aunt/uncle":
+                new_pedigrees.extend(PedigreeEnsemble._connect_aunt_uncle_relation(pedigree, node2, node1, shared_relative_sex="M"))
+            
+            if relation == "maternal grandparent-grandchild":
+                new_pedigrees.extend(PedigreeEnsemble._connect_grandparent_relation(pedigree, node1, node2, shared_relative_sex="F"))
+            if relation == "maternal grandchild-grandparent":
+                new_pedigrees.extend(PedigreeEnsemble._connect_grandparent_relation(pedigree, node2, node1, shared_relative_sex="F"))
+            if relation == "paternal grandparent-grandchild":
+                new_pedigrees.extend(PedigreeEnsemble._connect_grandparent_relation(pedigree, node1, node2, shared_relative_sex="M"))
+            if relation == "paternal grandchild-grandparent":
+                new_pedigrees.extend(PedigreeEnsemble._connect_grandparent_relation(pedigree, node2, node1, shared_relative_sex="M"))
+            
+            if relation == "maternal half-siblings":
+                new_pedigrees.extend(PedigreeEnsemble._connect_half_sibling_relation(pedigree, node1, node2, shared_relative_sex="F"))
+            if relation == "paternal half-siblings":
+                new_pedigrees.extend(PedigreeEnsemble._connect_half_sibling_relation(pedigree, node1, node2, shared_relative_sex="M"))
         return new_pedigrees
 
     @staticmethod
