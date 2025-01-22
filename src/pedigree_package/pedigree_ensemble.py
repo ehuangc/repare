@@ -196,10 +196,10 @@ class PedigreeEnsemble:
                 bar_format="{l_bar}{bar} | {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
             )
             for idx, row in progress_bar:
-                node1, node2, degree, _ = row
+                node1, node2, degree, constraints = row
                 logger.info(f"Current relation: {node1}, {node2}, {degree}")
                 progress_bar.set_description(f"Processing relation {{{node1}, {node2}, {degree}}}")
-                self._add_relation(node1, node2, degree=degree)
+                self._add_relation(node1, node2, degree=degree, constraints=constraints)
                 self._clean_relation_dicts()
 
                 processed_relations = self._all_relations.iloc[:idx+1]
@@ -225,7 +225,7 @@ class PedigreeEnsemble:
         self._write_corrected_relations()
         return self._final_pedigree
 
-    def _add_relation(self, node1: str, node2: str, degree: str) -> None:
+    def _add_relation(self, node1: str, node2: str, degree: str, constraints: str) -> None:
         """
         Connects two nodes in every pedigree. 
         Does not care about input constraints; those will be handled by Pedigree.count_inconsistencies().
@@ -235,12 +235,21 @@ class PedigreeEnsemble:
         new_pedigrees: list[Pedigree] = []
         for pedigree in self._pedigrees:
             if degree == "1":
-                new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
-                new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
+                if constraints == self._DEFAULT_CONSTRAINTS["1"]:
+                    new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
+                    new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
+                else:
+                    for constraint in constraints.split(";"):
+                        new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=constraint))
+            
             elif degree == "2":
-                new_pedigrees.append(pedigree)  # No relation (i.e. false positive)
-                new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
-                new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
+                if constraints == self._DEFAULT_CONSTRAINTS["2"]:
+                    new_pedigrees.append(pedigree)  # No relation (i.e. false positive)
+                    new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
+                    new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
+                else:
+                    for constraint in constraints.split(";"):
+                        new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=constraint))
         self._pedigrees = new_pedigrees
 
     @staticmethod
