@@ -239,8 +239,7 @@ class PedigreeEnsemble:
                     new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
                     new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
                 else:
-                    for constraint in constraints.split(";"):
-                        new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=constraint))
+                    new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=constraints))
             
             elif degree == "2":
                 if constraints == self._DEFAULT_CONSTRAINTS["2"]:
@@ -248,8 +247,7 @@ class PedigreeEnsemble:
                     new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
                     new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
                 else:
-                    for constraint in constraints.split(";"):
-                        new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=constraint))
+                    new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=constraints))
         self._pedigrees = new_pedigrees
 
     @staticmethod
