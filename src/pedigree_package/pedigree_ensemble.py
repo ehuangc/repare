@@ -46,6 +46,7 @@ class PedigreeEnsemble:
         for optional_column in ["can_have_children", "can_be_inbred", "years_before_present"]:
             if optional_column not in self._node_data.columns:
                 self._node_data[optional_column] = ""
+        self._node_data = self._node_data[["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children", "can_be_inbred", "years_before_present"]]  # Reorder columns
 
         if self._node_data["id"].str.isnumeric().any():  # Numeric IDs are used for placeholder nodes
             raise ValueError("Sample IDs cannot be completely numeric.")
@@ -81,6 +82,7 @@ class PedigreeEnsemble:
         for column_name in ["id1", "id2", "degree", "constraints"]:
             if column_name not in relations_data.columns:
                 raise ValueError(f"Column \"{column_name}\" not found in input relations data.")
+        relations_data = relations_data[["id1", "id2", "degree", "constraints"]]  # Reorder columns
 
         if not relations_data["id1"].isin(self._node_data["id"]).all() or not relations_data["id2"].isin(self._node_data["id"]).all():
             raise ValueError("All node IDs in relations data must be present in node data.")
