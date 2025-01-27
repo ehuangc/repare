@@ -1,4 +1,4 @@
-id,sex,y_haplogroup,mt_haplogroup,can_have_children,can_be_inbred
+id,sex,y_haplogroup,mt_haplogroup,can_have_children,can_be_inbred,years_before_present
 SE4m,M,I2a1b1a1a1*,J1c1*,
 SP4m,M,I2a1b1a1a1*,T2e1*,
 SP3m,M,I2a1b1a1a1*,K1b1a*,
