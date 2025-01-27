@@ -4,13 +4,17 @@ GLN320,GLN231A,2
 GLN320,GLN270B,2
 GLN231A,GLN270B,siblings
 GLN231A,GLN322,parent-child
-GLN270B,GLN322,aunt/uncle-nephew/niece
+GLN270B,GLN322,2
 GLN270B,GLN237A,parent-child
-GLN231A,GLN237A,aunt/uncle-nephew/niece
+GLN231A,GLN237A,2
 GLN237A,GLN325,parent-child
 GLN237A,GLN265,parent-child
 GLN237A,GLN221B,parent-child
 GLN237A,GLN266,parent-child
+GLN270B,GLN325,paternal grandparent-grandchild
+GLN270B,GLN265,paternal grandparent-grandchild
+GLN270B,GLN221B,paternal grandparent-grandchild
+GLN270B,GLN266,paternal grandparent-grandchild
 GLN325,GLN265,siblings
 GLN325,GLN221B,siblings
 GLN325,GLN266,siblings
@@ -32,8 +36,8 @@ GLN221B,GLN216,maternal aunt/uncle-nephew/niece
 GLN221B,GLN276,maternal aunt/uncle-nephew/niece
 GLN266,GLN216,maternal aunt/uncle-nephew/niece
 GLN266,GLN276,maternal aunt/uncle-nephew/niece
-GLN253,GLN216,maternal aunt/uncle-nephew/niece
-GLN253,GLN276,maternal aunt/uncle-nephew/niece
+GLN253,GLN216,paternal aunt/uncle-nephew/niece
+GLN253,GLN276,paternal aunt/uncle-nephew/niece
 GLN276,GLN215A,2
 GLN276,GLN215B,2
 GLN215A,GLN215B,siblings
@@ -43,23 +47,17 @@ GLN221B,GLN235,paternal aunt/uncle-nephew/niece
 GLN266,GLN235,paternal aunt/uncle-nephew/niece
 GLN237A,GLN235,paternal grandparent-grandchild
 
-GLN266,GLN269,parent-child
-GLN325,GLN269,paternal aunt/uncle-nephew/niece
-GLN265,GLN269,paternal aunt/uncle-nephew/niece
-GLN221B,GLN269,paternal aunt/uncle-nephew/niece
-GLN237A,GLN269,paternal grandparent-grandchild
 GLN266,GLN268B,parent-child
 GLN325,GLN268B,paternal aunt/uncle-nephew/niece
 GLN265,GLN268B,paternal aunt/uncle-nephew/niece
 GLN221B,GLN268B,paternal aunt/uncle-nephew/niece
 GLN237A,GLN268B,paternal grandparent-grandchild
+GLN266,GLN243A,parent-child
 GLN325,GLN243A,paternal aunt/uncle-nephew/niece
 GLN265,GLN243A,paternal aunt/uncle-nephew/niece
 GLN221B,GLN243A,paternal aunt/uncle-nephew/niece
 GLN237A,GLN243A,paternal grandparent-grandchild
 
-GLN269,GLN268B,siblings
-GLN269,GLN243A,siblings
 GLN268B,GLN243A,siblings
 GLN269,GLN227,parent-child
 GLN268B,GLN227,paternal aunt/uncle-nephew/niece
@@ -79,7 +77,6 @@ GLN267,GLN268A,siblings
 
 GLN243A,GLN262,parent-child
 GLN236A,GLN262,parent-child
-GLN269,GLN262,paternal aunt/uncle-nephew/niece
 GLN268B,GLN262,paternal aunt/uncle-nephew/niece
 GLN266,GLN262,paternal grandparent-grandchild
 GLN243A,GLN236B,paternal grandparent-grandchild
@@ -186,7 +183,7 @@ GLN237A,GLN260,paternal aunt/uncle-nephew/niece
 GLN237A,GLN220,paternal aunt/uncle-nephew/niece
 GLN237A,GLN241,paternal aunt/uncle-nephew/niece
 GLN237A,GLN319,paternal aunt/uncle-nephew/niece
-GLN237A,GLN226,paternal aunt/uncle-nephew/niece
+GLN237A,GLN256,paternal aunt/uncle-nephew/niece
 GLN237A,GLN261,paternal aunt/uncle-nephew/niece
 
 GLN260,GLN220,siblings
@@ -207,7 +204,7 @@ GLN256,GLN261,siblings
 GLN256,GLN250,parent-child
 GLN261,GLN250,paternal aunt/uncle-nephew/niece
 GLN261,GLN245B,parent-child
-GLN256,GLN261,paternal aunt/uncle-nephew/niece
+GLN256,GLN245B,paternal aunt/uncle-nephew/niece
 GLN245B,GLN245A,parent-child
 GLN249,GLN245A,parent-child
 GLN245B,GLN258,parent-child
