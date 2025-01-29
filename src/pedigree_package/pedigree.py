@@ -114,7 +114,7 @@ class Pedigree:
     def add_sibling_relation(self, node1: str, node2: str) -> None:
         """
         Adds a sibling relationship to the tree.
-        Note: Does not merge parents. See self.connect_sibling_relation().
+        Note: Does not merge parents.
         """
         assert node1 != node2
         assert node1 in self.node_to_data and node2 in self.node_to_data
