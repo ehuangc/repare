@@ -212,20 +212,31 @@ class PedigreeEnsemble:
                     self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=True)
                 logger.info(f"Remaining pedigrees after pruning: {len(self._pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n")
 
-            if self._final_pedigree is None:
+            if not self._final_pedigrees:
                 logger.warning("No valid pedigree found. Shuffling relations and restarting algorithm.\n")
                 self._pedigrees = [self._get_initial_pedigree()]
                 self._shuffle_relations()
             else:
                 break
 
-        if self._final_pedigree is None:
+        if not self._final_pedigrees:
             logger.error(f"No valid pedigree found after {self._MAX_RUNS} runs. Exiting.")
             raise RuntimeError(f"No valid pedigree found after {self._MAX_RUNS} runs.")
 
-        self._final_pedigree.clean_up_relations()
-        self._write_corrected_relations()
-        return self._final_pedigree
+        # Write sample corrected relations
+        sample_idx = random.randint(0, len(self._final_pedigrees) - 1)
+        self._sample_pedigree = self._final_pedigrees[sample_idx]
+        self._sample_strike_count = self._final_strike_counts[sample_idx]
+        self._sample_strike_log = self._final_strike_logs[sample_idx]
+        sample_relations_path = os.path.join(self._outputs_dir, "sample_corrected_relations.csv")
+        self._write_corrected_relations(self._sample_strike_count, self._sample_strike_log, sample_relations_path)
+        
+        # Write corrected relations of alternate final pedigrees
+        os.makedirs(os.path.join(self._outputs_dir, "alternate_pedigrees"), exist_ok=True)
+        for idx, (pedigree, strike_count, strike_log) in enumerate(zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs)):
+            relations_path = os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_corrected_relations.csv")
+            self._write_corrected_relations(strike_count, strike_log, relations_path)
+        return self._sample_pedigree
 
     def _add_relation(self, node1: str, node2: str, degree: str, constraints: str) -> None:
         """
@@ -519,16 +530,23 @@ class PedigreeEnsemble:
             if new_potential_pedigrees:  # Only set final pedigree if there are valid pedigrees left
                 best_pedigrees = [pedigree for pedigree, num_strikes in zip(new_potential_pedigrees, strikes) if num_strikes == min(strikes)]
                 third_degree_strikes = [pedigree.count_third_degree_inconcistencies(self._pair_to_constraints) for pedigree in best_pedigrees]  # Use 3rd-degree strikes as tiebreaker
-                self._final_pedigree = best_pedigrees[third_degree_strikes.index(min(third_degree_strikes))]
-                self._final_strike_count, self._final_strike_log = self._final_pedigree.count_inconsistencies(self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings=True)
+                
+                self._final_pedigrees = [pedigree for pedigree, num_strikes in zip(best_pedigrees, third_degree_strikes) if num_strikes == min(third_degree_strikes)]
+                self._final_strike_counts = []
+                self._final_strike_logs = []
+                for pedigree in self._final_pedigrees:
+                    strike_count, strike_log = pedigree.count_inconsistencies(self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings=True)
+                    self._final_strike_counts.append(strike_count)
+                    self._final_strike_logs.append(strike_log)
+                    pedigree.clean_up_relations()
 
-    def _write_corrected_relations(self) -> None:
+    def _write_corrected_relations(self, strike_count: int, strike_log: list[tuple[str, str, str]], path: str) -> None:
         """
         Write corrected relations to file.
         """
         added_relations = []
         removed_relations = []
-        for node1, node2, degree, constraints in self._final_strike_log:
+        for node1, node2, degree, constraints in strike_log:
             if degree[0] == "+":
                 added_relations.append((node1, node2, degree[1], constraints))
             else:
@@ -542,10 +560,9 @@ class PedigreeEnsemble:
                 if (add_node1 == remove_node1 and add_node2 == remove_node2) or (add_node2 == remove_node1 and add_node1 == remove_node2):
                     changed_node_pairs.add((add_node1, add_node2))
         
-        path = os.path.join(self._outputs_dir, "corrected_relations.csv")
         with open(path, "w") as file:
             file.write("id1,id2,degree,constraints\n")  # Header line
-            file.write(f"# Final strike count: {self._final_strike_count}\n")
+            file.write(f"# Final strike count: {strike_count}\n")
 
             def write_relations_line(node1, node2, degree, constraints, commented=False):
                 if constraints == self._DEFAULT_CONSTRAINTS[degree]:
