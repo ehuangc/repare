@@ -13,6 +13,7 @@ def parse_arguments():
     parser.add_argument("-s", "--sample_count", type=int, default=1000, help="Number of pedigrees to keep at each relation step. Default is 100.")
     parser.add_argument("-e", "--epsilon", type=float, default=0.2, help="Epsilon value for the simulation. Default is 0.2.")
     parser.add_argument("-d", "--seed", type=int, default=42, help="Random seed for reproducibility. Default is 42.")
+    parser.add_argument("-w", "--write_alternates", action="store_true", help="Write outputs of alternate pedigrees to disk.")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output (INFO-level logging).")
     return parser.parse_args()
 
@@ -32,6 +33,7 @@ def main():
             outputs_dir=output_dir,
             sample_count=args.sample_count,
             epsilon=args.epsilon,
+            write_alternate_pedigrees=args.write_alternates,
             random_seed=args.seed
         )
         pedigree = pedigree_ensemble.find_best_pedigree()

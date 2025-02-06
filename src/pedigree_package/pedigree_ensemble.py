@@ -19,13 +19,14 @@ class PedigreeEnsemble:
     """
     Manages and builds up a collection of potential Pedigrees.
     """
-    def __init__(self, relations_path: str, nodes_path: str, outputs_dir: str, sample_count: int = 1000, epsilon: float = 0.2, random_seed: Any = 42) -> None:
+    def __init__(self, relations_path: str, nodes_path: str, outputs_dir: str, sample_count: int = 1000, epsilon: float = 0.2, write_alternate_pedigrees: bool = False, random_seed: Any = 42) -> None:
         self._start_time = time.time()
         self._process_node_data(nodes_path)
         self._process_relations_data(relations_path)
         self._outputs_dir = outputs_dir
         self._sample_count = sample_count  # Number of pedigrees to sample at each step of algorithm
         self._epsilon = epsilon  # Parameter for epsilon-greedy sampling when pruning pedigrees
+        self._write_alternate_pedigrees = write_alternate_pedigrees  # Whether to write corrected relations and plots of alternate final pedigrees
         self._random_seed = random_seed
         random.seed(self._random_seed)
 
@@ -234,12 +235,13 @@ class PedigreeEnsemble:
         self._sample_pedigree.plot(path=sample_plot_path)
 
         # Write corrected relations of alternate final pedigrees
-        os.makedirs(os.path.join(self._outputs_dir, "alternate_pedigrees"), exist_ok=True)
-        for idx, (pedigree, strike_count, strike_log) in enumerate(zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs)):
-            relations_path = os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_corrected_relations.csv")
-            plot_path = os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}.png")
-            self._write_corrected_relations(strike_count, strike_log, relations_path)
-            pedigree.plot(path=plot_path)
+        if self._write_alternate_pedigrees:
+            os.makedirs(os.path.join(self._outputs_dir, "alternate_pedigrees"), exist_ok=True)
+            for idx, (pedigree, strike_count, strike_log) in enumerate(zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs)):
+                relations_path = os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_corrected_relations.csv")
+                plot_path = os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}.png")
+                self._write_corrected_relations(strike_count, strike_log, relations_path)
+                pedigree.plot(path=plot_path)
         return self._sample_pedigree
 
     def _add_relation(self, node1: str, node2: str, degree: str, constraints: str) -> None:
