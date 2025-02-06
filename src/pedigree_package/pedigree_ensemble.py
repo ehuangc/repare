@@ -223,19 +223,23 @@ class PedigreeEnsemble:
             logger.error(f"No valid pedigree found after {self._MAX_RUNS} runs. Exiting.")
             raise RuntimeError(f"No valid pedigree found after {self._MAX_RUNS} runs.")
 
-        # Write sample corrected relations
+        # Write sample corrected relations and plot
         sample_idx = random.randint(0, len(self._final_pedigrees) - 1)
         self._sample_pedigree = self._final_pedigrees[sample_idx]
         self._sample_strike_count = self._final_strike_counts[sample_idx]
         self._sample_strike_log = self._final_strike_logs[sample_idx]
         sample_relations_path = os.path.join(self._outputs_dir, "sample_corrected_relations.csv")
+        sample_plot_path = os.path.join(self._outputs_dir, "sample_pedigree.png")
         self._write_corrected_relations(self._sample_strike_count, self._sample_strike_log, sample_relations_path)
-        
+        self._sample_pedigree.plot(path=sample_plot_path)
+
         # Write corrected relations of alternate final pedigrees
         os.makedirs(os.path.join(self._outputs_dir, "alternate_pedigrees"), exist_ok=True)
         for idx, (pedigree, strike_count, strike_log) in enumerate(zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs)):
             relations_path = os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_corrected_relations.csv")
+            plot_path = os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}.png")
             self._write_corrected_relations(strike_count, strike_log, relations_path)
+            pedigree.plot(path=plot_path)
         return self._sample_pedigree
 
     def _add_relation(self, node1: str, node2: str, degree: str, constraints: str) -> None:

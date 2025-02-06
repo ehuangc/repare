@@ -953,3 +953,4 @@ class Pedigree:
 
         plt.axis("off")
         plt.savefig(path, bbox_inches="tight")
+        plt.close()
