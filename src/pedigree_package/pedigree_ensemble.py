@@ -66,7 +66,7 @@ class PedigreeEnsemble:
             raise ValueError("can_be_inbred value must be \"True\", \"False\", or empty.")
 
         if not self._node_data["years_before_present"].apply(lambda x: x.isnumeric() or x == "").all():
-            raise ValueError("years_before_present value must be numeric or empty.")
+            raise ValueError("years_before_present value must be integer or empty.")
 
         # Convert "can_have_children" and "can_be_inbred" columns to booleans
         self._node_data["can_have_children"] = self._node_data["can_have_children"].map({"False": False, "True": True, "": True})
