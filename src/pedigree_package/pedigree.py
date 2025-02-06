@@ -916,16 +916,36 @@ class Pedigree:
         male_placeholder_nodes = [node for node in self.node_to_data if self.node_to_data[node]["sex"] == "M" and node.isnumeric()]
         female_named_nodes = [node for node in self.node_to_data if self.node_to_data[node]["sex"] == "F" and not node.isnumeric()]
         female_placeholder_nodes = [node for node in self.node_to_data if self.node_to_data[node]["sex"] == "F" and node.isnumeric()]
-        non_placeholder_labels = {node: node for node in self.node_to_data if not node.isnumeric()}
+        
+        non_placeholder_labels = dict()
+        for node in tree.nodes:
+            mt_haplogroup = self.node_to_data[node]["mt_haplogroup"][:3]
+            y_haplogroup = self.node_to_data[node]["y_haplogroup"][:3]
+            if node.isnumeric():
+                if y_haplogroup:
+                    non_placeholder_labels[node] = f"{mt_haplogroup}\n{y_haplogroup}"
+                else:
+                    non_placeholder_labels[node] = f"{mt_haplogroup}"
+            else:
+                if y_haplogroup:
+                    non_placeholder_labels[node] = f"{node}\n{mt_haplogroup}\n{y_haplogroup}"
+                else:
+                    non_placeholder_labels[node] = f"{node}\n{mt_haplogroup}"
+        
+        # Create colormap for MT haplogroups
+        cmap = plt.get_cmap("tab20")
+        mt_haplogroups = sorted(set([self.node_to_data[node]["mt_haplogroup"] for node in self.node_to_data if not node.isnumeric()]))
+        mt_haplogroup_to_color = {haplogroup: cmap(i / len(mt_haplogroups)) for i, haplogroup in enumerate(mt_haplogroups)}
+        male_named_node_colors = [mt_haplogroup_to_color[self.node_to_data[node]["mt_haplogroup"]] for node in male_named_nodes]
+        female_named_node_colors = [mt_haplogroup_to_color[self.node_to_data[node]["mt_haplogroup"]] for node in female_named_nodes]
 
         plt.figure(figsize=(12, 4.8), dpi=1200)
-        # Scale sizes based on pedigree node count
-        node_size = min(1000, 10000 / len(tree.nodes))
-        font_size = min(7, 300 / len(tree.nodes))
+        node_size = min(1000, 10000 / len(tree.nodes))  # Scale sizes based on pedigree node count
+        font_size = min(4.5, 150 / len(tree.nodes))
 
         pos = nx.nx_agraph.graphviz_layout(tree, prog="dot")
-        nx.draw_networkx_nodes(tree, pos=pos, nodelist=male_named_nodes, node_shape="s", node_size=node_size, node_color="#ded9cc", edgecolors="black", linewidths=0.2)
-        nx.draw_networkx_nodes(tree, pos=pos, nodelist=female_named_nodes, node_shape="o", node_size=node_size, node_color="#ded9cc", edgecolors="black", linewidths=0.2)
+        nx.draw_networkx_nodes(tree, pos=pos, nodelist=male_named_nodes, node_shape="s", node_size=node_size, node_color=male_named_node_colors, edgecolors="black", linewidths=0.2)
+        nx.draw_networkx_nodes(tree, pos=pos, nodelist=female_named_nodes, node_shape="o", node_size=node_size, node_color=female_named_node_colors, edgecolors="black", linewidths=0.2)
         nx.draw_networkx_nodes(tree, pos=pos, nodelist=male_placeholder_nodes, node_shape="s", node_size=node_size, node_color="#e5e5e5", edgecolors="black", linewidths=0.2)
         nx.draw_networkx_nodes(tree, pos=pos, nodelist=female_placeholder_nodes, node_shape="o", node_size=node_size, node_color="#e5e5e5", edgecolors="black", linewidths=0.2)
         nx.draw_networkx_labels(tree, pos=pos, labels=non_placeholder_labels, font_size=font_size)
