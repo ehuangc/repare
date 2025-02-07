@@ -533,18 +533,17 @@ class PedigreeEnsemble:
         if num_processed_relations < len(self._first_and_second_degree_relations):
             self._pedigrees = epsilon_greedy_sample(new_potential_pedigrees, strikes, third_degree_strikes, epsilon=self._epsilon, sample_count=self._sample_count)
         else:  # Final iteration
-            if new_potential_pedigrees:  # Only set final pedigree if there are valid pedigrees left
-                best_pedigrees = [pedigree for pedigree, num_strikes in zip(new_potential_pedigrees, strikes) if num_strikes == min(strikes)]
-                third_degree_strikes = [pedigree.count_third_degree_inconcistencies(self._pair_to_constraints) for pedigree in best_pedigrees]  # Use 3rd-degree strikes as tiebreaker
-                
-                self._final_pedigrees = [pedigree for pedigree, num_strikes in zip(best_pedigrees, third_degree_strikes) if num_strikes == min(third_degree_strikes)]
-                self._final_strike_counts = []
-                self._final_strike_logs = []
-                for pedigree in self._final_pedigrees:
-                    strike_count, strike_log = pedigree.count_inconsistencies(self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings=True)
-                    self._final_strike_counts.append(strike_count)
-                    self._final_strike_logs.append(strike_log)
-                    pedigree.clean_up_relations()
+            best_pedigrees = [pedigree for pedigree, num_strikes in zip(new_potential_pedigrees, strikes) if num_strikes == min(strikes)]
+            third_degree_strikes = [pedigree.count_third_degree_inconcistencies(self._pair_to_constraints) for pedigree in best_pedigrees]  # Use 3rd-degree strikes as tiebreaker
+            
+            self._final_pedigrees = [pedigree for pedigree, num_strikes in zip(best_pedigrees, third_degree_strikes) if num_strikes == min(third_degree_strikes)]
+            self._final_strike_counts = []
+            self._final_strike_logs = []
+            for pedigree in self._final_pedigrees:
+                strike_count, strike_log = pedigree.count_inconsistencies(self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings=True)
+                self._final_strike_counts.append(strike_count)
+                self._final_strike_logs.append(strike_log)
+                pedigree.clean_up_relations()
 
     def _write_corrected_relations(self, strike_count: int, strike_log: list[tuple[str, str, str]], path: str) -> None:
         """
