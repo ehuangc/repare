@@ -246,8 +246,7 @@ class PedigreeEnsemble:
 
     def _add_relation(self, node1: str, node2: str, degree: str, constraints: str) -> None:
         """
-        Connects two nodes in every pedigree. 
-        Does not care about input constraints; those will be handled by Pedigree.count_inconsistencies().
+        Connects two nodes in every pedigree.
         """
         assert degree in ["1", "2"]
 
