@@ -92,7 +92,7 @@ class PedigreeEnsemble:
             
         relations_data["pair_degree"] = relations_data.apply(lambda row: tuple(sorted([row["id1"], row["id2"], row["degree"]])), axis=1)
         grouped_relations = relations_data.groupby("pair_degree")
-        # Check for groups with multiple non-empty constraints
+        # Check for groups with multiple non-empty constraints, which can lead to issues when counting inconsistencies
         invalid_groups = grouped_relations.filter(
             lambda group: (group["constraints"] != "").sum() > 1
         )
