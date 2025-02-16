@@ -83,13 +83,21 @@ class PedigreeEnsemble:
         for column_name in ["id1", "id2", "degree", "constraints"]:
             if column_name not in relations_data.columns:
                 raise ValueError(f"Column \"{column_name}\" not found in input relations data.")
-        relations_data = relations_data[["id1", "id2", "degree", "constraints"]]  # Reorder columns
 
+        for optional_column in ["force_constraints"]:
+            if optional_column not in self._node_data.columns:
+                relations_data[optional_column] = ""
+        relations_data = relations_data[["id1", "id2", "degree", "constraints", "force_constraints"]]  # Reorder columns
+        
         if not relations_data["id1"].isin(self._node_data["id"]).all() or not relations_data["id2"].isin(self._node_data["id"]).all():
             raise ValueError("All node IDs in relations data must be present in node data.")
         if not relations_data["degree"].isin(["1", "2", "3"]).all():
             raise ValueError("Degree must be 1, 2, or 3.")
-            
+        if not relations_data["force_constraints"].isin(["True", "False", ""]).all():
+            raise ValueError("can_have_children value must be \"True\", \"False\", or empty.")
+        # Convert "force_constrains" column to booleans
+        relations_data["force_constraints"] = relations_data["force_constraints"].map({"False": False, "True": True, "": False})
+        
         relations_data["pair_degree"] = relations_data.apply(lambda row: tuple(sorted([row["id1"], row["id2"], row["degree"]])), axis=1)
         grouped_relations = relations_data.groupby("pair_degree")
         # Check for groups with multiple non-empty constraints, which can lead to issues when counting inconsistencies
@@ -143,7 +151,7 @@ class PedigreeEnsemble:
                 else:
                     relation_flipped_constraints = ""
                 # Swap id1 and id2, and flip constraints
-                return pd.Series({"id1": row["id2"], "id2": row["id1"], "degree": row["degree"], "constraints": relation_flipped_constraints})
+                return pd.Series({"id1": row["id2"], "id2": row["id1"], "degree": row["degree"], "constraints": relation_flipped_constraints, "force_constraints": row["force_constraints"]})
             else:
                 return row
         relations_data = relations_data.apply(sort_nodes, axis=1)
@@ -157,7 +165,7 @@ class PedigreeEnsemble:
         def fill_constraints(row: pd.Series) -> pd.Series:
             if not row["constraints"]:
                 constraints = self._DEFAULT_CONSTRAINTS[row["degree"]]
-                return pd.Series({"id1": row["id1"], "id2": row["id2"], "degree": row["degree"], "constraints": constraints})
+                return pd.Series({"id1": row["id1"], "id2": row["id2"], "degree": row["degree"], "constraints": constraints, "force_constraints": row["force_constraints"]})
             return row
         relations_data = relations_data.apply(fill_constraints, axis=1)
         
@@ -199,10 +207,10 @@ class PedigreeEnsemble:
                 bar_format="{l_bar}{bar} | {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
             )
             for idx, row in progress_bar:
-                node1, node2, degree, constraints = row
+                node1, node2, degree, constraints, force_constraints = row
                 logger.info(f"Current relation: {node1}, {node2}, {degree}")
                 progress_bar.set_description(f"Processing relation {{{node1}, {node2}, {degree}}}")
-                self._add_relation(node1, node2, degree=degree, constraints=constraints)
+                self._add_relation(node1, node2, degree=degree, constraints=constraints, force_constraints=force_constraints)
                 self._clean_relation_dicts()
 
                 processed_relations = self._all_relations.iloc[:idx+1]
@@ -244,7 +252,7 @@ class PedigreeEnsemble:
                 pedigree.plot(path=plot_path)
         return self._sample_pedigree
 
-    def _add_relation(self, node1: str, node2: str, degree: str, constraints: str) -> None:
+    def _add_relation(self, node1: str, node2: str, degree: str, constraints: str, force_constraints: bool) -> None:
         """
         Connects two nodes in every pedigree.
         """
@@ -253,14 +261,14 @@ class PedigreeEnsemble:
         new_pedigrees: list[Pedigree] = []
         for pedigree in self._pedigrees:
             if degree == "1":
-                if constraints == self._DEFAULT_CONSTRAINTS["1"]:
+                if not force_constraints:
                     new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
                     new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
                 else:
                     new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=constraints))
             
             elif degree == "2":
-                if constraints == self._DEFAULT_CONSTRAINTS["2"]:
+                if not force_constraints:
                     new_pedigrees.append(pedigree)  # No relation (i.e. false positive)
                     new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
                     new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
@@ -469,7 +477,7 @@ class PedigreeEnsemble:
         Dict values are lists of tuples (as opposed to just tuples) because a pair of nodes can share more than 1 relation.
         """
         pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]] = defaultdict(list)
-        for node1, node2, _, constraints in self._all_relations.itertuples(index=False):
+        for node1, node2, _, constraints, _ in self._all_relations.itertuples(index=False):
             pair_to_constraints[(node1, node2)].append(tuple(constraints.split(";")))
         for node_pair in pair_to_constraints:
             pair_to_constraints[node_pair].sort(key=lambda x: len(x))  # Sort by number of constraints so specific constraints are checked first when pruning
@@ -480,7 +488,7 @@ class PedigreeEnsemble:
         Turn DataFrame of relations/constraints processed so far into dict(s) of {node pairs: list of (degree, constraints) tuples}.
         """
         pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str]]] = defaultdict(list)
-        for node1, node2, degree, constraints in processed_relations.itertuples(index=False):
+        for node1, node2, degree, constraints, _ in processed_relations.itertuples(index=False):
             pair_to_relations_so_far[(node1, node2)].append((degree, constraints))
         return pair_to_relations_so_far
 
@@ -600,7 +608,7 @@ class PedigreeEnsemble:
                         write_relations_line(node1_to_write, node2_to_write, degree_add, constraints_add)
             
             file.write("\n# Unchanged relations\n")
-            for node1, node2, degree, constraints in self._all_relations.itertuples(index=False):
+            for node1, node2, degree, constraints, _ in self._all_relations.itertuples(index=False):
                 if (node1, node2, degree, constraints) not in removed_relations_set:
                     assert (node2, node1, degree, constraints) not in removed_relations_set
                     write_relations_line(node1, node2, degree, constraints)
