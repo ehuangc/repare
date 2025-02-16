@@ -37,7 +37,6 @@ def main():
             random_seed=args.seed
         )
         pedigree = pedigree_ensemble.find_best_pedigree()
-        pedigree.plot(path=os.path.join(output_dir, "pedigree.png"))
 
 if __name__ == "__main__":
     main()
