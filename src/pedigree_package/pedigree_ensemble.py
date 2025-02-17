@@ -85,7 +85,7 @@ class PedigreeEnsemble:
                 raise ValueError(f"Column \"{column_name}\" not found in input relations data.")
 
         for optional_column in ["force_constraints"]:
-            if optional_column not in self._node_data.columns:
+            if optional_column not in relations_data.columns:
                 relations_data[optional_column] = ""
         relations_data = relations_data[["id1", "id2", "degree", "constraints", "force_constraints"]]  # Reorder columns
         
