@@ -483,16 +483,16 @@ class PedigreeEnsemble:
             pair_to_constraints[node_pair].sort(key=lambda x: len(x))  # Sort by number of constraints so specific constraints are checked first when pruning
         return pair_to_constraints
     
-    def _get_pair_to_relations_so_far(self, processed_relations: pd.DataFrame) -> defaultdict[tuple[str, str], list[tuple[str, str]]]:
+    def _get_pair_to_relations_so_far(self, processed_relations: pd.DataFrame) -> defaultdict[tuple[str, str], list[tuple[str, str, bool]]]:
         """
         Turn DataFrame of relations/constraints processed so far into dict(s) of {node pairs: list of (degree, constraints) tuples}.
         """
-        pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str]]] = defaultdict(list)
-        for node1, node2, degree, constraints, _ in processed_relations.itertuples(index=False):
-            pair_to_relations_so_far[(node1, node2)].append((degree, constraints))
+        pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]] = defaultdict(list)
+        for node1, node2, degree, constraints, force_constraints in processed_relations.itertuples(index=False):
+            pair_to_relations_so_far[(node1, node2)].append((degree, constraints, force_constraints))
         return pair_to_relations_so_far
 
-    def _prune_pedigrees(self, pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str]]], check_half_siblings: bool) -> None:
+    def _prune_pedigrees(self, pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]], check_half_siblings: bool) -> None:
         """
         Remove pedigrees with inconsistencies.
         """
@@ -503,6 +503,7 @@ class PedigreeEnsemble:
                 and pedigree.validate_can_have_children() 
                 and pedigree.validate_inbreeding()
                 and pedigree.validate_years_before_present()
+                and pedigree.validate_forced_constraints(pair_to_relations_so_far)
                 ):
                 pedigree.update_haplogroups()
                 if pedigree.validate_haplogroups():

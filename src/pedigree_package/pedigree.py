@@ -422,7 +422,18 @@ class Pedigree:
                 return False
         return True
 
-    def count_inconsistencies(self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]], pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str]]], check_half_siblings: bool) -> tuple[int, list[tuple[str, str, str]]]:
+    def validate_forced_constraints(self, pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]]) -> bool:
+        """
+        Validates that forced constraints so far are present in the pedigree.
+        Note: Additional relations between two nodes are allowed as long as the forced constraints are present.
+        """
+        for (node1, node2), degree_constraints in pair_to_relations_so_far.items():
+            for degree, constraints, force_constraints in degree_constraints:
+                if force_constraints and not self.is_relation_in_pedigree(node1, node2, constraints.split(";")):
+                    return False
+        return True
+
+    def count_inconsistencies(self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]], pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]], check_half_siblings: bool) -> tuple[int, list[tuple[str, str, str]]]:
         """
         Validates this tree based on the input relations data.
         If check_half_siblings is False, don't check for extraneous half-sibling relations because the 2 non-shared parents might be merged later.
@@ -504,12 +515,12 @@ class Pedigree:
         # The purpose of check_half_siblings is to avoid marking *incidental* half-siblings, not half-siblings that should be something else
         for (node1, node2), degrees_constraints in pair_to_relations_so_far.items():
             if len(degrees_constraints) == 1:  # If only one input relation between these two nodes, simple check is much faster
-                degree, constraints = degrees_constraints[0]
+                degree, constraints, _ = degrees_constraints[0]
                 if not self.is_relation_in_pedigree(node1, node2, constraints.split(";")):
                     strike_log.append((node1, node2, f"-{degree}", constraints))
             else:
                 pedigree_shared_relations: defaultdict(int) = self.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
-                for degree, constraints in degrees_constraints:
+                for degree, constraints, _ in degrees_constraints:
                     present_flag = False
                     for constraint in constraints.split(";"):
                         if constraint in pedigree_shared_relations:
