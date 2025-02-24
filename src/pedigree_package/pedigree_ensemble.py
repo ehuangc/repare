@@ -23,8 +23,8 @@ class PedigreeEnsemble:
         self._start_time = time.time()
         self._validate_node_data(nodes_path)
         self._process_node_data()
-        self._validate_relations_data(relations_path)
-        self._process_relations_data()
+        self._validate_relation_data(relations_path)
+        self._process_relation_data()
 
         self._outputs_dir = outputs_dir
         self._sample_count = sample_count  # Number of pedigrees to sample at each step of algorithm
@@ -81,35 +81,35 @@ class PedigreeEnsemble:
         # Convert "years_before_present" column to floats
         self._node_data["years_before_present"] = pd.to_numeric(self._node_data["years_before_present"], errors="coerce")
 
-    def _validate_relations_data(self, relations_path: str) -> None:
+    def _validate_relation_data(self, relations_path: str) -> None:
         """
         Validate relations data input.
         """
-        self._relations_data = pd.read_csv(relations_path, dtype=str, comment="#", keep_default_na=False)
+        self._relation_data = pd.read_csv(relations_path, dtype=str, comment="#", keep_default_na=False)
         for column_name in ["id1", "id2", "degree", "constraints"]:
-            if column_name not in self._relations_data.columns:
+            if column_name not in self._relation_data.columns:
                 raise ValueError(f"Column \"{column_name}\" not found in input relations data.")
 
         for optional_column in ["force_constraints"]:
-            if optional_column not in self._relations_data.columns:
-                self._relations_data[optional_column] = ""
+            if optional_column not in self._relation_data.columns:
+                self._relation_data[optional_column] = ""
         
-        if not self._relations_data["id1"].isin(self._node_data["id"]).all() or not self._relations_data["id2"].isin(self._node_data["id"]).all():
+        if not self._relation_data["id1"].isin(self._node_data["id"]).all() or not self._relation_data["id2"].isin(self._node_data["id"]).all():
             raise ValueError("All node IDs in relations data must be present in node data.")
-        if not self._relations_data["degree"].isin(["1", "2", "3"]).all():
+        if not self._relation_data["degree"].isin(["1", "2", "3"]).all():
             raise ValueError("Degree must be 1, 2, or 3.")
-        if not self._relations_data["force_constraints"].isin(["True", "False", ""]).all():
+        if not self._relation_data["force_constraints"].isin(["True", "False", ""]).all():
             raise ValueError("can_have_children value must be \"True\", \"False\", or empty.")
         
-        self._relations_data["pair_degree"] = self._relations_data.apply(lambda row: tuple(sorted([row["id1"], row["id2"], row["degree"]])), axis=1)
-        grouped_relations = self._relations_data.groupby("pair_degree")
+        self._relation_data["pair_degree"] = self._relation_data.apply(lambda row: tuple(sorted([row["id1"], row["id2"], row["degree"]])), axis=1)
+        grouped_relations = self._relation_data.groupby("pair_degree")
         # Check for groups with multiple non-empty constraints, which can lead to issues when counting inconsistencies
         invalid_groups = grouped_relations.filter(
             lambda group: (group["constraints"] != "").sum() > 1
         )
         if not invalid_groups.empty:
             raise ValueError("Node pairs cannot have multiple non-empty constraints of the same degree.")
-        self._relations_data.drop("pair_degree", axis=1, inplace=True)
+        self._relation_data.drop("pair_degree", axis=1, inplace=True)
 
         def split_and_validate_constraints(constraints: str) -> None:
             allowed_constraints = {
@@ -124,16 +124,16 @@ class PedigreeEnsemble:
                 constraints_list = [c for c in constraints.split(";")]
                 if any(c not in allowed_constraints for c in constraints_list):
                     raise ValueError(f"Invalid constraints found: {[c for c in constraints_list if c not in allowed_constraints]}.")
-        self._relations_data["constraints"].apply(split_and_validate_constraints)
+        self._relation_data["constraints"].apply(split_and_validate_constraints)
 
-    def _process_relations_data(self) -> None:
+    def _process_relation_data(self) -> None:
         """
         Process relations data input.
         """
         # Reorder relations data columns and remove unnecessary columns
-        self._relations_data = self._relations_data[["id1", "id2", "degree", "constraints", "force_constraints"]]
+        self._relation_data = self._relation_data[["id1", "id2", "degree", "constraints", "force_constraints"]]
         # Convert "force_constrains" column to booleans
-        self._relations_data["force_constraints"] = self._relations_data["force_constraints"].map({"False": False, "True": True, "": False})
+        self._relation_data["force_constraints"] = self._relation_data["force_constraints"].map({"False": False, "True": True, "": False})
 
         def sort_nodes(row: pd.Series) -> pd.Series:
             """
@@ -166,7 +166,7 @@ class PedigreeEnsemble:
                 return pd.Series({"id1": row["id2"], "id2": row["id1"], "degree": row["degree"], "constraints": relation_flipped_constraints, "force_constraints": row["force_constraints"]})
             else:
                 return row
-        self._relations_data = self._relations_data.apply(sort_nodes, axis=1)
+        self._relation_data = self._relation_data.apply(sort_nodes, axis=1)
 
         self._DEFAULT_CONSTRAINTS = {  # Note: We don't use maternal/paternal 3rd-degree relations because those are not well-defined
             "1": "parent-child;child-parent;siblings",
@@ -179,11 +179,11 @@ class PedigreeEnsemble:
                 constraints = self._DEFAULT_CONSTRAINTS[row["degree"]]
                 return pd.Series({"id1": row["id1"], "id2": row["id2"], "degree": row["degree"], "constraints": constraints, "force_constraints": row["force_constraints"]})
             return row
-        self._relations_data = self._relations_data.apply(fill_constraints, axis=1)
+        self._relation_data = self._relation_data.apply(fill_constraints, axis=1)
         
-        self._first_degree_relations = self._relations_data[self._relations_data["degree"] == "1"].reset_index(drop=True)
-        self._second_degree_relations = self._relations_data[self._relations_data["degree"] == "2"].reset_index(drop=True)
-        self._third_degree_relations = self._relations_data[self._relations_data["degree"] == "3"].reset_index(drop=True)
+        self._first_degree_relations = self._relation_data[self._relation_data["degree"] == "1"].reset_index(drop=True)
+        self._second_degree_relations = self._relation_data[self._relation_data["degree"] == "2"].reset_index(drop=True)
+        self._third_degree_relations = self._relation_data[self._relation_data["degree"] == "3"].reset_index(drop=True)
         self._first_and_second_degree_relations = pd.concat([self._first_degree_relations, self._second_degree_relations]).reset_index(drop=True)
         self._all_relations = pd.concat([self._first_degree_relations, self._second_degree_relations, self._third_degree_relations]).reset_index(drop=True)
 
