@@ -94,8 +94,10 @@ class PedigreeEnsemble:
             if optional_column not in self._relation_data.columns:
                 self._relation_data[optional_column] = ""
         
-        if not self._relation_data["id1"].isin(self._node_data["id"]).all() or not self._relation_data["id2"].isin(self._node_data["id"]).all():
-            raise ValueError("All node IDs in relations data must be present in node data.")
+        excess_relation_nodes = set(self._relation_data["id1"]).union(set(self._relation_data["id2"])) - set(self._node_data["id"])
+        if excess_relation_nodes:
+            raise ValueError(f"All node IDs in relations data must be present in node data: {excess_relation_nodes}.")
+        
         if not self._relation_data["degree"].isin(["1", "2", "3"]).all():
             raise ValueError("Degree must be 1, 2, or 3.")
         if not self._relation_data["force_constraints"].isin(["True", "False", ""]).all():
