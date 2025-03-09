@@ -544,8 +544,8 @@ class PedigreeEnsemble:
                 return pedigrees
             
             sorted_pedigrees = [pedigree for pedigree, _, _ in sorted(zip(pedigrees, strikes, third_degree_strikes), key=lambda x: (x[1], x[2]))]
-            exploration_sample_count = int(epsilon * sample_count)
-            exploitation_sample_count = sample_count - exploration_sample_count
+            exploitation_sample_count = int((1 - epsilon) * sample_count)
+            exploration_sample_count = sample_count - exploitation_sample_count
 
             exploitation_pedigrees = sorted_pedigrees[:exploitation_sample_count]
             exploration_pedigrees = random.sample(sorted_pedigrees[exploitation_sample_count:], exploration_sample_count)
