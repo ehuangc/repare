@@ -18,7 +18,7 @@ class SimulatedPedigree:
         self._p_can_have_children = 0.6  # "True" value, will be more conservative when writing node data
         self._mean_children_per_mate = 2
         self._sd_children_per_mate = 1
-        self._num_generations = 5
+        self._num_generations = 4
         self._generation_zero_size = 3
 
         self._p_mask_node = p_mask_node  # Probability that a node will be masked (i.e., not included in node data)
