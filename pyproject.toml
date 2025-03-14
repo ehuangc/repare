@@ -15,5 +15,5 @@ trees = "pedigree_package.main:main"
 where = "src"
 
 [project.optional-dependencies]
-benchmark = ["scikit-learn"]
+benchmark = ["scikit-learn", "seaborn"]
 plot = ["pygraphviz"]
