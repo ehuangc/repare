@@ -12,7 +12,7 @@ dependencies = [
 trees = "pedigree_package.main:main"
 
 [tool.setuptools.packages.find]
-where = "src"
+where = ["src"]
 
 [project.optional-dependencies]
 benchmark = ["scikit-learn", "seaborn"]
