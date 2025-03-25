@@ -305,17 +305,8 @@ class SimulatedPedigree:
         statistics = defaultdict()
         statistics["Total Node Count"] = len(self._ground_truth_pedigree.node_to_data)
         statistics["Sampled Node Count"] = len(self._final_nodes_df)
-        statistics["Density"] = self._calculate_pedigree_density()
         statistics["Proportion of Inbred Nodes"] = self._calculate_inbred_proportion()
         return statistics
-    
-    def _calculate_pedigree_density(self) -> float:
-        pedigree_graph = nx.from_dict_of_lists(self._ground_truth_pedigree.node_to_children)
-        # Add childless nodes
-        for node in self._ground_truth_pedigree.node_to_data:
-            if node not in pedigree_graph:
-                pedigree_graph.add_node(node)
-        return nx.density(pedigree_graph)
     
     def _calculate_inbred_proportion(self) -> float:
         num_nodes_with_parents = 0
