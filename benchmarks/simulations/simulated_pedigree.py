@@ -89,7 +89,7 @@ class SimulatedPedigree:
         # Parent 2 is either an existing node or is an "outside" node
         parent2 = None
         parent2_sex = "F" if parent1_sex == "M" else "M"
-        if random.random() < 0.5:  # Existing mate
+        if random.random() < 0.25:  # Existing mate
             potential_mates = []
             for node in self._ground_truth_pedigree.node_to_data.keys():
                 if node != parent1 and self._ground_truth_pedigree.node_to_data[node]["can_have_children"] and 0 <= parent1_generation - self._node_to_generation[node] <= 1:
