@@ -29,7 +29,6 @@ SE2m,SC4f,1,
 SE2m,SC9f,1,
 SC9f,SC8m,1,siblings
 SE2m,SC3m,1,
-
 NC1m,NC8m,2,
 SC3m,SC8m,2,
 SP1m,SC3m,2,
@@ -73,7 +72,6 @@ SE1m,NC4m,2,
 NC8m,NC3f,2,
 NC3f,SP3m,2,
 NC8m,SC2m,2,
-
 SP1m,NC8m,3,
 NC1m,SC8m,3,
 SP1m,SE2m,3,
