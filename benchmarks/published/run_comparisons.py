@@ -5,10 +5,10 @@ from relation_comparison import RelationComparison
 
 
 def main():
-    data_dir = os.path.join(os.path.dirname(__file__), "blocher")
+    data_dir = os.path.join(os.path.dirname(__file__), "fowler")
     published_relations_path = os.path.join(data_dir, "published_exact_relations.csv")
     algorithm_nodes_path = os.path.join(data_dir, "nodes.csv")
-    algorithm_relations_path = os.path.join(data_dir, "inferred_relations_KIN.csv")
+    algorithm_relations_path = os.path.join(data_dir, "inferred_relations_coeffs.csv")
 
     logging.basicConfig(level=logging.WARNING)  # Set to logging.INFO for more detailed output
     with logging_redirect_tqdm():
