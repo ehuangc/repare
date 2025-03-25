@@ -61,7 +61,7 @@ class RelationComparison:
             pedigree_ensemble = PedigreeEnsemble(relations_path,
                                                  nodes_path,
                                                  outputs_dir=temp_dir,
-                                                 sample_count=100)
+                                                 sample_count=1000)
             return pedigree_ensemble.find_best_pedigree()
 
     def _fill_uncertain_relations(self) -> None:
