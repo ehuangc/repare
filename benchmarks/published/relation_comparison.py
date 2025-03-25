@@ -1,9 +1,13 @@
 import tempfile
+import logging
 import pandas as pd
 from collections import defaultdict, namedtuple
 from itertools import combinations
 from sklearn.metrics import r2_score
 from pedigree_package import Pedigree, PedigreeEnsemble
+
+logger = logging.getLogger(__name__)
+
 
 class RelationComparison:
     def __init__(self, published_relations_path: str, algorithm_nodes_path: str, algorithm_relations_path: str) -> None:
@@ -112,7 +116,7 @@ class RelationComparison:
         return metrics
 
     @staticmethod
-    def _calculate_tp_fp_fn(published_counts: defaultdict(int), algorithm_counts: defaultdict(int)) -> tuple[int, int, int]:
+    def _calculate_tp_fp_fn(published_counts: defaultdict(int), algorithm_counts: defaultdict(int), nodes: tuple[str, str]) -> tuple[int, int, int]:
         tp = 0  # True positives
         fp = 0  # False positives
         fn = 0  # False negatives
@@ -126,9 +130,11 @@ class RelationComparison:
             elif true_count > algorithm_count:
                 tp += algorithm_count
                 fn += true_count - algorithm_count
+                logger.info(f"False Negative: {nodes[0]} - {nodes[1]}: {relation} ({true_count} > {algorithm_count})")
             else:
                 tp += true_count
                 fp += algorithm_count - true_count
+                logger.info(f"False Positive: {nodes[0]} - {nodes[1]}: {relation} ({true_count} < {algorithm_count})")
         return tp, fp, fn
 
     def _calculate_relation_metrics(self) -> tuple[float, float, float, float]:
@@ -147,7 +153,7 @@ class RelationComparison:
                 correct_node_pairs += 1
             total_node_pairs += 1
 
-            tp, fp, fn = self._calculate_tp_fp_fn(published_relations_between_nodes, algorithm_relations_between_nodes)
+            tp, fp, fn = self._calculate_tp_fp_fn(published_relations_between_nodes, algorithm_relations_between_nodes, (id1, id2))
             relation_tp += tp
             relation_fp += fp
             relation_fn += fn
@@ -187,7 +193,7 @@ class RelationComparison:
                 correct_node_pairs += 1
             total_node_pairs += 1
         
-            tp, fp, fn = self._calculate_tp_fp_fn(published_degrees_between_nodes, algorithm_degrees_between_nodes)
+            tp, fp, fn = self._calculate_tp_fp_fn(published_degrees_between_nodes, algorithm_degrees_between_nodes, (id1, id2))
             degree_tp += tp
             degree_fp += fp
             degree_fn += fn
