@@ -77,7 +77,7 @@ def plot_results():
         plt.title(f"{metric} Heatmap", fontsize=14)
         plt.xlabel("Kinship Relation Error Rate Scale", fontsize=12)
         plt.ylabel("p(Mask Node)", fontsize=12)
-        plt.savefig(f"simulation_results/{metric.lower().replace(' ', '_')}_heatmap.png")
+        plt.savefig(f"simulation_results/plots/{metric.lower().replace(' ', '_')}_heatmap.png")
 
 def main():
     for p_mask_node in [0.0, 0.2, 0.4, 0.6]:
