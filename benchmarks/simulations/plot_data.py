@@ -10,18 +10,32 @@ def plot_pedigree_summary_statistics(results_dir: str) -> None:
     # all experiments are run on same simulated pedigrees since seed is fixed
     results_path = os.listdir(results_dir)[0]
     results_df = pd.read_csv(os.path.join(results_dir, results_path))
-
     pedigree_sizes = results_df["Total Node Count"].values
     inbred_proportions = results_df["Proportion of Inbred Nodes"].values
+    has_children_proportions = results_df["Proportion of Non-Leaf Nodes with Children"].values
+    mean_children_count = results_df["Mean Children Count per Parent"].values
 
-    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+    axes = axes.flatten()
+    for ax in axes:
+        ax.set_ylabel("Pedigree Count")
+    plt.subplots_adjust(hspace=0.25)
+
     sns.histplot(pedigree_sizes, ax=axes[0])
     axes[0].set_title("Pedigree Size Distribution")
     axes[0].set_xlabel("# of Individuals in Full Simulated Pedigree")
-    
+
     sns.histplot(inbred_proportions, ax=axes[1])
     axes[1].set_title("Inbreeding Proportion Distrbution")
     axes[1].set_xlabel("Proportion of Inbred Individuals in Full Simulated Pedigree")
+
+    sns.histplot(has_children_proportions, ax=axes[2])
+    axes[2].set_title("Has Children Proportion Distribution")
+    axes[2].set_xlabel("Proportion of Non-Leaf Individuals with Children in Full Simulated Pedigree")
+
+    sns.histplot(mean_children_count, ax=axes[3])
+    axes[3].set_title("Mean Children Count Distribution")
+    axes[3].set_xlabel("Mean # of Children per Parent in Full Simulated Pedigree")
     plt.savefig("simulation_results/plots/pedigree_summary_statistics.png", dpi=600)
 
 def plot_results(results_dir: str) -> None:
