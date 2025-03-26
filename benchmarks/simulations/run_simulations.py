@@ -2,7 +2,6 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from statistics import mean, stdev
 from collections import defaultdict
 from simulated_pedigree import SimulatedPedigree
 

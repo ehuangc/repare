@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from statistics import mean, stdev
 
 
 def plot_pedigree_summary_statistics(results_dir: str) -> None:
