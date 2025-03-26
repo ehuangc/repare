@@ -306,6 +306,8 @@ class SimulatedPedigree:
         statistics["Total Node Count"] = len(self._ground_truth_pedigree.node_to_data)
         statistics["Sampled Node Count"] = len(self._final_nodes_df)
         statistics["Proportion of Inbred Nodes"] = self._calculate_inbred_proportion()
+        statistics["Proportion of Non-Leaf Nodes with Children"] = self._calculate_has_children_proportion()
+        statistics["Mean Children Count per Parent"] = self._calculate_mean_children_per_node()
         return statistics
     
     def _calculate_inbred_proportion(self) -> float:
@@ -321,6 +323,27 @@ class SimulatedPedigree:
                 if (father, mother) in related_pairs or (mother, father) in related_pairs:
                     num_nodes_with_related_parents += 1
         return num_nodes_with_related_parents / num_nodes_with_parents if num_nodes_with_parents > 0 else 0
+
+    def _calculate_has_children_proportion(self) -> float:
+        num_nonleaf_parents = 0
+        num_nonleaf_nodes = 0
+
+        for node in self._ground_truth_pedigree.node_to_data:
+            if self._node_to_generation[node] != max(self._node_to_generation.values()):
+                num_nonleaf_nodes += 1
+                if self._ground_truth_pedigree.node_to_children[node]:
+                    num_nonleaf_parents += 1
+        return num_nonleaf_parents / num_nonleaf_nodes if num_nonleaf_nodes > 0 else 0
+    
+    def _calculate_mean_children_per_node(self) -> float:
+        num_children = 0
+        num_parents = 0
+
+        for node in self._ground_truth_pedigree.node_to_data:
+            if self._ground_truth_pedigree.node_to_children[node]:
+                num_children += len(self._ground_truth_pedigree.node_to_children[node])
+                num_parents += 1
+        return num_children / num_parents if num_parents > 0 else 0
 
     def get_metrics(self) -> dict[str, float]:
         metrics: dict[str, float] = dict()
