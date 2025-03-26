@@ -231,7 +231,7 @@ class SimulatedPedigree:
                 raise ValueError(f"Scale is too high. Error rates exceed 1.")
         return scaled_degree_probs, scaled_relation_probs
 
-    def mask_and_corrupt_data(self):
+    def mask_and_corrupt_data(self) -> None:
         nodes_df = self._get_nodes()
         relations_df = pd.concat([self._get_first_degree_relations(), 
                                   self._get_second_degree_relations(), 
