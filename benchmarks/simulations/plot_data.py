@@ -22,7 +22,7 @@ def plot_pedigree_summary_statistics(results_dir: str) -> None:
     sns.histplot(inbred_proportions, ax=axes[1])
     axes[1].set_title("Inbreeding Proportion Distrbution")
     axes[1].set_xlabel("Proportion of Inbred Individuals in Full Simulated Pedigree")
-    plt.savefig("simulation_results/plots/pedigree_summary_statistics.png")
+    plt.savefig("simulation_results/plots/pedigree_summary_statistics.png", dpi=600)
 
 def plot_results(results_dir: str) -> None:
     p_mask_nodes = []
@@ -56,14 +56,14 @@ def plot_results(results_dir: str) -> None:
         heatmap_data = heatmap_data.sort_index(axis=1, ascending=True)  # p(Mask Node) increases from top to bottom
         heatmap_data.rename(columns={1.0: "1.0\n(~0.5x coverage)"}, inplace=True)
         
-        plt.figure(figsize=(8, 6), dpi=1200)
+        plt.figure(figsize=(8, 6))
         # Set vmin and vmax so relation and degree F1 scores are on the same color scale
         ax = sns.heatmap(heatmap_data, annot=True, fmt=".2f", cmap="Blues", cbar_kws={"label": metric}, vmin=0.5, vmax=1.0)
         ax.figure.axes[-1].yaxis.label.set_size(12)  # Set colorbar label size
         plt.title(f"{metric} Heatmap", fontsize=14)
         plt.xlabel("Kinship Relation Error Rate Scale", fontsize=12)
         plt.ylabel("p(Mask Node)", fontsize=12)
-        plt.savefig(f"simulation_results/plots/{metric.lower().replace(' ', '_')}_heatmap.png")
+        plt.savefig(f"simulation_results/plots/{metric.lower().replace(' ', '_')}_heatmap.png", dpi=600)
 
 def main():
     os.makedirs("simulation_results/plots", exist_ok=True)
