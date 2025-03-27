@@ -33,8 +33,8 @@ def run_experiment(p_mask_node: float, error_rate_scale: float, num_simulations:
     results_df = pd.concat([pd.DataFrame.from_dict(experiment_pedigree_statistics), pd.DataFrame.from_dict(experiment_metrics)], axis=1)
     results_df["p(Mask Node)"] = p_mask_node
     results_df["Error Rate Scale"] = error_rate_scale
-    os.makedirs("simulation_results/data", exist_ok=True)
-    results_df.to_csv(f"simulation_results/data/p_mask_node={p_mask_node}_error_rate_scale={error_rate_scale}.csv", index=False)
+    os.makedirs("results/data", exist_ok=True)
+    results_df.to_csv(f"results/data/p_mask_node={p_mask_node}_error_rate_scale={error_rate_scale}.csv", index=False)
 
 def main():
     for p_mask_node in [0.0, 0.2, 0.4, 0.6]:

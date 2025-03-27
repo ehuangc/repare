@@ -36,7 +36,7 @@ def plot_pedigree_summary_statistics(results_dir: str) -> None:
     sns.histplot(mean_children_count, ax=axes[3])
     axes[3].set_title("Mean Children Count Distribution")
     axes[3].set_xlabel("Mean # of Children per Parent in Full Simulated Pedigree")
-    plt.savefig("simulation_results/plots/pedigree_summary_statistics.png", dpi=600)
+    plt.savefig("results/plots/pedigree_summary_statistics.png", dpi=600)
 
 def plot_results(results_dir: str) -> None:
     p_mask_nodes = []
@@ -77,11 +77,11 @@ def plot_results(results_dir: str) -> None:
         plt.title(f"{metric} Heatmap", fontsize=14)
         plt.xlabel("Kinship Relation Error Rate Scale", fontsize=12)
         plt.ylabel("p(Mask Node)", fontsize=12)
-        plt.savefig(f"simulation_results/plots/{metric.lower().replace(' ', '_')}_heatmap.png", dpi=600)
+        plt.savefig(f"results/plots/{metric.lower().replace(' ', '_')}_heatmap.png", dpi=600)
 
 def main():
-    os.makedirs("simulation_results/plots", exist_ok=True)
-    results_dir = "simulation_results/data"
+    os.makedirs("results/plots", exist_ok=True)
+    results_dir = "results/data"
     plot_pedigree_summary_statistics(results_dir)
     plot_results(results_dir)
 
