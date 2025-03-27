@@ -1,2 +1,2 @@
-from .reconstruct.pedigree import Pedigree
-from .reconstruct.pedigree_ensemble import PedigreeEnsemble
+from .pedigree import Pedigree
+from .pedigree_ensemble import PedigreeEnsemble

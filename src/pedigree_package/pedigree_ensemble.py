@@ -10,7 +10,7 @@ import matplotlib.lines as mlines
 from collections import defaultdict
 from tqdm import tqdm
 from typing import Any
-from pedigree_package.reconstruct.pedigree import Pedigree
+from pedigree_package.pedigree import Pedigree
 
 logger = logging.getLogger(__name__)
 

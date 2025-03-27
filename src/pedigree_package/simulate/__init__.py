@@ -1,1 +1,0 @@
-from .simulated_pedigree import SimulatedPedigree
