@@ -83,12 +83,12 @@ class PedigreeEnsemble:
 
     def _validate_relation_data(self, relations_path: str) -> None:
         """
-        Validate relations data input.
+        Validate relation data input.
         """
         self._relation_data = pd.read_csv(relations_path, dtype=str, comment="#", keep_default_na=False)
         for column_name in ["id1", "id2", "degree", "constraints"]:
             if column_name not in self._relation_data.columns:
-                raise ValueError(f"Column \"{column_name}\" not found in input relations data.")
+                raise ValueError(f"Column \"{column_name}\" not found in input relation data.")
 
         for optional_column in ["force_constraints"]:
             if optional_column not in self._relation_data.columns:
@@ -96,7 +96,7 @@ class PedigreeEnsemble:
         
         excess_relation_nodes = set(self._relation_data["id1"]).union(set(self._relation_data["id2"])) - set(self._node_data["id"])
         if excess_relation_nodes:
-            raise ValueError(f"All node IDs in relations data must be present in node data: {excess_relation_nodes}.")
+            raise ValueError(f"All node IDs in relation data must be present in node data: {excess_relation_nodes}.")
         
         if not self._relation_data["degree"].isin(["1", "2", "3"]).all():
             raise ValueError("Degree must be 1, 2, or 3.")
@@ -130,9 +130,9 @@ class PedigreeEnsemble:
 
     def _process_relation_data(self) -> None:
         """
-        Process relations data input.
+        Process relation data input.
         """
-        # Reorder relations data columns and remove unnecessary columns
+        # Reorder relation data columns and remove unnecessary columns
         self._relation_data = self._relation_data[["id1", "id2", "degree", "constraints", "force_constraints"]]
         # Convert "force_constrains" column to booleans
         self._relation_data["force_constraints"] = self._relation_data["force_constraints"].map({"False": False, "True": True, "": False})
@@ -191,7 +191,7 @@ class PedigreeEnsemble:
 
     def _shuffle_relations(self) -> None:
         """
-        Shuffle relations DataFrames (when we want to restart the algorithm).
+        Shuffle relation DataFrames (when we want to restart the algorithm).
         """
         self._first_degree_relations = self._first_degree_relations.sample(frac=1, random_state=self._random_seed).reset_index(drop=True)
         self._second_degree_relations = self._second_degree_relations.sample(frac=1, random_state=self._random_seed).reset_index(drop=True)

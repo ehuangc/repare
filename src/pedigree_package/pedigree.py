@@ -435,7 +435,7 @@ class Pedigree:
 
     def count_inconsistencies(self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]], pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]], check_half_siblings: bool) -> tuple[int, list[tuple[str, str, str]]]:
         """
-        Validates this tree based on the input relations data.
+        Validates this tree based on the input relation data.
         If check_half_siblings is False, don't check for extraneous half-sibling relations because the 2 non-shared parents might be merged later.
         Returns count of inconsistencies with the input data as well as a log of the inconsistencies.
         Note: pair_to_constraints values must be sorted by increasing length so that specific constraints are checked first.
