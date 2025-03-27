@@ -11,6 +11,9 @@ logger = logging.getLogger(__name__)
 
 
 class RelationComparison:
+    """
+    Generates an algorithm-reconstructed pedigree and compares it to a published/ground-truth pedigree.
+    """
     def __init__(self, published_relations_path: str, algorithm_nodes_path: str, algorithm_relations_path: str) -> None:
         self._published_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = self._load_published_relations(published_relations_path)
         self._algorithm_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = self._load_algorithm_relations(algorithm_nodes_path, algorithm_relations_path)

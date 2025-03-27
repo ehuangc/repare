@@ -12,6 +12,10 @@ from pedigree_package.reconstruct.pedigree_ensemble import PedigreeEnsemble
 
 
 class SimulatedPedigree:
+    """
+    Simulates a pedigree, masks and corrupts the data to generate algorithm inputs, 
+    runs the pedigree reconstruction algorithm, and calculates performance metrics.
+    """
     def __init__(self, p_mask_node: float = 0.4, error_rate_scale: float = 1, random_seed: int | None = None) -> None:
         self._ground_truth_pedigree = Pedigree()
         self._y_haplogroup_pool = ["a", "b"]
