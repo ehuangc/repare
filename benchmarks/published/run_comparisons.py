@@ -5,7 +5,7 @@ from comparator.relation_comparison import RelationComparison
 
 
 def main():
-    data_dir = os.path.join(os.path.dirname(__file__), "fowler")
+    data_dir = os.path.join(os.path.dirname(__file__), "data", "fowler")
     published_relations_path = os.path.join(data_dir, "published_exact_relations.csv")
     algorithm_nodes_path = os.path.join(data_dir, "nodes.csv")
     algorithm_relations_path = os.path.join(data_dir, "inferred_relations_coeffs.csv")
