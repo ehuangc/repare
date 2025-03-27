@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from collections import defaultdict
-from simulated_pedigree import SimulatedPedigree
+from pedigree_package.simulate import SimulatedPedigree
 
 
 def simulate(p_mask_node: float, error_rate_scale: float, random_seed: int) -> tuple[dict[str, int | float], dict[str, float]]:

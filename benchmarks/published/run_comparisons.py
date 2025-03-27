@@ -1,7 +1,7 @@
 import os
 import logging
 from tqdm.contrib.logging import logging_redirect_tqdm
-from relation_comparison import RelationComparison
+from pedigree_package.compare import RelationComparison
 
 
 def main():

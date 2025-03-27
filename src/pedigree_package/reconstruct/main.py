@@ -2,7 +2,8 @@ import os
 import argparse
 import logging
 from tqdm.contrib.logging import logging_redirect_tqdm
-from . import PedigreeEnsemble
+from pedigree_package.reconstruct.pedigree import Pedigree
+from pedigree_package.reconstruct.pedigree_ensemble import PedigreeEnsemble
 
 
 def parse_arguments():

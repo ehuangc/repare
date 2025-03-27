@@ -4,7 +4,8 @@ import pandas as pd
 from collections import defaultdict, namedtuple
 from itertools import combinations
 from sklearn.metrics import r2_score
-from pedigree_package import Pedigree, PedigreeEnsemble
+from pedigree_package.reconstruct.pedigree import Pedigree
+from pedigree_package.reconstruct.pedigree_ensemble import PedigreeEnsemble
 
 logger = logging.getLogger(__name__)
 
