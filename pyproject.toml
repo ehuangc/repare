@@ -9,7 +9,7 @@ dependencies = [
 ]
 
 [project.scripts]
-trees = "pedigree_package.reconstruct.main:main"
+trees = "pedigree_package.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
