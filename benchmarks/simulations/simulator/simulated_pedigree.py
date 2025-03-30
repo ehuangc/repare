@@ -8,7 +8,7 @@ from sklearn.metrics import r2_score
 from itertools import combinations
 from collections import defaultdict
 from pedigree_package.pedigree import Pedigree
-from pedigree_package.pedigree_ensemble import PedigreeEnsemble
+from pedigree_package.pedigree_reconstructor import PedigreeReconstructor
 
 
 class SimulatedPedigree:
@@ -295,13 +295,13 @@ class SimulatedPedigree:
 
             outputs_dir = os.path.join(temp_dir, "outputs")
             os.makedirs(outputs_dir, exist_ok=True)
-            pedigree_ensemble = PedigreeEnsemble(relations_path, 
-                                                 nodes_path, 
-                                                 outputs_dir,
-                                                 sample_count=100,
-                                                 random_seed=self._random_seed)
+            pedigree_reconstructor = PedigreeReconstructor(relations_path, 
+                                                           nodes_path, 
+                                                           outputs_dir,
+                                                           sample_count=100,
+                                                           random_seed=self._random_seed)
             try:
-                self._algorithm_pedigree = pedigree_ensemble.find_best_pedigree()
+                self._algorithm_pedigree = pedigree_reconstructor.find_best_pedigree()
                 self._algorithm_found_pedigree = True
             except RuntimeError:
                 self._algorithm_found_pedigree = False

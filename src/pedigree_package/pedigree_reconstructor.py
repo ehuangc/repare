@@ -15,7 +15,7 @@ from pedigree_package.pedigree import Pedigree
 logger = logging.getLogger(__name__)
 
 
-class PedigreeEnsemble:
+class PedigreeReconstructor:
     """
     Manages and builds up a collection of potential Pedigrees.
     """
@@ -276,18 +276,18 @@ class PedigreeEnsemble:
         for pedigree in self._pedigrees:
             if degree == "1":
                 if not force_constraints:
-                    new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
-                    new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
+                    new_pedigrees.extend(PedigreeReconstructor._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
+                    new_pedigrees.extend(PedigreeReconstructor._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
                 else:
-                    new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=constraints))
+                    new_pedigrees.extend(PedigreeReconstructor._connect_first_degree_relation(pedigree, node1, node2, constraints=constraints))
             
             elif degree == "2":
                 if not force_constraints:
                     new_pedigrees.append(pedigree)  # No relation (i.e. false positive)
-                    new_pedigrees.extend(PedigreeEnsemble._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
-                    new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
+                    new_pedigrees.extend(PedigreeReconstructor._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
+                    new_pedigrees.extend(PedigreeReconstructor._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
                 else:
-                    new_pedigrees.extend(PedigreeEnsemble._connect_second_degree_relation(pedigree, node1, node2, constraints=constraints))
+                    new_pedigrees.extend(PedigreeReconstructor._connect_second_degree_relation(pedigree, node1, node2, constraints=constraints))
         self._pedigrees = new_pedigrees
 
     @staticmethod
@@ -302,11 +302,11 @@ class PedigreeEnsemble:
 
         for relation in possible_relations:
             if relation == "parent-child":
-                new_pedigrees.extend(PedigreeEnsemble._connect_parent_relation(pedigree, node1, node2))
+                new_pedigrees.extend(PedigreeReconstructor._connect_parent_relation(pedigree, node1, node2))
             if relation == "child-parent":
-                new_pedigrees.extend(PedigreeEnsemble._connect_parent_relation(pedigree, node2, node1))
+                new_pedigrees.extend(PedigreeReconstructor._connect_parent_relation(pedigree, node2, node1))
             if relation == "siblings":
-                new_pedigrees.extend(PedigreeEnsemble._connect_sibling_relation(pedigree, node1, node2))
+                new_pedigrees.extend(PedigreeReconstructor._connect_sibling_relation(pedigree, node1, node2))
         return new_pedigrees
 
     @staticmethod
@@ -321,27 +321,27 @@ class PedigreeEnsemble:
 
         for relation in possible_relations:
             if relation == "maternal aunt/uncle-nephew/niece":
-                new_pedigrees.extend(PedigreeEnsemble._connect_aunt_uncle_relation(pedigree, node1, node2, shared_relative_sex="F"))
+                new_pedigrees.extend(PedigreeReconstructor._connect_aunt_uncle_relation(pedigree, node1, node2, shared_relative_sex="F"))
             if relation == "maternal nephew/niece-aunt/uncle":
-                new_pedigrees.extend(PedigreeEnsemble._connect_aunt_uncle_relation(pedigree, node2, node1, shared_relative_sex="F"))
+                new_pedigrees.extend(PedigreeReconstructor._connect_aunt_uncle_relation(pedigree, node2, node1, shared_relative_sex="F"))
             if relation == "paternal aunt/uncle-nephew/niece":
-                new_pedigrees.extend(PedigreeEnsemble._connect_aunt_uncle_relation(pedigree, node1, node2, shared_relative_sex="M"))
+                new_pedigrees.extend(PedigreeReconstructor._connect_aunt_uncle_relation(pedigree, node1, node2, shared_relative_sex="M"))
             if relation == "paternal nephew/niece-aunt/uncle":
-                new_pedigrees.extend(PedigreeEnsemble._connect_aunt_uncle_relation(pedigree, node2, node1, shared_relative_sex="M"))
+                new_pedigrees.extend(PedigreeReconstructor._connect_aunt_uncle_relation(pedigree, node2, node1, shared_relative_sex="M"))
             
             if relation == "maternal grandparent-grandchild":
-                new_pedigrees.extend(PedigreeEnsemble._connect_grandparent_relation(pedigree, node1, node2, shared_relative_sex="F"))
+                new_pedigrees.extend(PedigreeReconstructor._connect_grandparent_relation(pedigree, node1, node2, shared_relative_sex="F"))
             if relation == "maternal grandchild-grandparent":
-                new_pedigrees.extend(PedigreeEnsemble._connect_grandparent_relation(pedigree, node2, node1, shared_relative_sex="F"))
+                new_pedigrees.extend(PedigreeReconstructor._connect_grandparent_relation(pedigree, node2, node1, shared_relative_sex="F"))
             if relation == "paternal grandparent-grandchild":
-                new_pedigrees.extend(PedigreeEnsemble._connect_grandparent_relation(pedigree, node1, node2, shared_relative_sex="M"))
+                new_pedigrees.extend(PedigreeReconstructor._connect_grandparent_relation(pedigree, node1, node2, shared_relative_sex="M"))
             if relation == "paternal grandchild-grandparent":
-                new_pedigrees.extend(PedigreeEnsemble._connect_grandparent_relation(pedigree, node2, node1, shared_relative_sex="M"))
+                new_pedigrees.extend(PedigreeReconstructor._connect_grandparent_relation(pedigree, node2, node1, shared_relative_sex="M"))
             
             if relation == "maternal half-siblings":
-                new_pedigrees.extend(PedigreeEnsemble._connect_half_sibling_relation(pedigree, node1, node2, shared_relative_sex="F"))
+                new_pedigrees.extend(PedigreeReconstructor._connect_half_sibling_relation(pedigree, node1, node2, shared_relative_sex="F"))
             if relation == "paternal half-siblings":
-                new_pedigrees.extend(PedigreeEnsemble._connect_half_sibling_relation(pedigree, node1, node2, shared_relative_sex="M"))
+                new_pedigrees.extend(PedigreeReconstructor._connect_half_sibling_relation(pedigree, node1, node2, shared_relative_sex="M"))
         return new_pedigrees
 
     @staticmethod
@@ -414,7 +414,7 @@ class PedigreeEnsemble:
 
         for node2_parent in node2_parents:
             if node1 != node2_parent:
-                ret.extend(PedigreeEnsemble._connect_sibling_relation(new_pedigree, node1, node2_parent))
+                ret.extend(PedigreeReconstructor._connect_sibling_relation(new_pedigree, node1, node2_parent))
         return ret
 
     @staticmethod
@@ -440,7 +440,7 @@ class PedigreeEnsemble:
 
         for node2_parent in node2_parents:
             if node1 != node2_parent:
-                ret.extend(PedigreeEnsemble._connect_parent_relation(new_pedigree, node1, node2_parent))
+                ret.extend(PedigreeReconstructor._connect_parent_relation(new_pedigree, node1, node2_parent))
         return ret
 
     @staticmethod
@@ -471,11 +471,11 @@ class PedigreeEnsemble:
         # Node 1 and Node 2 are half-siblings via one of Node 1's parents
         for node1_parent in node1_parents:
             if node1_parent != node2:
-                ret.extend(PedigreeEnsemble._connect_parent_relation(new_pedigree, node1_parent, node2))
+                ret.extend(PedigreeReconstructor._connect_parent_relation(new_pedigree, node1_parent, node2))
         # Node 1 and Node 2 are half-siblings via one of Node 2's parents
         for node2_parent in node2_parents:
             if node2_parent != node1:
-                ret.extend(PedigreeEnsemble._connect_parent_relation(new_pedigree, node2_parent, node1))
+                ret.extend(PedigreeReconstructor._connect_parent_relation(new_pedigree, node2_parent, node1))
         return ret
 
     def _clean_relation_dicts(self) -> None:

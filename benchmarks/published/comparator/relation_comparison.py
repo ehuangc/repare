@@ -5,7 +5,7 @@ from collections import defaultdict, namedtuple
 from itertools import combinations
 from sklearn.metrics import r2_score
 from pedigree_package.pedigree import Pedigree
-from pedigree_package.pedigree_ensemble import PedigreeEnsemble
+from pedigree_package.pedigree_reconstructor import PedigreeReconstructor
 
 logger = logging.getLogger(__name__)
 
@@ -66,11 +66,11 @@ class RelationComparison:
     @staticmethod
     def _run_algorithm(nodes_path: str, relations_path: str) -> Pedigree:
         with tempfile.TemporaryDirectory() as temp_dir:
-            pedigree_ensemble = PedigreeEnsemble(relations_path,
-                                                 nodes_path,
-                                                 outputs_dir=temp_dir,
-                                                 sample_count=1000)
-            return pedigree_ensemble.find_best_pedigree()
+            pedigree_reconstructor = PedigreeReconstructor(relations_path,
+                                                           nodes_path,
+                                                           outputs_dir=temp_dir,
+                                                           sample_count=1000)
+            return pedigree_reconstructor.find_best_pedigree()
 
     def _fill_uncertain_relations(self) -> None:
         uncertain_to_exact_relations = {
