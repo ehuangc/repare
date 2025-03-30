@@ -1,4 +1,4 @@
-# Data from READv2 and Rivollat et al., 2023 supplement
+# Data from Alaçamlı et al., 2024 and Rivollat et al., 2023 Supplementary Information
 # Disagreements default to Rivollat et al. data; includes manual adjustments made by Rivollat et al. incorporating READ, IcMLkin, BREADR, and haplogroup data
 id1,id2,degree,constraints
 GLN201,GLN202,1,parent-child;child-parent

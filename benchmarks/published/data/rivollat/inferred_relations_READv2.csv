@@ -1,3 +1,4 @@
+# Data from Alaçamlı et al., 2024 Supplementary Information
 id1,id2,degree,constraints
 GLN201,GLN202,1,parent-child;child-parent
 GLN202,GLN315,1,parent-child;child-parent
