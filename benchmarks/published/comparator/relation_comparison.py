@@ -41,7 +41,7 @@ class RelationComparison:
 
     @staticmethod
     def _sort_relation(id1: str, id2: str, relation: str) -> tuple[str, str, str]:
-        FLIPPED_RELATIONS = {
+        flipped_relations = {
             "parent-child": "child-parent",
             "child-parent": "parent-child",
             "siblings": "siblings",  # Symmetric
@@ -59,7 +59,7 @@ class RelationComparison:
             "2": "2"  # Symmetric
         }
         if id2 < id1:
-            return id2, id1, FLIPPED_RELATIONS[relation]
+            return id2, id1, flipped_relations[relation]
         else:
             return id1, id2, relation
 
