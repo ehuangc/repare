@@ -15,8 +15,12 @@ class RelationComparison:
     Generates an algorithm-reconstructed pedigree and compares it to a published/ground-truth pedigree.
     """
     def __init__(self, published_relations_path: str, algorithm_nodes_path: str, algorithm_relations_path: str) -> None:
-        self._published_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = self._load_published_relations(published_relations_path)
-        self._algorithm_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = self._load_algorithm_relations(algorithm_nodes_path, algorithm_relations_path)
+        self._published_relations_path = published_relations_path
+        self._algorithm_nodes_path = algorithm_nodes_path
+        self._algorithm_relations_path = algorithm_relations_path
+
+        self._published_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = self._load_published_relations(self._published_relations_path)
+        self._algorithm_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = self._load_algorithm_relations(self._algorithm_nodes_path, self._algorithm_relations_path)
         self._fill_uncertain_relations()
 
     def _load_published_relations(self, path: str) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
@@ -117,6 +121,7 @@ class RelationComparison:
         metrics["Degree Recall"] = degree_recall
         metrics["Degree F1"] = degree_f1
         metrics["Connectivity R-squared"] = self._calculate_connectivity_r_squared()
+        metrics["Kinship Inference Errors"] = self._calculate_kinship_inference_errors()
         return metrics
 
     @staticmethod
@@ -229,3 +234,61 @@ class RelationComparison:
             published_connectivities.append(published_relation_counter[node])
             algorithm_connectivities.append(algorithm_relation_counter[node])
         return r2_score(published_connectivities, algorithm_connectivities)
+
+    def _calculate_kinship_inference_errors(self) -> int:
+        """
+        Calculate the number of node pairs that share a different inferred kinship degree than in the published pedigree
+        or share a relation constraint not consistent with the published pedigree.
+        """
+        published_exact_relations = pd.read_csv(self._published_relations_path, dtype=str, comment="#", keep_default_na=False)
+        inferred_relations = pd.read_csv(self._algorithm_relations_path, dtype=str, comment="#", keep_default_na=False)
+
+        first_degree_relations = {"parent-child", "child-parent", "siblings", "1"}
+        second_degree_relations = {"maternal aunt/uncle-nephew/niece", "paternal aunt/uncle-nephew/niece", "maternal nephew/niece-aunt/uncle", "paternal nephew/niece-aunt/uncle",
+                                   "maternal grandparent-grandchild", "paternal grandparent-grandchild", "maternal grandchild-grandparent", "paternal grandchild-grandparent",
+                                   "maternal half-siblings", "paternal half-siblings", "2"}
+
+        pair_to_published_degree = {}
+        for id1, id2, relation in published_exact_relations.itertuples(index=False):
+            if relation in first_degree_relations:
+                degree = "1"
+            elif relation in second_degree_relations:
+                degree = "2"
+
+            if degree:
+                pair_to_published_degree[tuple(sorted((id1, id2)))] = degree
+        
+        pair_to_inferred_degree = {}
+        pair_to_inferred_constraints = {}
+        for id1, id2, degree, constraints in inferred_relations.itertuples(index=False):
+            if degree == "1" or degree == "2":
+                pair_to_inferred_degree[tuple(sorted((id1, id2)))] = degree
+            if constraints:
+                pair_to_inferred_constraints[tuple(sorted((id1, id2)))] = set(constraints.split(";"))
+
+        # Compare the degree dicts
+        kinship_inference_errors = 0
+        for pair, algorithm_degree in pair_to_inferred_degree.items():
+            if pair not in pair_to_published_degree:
+                kinship_inference_errors += 1
+                continue
+
+            published_degree = pair_to_published_degree[pair]
+            if algorithm_degree != published_degree:
+                kinship_inference_errors += 1
+                continue
+        
+        for pair, published_degree in pair_to_published_degree.items():
+            if pair not in pair_to_inferred_degree:
+                kinship_inference_errors += 1
+            
+        # Count first-degree exact relation inference errors
+        for id1, id2, relation in published_exact_relations.itertuples(index=False):
+            if relation == "1" or relation == "2":  # Skip "dotted lines"
+                continue
+
+            pair = tuple(sorted((id1, id2)))
+            if pair in pair_to_inferred_constraints and relation not in pair_to_inferred_constraints[pair]:
+                assert relation in first_degree_relations
+                kinship_inference_errors += 1
+        return kinship_inference_errors
