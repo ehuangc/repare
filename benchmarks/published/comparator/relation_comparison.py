@@ -6,8 +6,8 @@ from itertools import combinations
 import pandas as pd
 from sklearn.metrics import r2_score
 
-from pedigree_package.pedigree import Pedigree
-from pedigree_package.pedigree_reconstructor import PedigreeReconstructor
+from repare.pedigree import Pedigree
+from repare.pedigree_reconstructor import PedigreeReconstructor
 
 logger = logging.getLogger(__name__)
 

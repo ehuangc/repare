@@ -4,7 +4,7 @@ import os
 
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-from pedigree_package.pedigree_reconstructor import PedigreeReconstructor
+from repare.pedigree_reconstructor import PedigreeReconstructor
 
 
 def parse_arguments():

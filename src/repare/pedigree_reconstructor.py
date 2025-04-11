@@ -9,7 +9,7 @@ from typing import Any
 import pandas as pd
 from tqdm import tqdm
 
-from pedigree_package.pedigree import Pedigree
+from repare.pedigree import Pedigree
 
 logger = logging.getLogger(__name__)
 
