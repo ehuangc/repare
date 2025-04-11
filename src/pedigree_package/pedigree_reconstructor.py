@@ -34,7 +34,7 @@ class PedigreeReconstructor:
         random.seed(self._random_seed)
 
         self._MAX_RUNS = 10  # Maximum number of times to run the algorithm if no valid pedigree is found
-        self._pedigrees: list[Pedigree] = [self._get_initial_pedigree()]
+        self._candidate_pedigrees: list[Pedigree] = [self._get_initial_pedigree()]
         self._pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]] = self._get_pair_to_constraints()
         self._final_pedigree: Pedigree | None = None
 
@@ -233,11 +233,11 @@ class PedigreeReconstructor:
                     self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=False)
                 else:
                     self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=True)
-                logger.info(f"Remaining pedigrees after pruning: {len(self._pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n")
+                logger.info(f"Remaining pedigrees after pruning: {len(self._candidate_pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n")
 
             if not self._final_pedigrees:
                 logger.warning("No valid pedigree found. Shuffling relations and restarting algorithm.\n")
-                self._pedigrees = [self._get_initial_pedigree()]
+                self._candidate_pedigrees = [self._get_initial_pedigree()]
                 self._shuffle_relations()
             else:
                 break
@@ -273,7 +273,7 @@ class PedigreeReconstructor:
         assert degree in ["1", "2"]
 
         new_pedigrees: list[Pedigree] = []
-        for pedigree in self._pedigrees:
+        for pedigree in self._candidate_pedigrees:
             if degree == "1":
                 if not force_constraints:
                     new_pedigrees.extend(PedigreeReconstructor._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
@@ -288,7 +288,7 @@ class PedigreeReconstructor:
                     new_pedigrees.extend(PedigreeReconstructor._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
                 else:
                     new_pedigrees.extend(PedigreeReconstructor._connect_second_degree_relation(pedigree, node1, node2, constraints=constraints))
-        self._pedigrees = new_pedigrees
+        self._candidate_pedigrees = new_pedigrees
 
     @staticmethod
     def _connect_first_degree_relation(pedigree: Pedigree, node1: str, node2: str, constraints: str) -> None:
@@ -482,7 +482,7 @@ class PedigreeReconstructor:
         """
         Remove unnecessary entries in Pedigree dicts.
         """
-        for pedigree in self._pedigrees:
+        for pedigree in self._candidate_pedigrees:
             pedigree.clean_up_relations()
 
     def _get_pair_to_constraints(self) -> defaultdict[tuple[str, str], list[tuple[str, ...]]]:
@@ -512,7 +512,7 @@ class PedigreeReconstructor:
         """
         seen_topologies = set()
         new_potential_pedigrees = []
-        for pedigree in self._pedigrees:
+        for pedigree in self._candidate_pedigrees:
             if (pedigree.validate_members(set(self._node_data["id"])) 
                 and pedigree.validate_can_have_children() 
                 and pedigree.validate_inbreeding()
@@ -553,7 +553,7 @@ class PedigreeReconstructor:
 
         num_processed_relations = sum(len(relations) for relations in pair_to_relations_so_far.values())
         if num_processed_relations < len(self._first_and_second_degree_relations):
-            self._pedigrees = epsilon_greedy_sample(new_potential_pedigrees, strikes, third_degree_strikes, epsilon=self._epsilon, sample_count=self._sample_count)
+            self._candidate_pedigrees = epsilon_greedy_sample(new_potential_pedigrees, strikes, third_degree_strikes, epsilon=self._epsilon, sample_count=self._sample_count)
         else:  # Final iteration
             best_pedigrees = [pedigree for pedigree, num_strikes in zip(new_potential_pedigrees, strikes) if num_strikes == min(strikes)]
             third_degree_strikes = [pedigree.count_third_degree_inconcistencies(self._pair_to_constraints) for pedigree in best_pedigrees]  # Use 3rd-degree strikes as tiebreaker
