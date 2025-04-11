@@ -1,5 +1,5 @@
 import math
-import pandas as pd
+import importlib
 import networkx as nx
 import matplotlib.pyplot as plt
 from collections import defaultdict, deque
@@ -9,6 +9,7 @@ class Pedigree:
     """
     Describes a pedigree configuration for a set of nodes.
     """
+
     def __init__(self) -> None:
         self.num_placeholders = 0
         self.node_to_data: dict[str, dict[str, str | bool | float]] = dict()
@@ -24,7 +25,7 @@ class Pedigree:
         cls = self.__class__
         new_pedigree = cls.__new__(cls)
         memo[id(self)] = new_pedigree
-        
+
         new_pedigree.num_placeholders = self.num_placeholders
         new_pedigree.node_to_data = dict()
         for k, v in self.node_to_data.items():
@@ -46,6 +47,7 @@ class Pedigree:
         """
         leaf_nodes: list[str] = sorted([node for node in self.node_to_data if not self.node_to_children[node]])
         result: list[str] = []
+
         # DFS
         def visit(node: str) -> None:
             # No father == no mother
@@ -78,7 +80,16 @@ class Pedigree:
                     result[i] = f"F {placeholder_to_idx[node]} {mt_haplogroup}"
         return tuple(result)
 
-    def add_node(self, node_id: str, sex: str, y_haplogroup: str, mt_haplogroup: str, can_have_children: bool, can_be_inbred: bool, years_before_present: float) -> None:
+    def add_node(
+        self,
+        node_id: str,
+        sex: str,
+        y_haplogroup: str,
+        mt_haplogroup: str,
+        can_have_children: bool,
+        can_be_inbred: bool,
+        years_before_present: float,
+    ) -> None:
         """
         Add a node to the pedigree. If haplogroup is unknown, set argument to empty string ("").
         """
@@ -112,7 +123,10 @@ class Pedigree:
         # Make sure Node 2 has 2 known parents
         if node2_parents[0] and node2_parents[1]:
             for node1_child in self.node_to_children[node1]:
-                if node1_child != node2 and [self.node_to_father[node1_child], self.node_to_mother[node1_child]] == node2_parents:
+                if (
+                    node1_child != node2
+                    and [self.node_to_father[node1_child], self.node_to_mother[node1_child]] == node2_parents
+                ):
                     self.add_sibling_relation(node1_child, node2)
 
     def add_sibling_relation(self, node1: str, node2: str) -> None:
@@ -170,7 +184,7 @@ class Pedigree:
                     else:
                         # This also handles having the correct name of the merged parents from last loop iteration
                         self.add_parent_relation(name_to_keep, child)
-                
+
                 # Remove all occurrences of name_to_discard in its sibling's sibling sets first so that self.add_sibling_relation() does not add it back in
                 for sibling in self.node_to_siblings[name_to_discard]:
                     self.node_to_siblings[sibling].remove(name_to_discard)
@@ -298,7 +312,15 @@ class Pedigree:
 
         if not father:
             father_id = str(self.num_placeholders)
-            self.add_node(node_id=father_id, sex="M", y_haplogroup="*", mt_haplogroup="*", can_have_children=True, can_be_inbred=True, years_before_present=math.nan)
+            self.add_node(
+                node_id=father_id,
+                sex="M",
+                y_haplogroup="*",
+                mt_haplogroup="*",
+                can_have_children=True,
+                can_be_inbred=True,
+                years_before_present=math.nan,
+            )
 
             self.add_parent_relation(father_id, node)
             for sibling in self.node_to_siblings[node]:
@@ -307,8 +329,16 @@ class Pedigree:
 
         if not mother:
             mother_id = str(self.num_placeholders)
-            self.add_node(node_id=mother_id, sex="F", y_haplogroup="", mt_haplogroup="*", can_have_children=True, can_be_inbred=True, years_before_present=math.nan)
-            
+            self.add_node(
+                node_id=mother_id,
+                sex="F",
+                y_haplogroup="",
+                mt_haplogroup="*",
+                can_have_children=True,
+                can_be_inbred=True,
+                years_before_present=math.nan,
+            )
+
             self.add_parent_relation(mother_id, node)
             for sibling in self.node_to_siblings[node]:
                 self.add_parent_relation(mother_id, sibling)
@@ -320,15 +350,24 @@ class Pedigree:
         """
         for node in self.node_to_data:
             y_haplogroup: str = self.node_to_data[node]["y_haplogroup"]
-            y_lineage: deque[str] = deque([self.node_to_father[node]] + [child for child in self.node_to_children[node] if self.node_to_data[child]["sex"] == "M"])
-            
+            y_lineage: deque[str] = deque(
+                [self.node_to_father[node]]
+                + [child for child in self.node_to_children[node] if self.node_to_data[child]["sex"] == "M"]
+            )
+
             while y_lineage:
                 curr_node = y_lineage.popleft()
-                if not curr_node or "*" not in self.node_to_data[curr_node]["y_haplogroup"] or self.node_to_data[curr_node]["y_haplogroup"].rstrip("*") == y_haplogroup.rstrip("*"):
+                if (
+                    not curr_node
+                    or "*" not in self.node_to_data[curr_node]["y_haplogroup"]
+                    or self.node_to_data[curr_node]["y_haplogroup"].rstrip("*") == y_haplogroup.rstrip("*")
+                ):
                     continue
                 # Overwrite/extend Y haplogroup if it contains a "*" and is a strict subset of the "leaf" haplogroup
                 if y_haplogroup.startswith(self.node_to_data[curr_node]["y_haplogroup"].rstrip("*")):
-                    self.node_to_data[curr_node]["y_haplogroup"] = y_haplogroup if y_haplogroup[-1] == "*" else y_haplogroup + "*"
+                    self.node_to_data[curr_node]["y_haplogroup"] = (
+                        y_haplogroup if y_haplogroup[-1] == "*" else y_haplogroup + "*"
+                    )
                     y_lineage.append(self.node_to_father[curr_node])
                     for curr_node_child in self.node_to_children[curr_node]:
                         # Only males have Y chromosome
@@ -343,11 +382,17 @@ class Pedigree:
 
             while mt_lineage:
                 curr_node = mt_lineage.popleft()
-                if not curr_node or "*" not in self.node_to_data[curr_node]["mt_haplogroup"] or self.node_to_data[curr_node]["mt_haplogroup"].rstrip("*") == mt_haplogroup.rstrip("*"):
+                if (
+                    not curr_node
+                    or "*" not in self.node_to_data[curr_node]["mt_haplogroup"]
+                    or self.node_to_data[curr_node]["mt_haplogroup"].rstrip("*") == mt_haplogroup.rstrip("*")
+                ):
                     continue
                 # Overwrite/extend mitochondrial haplogroup if it contains a "*" and is a strict subset of the "leaf" haplogroup
                 if mt_haplogroup.startswith(self.node_to_data[curr_node]["mt_haplogroup"].rstrip("*")):
-                    self.node_to_data[curr_node]["mt_haplogroup"] = mt_haplogroup if mt_haplogroup[-1] == "*" else mt_haplogroup + "*"
+                    self.node_to_data[curr_node]["mt_haplogroup"] = (
+                        mt_haplogroup if mt_haplogroup[-1] == "*" else mt_haplogroup + "*"
+                    )
                     mt_lineage.append(self.node_to_mother[curr_node])
                     if self.node_to_data[curr_node]["sex"] == "F":
                         mt_lineage.extend(self.node_to_children[curr_node])
@@ -364,22 +409,29 @@ class Pedigree:
         """
         Validates that all haplogroups are consistent.
         """
+
         def haplogroups_agree(haplogroup1: str, haplogroup2: str) -> bool:
             if "*" not in haplogroup1 and "*" not in haplogroup2:
                 return haplogroup1 == haplogroup2
             elif "*" in haplogroup1 and "*" in haplogroup2:
-                return haplogroup1.startswith(haplogroup2.rstrip("*")) or haplogroup2.startswith(haplogroup1.rstrip("*"))
+                return haplogroup1.startswith(haplogroup2.rstrip("*")) or haplogroup2.startswith(
+                    haplogroup1.rstrip("*")
+                )
             elif "*" in haplogroup1:
                 return haplogroup2.startswith(haplogroup1.rstrip("*"))
             else:
                 return haplogroup1.startswith(haplogroup2.rstrip("*"))
-            
+
         for parent, child in self.get_parent_child_pairs():
             if self.node_to_data[parent]["sex"] == "F":
-                if not haplogroups_agree(self.node_to_data[parent]["mt_haplogroup"], self.node_to_data[child]["mt_haplogroup"]):
+                if not haplogroups_agree(
+                    self.node_to_data[parent]["mt_haplogroup"], self.node_to_data[child]["mt_haplogroup"]
+                ):
                     return False
             elif self.node_to_data[parent]["sex"] == "M" and self.node_to_data[child]["sex"] == "M":
-                if not haplogroups_agree(self.node_to_data[parent]["y_haplogroup"], self.node_to_data[child]["y_haplogroup"]):
+                if not haplogroups_agree(
+                    self.node_to_data[parent]["y_haplogroup"], self.node_to_data[child]["y_haplogroup"]
+                ):
                     return False
         return True
 
@@ -410,6 +462,7 @@ class Pedigree:
         Validates that nodes do not postdate their descendants.
         """
         leaf_nodes: list[str] = [node for node in self.node_to_data if not self.node_to_children[node]]
+
         # DFS
         def visit(node: str, curr_years_before_present: float) -> None:
             years_before_present = self.node_to_data[node]["years_before_present"]
@@ -433,7 +486,9 @@ class Pedigree:
                 return False
         return True
 
-    def validate_forced_constraints(self, pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]]) -> bool:
+    def validate_forced_constraints(
+        self, pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]]
+    ) -> bool:
         """
         Validates that forced constraints so far are present in the pedigree.
         Note: Additional relations between two nodes are allowed as long as the forced constraints are present.
@@ -444,14 +499,19 @@ class Pedigree:
                     return False
         return True
 
-    def count_inconsistencies(self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]], pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]], check_half_siblings: bool) -> tuple[int, list[tuple[str, str, str]]]:
+    def count_inconsistencies(
+        self,
+        pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]],
+        pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]],
+        check_half_siblings: bool,
+    ) -> tuple[int, list[tuple[str, str, str]]]:
         """
         Validates this tree based on the input relation data.
         If check_half_siblings is False, don't check for extraneous half-sibling relations because the 2 non-shared parents might be merged later.
         Returns count of inconsistencies with the input data as well as a log of the inconsistencies.
         Note: pair_to_constraints values must be sorted by increasing length so that specific constraints are checked first.
         """
-        for (node1, node2) in pair_to_constraints:
+        for node1, node2 in pair_to_constraints:
             # Ensure no duplicate/symmetric entries
             assert (node2, node1) not in pair_to_constraints
         # Marks which entries in pair_to_constraints have been seen/used
@@ -473,12 +533,19 @@ class Pedigree:
 
         def validate_relation(node1: str, node2: str, relation: str, strike_log: list[str, str, str, str]) -> None:
             relation_to_degree = {
-                "parent-child": "1", "child-parent": "1", "siblings": "1",
-                "maternal aunt/uncle-nephew/niece": "2", "maternal nephew/niece-aunt/uncle": "2",
-                "paternal aunt/uncle-nephew/niece": "2", "paternal nephew/niece-aunt/uncle": "2",
-                "maternal grandparent-grandchild": "2", "maternal grandchild-grandparent": "2", 
-                "paternal grandparent-grandchild": "2", "paternal grandchild-grandparent": "2",
-                "maternal half-siblings": "2", "paternal half-siblings": "2"
+                "parent-child": "1",
+                "child-parent": "1",
+                "siblings": "1",
+                "maternal aunt/uncle-nephew/niece": "2",
+                "maternal nephew/niece-aunt/uncle": "2",
+                "paternal aunt/uncle-nephew/niece": "2",
+                "paternal nephew/niece-aunt/uncle": "2",
+                "maternal grandparent-grandchild": "2",
+                "maternal grandchild-grandparent": "2",
+                "paternal grandparent-grandchild": "2",
+                "paternal grandchild-grandparent": "2",
+                "maternal half-siblings": "2",
+                "paternal half-siblings": "2",
             }
             flipped_relations = {
                 "parent-child": "child-parent",
@@ -493,13 +560,15 @@ class Pedigree:
                 "paternal grandchild-grandparent": "paternal grandparent-grandchild",
                 "siblings": "siblings",  # Symmetric
                 "maternal half-siblings": "maternal half-siblings",  # Symmetric
-                "paternal half-siblings": "paternal half-siblings"  # Symmetric
+                "paternal half-siblings": "paternal half-siblings",  # Symmetric
             }
-            if not is_relation_in_input_data(node1, node2, relation) and not is_relation_in_input_data(node2, node1, flipped_relations[relation]):
+            if not is_relation_in_input_data(node1, node2, relation) and not is_relation_in_input_data(
+                node2, node1, flipped_relations[relation]
+            ):
                 strike_log.append((node1, node2, f"+{relation_to_degree[relation]}", ""))
             remove_relation_from_input_data(node1, node2, relation)
             remove_relation_from_input_data(node2, node1, flipped_relations[relation])
-        
+
         strike_log: list[str, str, str, str] = []  # (node1, node2, +/- relation degree, constraints)
         # Check that relations in the pedigree are present in the input data
         for parent, child in self.get_parent_child_pairs(include_placeholders=False):
@@ -507,20 +576,32 @@ class Pedigree:
         for sibling1, sibling2 in self.get_sibling_pairs(include_placeholders=False):
             validate_relation(sibling1, sibling2, "siblings", strike_log)
 
-        for aunt_uncle, nephew_niece in self.get_aunt_uncle_nephew_niece_pairs(include_placeholders=False, shared_relative_sex="F"):
+        for aunt_uncle, nephew_niece in self.get_aunt_uncle_nephew_niece_pairs(
+            include_placeholders=False, shared_relative_sex="F"
+        ):
             validate_relation(aunt_uncle, nephew_niece, "maternal aunt/uncle-nephew/niece", strike_log)
-        for aunt_uncle, nephew_niece in self.get_aunt_uncle_nephew_niece_pairs(include_placeholders=False, shared_relative_sex="M"):
+        for aunt_uncle, nephew_niece in self.get_aunt_uncle_nephew_niece_pairs(
+            include_placeholders=False, shared_relative_sex="M"
+        ):
             validate_relation(aunt_uncle, nephew_niece, "paternal aunt/uncle-nephew/niece", strike_log)
 
-        for grandparent, grandchild in self.get_grandparent_grandchild_pairs(include_placeholders=False, shared_relative_sex="F"):
+        for grandparent, grandchild in self.get_grandparent_grandchild_pairs(
+            include_placeholders=False, shared_relative_sex="F"
+        ):
             validate_relation(grandparent, grandchild, "maternal grandparent-grandchild", strike_log)
-        for grandparent, grandchild in self.get_grandparent_grandchild_pairs(include_placeholders=False, shared_relative_sex="M"):
+        for grandparent, grandchild in self.get_grandparent_grandchild_pairs(
+            include_placeholders=False, shared_relative_sex="M"
+        ):
             validate_relation(grandparent, grandchild, "paternal grandparent-grandchild", strike_log)
 
         if check_half_siblings:
-            for half_sibling1, half_sibling2 in self.get_half_sibling_pairs(include_placeholders=False, shared_relative_sex="F"):
+            for half_sibling1, half_sibling2 in self.get_half_sibling_pairs(
+                include_placeholders=False, shared_relative_sex="F"
+            ):
                 validate_relation(half_sibling1, half_sibling2, "maternal half-siblings", strike_log)
-            for half_sibling1, half_sibling2 in self.get_half_sibling_pairs(include_placeholders=False, shared_relative_sex="M"):
+            for half_sibling1, half_sibling2 in self.get_half_sibling_pairs(
+                include_placeholders=False, shared_relative_sex="M"
+            ):
                 validate_relation(half_sibling1, half_sibling2, "paternal half-siblings", strike_log)
 
         # Check for "dropped" input relations
@@ -533,7 +614,9 @@ class Pedigree:
                 if not self.is_relation_in_pedigree(node1, node2, constraints.split(";")):
                     strike_log.append((node1, node2, f"-{degree}", constraints))
             else:
-                pedigree_shared_relations: defaultdict(int) = self.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
+                pedigree_shared_relations: defaultdict(int) = self.get_relations_between_nodes(
+                    node1, node2, include_maternal_paternal=True
+                )
                 for degree, constraints, _ in degrees_constraints:
                     present_flag = False
                     for constraint in constraints.split(";"):
@@ -563,12 +646,14 @@ class Pedigree:
                 node_pair_strike_balances[(node2, node1)] -= 1
         return strike_count, strike_log
 
-    def count_third_degree_inconcistencies(self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]]) -> int:
+    def count_third_degree_inconcistencies(
+        self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]]
+    ) -> int:
         """
-        Counts only one-sided inconsistencies in third-degree relations. 
+        Counts only one-sided inconsistencies in third-degree relations.
         Used as a "tie-breaker" for 1st- and 2nd-degree inconsistences.
         """
-        for (node1, node2) in pair_to_constraints:
+        for node1, node2 in pair_to_constraints:
             # Ensure no duplicate/symmetric entries
             assert (node2, node1) not in pair_to_constraints
         # Marks which entries in pair_to_constraints have been seen/used
@@ -587,7 +672,7 @@ class Pedigree:
                     if relation in constraints:
                         pair_to_constraints_seen_entries[(node1, node2)].add(idx)
                         break
-        
+
         def validate_relation(node1: str, node2: str, relation: str) -> bool:
             flipped_relations = {
                 "half aunt/uncle-half nephew/niece": "half nephew/niece-half aunt/uncle",
@@ -596,22 +681,32 @@ class Pedigree:
                 "greatgrandchild-greatgrandparent": "greatgrandparent-greatgrandchild",
                 "grandaunt/granduncle-grandnephew/grandniece": "grandnephew/grandniece-grandaunt/granduncle",
                 "grandnephew/grandniece-grandaunt/granduncle": "grandaunt/granduncle-grandnephew/grandniece",
-                "first cousins": "first cousins"  # Symmetric
+                "first cousins": "first cousins",  # Symmetric
             }
             ret = False
-            if not is_relation_in_input_data(node1, node2, relation) and not is_relation_in_input_data(node2, node1, flipped_relations[relation]):
+            if not is_relation_in_input_data(node1, node2, relation) and not is_relation_in_input_data(
+                node2, node1, flipped_relations[relation]
+            ):
                 ret = True
             remove_relation_from_input_data(node1, node2, relation)
             remove_relation_from_input_data(node2, node1, flipped_relations[relation])
             return ret
-            
+
         strike_count: int = 0
-        for half_aunt_uncle, half_nephew_niece in self.get_half_aunt_uncle_nephew_niece_pairs(include_placeholders=False):
+        for half_aunt_uncle, half_nephew_niece in self.get_half_aunt_uncle_nephew_niece_pairs(
+            include_placeholders=False
+        ):
             strike_count += validate_relation(half_aunt_uncle, half_nephew_niece, "half aunt/uncle-half nephew/niece")
-        for greatgrandparent, greatgrandchild in self.get_greatgrandparent_greatgrandchild_pairs(include_placeholders=False):
+        for greatgrandparent, greatgrandchild in self.get_greatgrandparent_greatgrandchild_pairs(
+            include_placeholders=False
+        ):
             strike_count += validate_relation(greatgrandparent, greatgrandchild, "greatgrandparent-greatgrandchild")
-        for grandaunt_granduncle, grandnephew_grandniece in self.get_grandaunt_granduncle_grandnephew_grandniece_pairs(include_placeholders=False):
-            strike_count += validate_relation(grandaunt_granduncle, grandnephew_grandniece, "grandaunt/granduncle-grandnephew/grandniece")
+        for grandaunt_granduncle, grandnephew_grandniece in self.get_grandaunt_granduncle_grandnephew_grandniece_pairs(
+            include_placeholders=False
+        ):
+            strike_count += validate_relation(
+                grandaunt_granduncle, grandnephew_grandniece, "grandaunt/granduncle-grandnephew/grandniece"
+            )
         for first_cousin1, first_cousin2 in self.get_first_cousin_pairs(include_placeholders=False):
             strike_count += validate_relation(first_cousin1, first_cousin2, "first cousins")
         return strike_count
@@ -652,10 +747,16 @@ class Pedigree:
                         return True
             if relation == "half-siblings":
                 if self.node_to_father[node2]:
-                    if node1 in self.node_to_children[self.node_to_father[node2]] and self.node_to_mother[node1] != self.node_to_mother[node2]:
+                    if (
+                        node1 in self.node_to_children[self.node_to_father[node2]]
+                        and self.node_to_mother[node1] != self.node_to_mother[node2]
+                    ):
                         return True
                 if self.node_to_mother[node2]:
-                    if node1 in self.node_to_children[self.node_to_mother[node2]] and self.node_to_father[node1] != self.node_to_father[node2]:
+                    if (
+                        node1 in self.node_to_children[self.node_to_mother[node2]]
+                        and self.node_to_father[node1] != self.node_to_father[node2]
+                    ):
                         return True
 
             if relation == "maternal aunt/uncle-nephew/niece":
@@ -694,15 +795,23 @@ class Pedigree:
 
             if relation == "paternal half-siblings":
                 if self.node_to_father[node2]:
-                    if node1 in self.node_to_children[self.node_to_father[node2]] and self.node_to_mother[node1] != self.node_to_mother[node2]:
+                    if (
+                        node1 in self.node_to_children[self.node_to_father[node2]]
+                        and self.node_to_mother[node1] != self.node_to_mother[node2]
+                    ):
                         return True
             if relation == "maternal half-siblings":
                 if self.node_to_mother[node2]:
-                    if node1 in self.node_to_children[self.node_to_mother[node2]] and self.node_to_father[node1] != self.node_to_father[node2]:
+                    if (
+                        node1 in self.node_to_children[self.node_to_mother[node2]]
+                        and self.node_to_father[node1] != self.node_to_father[node2]
+                    ):
                         return True
         return False
 
-    def get_relations_between_nodes(self, node1: str, node2: str, include_maternal_paternal: bool = False) -> defaultdict[str, int]:
+    def get_relations_between_nodes(
+        self, node1: str, node2: str, include_maternal_paternal: bool = False
+    ) -> defaultdict[str, int]:
         """
         Returns a dictionary of the *1st- and 2nd-degree* relations between node1 and node2.
         """
@@ -713,7 +822,7 @@ class Pedigree:
             relations["child-parent"] += 1
         if self.is_relation_in_pedigree(node1, node2, ["siblings"]):
             relations["siblings"] += 1
-        
+
         if self.is_relation_in_pedigree(node1, node2, ["maternal aunt/uncle-nephew/niece"]):
             relations["maternal aunt/uncle-nephew/niece"] += 1
         if self.is_relation_in_pedigree(node1, node2, ["paternal aunt/uncle-nephew/niece"]):
@@ -722,7 +831,7 @@ class Pedigree:
             relations["maternal nephew/niece-aunt/uncle"] += 1
         if self.is_relation_in_pedigree(node1, node2, ["paternal nephew/niece-aunt/uncle"]):
             relations["paternal nephew/niece-aunt/uncle"] += 1
-        
+
         if self.is_relation_in_pedigree(node1, node2, ["maternal grandparent-grandchild"]):
             relations["maternal grandparent-grandchild"] += 1
         if self.is_relation_in_pedigree(node1, node2, ["paternal grandparent-grandchild"]):
@@ -731,25 +840,40 @@ class Pedigree:
             relations["maternal grandchild-grandparent"] += 1
         if self.is_relation_in_pedigree(node1, node2, ["paternal grandchild-grandparent"]):
             relations["paternal grandchild-grandparent"] += 1
-        
+
         if self.is_relation_in_pedigree(node1, node2, ["maternal half-siblings"]):
             relations["maternal half-siblings"] += 1
         if self.is_relation_in_pedigree(node1, node2, ["paternal half-siblings"]):
             relations["paternal half-siblings"] += 1
-        
+
         if not include_maternal_paternal:
-            relations["aunt/uncle-nephew/niece"] = relations["maternal aunt/uncle-nephew/niece"] + relations["paternal aunt/uncle-nephew/niece"]
-            relations["nephew/niece-aunt/uncle"] = relations["maternal nephew/niece-aunt/uncle"] + relations["paternal nephew/niece-aunt/uncle"]
-            relations["grandparent-grandchild"] = relations["maternal grandparent-grandchild"] + relations["paternal grandparent-grandchild"]
-            relations["grandchild-grandparent"] = relations["maternal grandchild-grandparent"] + relations["paternal grandchild-grandparent"]
+            relations["aunt/uncle-nephew/niece"] = (
+                relations["maternal aunt/uncle-nephew/niece"] + relations["paternal aunt/uncle-nephew/niece"]
+            )
+            relations["nephew/niece-aunt/uncle"] = (
+                relations["maternal nephew/niece-aunt/uncle"] + relations["paternal nephew/niece-aunt/uncle"]
+            )
+            relations["grandparent-grandchild"] = (
+                relations["maternal grandparent-grandchild"] + relations["paternal grandparent-grandchild"]
+            )
+            relations["grandchild-grandparent"] = (
+                relations["maternal grandchild-grandparent"] + relations["paternal grandchild-grandparent"]
+            )
             relations["half-siblings"] = relations["maternal half-siblings"] + relations["paternal half-siblings"]
-            for relation in ["maternal aunt/uncle-nephew/niece", "paternal aunt/uncle-nephew/niece", 
-                             "maternal nephew/niece-aunt/uncle", "paternal nephew/niece-aunt/uncle", 
-                             "maternal grandparent-grandchild", "paternal grandparent-grandchild", 
-                             "maternal grandchild-grandparent", "paternal grandchild-grandparent", 
-                             "maternal half-siblings", "paternal half-siblings"]:
+            for relation in [
+                "maternal aunt/uncle-nephew/niece",
+                "paternal aunt/uncle-nephew/niece",
+                "maternal nephew/niece-aunt/uncle",
+                "paternal nephew/niece-aunt/uncle",
+                "maternal grandparent-grandchild",
+                "paternal grandparent-grandchild",
+                "maternal grandchild-grandparent",
+                "paternal grandchild-grandparent",
+                "maternal half-siblings",
+                "paternal half-siblings",
+            ]:
                 del relations[relation]
-        
+
         relations_to_remove = set()
         for relation, count in relations.items():
             if count == 0:
@@ -783,7 +907,9 @@ class Pedigree:
                         sibling_pairs.append((sibling1, sibling2))
         return sibling_pairs
 
-    def get_aunt_uncle_nephew_niece_pairs(self, include_placeholders: bool = True, shared_relative_sex: str | None = None) -> list[tuple[str, str]]:
+    def get_aunt_uncle_nephew_niece_pairs(
+        self, include_placeholders: bool = True, shared_relative_sex: str | None = None
+    ) -> list[tuple[str, str]]:
         """
         Gets all (aunt/uncle, nephew/niece) pairs in the tree.
         Includes duplicates if, for example, shared_relative_sex=None and an aunt is both a maternal and paternal aunt to a nephew (i.e., full-sib mating).
@@ -796,7 +922,9 @@ class Pedigree:
                         aunt_uncle_nephew_niece_pairs.append((parent_sibling, child))
         return aunt_uncle_nephew_niece_pairs
 
-    def get_grandparent_grandchild_pairs(self, include_placeholders: bool = True, shared_relative_sex: str | None = None) -> list[tuple[str, str]]:
+    def get_grandparent_grandchild_pairs(
+        self, include_placeholders: bool = True, shared_relative_sex: str | None = None
+    ) -> list[tuple[str, str]]:
         """
         Gets all (grandparent, grandchild) pairs in the tree.
         Includes duplicates if, for example, a grandparent is both a maternal and paternal grandparent to a grandchild.
@@ -809,7 +937,9 @@ class Pedigree:
                         grandparent_grandchild_pairs.append((parent, child_child))
         return grandparent_grandchild_pairs
 
-    def get_half_sibling_pairs(self, include_placeholders: bool = True, shared_relative_sex: str | None = None) -> list[tuple[str, str]]:
+    def get_half_sibling_pairs(
+        self, include_placeholders: bool = True, shared_relative_sex: str | None = None
+    ) -> list[tuple[str, str]]:
         """
         Gets all (half-sibling, half-sibling) pairs in the tree.
         """
@@ -852,7 +982,9 @@ class Pedigree:
                     greatgrandparent_greatgrandchild_pairs.append((grandparent, grandchild_child))
         return greatgrandparent_greatgrandchild_pairs
 
-    def get_grandaunt_granduncle_grandnephew_grandniece_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
+    def get_grandaunt_granduncle_grandnephew_grandniece_pairs(
+        self, include_placeholders: bool = True
+    ) -> list[tuple[str, str]]:
         """
         Gets all (grandaunt/uncle, grandnephew/niece) pairs in the tree.
         """
@@ -888,7 +1020,9 @@ class Pedigree:
         related_pairs.update(self.get_half_sibling_pairs(include_placeholders=include_placeholders))
         related_pairs.update(self.get_half_aunt_uncle_nephew_niece_pairs(include_placeholders=include_placeholders))
         related_pairs.update(self.get_greatgrandparent_greatgrandchild_pairs(include_placeholders=include_placeholders))
-        related_pairs.update(self.get_grandaunt_granduncle_grandnephew_grandniece_pairs(include_placeholders=include_placeholders))
+        related_pairs.update(
+            self.get_grandaunt_granduncle_grandnephew_grandniece_pairs(include_placeholders=include_placeholders)
+        )
         related_pairs.update(self.get_first_cousin_pairs(include_placeholders=include_placeholders))
         return related_pairs
 
@@ -917,16 +1051,26 @@ class Pedigree:
             father = self.node_to_father[node]
             if mother.isnumeric() and father.isnumeric():
                 if len(self.node_to_children[mother]) == 1 and len(self.node_to_children[father]) == 1:
-                    if (not self.node_to_mother[mother] and not self.node_to_father[mother]
-                        and not self.node_to_mother[father] and not self.node_to_father[father]):
+                    if (
+                        not self.node_to_mother[mother]
+                        and not self.node_to_father[mother]
+                        and not self.node_to_mother[father]
+                        and not self.node_to_father[father]
+                    ):
                         placeholder_nodes_to_remove.add(mother)
                         placeholder_nodes_to_remove.add(father)
-        
+
         for node in placeholder_nodes_to_remove:
-            for data_dict in [self.node_to_data, self.node_to_father, self.node_to_mother, self.node_to_children, self.node_to_siblings]:
+            for data_dict in [
+                self.node_to_data,
+                self.node_to_father,
+                self.node_to_mother,
+                self.node_to_children,
+                self.node_to_siblings,
+            ]:
                 if node in data_dict:
                     del data_dict[node]
-            
+
             for node in self.node_to_data:
                 assert node not in self.node_to_siblings[node] and node not in self.node_to_children[node]
                 if self.node_to_father[node] in placeholder_nodes_to_remove:
@@ -938,21 +1082,27 @@ class Pedigree:
         """
         Plot the pedigree to the given path.
         """
-        try:
-            import pygraphviz
-        except ImportError as err:
-            raise ImportError("Plotting pedigree requires PyGraphviz (https://pygraphviz.github.io/).") from err
+        if not importlib.util.find_spec("pygraphviz"):
+            raise ImportError("Plotting pedigree requires PyGraphviz (https://pygraphviz.github.io/).")
 
         tree = nx.from_dict_of_lists(self.node_to_children, create_using=nx.DiGraph)
         # Add childless nodes
         for node in self.node_to_data:
             if node not in tree.nodes:
                 tree.add_node(node)
-        male_named_nodes = [node for node in self.node_to_data if self.node_to_data[node]["sex"] == "M" and not node.isnumeric()]
-        male_placeholder_nodes = [node for node in self.node_to_data if self.node_to_data[node]["sex"] == "M" and node.isnumeric()]
-        female_named_nodes = [node for node in self.node_to_data if self.node_to_data[node]["sex"] == "F" and not node.isnumeric()]
-        female_placeholder_nodes = [node for node in self.node_to_data if self.node_to_data[node]["sex"] == "F" and node.isnumeric()]
-        
+        male_named_nodes = [
+            node for node in self.node_to_data if self.node_to_data[node]["sex"] == "M" and not node.isnumeric()
+        ]
+        male_placeholder_nodes = [
+            node for node in self.node_to_data if self.node_to_data[node]["sex"] == "M" and node.isnumeric()
+        ]
+        female_named_nodes = [
+            node for node in self.node_to_data if self.node_to_data[node]["sex"] == "F" and not node.isnumeric()
+        ]
+        female_placeholder_nodes = [
+            node for node in self.node_to_data if self.node_to_data[node]["sex"] == "F" and node.isnumeric()
+        ]
+
         non_placeholder_labels = dict()
         for node in tree.nodes:
             mt_haplogroup = self.node_to_data[node]["mt_haplogroup"][:3]
@@ -967,13 +1117,21 @@ class Pedigree:
                     non_placeholder_labels[node] = f"{node}\n{mt_haplogroup}\n{y_haplogroup}"
                 else:
                     non_placeholder_labels[node] = f"{node}\n{mt_haplogroup}"
-        
+
         # Create colormap for MT haplogroups
         cmap = plt.get_cmap("tab20")
-        mt_haplogroups = sorted(set([self.node_to_data[node]["mt_haplogroup"] for node in self.node_to_data if not node.isnumeric()]))
-        mt_haplogroup_to_color = {haplogroup: cmap(i / len(mt_haplogroups)) for i, haplogroup in enumerate(mt_haplogroups)}
-        male_named_node_colors = [mt_haplogroup_to_color[self.node_to_data[node]["mt_haplogroup"]] for node in male_named_nodes]
-        female_named_node_colors = [mt_haplogroup_to_color[self.node_to_data[node]["mt_haplogroup"]] for node in female_named_nodes]
+        mt_haplogroups = sorted(
+            set([self.node_to_data[node]["mt_haplogroup"] for node in self.node_to_data if not node.isnumeric()])
+        )
+        mt_haplogroup_to_color = {
+            haplogroup: cmap(i / len(mt_haplogroups)) for i, haplogroup in enumerate(mt_haplogroups)
+        }
+        male_named_node_colors = [
+            mt_haplogroup_to_color[self.node_to_data[node]["mt_haplogroup"]] for node in male_named_nodes
+        ]
+        female_named_node_colors = [
+            mt_haplogroup_to_color[self.node_to_data[node]["mt_haplogroup"]] for node in female_named_nodes
+        ]
 
         plt.figure(figsize=(12, 4.8), dpi=1200)
         # Scale sizes based on pedigree node count
@@ -982,12 +1140,48 @@ class Pedigree:
         font_size = max(min(4.5, 150 / len(tree.nodes)), 1)
 
         pos = nx.nx_agraph.graphviz_layout(tree, prog="dot")
-        nx.draw_networkx_nodes(tree, pos=pos, nodelist=male_named_nodes, node_shape="s", node_size=node_size, node_color=male_named_node_colors, edgecolors="black", linewidths=0.2)
-        nx.draw_networkx_nodes(tree, pos=pos, nodelist=female_named_nodes, node_shape="o", node_size=node_size, node_color=female_named_node_colors, edgecolors="black", linewidths=0.2)
-        nx.draw_networkx_nodes(tree, pos=pos, nodelist=male_placeholder_nodes, node_shape="s", node_size=node_size, node_color="#e5e5e5", edgecolors="black", linewidths=0.2)
-        nx.draw_networkx_nodes(tree, pos=pos, nodelist=female_placeholder_nodes, node_shape="o", node_size=node_size, node_color="#e5e5e5", edgecolors="black", linewidths=0.2)
+        nx.draw_networkx_nodes(
+            tree,
+            pos=pos,
+            nodelist=male_named_nodes,
+            node_shape="s",
+            node_size=node_size,
+            node_color=male_named_node_colors,
+            edgecolors="black",
+            linewidths=0.2,
+        )
+        nx.draw_networkx_nodes(
+            tree,
+            pos=pos,
+            nodelist=female_named_nodes,
+            node_shape="o",
+            node_size=node_size,
+            node_color=female_named_node_colors,
+            edgecolors="black",
+            linewidths=0.2,
+        )
+        nx.draw_networkx_nodes(
+            tree,
+            pos=pos,
+            nodelist=male_placeholder_nodes,
+            node_shape="s",
+            node_size=node_size,
+            node_color="#e5e5e5",
+            edgecolors="black",
+            linewidths=0.2,
+        )
+        nx.draw_networkx_nodes(
+            tree,
+            pos=pos,
+            nodelist=female_placeholder_nodes,
+            node_shape="o",
+            node_size=node_size,
+            node_color="#e5e5e5",
+            edgecolors="black",
+            linewidths=0.2,
+        )
         nx.draw_networkx_labels(tree, pos=pos, labels=non_placeholder_labels, font_size=font_size)
-        nx.draw_networkx_edges(tree, pos=pos, node_shape="s", node_size=node_size, width=0.2, arrowsize=font_size*1.2)
+        nx.draw_networkx_edges(tree, pos=pos, node_shape="s", node_size=node_size, width=0.2, arrowsize=font_size * 1.2)
 
         plt.axis("off")
         plt.savefig(path, bbox_inches="tight")

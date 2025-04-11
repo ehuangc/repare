@@ -23,3 +23,6 @@ trees = "pedigree_package.main:main"
 where = ["src"]
 
 [tool.setuptools_scm]
+
+[tool.ruff]
+line-length = 120

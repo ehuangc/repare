@@ -3,7 +3,6 @@ import pandas as pd
 import random
 import tempfile
 import math
-import networkx as nx
 from sklearn.metrics import r2_score
 from itertools import combinations
 from collections import defaultdict
@@ -13,9 +12,10 @@ from pedigree_package.pedigree_reconstructor import PedigreeReconstructor
 
 class SimulatedPedigree:
     """
-    Simulates a pedigree, masks and corrupts the data to generate algorithm inputs, 
+    Simulates a pedigree, masks and corrupts the data to generate algorithm inputs,
     runs the pedigree reconstruction algorithm, and calculates performance metrics.
     """
+
     def __init__(self, p_mask_node: float = 0.4, error_rate_scale: float = 1, random_seed: int | None = None) -> None:
         self._ground_truth_pedigree = Pedigree()
         self._y_haplogroup_pool = ["a", "b"]
@@ -49,13 +49,13 @@ class SimulatedPedigree:
             "1": (0.99, 0.01, 0.0, 0.0),
             "2": (0.01, 0.94, 0.05, 0.0),
             "3": (0.0, 0.02, 0.88, 0.1),
-            "Unrelated": (0.0, 0.0, 0.01, 0.99)
+            "Unrelated": (0.0, 0.0, 0.01, 0.99),
         }
         self._base_relation_classification_probs: dict[str, tuple(float, float)] = {
             "parent-child;child-parent": (0.95, 0.05),
-            "siblings": (0.05, 0.95)
+            "siblings": (0.05, 0.95),
         }
-    
+
     def create_pedigree(self) -> None:
         self._create_node(generation=0, sex="M", can_have_children=True)
         self._create_node(generation=0, sex="F", can_have_children=True)
@@ -68,7 +68,14 @@ class SimulatedPedigree:
                 if self._ground_truth_pedigree.node_to_data[node]["can_have_children"]:
                     self._create_children(node)
 
-    def _create_node(self, generation: int, sex: str | None = None, y_haplogroup: str | None = None, mt_haplogroup: str | None = None, can_have_children: bool | None = None) -> str:
+    def _create_node(
+        self,
+        generation: int,
+        sex: str | None = None,
+        y_haplogroup: str | None = None,
+        mt_haplogroup: str | None = None,
+        can_have_children: bool | None = None,
+    ) -> str:
         """
         Create a new node in the pedigree with the given attributes. Returns the new node's ID.
         """
@@ -85,11 +92,19 @@ class SimulatedPedigree:
             can_have_children = random.random() < self._p_can_have_children
 
         # Set can_be_inbred to True; we will update later in self._get_nodes()
-        self._ground_truth_pedigree.add_node(node_id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred=True, years_before_present=math.nan)
+        self._ground_truth_pedigree.add_node(
+            node_id,
+            sex,
+            y_haplogroup,
+            mt_haplogroup,
+            can_have_children,
+            can_be_inbred=True,
+            years_before_present=math.nan,
+        )
         self._generation_to_nodes[generation].add(node_id)
         self._node_to_generation[node_id] = generation
         return node_id
-    
+
     def _create_children(self, parent1: str) -> None:
         """
         Given a parent node, select a valid mate and produce a random number of children.
@@ -104,7 +119,11 @@ class SimulatedPedigree:
             # Existing mate
             potential_mates = []
             for node in self._ground_truth_pedigree.node_to_data.keys():
-                if node != parent1 and self._ground_truth_pedigree.node_to_data[node]["can_have_children"] and 0 <= parent1_generation - self._node_to_generation[node] <= 1:
+                if (
+                    node != parent1
+                    and self._ground_truth_pedigree.node_to_data[node]["can_have_children"]
+                    and 0 <= parent1_generation - self._node_to_generation[node] <= 1
+                ):
                     if parent1_sex == "M" and self._ground_truth_pedigree.node_to_data[node]["sex"] == "F":
                         potential_mates.append(node)
                     if parent1_sex == "F" and self._ground_truth_pedigree.node_to_data[node]["sex"] == "M":
@@ -133,12 +152,19 @@ class SimulatedPedigree:
                     child_y_haplogroup = self._ground_truth_pedigree.node_to_data[parent2]["y_haplogroup"]
                 child_mt_haplogroup = self._ground_truth_pedigree.node_to_data[parent1]["mt_haplogroup"]
 
-            child = self._create_node(generation=child_generation, sex=child_sex, y_haplogroup=child_y_haplogroup, mt_haplogroup=child_mt_haplogroup)
+            child = self._create_node(
+                generation=child_generation,
+                sex=child_sex,
+                y_haplogroup=child_y_haplogroup,
+                mt_haplogroup=child_mt_haplogroup,
+            )
             self._ground_truth_pedigree.add_parent_relation(parent1, child)
             self._ground_truth_pedigree.add_parent_relation(parent2, child)
 
     def _get_nodes(self) -> pd.DataFrame:
-        nodes_list: list[str, str, str, str, str, str] = []  # id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred
+        nodes_list: list[
+            str, str, str, str, str, str
+        ] = []  # id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred
         pedigree_relation_pairs: set[tuple[str, str]] = self._ground_truth_pedigree.get_related_pairs()
         for node, node_info in self._ground_truth_pedigree.node_to_data.items():
             sex = node_info["sex"]
@@ -154,13 +180,30 @@ class SimulatedPedigree:
             father = self._ground_truth_pedigree.node_to_father[node]
             mother = self._ground_truth_pedigree.node_to_mother[node]
             # Even if node is not inbred, conservatively set can_be_inbred to False
-            if (father, mother) not in pedigree_relation_pairs and (mother, father) not in pedigree_relation_pairs and random.random() < 0.5:
+            if (
+                (father, mother) not in pedigree_relation_pairs
+                and (mother, father) not in pedigree_relation_pairs
+                and random.random() < 0.5
+            ):
                 can_be_inbred = "False"
-            
+
             # Conservatively do not set sample age
             years_before_present = math.nan
-            nodes_list.append((node, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred, years_before_present))
-        return pd.DataFrame(nodes_list, columns=["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children", "can_be_inbred", "years_before_present"])
+            nodes_list.append(
+                (node, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred, years_before_present)
+            )
+        return pd.DataFrame(
+            nodes_list,
+            columns=[
+                "id",
+                "sex",
+                "y_haplogroup",
+                "mt_haplogroup",
+                "can_have_children",
+                "can_be_inbred",
+                "years_before_present",
+            ],
+        )
 
     def _get_first_degree_relations(self) -> pd.DataFrame:
         relations_list: list[str, str, str, str] = []  # id1, id2, degree, constraints
@@ -173,28 +216,45 @@ class SimulatedPedigree:
 
     def _get_second_degree_relations(self) -> pd.DataFrame:
         relations_list: list[str, str, str, str] = []  # id1, id2, degree, constraints (no constraints for 2nd-degree)
-        for aunt_uncle, nephew_niece in self._ground_truth_pedigree.get_aunt_uncle_nephew_niece_pairs(include_placeholders=False):
+        for aunt_uncle, nephew_niece in self._ground_truth_pedigree.get_aunt_uncle_nephew_niece_pairs(
+            include_placeholders=False
+        ):
             relations_list.append((aunt_uncle, nephew_niece, "2", ""))
 
-        for grandparent, grandchild in self._ground_truth_pedigree.get_grandparent_grandchild_pairs(include_placeholders=False):
+        for grandparent, grandchild in self._ground_truth_pedigree.get_grandparent_grandchild_pairs(
+            include_placeholders=False
+        ):
             relations_list.append((grandparent, grandchild, "2", ""))
 
-        for half_sibling1, half_sibling2 in self._ground_truth_pedigree.get_half_sibling_pairs(include_placeholders=False):
+        for half_sibling1, half_sibling2 in self._ground_truth_pedigree.get_half_sibling_pairs(
+            include_placeholders=False
+        ):
             relations_list.append((half_sibling1, half_sibling2, "2", ""))
         return pd.DataFrame(relations_list, columns=["id1", "id2", "degree", "constraints"])
-    
+
     def _get_third_degree_relations(self) -> pd.DataFrame:
         relations_list: list[str, str, str, str] = []  # id1, id2, degree, constraints (no constraints for 3rd-degree)
-        for half_aunt_uncle, half_nephew_niece in self._ground_truth_pedigree.get_half_aunt_uncle_nephew_niece_pairs(include_placeholders=False):
+        for half_aunt_uncle, half_nephew_niece in self._ground_truth_pedigree.get_half_aunt_uncle_nephew_niece_pairs(
+            include_placeholders=False
+        ):
             relations_list.append((half_aunt_uncle, half_nephew_niece, "3", ""))
 
-        for greatgrandparent, greatgrandchild in self._ground_truth_pedigree.get_greatgrandparent_greatgrandchild_pairs(include_placeholders=False):
+        for greatgrandparent, greatgrandchild in self._ground_truth_pedigree.get_greatgrandparent_greatgrandchild_pairs(
+            include_placeholders=False
+        ):
             relations_list.append((greatgrandparent, greatgrandchild, "3", ""))
 
-        for grandaunt_granduncle, grandnephew_grandniece in self._ground_truth_pedigree.get_grandaunt_granduncle_grandnephew_grandniece_pairs(include_placeholders=False):
+        for (
+            grandaunt_granduncle,
+            grandnephew_grandniece,
+        ) in self._ground_truth_pedigree.get_grandaunt_granduncle_grandnephew_grandniece_pairs(
+            include_placeholders=False
+        ):
             relations_list.append((grandaunt_granduncle, grandnephew_grandniece, "3", ""))
 
-        for first_cousin1, first_cousin2 in self._ground_truth_pedigree.get_first_cousin_pairs(include_placeholders=False):
+        for first_cousin1, first_cousin2 in self._ground_truth_pedigree.get_first_cousin_pairs(
+            include_placeholders=False
+        ):
             relations_list.append((first_cousin1, first_cousin2, "3", ""))
         return pd.DataFrame(relations_list, columns=["id1", "id2", "degree", "constraints"])
 
@@ -205,7 +265,9 @@ class SimulatedPedigree:
                 relations_list.append((node1, node2, "Unrelated", ""))
         return pd.DataFrame(relations_list, columns=["id1", "id2", "degree", "constraints"])
 
-    def _scale_error_rates(self, scale: float) -> tuple[dict[str, tuple[float, float, float, float], dict[str, tuple[float, float]]]]:        
+    def _scale_error_rates(
+        self, scale: float
+    ) -> tuple[dict[str, tuple[float, float, float, float], dict[str, tuple[float, float]]]]:
         scaled_degree_probs = {}
         for degree, probs in self._base_degree_classification_probs.items():
             correct_prob_idx = None
@@ -217,7 +279,7 @@ class SimulatedPedigree:
                 correct_prob_idx = 2
             else:
                 correct_prob_idx = 3
-            
+
             scaled_probs = []
             for idx, prob in enumerate(probs):
                 if idx == correct_prob_idx:
@@ -239,19 +301,22 @@ class SimulatedPedigree:
 
         for degree, probs in scaled_degree_probs.items():
             if any(prob > 1 for prob in probs):
-                raise ValueError(f"Scale is too high. Error rates exceed 1.")
+                raise ValueError("Scale is too high. Error rates exceed 1.")
         for relation, probs in scaled_relation_probs.items():
             if any(prob > 1 for prob in probs):
-                raise ValueError(f"Scale is too high. Error rates exceed 1.")
+                raise ValueError("Scale is too high. Error rates exceed 1.")
         return scaled_degree_probs, scaled_relation_probs
 
     def mask_and_corrupt_data(self) -> None:
         nodes_df = self._get_nodes()
-        relations_df = pd.concat([self._get_first_degree_relations(), 
-                                  self._get_second_degree_relations(), 
-                                  self._get_third_degree_relations(),
-                                  self._get_unrelated_relations()
-                                  ])
+        relations_df = pd.concat(
+            [
+                self._get_first_degree_relations(),
+                self._get_second_degree_relations(),
+                self._get_third_degree_relations(),
+                self._get_unrelated_relations(),
+            ]
+        )
         self._ground_truth_pedigree.clean_up_relations()
         self._ground_truth_nodes_df = nodes_df.copy()
         # Remove unrelated entries
@@ -259,13 +324,21 @@ class SimulatedPedigree:
 
         nodes_to_mask = [node for node in nodes_df["id"] if random.random() < self._p_mask_node]
         nodes_df = nodes_df.loc[~nodes_df["id"].isin(nodes_to_mask)]
-        relations_df = relations_df.loc[~relations_df["id1"].isin(nodes_to_mask) & ~relations_df["id2"].isin(nodes_to_mask)]
+        relations_df = relations_df.loc[
+            ~relations_df["id1"].isin(nodes_to_mask) & ~relations_df["id2"].isin(nodes_to_mask)
+        ]
 
         # Ensure only the first (closest) relation is kept for each pair of nodes to simulate e.g., READv2 outputs
         relations_df["pair"] = relations_df.apply(lambda row: tuple(sorted([row["id1"], row["id2"]])), axis=1)
-        relations_df = relations_df.sort_values(by=["pair", "degree"]).drop_duplicates(subset="pair", keep="first").drop(columns=["pair"])
+        relations_df = (
+            relations_df.sort_values(by=["pair", "degree"])
+            .drop_duplicates(subset="pair", keep="first")
+            .drop(columns=["pair"])
+        )
 
-        degree_classification_probs, relation_classification_probs = self._scale_error_rates(scale=self._error_rate_scale)
+        degree_classification_probs, relation_classification_probs = self._scale_error_rates(
+            scale=self._error_rate_scale
+        )
 
         def corrupt_relation(row: pd.Series) -> pd.Series:
             node1, node2, degree, constraints = row
@@ -277,7 +350,9 @@ class SimulatedPedigree:
                 assert degree == "1"
                 if new_degree == "1":
                     new_constraints_probs = relation_classification_probs[constraints]
-                    new_constraints = random.choices(population=["parent-child;child-parent", "siblings"], weights=new_constraints_probs, k=1)[0]
+                    new_constraints = random.choices(
+                        population=["parent-child;child-parent", "siblings"], weights=new_constraints_probs, k=1
+                    )[0]
                 else:
                     new_constraints = ""
             return pd.Series({"id1": node1, "id2": node2, "degree": new_degree, "constraints": new_constraints})
@@ -294,10 +369,10 @@ class SimulatedPedigree:
             nodes = relations_df["id1"].tolist() + relations_df["id2"].tolist()
             nodes_df = self._ground_truth_nodes_df.loc[self._ground_truth_nodes_df["id"].isin(nodes)]
             empty_iters += 1
-        
+
         self._final_nodes_df = nodes_df.copy()
         self._final_relations_df = relations_df.copy()
-    
+
     def run_algorithm(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             nodes_path = os.path.join(temp_dir, "nodes.csv")
@@ -307,18 +382,20 @@ class SimulatedPedigree:
 
             outputs_dir = os.path.join(temp_dir, "outputs")
             os.makedirs(outputs_dir, exist_ok=True)
-            pedigree_reconstructor = PedigreeReconstructor(relations_path, 
-                                                           nodes_path, 
-                                                           outputs_dir,
-                                                           max_candidate_pedigrees=100,
-                                                           random_seed=self._random_seed,
-                                                           plot=False)
+            pedigree_reconstructor = PedigreeReconstructor(
+                relations_path,
+                nodes_path,
+                outputs_dir,
+                max_candidate_pedigrees=100,
+                random_seed=self._random_seed,
+                plot=False,
+            )
             try:
                 self._algorithm_pedigree = pedigree_reconstructor.find_best_pedigree()
                 self._algorithm_found_pedigree = True
             except RuntimeError:
                 self._algorithm_found_pedigree = False
-    
+
     def get_pedigree_statistics(self) -> dict[str, int | float]:
         statistics = defaultdict()
         statistics["Total Node Count"] = len(self._ground_truth_pedigree.node_to_data)
@@ -327,7 +404,7 @@ class SimulatedPedigree:
         statistics["Proportion of Non-Leaf Nodes with Children"] = self._calculate_has_children_proportion()
         statistics["Mean Children Count per Parent"] = self._calculate_mean_children_per_node()
         return statistics
-    
+
     def _calculate_inbred_proportion(self) -> float:
         num_nodes_with_parents = 0
         num_nodes_with_related_parents = 0
@@ -352,7 +429,7 @@ class SimulatedPedigree:
                 if self._ground_truth_pedigree.node_to_children[node]:
                     num_nonleaf_parents += 1
         return num_nonleaf_parents / num_nonleaf_nodes if num_nonleaf_nodes > 0 else 0
-    
+
     def _calculate_mean_children_per_node(self) -> float:
         num_children = 0
         num_parents = 0
@@ -366,7 +443,9 @@ class SimulatedPedigree:
     def get_metrics(self) -> dict[str, float]:
         metrics: dict[str, float] = dict()
         if self._algorithm_found_pedigree:
-            pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1 = self._calculate_relation_metrics()
+            pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1 = (
+                self._calculate_relation_metrics()
+            )
             pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1 = self._calculate_degree_metrics()
             metrics["Pairwise Relation Accuracy"] = pairwise_relation_accuracy
             metrics["Relation Precision"] = relation_precision
@@ -390,7 +469,9 @@ class SimulatedPedigree:
         return metrics
 
     @staticmethod
-    def _calculate_tp_fp_fn(ground_truth_counts: defaultdict[str, int], algorithm_counts: defaultdict[str, int]) -> tuple[int, int, int]:
+    def _calculate_tp_fp_fn(
+        ground_truth_counts: defaultdict[str, int], algorithm_counts: defaultdict[str, int]
+    ) -> tuple[int, int, int]:
         tp = 0  # True positives
         fp = 0  # False positives
         fn = 0  # False negatives
@@ -408,7 +489,7 @@ class SimulatedPedigree:
                 tp += true_count
                 fp += algorithm_count - true_count
         return tp, fp, fn
-    
+
     def _calculate_relation_metrics(self) -> tuple[float, float, float, float]:
         nodes: list[str] = self._final_nodes_df["id"].tolist()  # Use unmasked nodes
         correct_node_pairs: int = 0
@@ -416,10 +497,14 @@ class SimulatedPedigree:
         relation_tp: int = 0
         relation_fp: int = 0
         relation_fn: int = 0
-        
+
         for node1, node2 in combinations(nodes, 2):
-            ground_truth_relations: defaultdict(int) = self._ground_truth_pedigree.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
-            algorithm_relations: defaultdict(int) = self._algorithm_pedigree.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
+            ground_truth_relations: defaultdict(int) = self._ground_truth_pedigree.get_relations_between_nodes(
+                node1, node2, include_maternal_paternal=True
+            )
+            algorithm_relations: defaultdict(int) = self._algorithm_pedigree.get_relations_between_nodes(
+                node1, node2, include_maternal_paternal=True
+            )
 
             if ground_truth_relations == algorithm_relations:
                 correct_node_pairs += 1
@@ -429,13 +514,17 @@ class SimulatedPedigree:
             relation_tp += tp
             relation_fp += fp
             relation_fn += fn
-        
+
         pairwise_relation_accuracy = correct_node_pairs / total_node_pairs
         relation_precision = relation_tp / (relation_tp + relation_fp)
         relation_recall = relation_tp / (relation_tp + relation_fn)
-        relation_f1 = (2 * relation_precision * relation_recall) / (relation_precision + relation_recall) if relation_precision + relation_recall > 0 else 0
+        relation_f1 = (
+            (2 * relation_precision * relation_recall) / (relation_precision + relation_recall)
+            if relation_precision + relation_recall > 0
+            else 0
+        )
         return pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1
-    
+
     def _calculate_degree_metrics(self) -> tuple[float, float, float, float]:
         nodes: list[str] = self._final_nodes_df["id"].tolist()  # Use unmasked nodes
         correct_node_pairs: int = 0
@@ -445,8 +534,12 @@ class SimulatedPedigree:
         degree_fn: int = 0
 
         for node1, node2 in combinations(nodes, 2):
-            ground_truth_relations: defaultdict(int) = self._ground_truth_pedigree.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
-            algorithm_relations: defaultdict(int) = self._algorithm_pedigree.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
+            ground_truth_relations: defaultdict(int) = self._ground_truth_pedigree.get_relations_between_nodes(
+                node1, node2, include_maternal_paternal=True
+            )
+            algorithm_relations: defaultdict(int) = self._algorithm_pedigree.get_relations_between_nodes(
+                node1, node2, include_maternal_paternal=True
+            )
 
             ground_truth_degrees = defaultdict(int)
             algorithm_degrees = defaultdict(int)
@@ -454,40 +547,57 @@ class SimulatedPedigree:
                 ground_truth_degrees["1"] += ground_truth_relations[relation]
                 algorithm_degrees["1"] += algorithm_relations[relation]
 
-            for relation in ["maternal aunt/uncle-nephew/niece", "paternal aunt/uncle-nephew/niece", "maternal nephew/niece-aunt/uncle", "paternal nephew/niece-aunt/uncle", 
-                             "maternal grandparent-grandchild", "paternal grandparent-grandchild", "maternal grandchild-grandparent", "paternal grandchild-grandparent", 
-                             "maternal half-siblings", "paternal half-siblings"]:
+            for relation in [
+                "maternal aunt/uncle-nephew/niece",
+                "paternal aunt/uncle-nephew/niece",
+                "maternal nephew/niece-aunt/uncle",
+                "paternal nephew/niece-aunt/uncle",
+                "maternal grandparent-grandchild",
+                "paternal grandparent-grandchild",
+                "maternal grandchild-grandparent",
+                "paternal grandchild-grandparent",
+                "maternal half-siblings",
+                "paternal half-siblings",
+            ]:
                 ground_truth_degrees["2"] += ground_truth_relations[relation]
                 algorithm_degrees["2"] += algorithm_relations[relation]
-            
+
             if ground_truth_degrees == algorithm_degrees:
                 correct_node_pairs += 1
             total_node_pairs += 1
-            
+
             tp, fp, fn = self._calculate_tp_fp_fn(ground_truth_degrees, algorithm_degrees)
             degree_tp += tp
             degree_fp += fp
             degree_fn += fn
-        
+
         pairwise_degree_accuracy = correct_node_pairs / total_node_pairs
         degree_precision = degree_tp / (degree_tp + degree_fp)
         degree_recall = degree_tp / (degree_tp + degree_fn)
-        degree_f1 = (2 * degree_precision * degree_recall) / (degree_precision + degree_recall) if degree_precision + degree_recall > 0 else 0
+        degree_f1 = (
+            (2 * degree_precision * degree_recall) / (degree_precision + degree_recall)
+            if degree_precision + degree_recall > 0
+            else 0
+        )
         return pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1
 
     def _calculate_connectivity_r_squared(self) -> float:
         ground_truth_relation_counter: defaultdict[str, int] = defaultdict(int)
         algorithm_relation_counter: defaultdict[str, int] = defaultdict(int)
-        
+
         nodes: list[str] = self._final_nodes_df["id"].tolist()  # Use unmasked nodes
         for node1, node2 in combinations(nodes, 2):
-            ground_truth_relations: defaultdict(int) = self._ground_truth_pedigree.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
-            algorithm_relations: defaultdict(int) = self._algorithm_pedigree.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
+            ground_truth_relations: defaultdict(int) = self._ground_truth_pedigree.get_relations_between_nodes(
+                node1, node2, include_maternal_paternal=True
+            )
+            algorithm_relations: defaultdict(int) = self._algorithm_pedigree.get_relations_between_nodes(
+                node1, node2, include_maternal_paternal=True
+            )
 
             for relation, count in ground_truth_relations.items():
                 ground_truth_relation_counter[node1] += count
                 ground_truth_relation_counter[node2] += count
-            
+
             for relation, count in algorithm_relations.items():
                 algorithm_relation_counter[node1] += count
                 algorithm_relation_counter[node2] += count

@@ -4,9 +4,6 @@ import random
 import time
 import logging
 import pandas as pd
-import networkx as nx
-import matplotlib.pyplot as plt
-import matplotlib.lines as mlines
 from collections import defaultdict
 from tqdm import tqdm
 from typing import Any
@@ -19,7 +16,18 @@ class PedigreeReconstructor:
     """
     Manages and builds up a collection of potential Pedigrees.
     """
-    def __init__(self, relations_path: str, nodes_path: str, outputs_dir: str, max_candidate_pedigrees: int = 1000, epsilon: float = 0.2, plot: bool = True, write_alternate_pedigrees: bool = False, random_seed: Any = 42) -> None:
+
+    def __init__(
+        self,
+        relations_path: str,
+        nodes_path: str,
+        outputs_dir: str,
+        max_candidate_pedigrees: int = 1000,
+        epsilon: float = 0.2,
+        plot: bool = True,
+        write_alternate_pedigrees: bool = False,
+        random_seed: Any = 42,
+    ) -> None:
         self._start_time = time.time()
         self._validate_node_data(nodes_path)
         self._process_node_data()
@@ -51,8 +59,8 @@ class PedigreeReconstructor:
         self._node_data = pd.read_csv(nodes_path, dtype=str, comment="#", keep_default_na=False)
         for mandatory_column in ["id", "sex", "y_haplogroup", "mt_haplogroup"]:
             if mandatory_column not in self._node_data.columns:
-                raise ValueError(f"Column \"{mandatory_column}\" not found in input node data.")
-        
+                raise ValueError(f'Column "{mandatory_column}" not found in input node data.')
+
         for optional_column in ["can_have_children", "can_be_inbred", "years_before_present"]:
             if optional_column not in self._node_data.columns:
                 self._node_data[optional_column] = ""
@@ -62,17 +70,19 @@ class PedigreeReconstructor:
             raise ValueError("Sample IDs cannot be completely numeric.")
 
         if not self._node_data["sex"].isin(["M", "F"]).all():
-            raise ValueError("Node sex must be \"M\" or \"F\".")
-        
+            raise ValueError('Node sex must be "M" or "F".')
+
         for haplogroup_column in ["y_haplogroup", "mt_haplogroup"]:
             for haplogroup in self._node_data[haplogroup_column]:
                 if "*" in haplogroup[:-1]:
-                    raise ValueError("Expandable haplogroups should contain one trailing asterisk. No other asterisks are allowed in haplogroups.")
+                    raise ValueError(
+                        "Expandable haplogroups should contain one trailing asterisk. No other asterisks are allowed in haplogroups."
+                    )
 
         if not self._node_data["can_have_children"].isin(["True", "False", ""]).all():
-            raise ValueError("can_have_children value must be \"True\", \"False\", or empty.")
+            raise ValueError('can_have_children value must be "True", "False", or empty.')
         if not self._node_data["can_be_inbred"].isin(["True", "False", ""]).all():
-            raise ValueError("can_be_inbred value must be \"True\", \"False\", or empty.")
+            raise ValueError('can_be_inbred value must be "True", "False", or empty.')
         if not self._node_data["years_before_present"].apply(lambda x: x.isnumeric() or x == "").all():
             raise ValueError("years_before_present value must be integer or empty.")
 
@@ -81,12 +91,20 @@ class PedigreeReconstructor:
         Process node data input.
         """
         # Reorder node data columns and remove unnecessary columns
-        self._node_data = self._node_data[["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children", "can_be_inbred", "years_before_present"]]
+        self._node_data = self._node_data[
+            ["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children", "can_be_inbred", "years_before_present"]
+        ]
         # Convert "can_have_children" and "can_be_inbred" columns to booleans
-        self._node_data["can_have_children"] = self._node_data["can_have_children"].map({"False": False, "True": True, "": True})
-        self._node_data["can_be_inbred"] = self._node_data["can_be_inbred"].map({"False": False, "True": True, "": True})
+        self._node_data["can_have_children"] = self._node_data["can_have_children"].map(
+            {"False": False, "True": True, "": True}
+        )
+        self._node_data["can_be_inbred"] = self._node_data["can_be_inbred"].map(
+            {"False": False, "True": True, "": True}
+        )
         # Convert "years_before_present" column to floats
-        self._node_data["years_before_present"] = pd.to_numeric(self._node_data["years_before_present"], errors="coerce")
+        self._node_data["years_before_present"] = pd.to_numeric(
+            self._node_data["years_before_present"], errors="coerce"
+        )
 
     def _validate_relation_data(self, relations_path: str) -> None:
         """
@@ -95,44 +113,56 @@ class PedigreeReconstructor:
         self._relation_data = pd.read_csv(relations_path, dtype=str, comment="#", keep_default_na=False)
         for column_name in ["id1", "id2", "degree", "constraints"]:
             if column_name not in self._relation_data.columns:
-                raise ValueError(f"Column \"{column_name}\" not found in input relation data.")
+                raise ValueError(f'Column "{column_name}" not found in input relation data.')
 
         for optional_column in ["force_constraints"]:
             if optional_column not in self._relation_data.columns:
                 self._relation_data[optional_column] = ""
-        
-        excess_relation_nodes = set(self._relation_data["id1"]).union(set(self._relation_data["id2"])) - set(self._node_data["id"])
+
+        excess_relation_nodes = set(self._relation_data["id1"]).union(set(self._relation_data["id2"])) - set(
+            self._node_data["id"]
+        )
         if excess_relation_nodes:
             raise ValueError(f"All node IDs in relation data must be present in node data: {excess_relation_nodes}.")
-        
+
         if not self._relation_data["degree"].isin(["1", "2", "3"]).all():
             raise ValueError("Degree must be 1, 2, or 3.")
         if not self._relation_data["force_constraints"].isin(["True", "False", ""]).all():
-            raise ValueError("can_have_children value must be \"True\", \"False\", or empty.")
-        
-        self._relation_data["pair_degree"] = self._relation_data.apply(lambda row: tuple(sorted([row["id1"], row["id2"], row["degree"]])), axis=1)
+            raise ValueError('can_have_children value must be "True", "False", or empty.')
+
+        self._relation_data["pair_degree"] = self._relation_data.apply(
+            lambda row: tuple(sorted([row["id1"], row["id2"], row["degree"]])), axis=1
+        )
         grouped_relations = self._relation_data.groupby("pair_degree")
         # Check for groups with multiple non-empty constraints, which can lead to issues when counting inconsistencies
-        invalid_groups = grouped_relations.filter(
-            lambda group: (group["constraints"] != "").sum() > 1
-        )
+        invalid_groups = grouped_relations.filter(lambda group: (group["constraints"] != "").sum() > 1)
         if not invalid_groups.empty:
             raise ValueError("Node pairs cannot have multiple non-empty constraints of the same degree.")
         self._relation_data.drop("pair_degree", axis=1, inplace=True)
 
         def split_and_validate_constraints(constraints: str) -> None:
             allowed_constraints = {
-                "parent-child", "child-parent", "siblings", 
-                "maternal aunt/uncle-nephew/niece", "maternal nephew/niece-aunt/uncle",
-                "paternal aunt/uncle-nephew/niece", "paternal nephew/niece-aunt/uncle",
-                "maternal grandparent-grandchild", "maternal grandchild-grandparent",
-                "paternal grandparent-grandchild", "paternal grandchild-grandparent",
-                "maternal half-siblings", "paternal half-siblings"
+                "parent-child",
+                "child-parent",
+                "siblings",
+                "maternal aunt/uncle-nephew/niece",
+                "maternal nephew/niece-aunt/uncle",
+                "paternal aunt/uncle-nephew/niece",
+                "paternal nephew/niece-aunt/uncle",
+                "maternal grandparent-grandchild",
+                "maternal grandchild-grandparent",
+                "paternal grandparent-grandchild",
+                "paternal grandchild-grandparent",
+                "maternal half-siblings",
+                "paternal half-siblings",
             }
             if constraints:
                 constraints_list = [c for c in constraints.split(";")]
                 if any(c not in allowed_constraints for c in constraints_list):
-                    raise ValueError(f"Invalid constraints found: {[c for c in constraints_list if c not in allowed_constraints]}.")
+                    raise ValueError(
+                        f"Invalid constraints found: {[c for c in constraints_list if c not in allowed_constraints]}."
+                    )
+
         self._relation_data["constraints"].apply(split_and_validate_constraints)
 
     def _process_relation_data(self) -> None:
@@ -142,7 +172,9 @@ class PedigreeReconstructor:
         # Reorder relation data columns and remove unnecessary columns
         self._relation_data = self._relation_data[["id1", "id2", "degree", "constraints", "force_constraints"]]
         # Convert "force_constrains" column to booleans
-        self._relation_data["force_constraints"] = self._relation_data["force_constraints"].map({"False": False, "True": True, "": False})
+        self._relation_data["force_constraints"] = self._relation_data["force_constraints"].map(
+            {"False": False, "True": True, "": False}
+        )
 
         def sort_nodes(row: pd.Series) -> pd.Series:
             """
@@ -162,7 +194,7 @@ class PedigreeReconstructor:
                 "paternal grandchild-grandparent": "paternal grandparent-grandchild",
                 "siblings": "siblings",  # Symmetric
                 "maternal half-siblings": "maternal half-siblings",  # Symmetric
-                "paternal half-siblings": "paternal half-siblings"  # Symmetric
+                "paternal half-siblings": "paternal half-siblings",  # Symmetric
             }
             if row["id2"] < row["id1"]:
                 constraints = row["constraints"]
@@ -174,48 +206,90 @@ class PedigreeReconstructor:
                 else:
                     relation_flipped_constraints = ""
                 # Swap id1 and id2, and flip constraints
-                return pd.Series({"id1": row["id2"], "id2": row["id1"], "degree": row["degree"], "constraints": relation_flipped_constraints, "force_constraints": row["force_constraints"]})
+                return pd.Series(
+                    {
+                        "id1": row["id2"],
+                        "id2": row["id1"],
+                        "degree": row["degree"],
+                        "constraints": relation_flipped_constraints,
+                        "force_constraints": row["force_constraints"],
+                    }
+                )
             else:
                 return row
+
         self._relation_data = self._relation_data.apply(sort_nodes, axis=1)
 
         # Note: We don't use maternal/paternal 3rd-degree relations because those are not well-defined
         self._DEFAULT_CONSTRAINTS = {
             "1": "parent-child;child-parent;siblings",
             "2": "maternal aunt/uncle-nephew/niece;maternal nephew/niece-aunt/uncle;paternal aunt/uncle-nephew/niece;paternal nephew/niece-aunt/uncle;maternal grandparent-grandchild;maternal grandchild-grandparent;paternal grandparent-grandchild;paternal grandchild-grandparent;maternal half-siblings;paternal half-siblings",
-            "3": "half aunt/uncle-half nephew/niece;half nephew/niece-half aunt/uncle;greatgrandparent-greatgrandchild;greatgrandchild-greatgrandparent;grandaunt/granduncle-grandnephew/grandniece;grandnephew/grandniece-grandaunt/granduncle;first cousins"
+            "3": "half aunt/uncle-half nephew/niece;half nephew/niece-half aunt/uncle;greatgrandparent-greatgrandchild;greatgrandchild-greatgrandparent;grandaunt/granduncle-grandnephew/grandniece;grandnephew/grandniece-grandaunt/granduncle;first cousins",
         }
 
         def fill_constraints(row: pd.Series) -> pd.Series:
             if not row["constraints"]:
                 constraints = self._DEFAULT_CONSTRAINTS[row["degree"]]
-                return pd.Series({"id1": row["id1"], "id2": row["id2"], "degree": row["degree"], "constraints": constraints, "force_constraints": row["force_constraints"]})
+                return pd.Series(
+                    {
+                        "id1": row["id1"],
+                        "id2": row["id2"],
+                        "degree": row["degree"],
+                        "constraints": constraints,
+                        "force_constraints": row["force_constraints"],
+                    }
+                )
             return row
+
         self._relation_data = self._relation_data.apply(fill_constraints, axis=1)
-        
+
         self._first_degree_relations = self._relation_data[self._relation_data["degree"] == "1"].reset_index(drop=True)
         self._second_degree_relations = self._relation_data[self._relation_data["degree"] == "2"].reset_index(drop=True)
         self._third_degree_relations = self._relation_data[self._relation_data["degree"] == "3"].reset_index(drop=True)
-        self._first_and_second_degree_relations = pd.concat([self._first_degree_relations, self._second_degree_relations]).reset_index(drop=True)
-        self._all_relations = pd.concat([self._first_degree_relations, self._second_degree_relations, self._third_degree_relations]).reset_index(drop=True)
+        self._first_and_second_degree_relations = pd.concat(
+            [self._first_degree_relations, self._second_degree_relations]
+        ).reset_index(drop=True)
+        self._all_relations = pd.concat(
+            [self._first_degree_relations, self._second_degree_relations, self._third_degree_relations]
+        ).reset_index(drop=True)
 
     def _shuffle_relations(self) -> None:
         """
         Shuffle relation DataFrames (when we want to restart the algorithm).
         """
-        self._first_degree_relations = self._first_degree_relations.sample(frac=1, random_state=self._random_seed).reset_index(drop=True)
-        self._second_degree_relations = self._second_degree_relations.sample(frac=1, random_state=self._random_seed).reset_index(drop=True)
-        self._third_degree_relations = self._third_degree_relations.sample(frac=1, random_state=self._random_seed).reset_index(drop=True)
-        self._first_and_second_degree_relations = pd.concat([self._first_degree_relations, self._second_degree_relations]).reset_index(drop=True)
-        self._all_relations = pd.concat([self._first_degree_relations, self._second_degree_relations, self._third_degree_relations]).reset_index(drop=True)
+        self._first_degree_relations = self._first_degree_relations.sample(
+            frac=1, random_state=self._random_seed
+        ).reset_index(drop=True)
+        self._second_degree_relations = self._second_degree_relations.sample(
+            frac=1, random_state=self._random_seed
+        ).reset_index(drop=True)
+        self._third_degree_relations = self._third_degree_relations.sample(
+            frac=1, random_state=self._random_seed
+        ).reset_index(drop=True)
+        self._first_and_second_degree_relations = pd.concat(
+            [self._first_degree_relations, self._second_degree_relations]
+        ).reset_index(drop=True)
+        self._all_relations = pd.concat(
+            [self._first_degree_relations, self._second_degree_relations, self._third_degree_relations]
+        ).reset_index(drop=True)
 
     def _get_initial_pedigree(self):
         """
         Create the initial pedigree and add all nodes.
         """
         initial_pedigree = Pedigree()
-        for node_id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred, years_before_present in self._node_data.itertuples(index=False):
-            initial_pedigree.add_node(node_id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred, years_before_present)
+        for (
+            node_id,
+            sex,
+            y_haplogroup,
+            mt_haplogroup,
+            can_have_children,
+            can_be_inbred,
+            years_before_present,
+        ) in self._node_data.itertuples(index=False):
+            initial_pedigree.add_node(
+                node_id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred, years_before_present
+            )
         return initial_pedigree
 
     def find_best_pedigree(self) -> Pedigree:
@@ -228,22 +302,26 @@ class PedigreeReconstructor:
                 self._first_and_second_degree_relations.iterrows(),
                 total=self._first_and_second_degree_relations.shape[0],
                 smoothing=0.5,
-                bar_format="{l_bar}{bar} | {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
+                bar_format="{l_bar}{bar} | {n_fmt}/{total_fmt} [{elapsed}<{remaining}]",
             )
             for idx, row in progress_bar:
                 node1, node2, degree, constraints, force_constraints = row
                 logger.info(f"Current relation: {node1}, {node2}, {degree}")
                 progress_bar.set_description(f"Processing relation {{{node1}, {node2}, {degree}}}")
-                self._add_relation(node1, node2, degree=degree, constraints=constraints, force_constraints=force_constraints)
+                self._add_relation(
+                    node1, node2, degree=degree, constraints=constraints, force_constraints=force_constraints
+                )
                 self._clean_relation_dicts()
 
-                processed_relations = self._all_relations.iloc[:idx+1]
+                processed_relations = self._all_relations.iloc[: idx + 1]
                 pair_to_relations_so_far = self._get_pair_to_relations_so_far(processed_relations)
                 if degree == "1" and len(processed_relations) < len(self._first_and_second_degree_relations):
                     self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=False)
                 else:
                     self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=True)
-                logger.info(f"Remaining pedigrees after pruning: {len(self._candidate_pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n")
+                logger.info(
+                    f"Remaining pedigrees after pruning: {len(self._candidate_pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n"
+                )
 
             if not self._final_pedigrees:
                 logger.warning("No valid pedigree found. Shuffling relations and restarting algorithm.\n")
@@ -261,22 +339,40 @@ class PedigreeReconstructor:
         self._sample_pedigree = self._final_pedigrees[sample_idx]
         self._sample_strike_count = self._final_strike_counts[sample_idx]
         self._sample_strike_log = self._final_strike_logs[sample_idx]
-        self._write_corrected_input_relations(self._sample_strike_count, self._sample_strike_log, os.path.join(self._outputs_dir, "corrected_input_relations.csv"))
-        self._sample_pedigree.write_exact_relations(os.path.join(self._outputs_dir, "reconstructed_exact_relations.csv"))
+        self._write_corrected_input_relations(
+            self._sample_strike_count,
+            self._sample_strike_log,
+            os.path.join(self._outputs_dir, "corrected_input_relations.csv"),
+        )
+        self._sample_pedigree.write_exact_relations(
+            os.path.join(self._outputs_dir, "reconstructed_exact_relations.csv")
+        )
         if self._plot:
             try:
                 self._sample_pedigree.plot(os.path.join(self._outputs_dir, "reconstructed_pedigree.png"))
                 pygraphviz_found = True
             except ImportError:
-                logger.warning("PyGraphviz (https://pygraphviz.github.io/) must be installed to plot pedigrees. Skipping plotting of reconstructed pedigree(s).")
+                logger.warning(
+                    "PyGraphviz (https://pygraphviz.github.io/) must be installed to plot pedigrees. Skipping plotting of reconstructed pedigree(s)."
+                )
                 pygraphviz_found = False
 
         # Plot and write outputs of alternate pedigrees
         if self._write_alternate_pedigrees:
             os.makedirs(os.path.join(self._outputs_dir, "alternate_pedigrees"), exist_ok=True)
-            for idx, (pedigree, strike_count, strike_log) in enumerate(zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs)):
-                self._write_corrected_input_relations(strike_count, strike_log, os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_corrected_input_relations.csv"))
-                pedigree.write_exact_relations(os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_exact_relations.csv"))
+            for idx, (pedigree, strike_count, strike_log) in enumerate(
+                zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs)
+            ):
+                self._write_corrected_input_relations(
+                    strike_count,
+                    strike_log,
+                    os.path.join(
+                        self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_corrected_input_relations.csv"
+                    ),
+                )
+                pedigree.write_exact_relations(
+                    os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_exact_relations.csv")
+                )
                 if self._plot and pygraphviz_found:
                     pedigree.plot(os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}.png"))
         return self._sample_pedigree
@@ -291,18 +387,42 @@ class PedigreeReconstructor:
         for pedigree in self._candidate_pedigrees:
             if degree == "1":
                 if not force_constraints:
-                    new_pedigrees.extend(PedigreeReconstructor._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
-                    new_pedigrees.extend(PedigreeReconstructor._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
+                    new_pedigrees.extend(
+                        PedigreeReconstructor._connect_first_degree_relation(
+                            pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]
+                        )
+                    )
+                    new_pedigrees.extend(
+                        PedigreeReconstructor._connect_second_degree_relation(
+                            pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]
+                        )
+                    )
                 else:
-                    new_pedigrees.extend(PedigreeReconstructor._connect_first_degree_relation(pedigree, node1, node2, constraints=constraints))
-            
+                    new_pedigrees.extend(
+                        PedigreeReconstructor._connect_first_degree_relation(
+                            pedigree, node1, node2, constraints=constraints
+                        )
+                    )
+
             elif degree == "2":
                 if not force_constraints:
                     new_pedigrees.append(pedigree)  # No relation (i.e. false positive)
-                    new_pedigrees.extend(PedigreeReconstructor._connect_first_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]))
-                    new_pedigrees.extend(PedigreeReconstructor._connect_second_degree_relation(pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]))
+                    new_pedigrees.extend(
+                        PedigreeReconstructor._connect_first_degree_relation(
+                            pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["1"]
+                        )
+                    )
+                    new_pedigrees.extend(
+                        PedigreeReconstructor._connect_second_degree_relation(
+                            pedigree, node1, node2, constraints=self._DEFAULT_CONSTRAINTS["2"]
+                        )
+                    )
                 else:
-                    new_pedigrees.extend(PedigreeReconstructor._connect_second_degree_relation(pedigree, node1, node2, constraints=constraints))
+                    new_pedigrees.extend(
+                        PedigreeReconstructor._connect_second_degree_relation(
+                            pedigree, node1, node2, constraints=constraints
+                        )
+                    )
         self._candidate_pedigrees = new_pedigrees
 
     @staticmethod
@@ -336,27 +456,51 @@ class PedigreeReconstructor:
 
         for relation in possible_relations:
             if relation == "maternal aunt/uncle-nephew/niece":
-                new_pedigrees.extend(PedigreeReconstructor._connect_aunt_uncle_relation(pedigree, node1, node2, shared_relative_sex="F"))
+                new_pedigrees.extend(
+                    PedigreeReconstructor._connect_aunt_uncle_relation(pedigree, node1, node2, shared_relative_sex="F")
+                )
             if relation == "maternal nephew/niece-aunt/uncle":
-                new_pedigrees.extend(PedigreeReconstructor._connect_aunt_uncle_relation(pedigree, node2, node1, shared_relative_sex="F"))
+                new_pedigrees.extend(
+                    PedigreeReconstructor._connect_aunt_uncle_relation(pedigree, node2, node1, shared_relative_sex="F")
+                )
             if relation == "paternal aunt/uncle-nephew/niece":
-                new_pedigrees.extend(PedigreeReconstructor._connect_aunt_uncle_relation(pedigree, node1, node2, shared_relative_sex="M"))
+                new_pedigrees.extend(
+                    PedigreeReconstructor._connect_aunt_uncle_relation(pedigree, node1, node2, shared_relative_sex="M")
+                )
             if relation == "paternal nephew/niece-aunt/uncle":
-                new_pedigrees.extend(PedigreeReconstructor._connect_aunt_uncle_relation(pedigree, node2, node1, shared_relative_sex="M"))
-            
+                new_pedigrees.extend(
+                    PedigreeReconstructor._connect_aunt_uncle_relation(pedigree, node2, node1, shared_relative_sex="M")
+                )
+
             if relation == "maternal grandparent-grandchild":
-                new_pedigrees.extend(PedigreeReconstructor._connect_grandparent_relation(pedigree, node1, node2, shared_relative_sex="F"))
+                new_pedigrees.extend(
+                    PedigreeReconstructor._connect_grandparent_relation(pedigree, node1, node2, shared_relative_sex="F")
+                )
             if relation == "maternal grandchild-grandparent":
-                new_pedigrees.extend(PedigreeReconstructor._connect_grandparent_relation(pedigree, node2, node1, shared_relative_sex="F"))
+                new_pedigrees.extend(
+                    PedigreeReconstructor._connect_grandparent_relation(pedigree, node2, node1, shared_relative_sex="F")
+                )
             if relation == "paternal grandparent-grandchild":
-                new_pedigrees.extend(PedigreeReconstructor._connect_grandparent_relation(pedigree, node1, node2, shared_relative_sex="M"))
+                new_pedigrees.extend(
+                    PedigreeReconstructor._connect_grandparent_relation(pedigree, node1, node2, shared_relative_sex="M")
+                )
             if relation == "paternal grandchild-grandparent":
-                new_pedigrees.extend(PedigreeReconstructor._connect_grandparent_relation(pedigree, node2, node1, shared_relative_sex="M"))
-            
+                new_pedigrees.extend(
+                    PedigreeReconstructor._connect_grandparent_relation(pedigree, node2, node1, shared_relative_sex="M")
+                )
+
             if relation == "maternal half-siblings":
-                new_pedigrees.extend(PedigreeReconstructor._connect_half_sibling_relation(pedigree, node1, node2, shared_relative_sex="F"))
+                new_pedigrees.extend(
+                    PedigreeReconstructor._connect_half_sibling_relation(
+                        pedigree, node1, node2, shared_relative_sex="F"
+                    )
+                )
             if relation == "paternal half-siblings":
-                new_pedigrees.extend(PedigreeReconstructor._connect_half_sibling_relation(pedigree, node1, node2, shared_relative_sex="M"))
+                new_pedigrees.extend(
+                    PedigreeReconstructor._connect_half_sibling_relation(
+                        pedigree, node1, node2, shared_relative_sex="M"
+                    )
+                )
         return new_pedigrees
 
     @staticmethod
@@ -407,7 +551,9 @@ class PedigreeReconstructor:
         return ret
 
     @staticmethod
-    def _connect_aunt_uncle_relation(pedigree: Pedigree, node1: str, node2: str, shared_relative_sex: str | None = None) -> list[Pedigree]:
+    def _connect_aunt_uncle_relation(
+        pedigree: Pedigree, node1: str, node2: str, shared_relative_sex: str | None = None
+    ) -> list[Pedigree]:
         """
         Adds an aunt/uncle-nephew/niece relation and merges nodes appropriately.
         Returns a list containing the resulting Pedigree(s), if successful.
@@ -433,7 +579,9 @@ class PedigreeReconstructor:
         return ret
 
     @staticmethod
-    def _connect_grandparent_relation(pedigree: Pedigree, node1: str, node2: str, shared_relative_sex: str | None = None) -> list[Pedigree]:
+    def _connect_grandparent_relation(
+        pedigree: Pedigree, node1: str, node2: str, shared_relative_sex: str | None = None
+    ) -> list[Pedigree]:
         """
         Adds a grandparent-grandchild relation and merges nodes appropriately.
         Returns a list containing the resulting Pedigree(s), if successful.
@@ -459,7 +607,9 @@ class PedigreeReconstructor:
         return ret
 
     @staticmethod
-    def _connect_half_sibling_relation(pedigree: Pedigree, node1: str, node2: str, shared_relative_sex: str | None = None) -> list[Pedigree]:
+    def _connect_half_sibling_relation(
+        pedigree: Pedigree, node1: str, node2: str, shared_relative_sex: str | None = None
+    ) -> list[Pedigree]:
         """
         Adds a half-sibling relation and merges nodes appropriately.
         Returns a list containing the resulting Pedigree(s), if successful.
@@ -512,8 +662,10 @@ class PedigreeReconstructor:
             # Sort by number of constraints so specific constraints are checked first when pruning
             pair_to_constraints[node_pair].sort(key=lambda x: len(x))
         return pair_to_constraints
-    
-    def _get_pair_to_relations_so_far(self, processed_relations: pd.DataFrame) -> defaultdict[tuple[str, str], list[tuple[str, str, bool]]]:
+
+    def _get_pair_to_relations_so_far(
+        self, processed_relations: pd.DataFrame
+    ) -> defaultdict[tuple[str, str], list[tuple[str, str, bool]]]:
         """
         Turn DataFrame of relations/constraints processed so far into dict(s) of {node pairs: list of (degree, constraints) tuples}.
         """
@@ -522,19 +674,24 @@ class PedigreeReconstructor:
             pair_to_relations_so_far[(node1, node2)].append((degree, constraints, force_constraints))
         return pair_to_relations_so_far
 
-    def _prune_pedigrees(self, pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]], check_half_siblings: bool) -> None:
+    def _prune_pedigrees(
+        self,
+        pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]],
+        check_half_siblings: bool,
+    ) -> None:
         """
         Remove pedigrees with inconsistencies.
         """
         seen_topologies = set()
         new_potential_pedigrees = []
         for pedigree in self._candidate_pedigrees:
-            if (pedigree.validate_members(set(self._node_data["id"])) 
-                and pedigree.validate_can_have_children() 
+            if (
+                pedigree.validate_members(set(self._node_data["id"]))
+                and pedigree.validate_can_have_children()
                 and pedigree.validate_inbreeding()
                 and pedigree.validate_years_before_present()
                 and pedigree.validate_forced_constraints(pair_to_relations_so_far)
-                ):
+            ):
                 pedigree.update_haplogroups()
                 if pedigree.validate_haplogroups():
                     topology = pedigree.get_topo_sort()
@@ -548,45 +705,78 @@ class PedigreeReconstructor:
         third_degree_strikes = []
         counts = defaultdict(int)
         for pedigree in new_potential_pedigrees:
-            num_strikes, _ = pedigree.count_inconsistencies(self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings)
+            num_strikes, _ = pedigree.count_inconsistencies(
+                self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings
+            )
             num_third_degree_strikes = pedigree.count_third_degree_inconcistencies(self._pair_to_constraints)
             strikes.append(num_strikes)
             third_degree_strikes.append(num_third_degree_strikes)
             counts[num_strikes] += 1
         logger.info(f"Strike counts before pruning: {str(dict(sorted(counts.items())))}")
 
-        def epsilon_greedy_sample(pedigrees: list[Pedigree], strikes: list[int], third_degree_strikes: list[int], epsilon: float, max_candidate_pedigrees: int) -> list[Pedigree]:
+        def epsilon_greedy_sample(
+            pedigrees: list[Pedigree],
+            strikes: list[int],
+            third_degree_strikes: list[int],
+            epsilon: float,
+            max_candidate_pedigrees: int,
+        ) -> list[Pedigree]:
             assert len(pedigrees) == len(strikes)
             if len(pedigrees) <= max_candidate_pedigrees:
                 return pedigrees
-            
-            sorted_pedigrees = [pedigree for pedigree, _, _ in sorted(zip(pedigrees, strikes, third_degree_strikes), key=lambda x: (x[1], x[2]))]
+
+            sorted_pedigrees = [
+                pedigree
+                for pedigree, _, _ in sorted(zip(pedigrees, strikes, third_degree_strikes), key=lambda x: (x[1], x[2]))
+            ]
             exploitation_max_candidate_pedigrees = int((1 - epsilon) * max_candidate_pedigrees)
             exploration_max_candidate_pedigrees = max_candidate_pedigrees - exploitation_max_candidate_pedigrees
 
             exploitation_pedigrees = sorted_pedigrees[:exploitation_max_candidate_pedigrees]
-            exploration_pedigrees = random.sample(sorted_pedigrees[exploitation_max_candidate_pedigrees:], exploration_max_candidate_pedigrees)
+            exploration_pedigrees = random.sample(
+                sorted_pedigrees[exploitation_max_candidate_pedigrees:], exploration_max_candidate_pedigrees
+            )
             return exploitation_pedigrees + exploration_pedigrees
 
         num_processed_relations = sum(len(relations) for relations in pair_to_relations_so_far.values())
         if num_processed_relations < len(self._first_and_second_degree_relations):
-            self._candidate_pedigrees = epsilon_greedy_sample(new_potential_pedigrees, strikes, third_degree_strikes, epsilon=self._epsilon, max_candidate_pedigrees=self._max_candidate_pedigrees)
+            self._candidate_pedigrees = epsilon_greedy_sample(
+                new_potential_pedigrees,
+                strikes,
+                third_degree_strikes,
+                epsilon=self._epsilon,
+                max_candidate_pedigrees=self._max_candidate_pedigrees,
+            )
         else:
             # Final iteration
-            best_pedigrees = [pedigree for pedigree, num_strikes in zip(new_potential_pedigrees, strikes) if num_strikes == min(strikes)]
-             # Use 3rd-degree strikes as tiebreaker
-            third_degree_strikes = [pedigree.count_third_degree_inconcistencies(self._pair_to_constraints) for pedigree in best_pedigrees]
-            
-            self._final_pedigrees = [pedigree for pedigree, num_strikes in zip(best_pedigrees, third_degree_strikes) if num_strikes == min(third_degree_strikes)]
+            best_pedigrees = [
+                pedigree
+                for pedigree, num_strikes in zip(new_potential_pedigrees, strikes)
+                if num_strikes == min(strikes)
+            ]
+            # Use 3rd-degree strikes as tiebreaker
+            third_degree_strikes = [
+                pedigree.count_third_degree_inconcistencies(self._pair_to_constraints) for pedigree in best_pedigrees
+            ]
+
+            self._final_pedigrees = [
+                pedigree
+                for pedigree, num_strikes in zip(best_pedigrees, third_degree_strikes)
+                if num_strikes == min(third_degree_strikes)
+            ]
             self._final_strike_counts = []
             self._final_strike_logs = []
             for pedigree in self._final_pedigrees:
-                strike_count, strike_log = pedigree.count_inconsistencies(self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings=True)
+                strike_count, strike_log = pedigree.count_inconsistencies(
+                    self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings=True
+                )
                 self._final_strike_counts.append(strike_count)
                 self._final_strike_logs.append(strike_log)
                 pedigree.clean_up_relations()
 
-    def _write_corrected_input_relations(self, strike_count: int, strike_log: list[tuple[str, str, str]], path: str) -> None:
+    def _write_corrected_input_relations(
+        self, strike_count: int, strike_log: list[tuple[str, str, str]], path: str
+    ) -> None:
         """
         Write corrected input relations to file. Includes information about added/removed/changed input relations.
         """
@@ -598,14 +788,16 @@ class PedigreeReconstructor:
             else:
                 removed_relations.append((node1, node2, degree[1], constraints))
         removed_relations_set = set(removed_relations)
-        
+
         # Separate out *changed* relations (added relation + removed relation pair, e.g., 1st-degree -> 2nd-degree)
         changed_node_pairs = set()
-        for (add_node1, add_node2, _, _) in added_relations:
-            for (remove_node1, remove_node2, _, _) in removed_relations:
-                if (add_node1 == remove_node1 and add_node2 == remove_node2) or (add_node2 == remove_node1 and add_node1 == remove_node2):
+        for add_node1, add_node2, _, _ in added_relations:
+            for remove_node1, remove_node2, _, _ in removed_relations:
+                if (add_node1 == remove_node1 and add_node2 == remove_node2) or (
+                    add_node2 == remove_node1 and add_node1 == remove_node2
+                ):
                     changed_node_pairs.add((add_node1, add_node2))
-        
+
         with open(path, "w") as file:
             file.write("id1,id2,degree,constraints\n")  # Header line
             file.write(f"# Final strike count: {strike_count}\n")
@@ -628,7 +820,7 @@ class PedigreeReconstructor:
             for node1, node2, degree, constraints in sorted(removed_relations):
                 if (node1, node2) not in changed_node_pairs and (node2, node1) not in changed_node_pairs:
                     write_relations_line(node1, node2, degree, constraints, commented=True)
-            
+
             file.write("\n# Changed relations\n")
             # Pair up changed relations (add + remove)
             for node1, node2 in sorted(changed_node_pairs):
@@ -637,7 +829,9 @@ class PedigreeReconstructor:
                 node2_to_write = None
                 for node1_remove, node2_remove, degree_remove, constraints_remove in removed_relations:
                     if (node1_remove, node2_remove) == (node1, node2) or (node2_remove, node1_remove) == (node1, node2):
-                        write_relations_line(node1_remove, node2_remove, degree_remove, constraints_remove, commented=True)
+                        write_relations_line(
+                            node1_remove, node2_remove, degree_remove, constraints_remove, commented=True
+                        )
                         # The removed nodes follow the original input order
                         node1_to_write = node1_remove
                         node2_to_write = node2_remove
@@ -645,7 +839,7 @@ class PedigreeReconstructor:
                     if (node1_add, node2_add) == (node1, node2) or (node2_add, node1_add) == (node1, node2):
                         assert node1_to_write and node2_to_write
                         write_relations_line(node1_to_write, node2_to_write, degree_add, constraints_add)
-            
+
             file.write("\n# Unchanged relations\n")
             for node1, node2, degree, constraints, _ in self._all_relations.itertuples(index=False):
                 if (node1, node2, degree, constraints) not in removed_relations_set:

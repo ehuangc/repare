@@ -1,7 +1,7 @@
 import tempfile
 import logging
 import pandas as pd
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 from itertools import combinations
 from sklearn.metrics import r2_score
 from pedigree_package.pedigree import Pedigree
@@ -14,13 +14,18 @@ class RelationComparison:
     """
     Generates an algorithm-reconstructed pedigree and compares it to a published/ground-truth pedigree.
     """
+
     def __init__(self, published_relations_path: str, algorithm_nodes_path: str, algorithm_relations_path: str) -> None:
         self._published_relations_path = published_relations_path
         self._algorithm_nodes_path = algorithm_nodes_path
         self._algorithm_relations_path = algorithm_relations_path
 
-        self._published_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = self._load_published_relations(self._published_relations_path)
-        self._algorithm_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = self._load_algorithm_relations(self._algorithm_nodes_path, self._algorithm_relations_path)
+        self._published_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = (
+            self._load_published_relations(self._published_relations_path)
+        )
+        self._algorithm_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = (
+            self._load_algorithm_relations(self._algorithm_nodes_path, self._algorithm_relations_path)
+        )
         self._fill_uncertain_relations()
 
     def _load_published_relations(self, path: str) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
@@ -31,13 +36,17 @@ class RelationComparison:
             relation_counts[(id1, id2)][relation] += 1
         return relation_counts
 
-    def _load_algorithm_relations(self, nodes_path: str, relations_path: str) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
+    def _load_algorithm_relations(
+        self, nodes_path: str, relations_path: str
+    ) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
         self._algorithm_pedigree: Pedigree = self._run_algorithm(nodes_path, relations_path)
         algorithm_relations: defaultdict[tuple[str, str], defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
 
         for id1, id2 in combinations(self._algorithm_pedigree.node_to_data, 2):
             if not id1.isnumeric() and not id2.isnumeric():  # Skip placeholder nodes
-                relations_between_nodes = self._algorithm_pedigree.get_relations_between_nodes(id1, id2, include_maternal_paternal=True)
+                relations_between_nodes = self._algorithm_pedigree.get_relations_between_nodes(
+                    id1, id2, include_maternal_paternal=True
+                )
                 for relation, count in relations_between_nodes.items():
                     id1, id2, relation = self._sort_relation(id1, id2, relation)
                     algorithm_relations[(id1, id2)][relation] += count
@@ -60,7 +69,7 @@ class RelationComparison:
             "maternal half-siblings": "maternal half-siblings",  # Symmetric
             "paternal half-siblings": "paternal half-siblings",  # Symmetric
             "1": "1",  # Symmetric
-            "2": "2"  # Symmetric
+            "2": "2",  # Symmetric
         }
         if id2 < id1:
             return id2, id1, flipped_relations[relation]
@@ -70,27 +79,26 @@ class RelationComparison:
     @staticmethod
     def _run_algorithm(nodes_path: str, relations_path: str) -> Pedigree:
         with tempfile.TemporaryDirectory() as temp_dir:
-            pedigree_reconstructor = PedigreeReconstructor(relations_path,
-                                                           nodes_path,
-                                                           outputs_dir=temp_dir,
-                                                           max_candidate_pedigrees=1000,
-                                                           plot=False)
+            pedigree_reconstructor = PedigreeReconstructor(
+                relations_path, nodes_path, outputs_dir=temp_dir, max_candidate_pedigrees=1000, plot=False
+            )
             return pedigree_reconstructor.find_best_pedigree()
 
     def _fill_uncertain_relations(self) -> None:
         uncertain_to_exact_relations = {
             "1": ["parent-child", "child-parent", "siblings"],
-            "2": ["maternal aunt/uncle-nephew/niece",
-                  "maternal nephew/niece-aunt/uncle",
-                  "paternal aunt/uncle-nephew/niece",
-                  "paternal nephew/niece-aunt/uncle",
-                  "maternal grandparent-grandchild",
-                  "maternal grandchild-grandparent",
-                  "paternal grandparent-grandchild",
-                  "paternal grandchild-grandparent",
-                  "maternal half-siblings",
-                  "paternal half-siblings"
-                  ]
+            "2": [
+                "maternal aunt/uncle-nephew/niece",
+                "maternal nephew/niece-aunt/uncle",
+                "paternal aunt/uncle-nephew/niece",
+                "paternal nephew/niece-aunt/uncle",
+                "maternal grandparent-grandchild",
+                "maternal grandchild-grandparent",
+                "paternal grandparent-grandchild",
+                "paternal grandchild-grandparent",
+                "maternal half-siblings",
+                "paternal half-siblings",
+            ],
         }
 
         for (id1, id2), relation_counts_between_nodes in self._published_relation_counts.items():
@@ -110,7 +118,9 @@ class RelationComparison:
 
     def get_metrics(self) -> dict[str, float]:
         metrics: dict[str, float] = dict()
-        pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1 = self._calculate_relation_metrics()
+        pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1 = (
+            self._calculate_relation_metrics()
+        )
         pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1 = self._calculate_degree_metrics()
 
         metrics["Pairwise Relation Accuracy"] = pairwise_relation_accuracy
@@ -126,7 +136,9 @@ class RelationComparison:
         return metrics
 
     @staticmethod
-    def _calculate_tp_fp_fn(published_counts: defaultdict(int), algorithm_counts: defaultdict(int), nodes: tuple[str, str]) -> tuple[int, int, int]:
+    def _calculate_tp_fp_fn(
+        published_counts: defaultdict(int), algorithm_counts: defaultdict(int), nodes: tuple[str, str]
+    ) -> tuple[int, int, int]:
         tp = 0  # True positives
         fp = 0  # False positives
         fn = 0  # False negatives
@@ -163,18 +175,24 @@ class RelationComparison:
                 correct_node_pairs += 1
             total_node_pairs += 1
 
-            tp, fp, fn = self._calculate_tp_fp_fn(published_relations_between_nodes, algorithm_relations_between_nodes, (id1, id2))
+            tp, fp, fn = self._calculate_tp_fp_fn(
+                published_relations_between_nodes, algorithm_relations_between_nodes, (id1, id2)
+            )
             relation_tp += tp
             relation_fp += fp
             relation_fn += fn
-                
+
         pairwise_relation_accuracy = correct_node_pairs / total_node_pairs
         relation_precision = relation_tp / (relation_tp + relation_fp)
         relation_recall = relation_tp / (relation_tp + relation_fn)
         relation_f1 = 2 * (relation_precision * relation_recall) / (relation_precision + relation_recall)
-        relation_f1 = (2 * relation_precision * relation_recall) / (relation_precision + relation_recall) if relation_precision + relation_recall > 0 else 0
+        relation_f1 = (
+            (2 * relation_precision * relation_recall) / (relation_precision + relation_recall)
+            if relation_precision + relation_recall > 0
+            else 0
+        )
         return pairwise_relation_accuracy, relation_precision, relation_recall, relation_f1
-    
+
     def _calculate_degree_metrics(self) -> tuple[float, float, float, float]:
         correct_node_pairs: int = 0
         total_node_pairs: int = 0
@@ -193,27 +211,42 @@ class RelationComparison:
                 published_degrees_between_nodes["1"] += published_relations_between_nodes[relation]
                 algorithm_degrees_between_nodes["1"] += algorithm_relations_between_nodes[relation]
 
-            for relation in ["maternal aunt/uncle-nephew/niece", "paternal aunt/uncle-nephew/niece", "maternal nephew/niece-aunt/uncle", "paternal nephew/niece-aunt/uncle", 
-                            "maternal grandparent-grandchild", "paternal grandparent-grandchild", "maternal grandchild-grandparent", "paternal grandchild-grandparent", 
-                            "maternal half-siblings", "paternal half-siblings"]:
+            for relation in [
+                "maternal aunt/uncle-nephew/niece",
+                "paternal aunt/uncle-nephew/niece",
+                "maternal nephew/niece-aunt/uncle",
+                "paternal nephew/niece-aunt/uncle",
+                "maternal grandparent-grandchild",
+                "paternal grandparent-grandchild",
+                "maternal grandchild-grandparent",
+                "paternal grandchild-grandparent",
+                "maternal half-siblings",
+                "paternal half-siblings",
+            ]:
                 published_degrees_between_nodes["2"] += published_relations_between_nodes[relation]
                 algorithm_degrees_between_nodes["2"] += algorithm_relations_between_nodes[relation]
 
             if published_degrees_between_nodes == algorithm_degrees_between_nodes:
                 correct_node_pairs += 1
             total_node_pairs += 1
-        
-            tp, fp, fn = self._calculate_tp_fp_fn(published_degrees_between_nodes, algorithm_degrees_between_nodes, (id1, id2))
+
+            tp, fp, fn = self._calculate_tp_fp_fn(
+                published_degrees_between_nodes, algorithm_degrees_between_nodes, (id1, id2)
+            )
             degree_tp += tp
             degree_fp += fp
             degree_fn += fn
-        
+
         pairwise_degree_accuracy = correct_node_pairs / total_node_pairs
         degree_precision = degree_tp / (degree_tp + degree_fp)
         degree_recall = degree_tp / (degree_tp + degree_fn)
-        degree_f1 = (2 * degree_precision * degree_recall) / (degree_precision + degree_recall) if degree_precision + degree_recall > 0 else 0
+        degree_f1 = (
+            (2 * degree_precision * degree_recall) / (degree_precision + degree_recall)
+            if degree_precision + degree_recall > 0
+            else 0
+        )
         return pairwise_degree_accuracy, degree_precision, degree_recall, degree_f1
-    
+
     def _calculate_connectivity_r_squared(self) -> float:
         published_relation_counter: defaultdict[str, int] = defaultdict(int)
         algorithm_relation_counter: defaultdict[str, int] = defaultdict(int)
@@ -228,7 +261,7 @@ class RelationComparison:
                 relations_between_nodes = self._algorithm_relation_counts[(node1, node2)]
                 for relation, count in relations_between_nodes.items():
                     algorithm_relation_counter[relation] += count
-                
+
         published_connectivities: list[int] = []
         algorithm_connectivities: list[int] = []
         for node in nodes:
@@ -241,13 +274,25 @@ class RelationComparison:
         Calculate the number of node pairs that share a different inferred kinship degree than in the published pedigree
         or share a relation constraint not consistent with the published pedigree.
         """
-        published_exact_relations = pd.read_csv(self._published_relations_path, dtype=str, comment="#", keep_default_na=False)
+        published_exact_relations = pd.read_csv(
+            self._published_relations_path, dtype=str, comment="#", keep_default_na=False
+        )
         inferred_relations = pd.read_csv(self._algorithm_relations_path, dtype=str, comment="#", keep_default_na=False)
 
         first_degree_relations = {"parent-child", "child-parent", "siblings", "1"}
-        second_degree_relations = {"maternal aunt/uncle-nephew/niece", "paternal aunt/uncle-nephew/niece", "maternal nephew/niece-aunt/uncle", "paternal nephew/niece-aunt/uncle",
-                                   "maternal grandparent-grandchild", "paternal grandparent-grandchild", "maternal grandchild-grandparent", "paternal grandchild-grandparent",
-                                   "maternal half-siblings", "paternal half-siblings", "2"}
+        second_degree_relations = {
+            "maternal aunt/uncle-nephew/niece",
+            "paternal aunt/uncle-nephew/niece",
+            "maternal nephew/niece-aunt/uncle",
+            "paternal nephew/niece-aunt/uncle",
+            "maternal grandparent-grandchild",
+            "paternal grandparent-grandchild",
+            "maternal grandchild-grandparent",
+            "paternal grandchild-grandparent",
+            "maternal half-siblings",
+            "paternal half-siblings",
+            "2",
+        }
 
         pair_to_published_degree = {}
         for id1, id2, relation in published_exact_relations.itertuples(index=False):
@@ -258,7 +303,7 @@ class RelationComparison:
 
             if degree:
                 pair_to_published_degree[tuple(sorted((id1, id2)))] = degree
-        
+
         pair_to_inferred_degree = {}
         pair_to_inferred_constraints = {}
         for id1, id2, degree, constraints in inferred_relations.itertuples(index=False):
@@ -278,11 +323,11 @@ class RelationComparison:
             if algorithm_degree != published_degree:
                 kinship_inference_errors += 1
                 continue
-        
+
         for pair, published_degree in pair_to_published_degree.items():
             if pair not in pair_to_inferred_degree:
                 kinship_inference_errors += 1
-            
+
         # Count first-degree exact relation inference errors
         for id1, id2, relation in published_exact_relations.itertuples(index=False):
             if relation == "1" or relation == "2":  # Skip "dotted lines"
