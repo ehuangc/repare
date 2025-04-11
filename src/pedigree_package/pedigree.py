@@ -1,8 +1,9 @@
-import math
 import importlib
-import networkx as nx
-import matplotlib.pyplot as plt
+import math
 from collections import defaultdict, deque
+
+import matplotlib.pyplot as plt
+import networkx as nx
 
 
 class Pedigree:

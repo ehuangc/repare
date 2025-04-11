@@ -1,7 +1,9 @@
-import os
 import argparse
 import logging
+import os
+
 from tqdm.contrib.logging import logging_redirect_tqdm
+
 from pedigree_package.pedigree_reconstructor import PedigreeReconstructor
 
 

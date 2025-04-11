@@ -1,6 +1,7 @@
 import os
-import pandas as pd
 from collections import defaultdict
+
+import pandas as pd
 from simulator.simulated_pedigree import SimulatedPedigree
 
 

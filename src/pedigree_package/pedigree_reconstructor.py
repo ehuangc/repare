@@ -1,12 +1,14 @@
-import os
 import copy
+import logging
+import os
 import random
 import time
-import logging
-import pandas as pd
 from collections import defaultdict
-from tqdm import tqdm
 from typing import Any
+
+import pandas as pd
+from tqdm import tqdm
+
 from pedigree_package.pedigree import Pedigree
 
 logger = logging.getLogger(__name__)

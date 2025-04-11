@@ -26,3 +26,9 @@ where = ["src"]
 
 [tool.ruff]
 line-length = 120
+
+[tool.ruff.lint]
+select = [
+    # isort
+    "I",
+]

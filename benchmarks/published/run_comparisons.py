@@ -1,7 +1,8 @@
-import os
 import logging
-from tqdm.contrib.logging import logging_redirect_tqdm
+import os
+
 from comparator.relation_comparison import RelationComparison
+from tqdm.contrib.logging import logging_redirect_tqdm
 
 
 def main():

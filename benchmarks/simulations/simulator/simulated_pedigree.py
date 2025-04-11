@@ -1,11 +1,13 @@
+import math
 import os
-import pandas as pd
 import random
 import tempfile
-import math
-from sklearn.metrics import r2_score
-from itertools import combinations
 from collections import defaultdict
+from itertools import combinations
+
+import pandas as pd
+from sklearn.metrics import r2_score
+
 from pedigree_package.pedigree import Pedigree
 from pedigree_package.pedigree_reconstructor import PedigreeReconstructor
 
