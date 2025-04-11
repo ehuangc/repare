@@ -19,7 +19,7 @@ class PedigreeReconstructor:
     """
     Manages and builds up a collection of potential Pedigrees.
     """
-    def __init__(self, relations_path: str, nodes_path: str, outputs_dir: str, max_candidate_pedigrees: int = 1000, epsilon: float = 0.2, write_alternate_pedigrees: bool = False, random_seed: Any = 42) -> None:
+    def __init__(self, relations_path: str, nodes_path: str, outputs_dir: str, max_candidate_pedigrees: int = 1000, epsilon: float = 0.2, plot: bool = True, write_alternate_pedigrees: bool = False, random_seed: Any = 42) -> None:
         self._start_time = time.time()
         self._validate_node_data(nodes_path)
         self._process_node_data()
@@ -29,6 +29,7 @@ class PedigreeReconstructor:
         self._outputs_dir = outputs_dir
         self._max_candidate_pedigrees = max_candidate_pedigrees  # Number of pedigrees to downsample to after each iteration of algorithm
         self._epsilon = epsilon  # Parameter for epsilon-greedy sampling when pruning pedigrees
+        self._plot = plot  # Whether to plot the reconstructed pedigree(s)
         self._write_alternate_pedigrees = write_alternate_pedigrees  # Whether to write corrected relations and plots of alternate final pedigrees
         self._random_seed = random_seed
         random.seed(self._random_seed)
@@ -253,7 +254,8 @@ class PedigreeReconstructor:
         self._sample_strike_log = self._final_strike_logs[sample_idx]
         self._write_corrected_input_relations(self._sample_strike_count, self._sample_strike_log, os.path.join(self._outputs_dir, "corrected_input_relations.csv"))
         self._sample_pedigree.write_exact_relations(os.path.join(self._outputs_dir, "reconstructed_exact_relations.csv"))
-        self._sample_pedigree.plot(os.path.join(self._outputs_dir, "reconstructed_pedigree.png"))
+        if self._plot:
+            self._sample_pedigree.plot(os.path.join(self._outputs_dir, "reconstructed_pedigree.png"))
 
         # Write corrected relations of alternate final pedigrees
         if self._write_alternate_pedigrees:
@@ -261,7 +263,8 @@ class PedigreeReconstructor:
             for idx, (pedigree, strike_count, strike_log) in enumerate(zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs)):
                 self._write_corrected_input_relations(strike_count, strike_log, os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_corrected_input_relations.csv"))
                 pedigree.write_exact_relations(os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_exact_relations.csv"))
-                pedigree.plot(os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}.png"))
+                if self._plot:
+                    pedigree.plot(os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}.png"))
         return self._sample_pedigree
 
     def _add_relation(self, node1: str, node2: str, degree: str, constraints: str, force_constraints: bool) -> None:

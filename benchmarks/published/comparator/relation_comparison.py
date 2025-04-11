@@ -73,7 +73,8 @@ class RelationComparison:
             pedigree_reconstructor = PedigreeReconstructor(relations_path,
                                                            nodes_path,
                                                            outputs_dir=temp_dir,
-                                                           max_candidate_pedigrees=1000)
+                                                           max_candidate_pedigrees=1000,
+                                                           plot=False)
             return pedigree_reconstructor.find_best_pedigree()
 
     def _fill_uncertain_relations(self) -> None:
