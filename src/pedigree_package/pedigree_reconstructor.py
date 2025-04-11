@@ -251,9 +251,9 @@ class PedigreeReconstructor:
         self._sample_pedigree = self._final_pedigrees[sample_idx]
         self._sample_strike_count = self._final_strike_counts[sample_idx]
         self._sample_strike_log = self._final_strike_logs[sample_idx]
-        self._write_corrected_input_relations(self._sample_strike_count, self._sample_strike_log, os.path.join(self._outputs_dir, "sample_corrected_input_relations.csv"))
-        self._sample_pedigree.write_exact_relations(os.path.join(self._outputs_dir, "sample_exact_relations.csv"))
-        self._sample_pedigree.plot(os.path.join(self._outputs_dir, "sample_pedigree.png"))
+        self._write_corrected_input_relations(self._sample_strike_count, self._sample_strike_log, os.path.join(self._outputs_dir, "corrected_input_relations.csv"))
+        self._sample_pedigree.write_exact_relations(os.path.join(self._outputs_dir, "reconstructed_exact_relations.csv"))
+        self._sample_pedigree.plot(os.path.join(self._outputs_dir, "reconstructed_pedigree.png"))
 
         # Write corrected relations of alternate final pedigrees
         if self._write_alternate_pedigrees:
