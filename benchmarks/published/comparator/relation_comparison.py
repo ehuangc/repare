@@ -326,7 +326,7 @@ class RelationComparison:
                 kinship_inference_errors += 1
                 continue
 
-        for pair, published_degree in pair_to_published_degree.items():
+        for pair in pair_to_published_degree:
             if pair not in pair_to_inferred_degree:
                 kinship_inference_errors += 1
 

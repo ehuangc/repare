@@ -120,7 +120,7 @@ class SimulatedPedigree:
         if random.random() < 0.25:
             # Existing mate
             potential_mates = []
-            for node in self._ground_truth_pedigree.node_to_data.keys():
+            for node in self._ground_truth_pedigree.node_to_data:
                 if (
                     node != parent1
                     and self._ground_truth_pedigree.node_to_data[node]["can_have_children"]
@@ -301,10 +301,10 @@ class SimulatedPedigree:
                     scaled_probs.append(prob * scale)
             scaled_relation_probs[relation] = tuple(scaled_probs)
 
-        for degree, probs in scaled_degree_probs.items():
+        for _degree, probs in scaled_degree_probs.items():
             if any(prob > 1 for prob in probs):
                 raise ValueError("Scale is too high. Error rates exceed 1.")
-        for relation, probs in scaled_relation_probs.items():
+        for _relation, probs in scaled_relation_probs.items():
             if any(prob > 1 for prob in probs):
                 raise ValueError("Scale is too high. Error rates exceed 1.")
         return scaled_degree_probs, scaled_relation_probs
@@ -596,11 +596,11 @@ class SimulatedPedigree:
                 node1, node2, include_maternal_paternal=True
             )
 
-            for relation, count in ground_truth_relations.items():
+            for _relation, count in ground_truth_relations.items():
                 ground_truth_relation_counter[node1] += count
                 ground_truth_relation_counter[node2] += count
 
-            for relation, count in algorithm_relations.items():
+            for _relation, count in algorithm_relations.items():
                 algorithm_relation_counter[node1] += count
                 algorithm_relation_counter[node2] += count
 

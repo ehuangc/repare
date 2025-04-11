@@ -186,7 +186,8 @@ class Pedigree:
                         # This also handles having the correct name of the merged parents from last loop iteration
                         self.add_parent_relation(name_to_keep, child)
 
-                # Remove all occurrences of name_to_discard in its sibling's sibling sets first so that self.add_sibling_relation() does not add it back in
+                # Remove all occurrences of name_to_discard in its sibling's sibling sets first
+                # so that self.add_sibling_relation() does not add it back in
                 for sibling in self.node_to_siblings[name_to_discard]:
                     self.node_to_siblings[sibling].remove(name_to_discard)
                 for sibling in self.node_to_siblings[name_to_discard]:
@@ -235,7 +236,8 @@ class Pedigree:
         Returns True if merging Node 1 and Node 2 (and their ancestors) would result in a cycle.
         """
         # Get sets of nodes that would be merged if Node 1 and Node 2 were merged (i.e. ancestors of Node 1 and Node 2)
-        # Note that we get sets and not just pairs because of potential inbreeding (e.g. one node is both a parent and grandparent of another node)
+        # Note that we get sets and not just pairs because of potential inbreeding,
+        # for example if one node is both a parent and grandparent of another node
         merge_sets: list[set[str]] = []
         merge_queue = deque([(node1, node2)])
         while merge_queue:
@@ -389,7 +391,8 @@ class Pedigree:
                     or self.node_to_data[curr_node]["mt_haplogroup"].rstrip("*") == mt_haplogroup.rstrip("*")
                 ):
                     continue
-                # Overwrite/extend mitochondrial haplogroup if it contains a "*" and is a strict subset of the "leaf" haplogroup
+                # Overwrite/extend mitochondrial haplogroup if it contains a "*"
+                # and is a strict subset of the "leaf" haplogroup
                 if mt_haplogroup.startswith(self.node_to_data[curr_node]["mt_haplogroup"].rstrip("*")):
                     self.node_to_data[curr_node]["mt_haplogroup"] = (
                         mt_haplogroup if mt_haplogroup[-1] == "*" else mt_haplogroup + "*"
@@ -495,7 +498,7 @@ class Pedigree:
         Note: Additional relations between two nodes are allowed as long as the forced constraints are present.
         """
         for (node1, node2), degree_constraints in pair_to_relations_so_far.items():
-            for degree, constraints, force_constraints in degree_constraints:
+            for _, constraints, force_constraints in degree_constraints:
                 if force_constraints and not self.is_relation_in_pedigree(node1, node2, constraints.split(";")):
                     return False
         return True
@@ -508,9 +511,11 @@ class Pedigree:
     ) -> tuple[int, list[tuple[str, str, str]]]:
         """
         Validates this tree based on the input relation data.
-        If check_half_siblings is False, don't check for extraneous half-sibling relations because the 2 non-shared parents might be merged later.
+        If check_half_siblings is False, don't check for extraneous half-sibling relations
+        because the 2 non-shared parents might be merged later.
         Returns count of inconsistencies with the input data as well as a log of the inconsistencies.
-        Note: pair_to_constraints values must be sorted by increasing length so that specific constraints are checked first.
+        Note: pair_to_constraints values must be sorted by increasing length
+        so that specific constraints are checked first.
         """
         for node1, node2 in pair_to_constraints:
             # Ensure no duplicate/symmetric entries
@@ -606,8 +611,10 @@ class Pedigree:
                 validate_relation(half_sibling1, half_sibling2, "paternal half-siblings", strike_log)
 
         # Check for "dropped" input relations
-        # Note: We use constrained relations instead of all relations because we want to catch half-siblings that explicitly should be some other relation even when check_half_siblings is False
-        # The purpose of check_half_siblings is to avoid marking *incidental* half-siblings, not half-siblings that should be something else
+        # Note: We use constrained relations instead of all relations because we want to catch half-siblings
+        # that explicitly should be some other relation even when check_half_siblings is False
+        # The purpose of check_half_siblings is to avoid marking *incidental* half-siblings,
+        # not half-siblings that should be something else
         for (node1, node2), degrees_constraints in pair_to_relations_so_far.items():
             # If only one input relation between these two nodes, simple check is much faster
             if len(degrees_constraints) == 1:
@@ -913,7 +920,8 @@ class Pedigree:
     ) -> list[tuple[str, str]]:
         """
         Gets all (aunt/uncle, nephew/niece) pairs in the tree.
-        Includes duplicates if, for example, shared_relative_sex=None and an aunt is both a maternal and paternal aunt to a nephew (i.e., full-sib mating).
+        Includes duplicates if, for example, shared_relative_sex=None and an aunt is
+        both a maternal and paternal aunt to a nephew (i.e., full-sib mating).
         """
         aunt_uncle_nephew_niece_pairs: list[tuple[str, str]] = []
         for parent, child in self.get_parent_child_pairs():

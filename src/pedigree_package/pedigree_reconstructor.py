@@ -78,7 +78,8 @@ class PedigreeReconstructor:
             for haplogroup in self._node_data[haplogroup_column]:
                 if "*" in haplogroup[:-1]:
                     raise ValueError(
-                        "Expandable haplogroups should contain one trailing asterisk. No other asterisks are allowed in haplogroups."
+                        "Expandable haplogroups should contain one trailing asterisk. "
+                        "No other asterisks are allowed in haplogroups."
                     )
 
         if not self._node_data["can_have_children"].isin(["True", "False", ""]).all():
@@ -224,9 +225,28 @@ class PedigreeReconstructor:
 
         # Note: We don't use maternal/paternal 3rd-degree relations because those are not well-defined
         self._DEFAULT_CONSTRAINTS = {
-            "1": "parent-child;child-parent;siblings",
-            "2": "maternal aunt/uncle-nephew/niece;maternal nephew/niece-aunt/uncle;paternal aunt/uncle-nephew/niece;paternal nephew/niece-aunt/uncle;maternal grandparent-grandchild;maternal grandchild-grandparent;paternal grandparent-grandchild;paternal grandchild-grandparent;maternal half-siblings;paternal half-siblings",
-            "3": "half aunt/uncle-half nephew/niece;half nephew/niece-half aunt/uncle;greatgrandparent-greatgrandchild;greatgrandchild-greatgrandparent;grandaunt/granduncle-grandnephew/grandniece;grandnephew/grandniece-grandaunt/granduncle;first cousins",
+            "1": ("parent-child;child-parent;siblings"),
+            "2": (
+                "maternal aunt/uncle-nephew/niece;"
+                "maternal nephew/niece-aunt/uncle;"
+                "paternal aunt/uncle-nephew/niece;"
+                "paternal nephew/niece-aunt/uncle;"
+                "maternal grandparent-grandchild;"
+                "maternal grandchild-grandparent;"
+                "paternal grandparent-grandchild;"
+                "paternal grandchild-grandparent;"
+                "maternal half-siblings;"
+                "paternal half-siblings"
+            ),
+            "3": (
+                "half aunt/uncle-half nephew/niece;"
+                "half nephew/niece-half aunt/uncle;"
+                "greatgrandparent-greatgrandchild;"
+                "greatgrandchild-greatgrandparent;"
+                "grandaunt/granduncle-grandnephew/grandniece;"
+                "grandnephew/grandniece-grandaunt/granduncle;"
+                "first cousins"
+            ),
         }
 
         def fill_constraints(row: pd.Series) -> pd.Series:
@@ -322,7 +342,9 @@ class PedigreeReconstructor:
                 else:
                     self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=True)
                 logger.info(
-                    f"Remaining pedigrees after pruning: {len(self._candidate_pedigrees)}\t\tElapsed: {round(time.time() - self._start_time, 1)} s\n"
+                    f"Remaining pedigrees after pruning: {len(self._candidate_pedigrees)}"
+                    "\t\tElapsed: "
+                    f"{round(time.time() - self._start_time, 1)} s\n"
                 )
 
             if not self._final_pedigrees:
@@ -355,7 +377,8 @@ class PedigreeReconstructor:
                 pygraphviz_found = True
             except ImportError:
                 logger.warning(
-                    "PyGraphviz (https://pygraphviz.github.io/) must be installed to plot pedigrees. Skipping plotting of reconstructed pedigree(s)."
+                    "PyGraphviz (https://pygraphviz.github.io/) must be installed to plot pedigrees. "
+                    "Skipping plotting of reconstructed pedigree(s)."
                 )
                 pygraphviz_found = False
 
@@ -655,7 +678,8 @@ class PedigreeReconstructor:
     def _get_pair_to_constraints(self) -> defaultdict[tuple[str, str], list[tuple[str, ...]]]:
         """
         Turn DataFrame of relations/constraints into dict(s) of {node pairs: list of possible relations}.
-        Dict values are lists of tuples (as opposed to just tuples) because a pair of nodes can share more than 1 relation.
+        Dict values are lists of tuples (as opposed to just tuples)
+        because a pair of nodes can share more than 1 relation.
         """
         pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]] = defaultdict(list)
         for node1, node2, _, constraints, _ in self._all_relations.itertuples(index=False):
@@ -669,7 +693,8 @@ class PedigreeReconstructor:
         self, processed_relations: pd.DataFrame
     ) -> defaultdict[tuple[str, str], list[tuple[str, str, bool]]]:
         """
-        Turn DataFrame of relations/constraints processed so far into dict(s) of {node pairs: list of (degree, constraints) tuples}.
+        Turn DataFrame of relations/constraints processed so far
+        into dict(s) of {node pairs: list of (degree, constraints) tuples}.
         """
         pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]] = defaultdict(list)
         for node1, node2, degree, constraints, force_constraints in processed_relations.itertuples(index=False):
