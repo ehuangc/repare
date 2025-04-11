@@ -251,19 +251,17 @@ class PedigreeReconstructor:
         self._sample_pedigree = self._final_pedigrees[sample_idx]
         self._sample_strike_count = self._final_strike_counts[sample_idx]
         self._sample_strike_log = self._final_strike_logs[sample_idx]
-        sample_relations_path = os.path.join(self._outputs_dir, "sample_corrected_relations.csv")
-        sample_plot_path = os.path.join(self._outputs_dir, "sample_pedigree.png")
-        self._write_corrected_relations(self._sample_strike_count, self._sample_strike_log, sample_relations_path)
-        self._sample_pedigree.plot(path=sample_plot_path)
+        self._write_corrected_input_relations(self._sample_strike_count, self._sample_strike_log, os.path.join(self._outputs_dir, "sample_corrected_input_relations.csv"))
+        self._sample_pedigree.write_exact_relations(os.path.join(self._outputs_dir, "sample_exact_relations.csv"))
+        self._sample_pedigree.plot(os.path.join(self._outputs_dir, "sample_pedigree.png"))
 
         # Write corrected relations of alternate final pedigrees
         if self._write_alternate_pedigrees:
             os.makedirs(os.path.join(self._outputs_dir, "alternate_pedigrees"), exist_ok=True)
             for idx, (pedigree, strike_count, strike_log) in enumerate(zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs)):
-                relations_path = os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_corrected_relations.csv")
-                plot_path = os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}.png")
-                self._write_corrected_relations(strike_count, strike_log, relations_path)
-                pedigree.plot(path=plot_path)
+                self._write_corrected_input_relations(strike_count, strike_log, os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_corrected_input_relations.csv"))
+                pedigree.write_exact_relations(os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_exact_relations.csv"))
+                pedigree.plot(os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}.png"))
         return self._sample_pedigree
 
     def _add_relation(self, node1: str, node2: str, degree: str, constraints: str, force_constraints: bool) -> None:
@@ -567,9 +565,9 @@ class PedigreeReconstructor:
                 self._final_strike_logs.append(strike_log)
                 pedigree.clean_up_relations()
 
-    def _write_corrected_relations(self, strike_count: int, strike_log: list[tuple[str, str, str]], path: str) -> None:
+    def _write_corrected_input_relations(self, strike_count: int, strike_log: list[tuple[str, str, str]], path: str) -> None:
         """
-        Write corrected relations to file.
+        Write corrected input relations to file. Includes information about added/removed/changed input relations.
         """
         added_relations = []
         removed_relations = []

@@ -965,3 +965,20 @@ class Pedigree:
         plt.axis("off")
         plt.savefig(path, bbox_inches="tight")
         plt.close()
+
+    def write_exact_relations(self, path: str) -> None:
+        """
+        Write the exact relations in the pedigree to a file.
+        """
+        non_placeholder_nodes = sorted(self.get_non_placeholder_nodes())
+        with open(path, "w") as file:
+            file.write("node1,node2,relation\n")
+            for i in range(len(non_placeholder_nodes)):
+                for j in range(i + 1, len(non_placeholder_nodes)):
+                    node1 = non_placeholder_nodes[i]
+                    node2 = non_placeholder_nodes[j]
+
+                    pair_relations = self.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
+                    for relation, count in pair_relations.items():
+                        for _ in range(count):
+                            file.write(f"{node1},{node2},{relation}\n")
