@@ -247,7 +247,7 @@ class PedigreeReconstructor:
             logger.error(f"No valid pedigree found after {self._MAX_RUNS} runs. Exiting.")
             raise RuntimeError(f"No valid pedigree found after {self._MAX_RUNS} runs.")
 
-        # Write sample corrected relations and plot
+        # Plot and write outputs of sample pedigree
         sample_idx = random.randint(0, len(self._final_pedigrees) - 1)
         self._sample_pedigree = self._final_pedigrees[sample_idx]
         self._sample_strike_count = self._final_strike_counts[sample_idx]
@@ -257,7 +257,7 @@ class PedigreeReconstructor:
         if self._plot:
             self._sample_pedigree.plot(os.path.join(self._outputs_dir, "reconstructed_pedigree.png"))
 
-        # Write corrected relations of alternate final pedigrees
+        # Plot and write outputs of alternate pedigrees
         if self._write_alternate_pedigrees:
             os.makedirs(os.path.join(self._outputs_dir, "alternate_pedigrees"), exist_ok=True)
             for idx, (pedigree, strike_count, strike_log) in enumerate(zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs)):
