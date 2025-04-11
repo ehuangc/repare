@@ -23,12 +23,16 @@ def parse_arguments():
         "--max_candidate_pedigrees",
         type=int,
         default=1000,
-        help="Number of pedigrees to keep after each iteration. Default is 100.",
+        help="Number of pedigrees to keep after each iteration. Defaults to 1000.",
     )
     parser.add_argument(
-        "-e", "--epsilon", type=float, default=0.2, help="Epsilon value for the simulation. Default is 0.2."
+        "-e",
+        "--epsilon",
+        type=float,
+        default=0.2,
+        help="Parameter for adapted epsilon-greedy sampling at the end of each algorithm iteration. Defaults to 0.2.",
     )
-    parser.add_argument("-s", "--seed", type=int, default=42, help="Random seed for reproducibility. Default is 42.")
+    parser.add_argument("-s", "--seed", type=int, default=42, help="Random seed for reproducibility. Defaults to 42.")
     parser.add_argument("-d", "--do_not_plot", action="store_false", help="Do not plot reconstructed pedigree(s).")
     parser.add_argument(
         "-w", "--write_alternates", action="store_true", help="Write outputs of alternate pedigrees to disk."
