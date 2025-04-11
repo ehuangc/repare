@@ -20,14 +20,17 @@ class SimulatedPedigree:
         self._ground_truth_pedigree = Pedigree()
         self._y_haplogroup_pool = ["a", "b"]
         self._mt_haplogroup_pool = ["a", "b", "c", "d", "e"]
-        self._p_can_have_children = 0.6  # "True" value, will be more conservative when writing node data
+        # "True" value, will be more conservative when writing node data
+        self._p_can_have_children = 0.6
         self._mean_children_per_mate = 2
         self._sd_children_per_mate = 1
         self._num_generations = 4
         self._generation_zero_size = 3
 
-        self._p_mask_node = p_mask_node  # Probability that a node will be masked (i.e., not included in node data)
-        self._error_rate_scale = error_rate_scale  # Scale to apply to relation classification error rates
+        # Probability that a node will be masked (i.e., not included in node data)
+        self._p_mask_node = p_mask_node
+        # Scale to apply to relation classification error rates
+        self._error_rate_scale = error_rate_scale
 
         if p_mask_node < 0 or p_mask_node > 1:
             raise ValueError("p_mask_node must be between 0 and 1.")
@@ -35,8 +38,10 @@ class SimulatedPedigree:
             raise ValueError("error_rate_scale must be non-negative.")
 
         self._node_count = 0
-        self._generation_to_nodes = defaultdict(set)  # Maps generation number to set of node IDs
-        self._node_to_generation = {}  # Maps node ID to generation number
+        # Maps generation number to set of node IDs
+        self._generation_to_nodes = defaultdict(set)
+        # Maps node ID to generation number
+        self._node_to_generation = {}
         self._random_seed = random_seed
         random.seed(self._random_seed)
 
@@ -58,7 +63,8 @@ class SimulatedPedigree:
             self._create_node(generation=0)
 
         for generation in range(self._num_generations - 1):
-            for node in sorted(self._generation_to_nodes[generation]):  # 1) Make copy so iterator doesn't change size, 2) Sort to ensure deterministic results
+            # 1) Make copy so iterator doesn't change size, 2) Sort to ensure deterministic results
+            for node in sorted(self._generation_to_nodes[generation]):
                 if self._ground_truth_pedigree.node_to_data[node]["can_have_children"]:
                     self._create_children(node)
 
@@ -94,7 +100,8 @@ class SimulatedPedigree:
         # Parent 2 is either an existing node or is an "outside" node
         parent2 = None
         parent2_sex = "F" if parent1_sex == "M" else "M"
-        if random.random() < 0.25:  # Existing mate
+        if random.random() < 0.25:
+            # Existing mate
             potential_mates = []
             for node in self._ground_truth_pedigree.node_to_data.keys():
                 if node != parent1 and self._ground_truth_pedigree.node_to_data[node]["can_have_children"] and 0 <= parent1_generation - self._node_to_generation[node] <= 1:
@@ -106,7 +113,8 @@ class SimulatedPedigree:
                 parent2 = random.choice(potential_mates)
             else:
                 parent2 = self._create_node(generation=parent1_generation, sex=parent2_sex, can_have_children=True)
-        else:  # Outside mate
+        else:
+            # Outside mate
             parent2 = self._create_node(generation=parent1_generation, sex=parent2_sex, can_have_children=True)
 
         child_generation = max(parent1_generation, self._node_to_generation[parent2]) + 1
@@ -149,7 +157,8 @@ class SimulatedPedigree:
             if (father, mother) not in pedigree_relation_pairs and (mother, father) not in pedigree_relation_pairs and random.random() < 0.5:
                 can_be_inbred = "False"
             
-            years_before_present = math.nan  # Conservatively do not set sample age
+            # Conservatively do not set sample age
+            years_before_present = math.nan
             nodes_list.append((node, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred, years_before_present))
         return pd.DataFrame(nodes_list, columns=["id", "sex", "y_haplogroup", "mt_haplogroup", "can_have_children", "can_be_inbred", "years_before_present"])
 
@@ -245,7 +254,8 @@ class SimulatedPedigree:
                                   ])
         self._ground_truth_pedigree.clean_up_relations()
         self._ground_truth_nodes_df = nodes_df.copy()
-        self._ground_truth_relations_df = relations_df[relations_df["degree"] != "Unrelated"].copy()  # Remove unrelated entries
+        # Remove unrelated entries
+        self._ground_truth_relations_df = relations_df[relations_df["degree"] != "Unrelated"].copy()
 
         nodes_to_mask = [node for node in nodes_df["id"] if random.random() < self._p_mask_node]
         nodes_df = nodes_df.loc[~nodes_df["id"].isin(nodes_to_mask)]
@@ -273,10 +283,12 @@ class SimulatedPedigree:
             return pd.Series({"id1": node1, "id2": node2, "degree": new_degree, "constraints": new_constraints})
 
         relations_df = relations_df.apply(corrupt_relation, axis=1)
-        relations_df = relations_df[relations_df["degree"] != "Unrelated"]  # Remove unrelated entries
+        # Remove unrelated entries
+        relations_df = relations_df[relations_df["degree"] != "Unrelated"]
 
         empty_iters = 0
-        while len(nodes_df) < 2 or len(relations_df) < 1:  # Ensure at least 2 nodes and 1 relation in input data
+        # Ensure at least 2 nodes and 1 relation in input data
+        while len(nodes_df) < 2 or len(relations_df) < 1:
             relations_df = self._ground_truth_relations_df.sample(n=1, axis=0, random_state=empty_iters)
             relations_df.apply(corrupt_relation, axis=1)
             nodes = relations_df["id1"].tolist() + relations_df["id2"].tolist()

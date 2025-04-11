@@ -48,7 +48,8 @@ class Pedigree:
         result: list[str] = []
         # DFS
         def visit(node: str) -> None:
-            if not self.node_to_father[node]:  # No father == no mother
+            # No father == no mother
+            if not self.node_to_father[node]:
                 assert not self.node_to_mother[node]
                 result.append(node)
             else:
@@ -59,7 +60,8 @@ class Pedigree:
 
         for node in leaf_nodes:
             visit(node)
-            result.append("")  # Break between each node's path
+            # Break between each node's path
+            result.append("")
 
         # Re-label placeholder nodes
         placeholder_to_idx: dict[str, int] = {}
@@ -70,7 +72,8 @@ class Pedigree:
                 mt_haplogroup = self.node_to_data[node]["mt_haplogroup"]
                 if self.node_to_data[node]["sex"] == "M":
                     y_haplogroup = self.node_to_data[node]["y_haplogroup"]
-                    result[i] = f"M {placeholder_to_idx[node]} {mt_haplogroup} {y_haplogroup}" # Unique identifier for placeholder
+                    # Unique identifier for placeholder
+                    result[i] = f"M {placeholder_to_idx[node]} {mt_haplogroup} {y_haplogroup}"
                 else:
                     result[i] = f"F {placeholder_to_idx[node]} {mt_haplogroup}"
         return tuple(result)
@@ -106,7 +109,8 @@ class Pedigree:
 
         # Add any sibling relations that are created
         node2_parents = [self.node_to_father[node2], self.node_to_mother[node2]]
-        if node2_parents[0] and node2_parents[1]:  # Make sure Node 2 has 2 known parents
+        # Make sure Node 2 has 2 known parents
+        if node2_parents[0] and node2_parents[1]:
             for node1_child in self.node_to_children[node1]:
                 if node1_child != node2 and [self.node_to_father[node1_child], self.node_to_mother[node1_child]] == node2_parents:
                     self.add_sibling_relation(node1_child, node2)
@@ -140,7 +144,8 @@ class Pedigree:
         """
         assert node1 in self.node_to_data and node2 in self.node_to_data
 
-        pair_queue: deque[tuple[str, str]] = deque([(node1, node2)])  # Pairs of nodes to merge
+        # Pairs of nodes to merge
+        pair_queue: deque[tuple[str, str]] = deque([(node1, node2)])
         while pair_queue:
             node1, node2 = pair_queue.popleft()
             if node1 != node2:
@@ -156,13 +161,15 @@ class Pedigree:
                     self.node_to_children[name_to_discard_mother].remove(name_to_discard)
 
                 for child in self.node_to_children[name_to_discard]:
-                    if name_to_keep == child:  # Merging a parent and child - we will see this when there is inbreeding
+                    # Merging a parent and child - we will see this when there is inbreeding
+                    if name_to_keep == child:
                         if self.node_to_data[name_to_keep]["sex"] == "M":
                             del self.node_to_father[name_to_keep]
                         else:
                             del self.node_to_mother[name_to_keep]
                     else:
-                        self.add_parent_relation(name_to_keep, child)  # This also handles having the correct name of the merged parents from last loop iteration
+                        # This also handles having the correct name of the merged parents from last loop iteration
+                        self.add_parent_relation(name_to_keep, child)
                 
                 # Remove all occurrences of name_to_discard in its sibling's sibling sets first so that self.add_sibling_relation() does not add it back in
                 for sibling in self.node_to_siblings[name_to_discard]:
@@ -182,7 +189,8 @@ class Pedigree:
                     if father2 == name_to_keep:
                         del self.node_to_father[name_to_keep]
                     else:
-                        self.add_parent_relation(father2, name_to_keep)  # Switch name_to_keep's father to name_to_discard's father
+                        # Switch name_to_keep's father to name_to_discard's father
+                        self.add_parent_relation(father2, name_to_keep)
                 if mother1 and mother2:
                     pair_queue.append((mother1, mother2))
                 elif mother2:
@@ -217,7 +225,8 @@ class Pedigree:
         merge_queue = deque([(node1, node2)])
         while merge_queue:
             curr_node1, curr_node2 = merge_queue.popleft()
-            if curr_node1 != curr_node2:  # Update merge sets
+            # Update merge sets
+            if curr_node1 != curr_node2:
                 updated = False
                 for merge_set in merge_sets:
                     if curr_node1 in merge_set or curr_node2 in merge_set:
@@ -273,7 +282,8 @@ class Pedigree:
         # Check for cycles starting from each node
         for node in self.node_to_data:
             if dfs(node):
-                return True  # Cycle detected
+                # Cycle detected
+                return True
         return False
 
     def fill_node_parents(self, node: str) -> None:
@@ -404,7 +414,8 @@ class Pedigree:
         def visit(node: str, curr_years_before_present: float) -> None:
             years_before_present = self.node_to_data[node]["years_before_present"]
             if not math.isnan(years_before_present):
-                if years_before_present < curr_years_before_present:  # Node postdates its descendants
+                # Node postdates its descendants
+                if years_before_present < curr_years_before_present:
                     return False
                 else:
                     curr_years_before_present = years_before_present
@@ -441,8 +452,10 @@ class Pedigree:
         Note: pair_to_constraints values must be sorted by increasing length so that specific constraints are checked first.
         """
         for (node1, node2) in pair_to_constraints:
-            assert (node2, node1) not in pair_to_constraints  # Ensure no duplicate/symmetric entries
-        pair_to_constraints_seen_entries: defaultdict[tuple[str, str], set[int]] = defaultdict(set)  # Marks which entries in pair_to_constraints have been seen/used
+            # Ensure no duplicate/symmetric entries
+            assert (node2, node1) not in pair_to_constraints
+        # Marks which entries in pair_to_constraints have been seen/used
+        pair_to_constraints_seen_entries: defaultdict[tuple[str, str], set[int]] = defaultdict(set)
 
         def is_relation_in_input_data(node1: str, node2: str, relation: str) -> bool:
             if (node1, node2) in pair_to_constraints:
@@ -514,7 +527,8 @@ class Pedigree:
         # Note: We use constrained relations instead of all relations because we want to catch half-siblings that explicitly should be some other relation even when check_half_siblings is False
         # The purpose of check_half_siblings is to avoid marking *incidental* half-siblings, not half-siblings that should be something else
         for (node1, node2), degrees_constraints in pair_to_relations_so_far.items():
-            if len(degrees_constraints) == 1:  # If only one input relation between these two nodes, simple check is much faster
+            # If only one input relation between these two nodes, simple check is much faster
+            if len(degrees_constraints) == 1:
                 degree, constraints, _ = degrees_constraints[0]
                 if not self.is_relation_in_pedigree(node1, node2, constraints.split(";")):
                     strike_log.append((node1, node2, f"-{degree}", constraints))
@@ -555,8 +569,10 @@ class Pedigree:
         Used as a "tie-breaker" for 1st- and 2nd-degree inconsistences.
         """
         for (node1, node2) in pair_to_constraints:
-            assert (node2, node1) not in pair_to_constraints  # Ensure no duplicate/symmetric entries
-        pair_to_constraints_seen_entries: defaultdict[tuple[str, str], set[int]] = defaultdict(set)  # Marks which entries in pair_to_constraints have been seen/used
+            # Ensure no duplicate/symmetric entries
+            assert (node2, node1) not in pair_to_constraints
+        # Marks which entries in pair_to_constraints have been seen/used
+        pair_to_constraints_seen_entries: defaultdict[tuple[str, str], set[int]] = defaultdict(set)
 
         def is_relation_in_input_data(node1: str, node2: str, relation: str) -> bool:
             if (node1, node2) in pair_to_constraints:
@@ -762,7 +778,8 @@ class Pedigree:
         for sibling1 in self.node_to_siblings:
             for sibling2 in self.node_to_siblings[sibling1]:
                 if include_placeholders or (not sibling1.isnumeric() and not sibling2.isnumeric()):
-                    if (sibling2, sibling1) not in sibling_pairs:  # Don't add symmetric duplicates
+                    # Don't add symmetric duplicates
+                    if (sibling2, sibling1) not in sibling_pairs:
                         sibling_pairs.append((sibling1, sibling2))
         return sibling_pairs
 
@@ -802,7 +819,8 @@ class Pedigree:
                 if child != other_child and other_child not in self.node_to_siblings[child]:
                     if not shared_relative_sex or self.node_to_data[parent]["sex"] == shared_relative_sex:
                         if include_placeholders or (not child.isnumeric() and not other_child.isnumeric()):
-                            if (other_child, child) not in half_sibling_pairs:  # Don't add symmetric duplicates
+                            # Don't add symmetric duplicates
+                            if (other_child, child) not in half_sibling_pairs:
                                 half_sibling_pairs.append((child, other_child))
         return half_sibling_pairs
 
@@ -853,7 +871,8 @@ class Pedigree:
         for aunt_uncle, child in self.get_aunt_uncle_nephew_niece_pairs():
             for aunt_uncle_child in self.node_to_children[aunt_uncle]:
                 if include_placeholders or (not child.isnumeric() and not aunt_uncle_child.isnumeric()):
-                    if aunt_uncle_child != child and (aunt_uncle_child, child) not in cousin_pairs:  # Don't add symmetric duplicates
+                    # Don't add symmetric duplicates
+                    if aunt_uncle_child != child and (aunt_uncle_child, child) not in cousin_pairs:
                         cousin_pairs.append((child, aunt_uncle_child))
         return cousin_pairs
 
@@ -925,7 +944,8 @@ class Pedigree:
             raise ImportError("Plotting pedigree requires PyGraphviz (https://pygraphviz.github.io/).") from err
 
         tree = nx.from_dict_of_lists(self.node_to_children, create_using=nx.DiGraph)
-        for node in self.node_to_data:  # Add childless nodes
+        # Add childless nodes
+        for node in self.node_to_data:
             if node not in tree.nodes:
                 tree.add_node(node)
         male_named_nodes = [node for node in self.node_to_data if self.node_to_data[node]["sex"] == "M" and not node.isnumeric()]
@@ -956,8 +976,10 @@ class Pedigree:
         female_named_node_colors = [mt_haplogroup_to_color[self.node_to_data[node]["mt_haplogroup"]] for node in female_named_nodes]
 
         plt.figure(figsize=(12, 4.8), dpi=1200)
-        node_size = min(1000, 10000 / len(tree.nodes))  # Scale sizes based on pedigree node count
-        font_size = max(min(4.5, 150 / len(tree.nodes)), 1)  # Matplotlib doesn't allow font size less than 1
+        # Scale sizes based on pedigree node count
+        node_size = min(1000, 10000 / len(tree.nodes))
+        # Matplotlib doesn't allow font size less than 1
+        font_size = max(min(4.5, 150 / len(tree.nodes)), 1)
 
         pos = nx.nx_agraph.graphviz_layout(tree, prog="dot")
         nx.draw_networkx_nodes(tree, pos=pos, nodelist=male_named_nodes, node_shape="s", node_size=node_size, node_color=male_named_node_colors, edgecolors="black", linewidths=0.2)
