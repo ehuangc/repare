@@ -255,7 +255,12 @@ class PedigreeReconstructor:
         self._write_corrected_input_relations(self._sample_strike_count, self._sample_strike_log, os.path.join(self._outputs_dir, "corrected_input_relations.csv"))
         self._sample_pedigree.write_exact_relations(os.path.join(self._outputs_dir, "reconstructed_exact_relations.csv"))
         if self._plot:
-            self._sample_pedigree.plot(os.path.join(self._outputs_dir, "reconstructed_pedigree.png"))
+            try:
+                self._sample_pedigree.plot(os.path.join(self._outputs_dir, "reconstructed_pedigree.png"))
+                pygraphviz_found = True
+            except ImportError:
+                logger.warning("PyGraphviz (https://pygraphviz.github.io/) must be installed to plot pedigrees. Skipping plotting of reconstructed pedigree(s).")
+                pygraphviz_found = False
 
         # Plot and write outputs of alternate pedigrees
         if self._write_alternate_pedigrees:
@@ -263,7 +268,7 @@ class PedigreeReconstructor:
             for idx, (pedigree, strike_count, strike_log) in enumerate(zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs)):
                 self._write_corrected_input_relations(strike_count, strike_log, os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_corrected_input_relations.csv"))
                 pedigree.write_exact_relations(os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_exact_relations.csv"))
-                if self._plot:
+                if self._plot and pygraphviz_found:
                     pedigree.plot(os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}.png"))
         return self._sample_pedigree
 

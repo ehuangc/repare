@@ -919,6 +919,11 @@ class Pedigree:
         """
         Plot the pedigree to the given path.
         """
+        try:
+            import pygraphviz
+        except ImportError as err:
+            raise ImportError("Plotting pedigree requires PyGraphviz (https://pygraphviz.github.io/).") from err
+
         tree = nx.from_dict_of_lists(self.node_to_children, create_using=nx.DiGraph)
         for node in self.node_to_data:  # Add childless nodes
             if node not in tree.nodes:
