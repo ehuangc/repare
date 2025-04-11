@@ -298,7 +298,7 @@ class SimulatedPedigree:
             pedigree_reconstructor = PedigreeReconstructor(relations_path, 
                                                            nodes_path, 
                                                            outputs_dir,
-                                                           sample_count=100,
+                                                           max_candidate_pedigrees=100,
                                                            random_seed=self._random_seed)
             try:
                 self._algorithm_pedigree = pedigree_reconstructor.find_best_pedigree()
