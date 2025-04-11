@@ -4,13 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "repare"
-dynamic = ["version"]
-dependencies = [
-    "pandas",
-    "networkx",
-    "tqdm",
-    "matplotlib",
+authors = [
+  {name="Edward Huang", email="edwardhuang02@gmail.com"},
 ]
+description = "Reconstruct ancient pedigrees."
+dynamic = ["version"]
+requires-python = ">= 3.10"
+dependencies = [
+    "matplotlib",
+    "networkx",
+    "pandas",
+    "tqdm",
+]
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 
 [project.optional-dependencies]
 benchmark = ["scikit-learn", "seaborn"]
