@@ -23,22 +23,26 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
 
 *Nodes (-n, required)*: Path to a CSV file that contains information about the individuals to be analyzed by repare. 
 
-> *Nodes CSV file columns*
-> - **id** (required): ID of individual. Cannot be fully numeric, as numeric IDs are reserved for placeholder nodes.
-> - **sex** (required): Genetic sex of individual.
-> - **y_haplogroup** (required): Y chromosome haplogroup of individual. Can include "*" as a wildcard expansion character at the end if haplogroup is not fully inferred.
-> - **mt_haplogroup** (required): Mitochondrial haplogroup of individual. Can include "*" as a wildcard expansion character at the end if haplogroup is not fully inferred.
-> - **can_have_children** (optional): Whether the individual *can* have offspring (e.g., as indicated by age of death). Defaults to "True".
-> - **can_be_inbred** (optional): Whether the individual *can* have parents related at the 3rd-degree or closer (e.g., as indicated by ROH). Defaults to "True".
-> - **years_before_present** (optional): (Approximate) date of birth of individual, in years before present. If provided, will be used to prune temporally invalid pedigrees. *This column should only be used when backed by strong dating evidence.*
+<details open>
+    <summary>Nodes CSV file columns</summary>
+    > - **id** (required): ID of individual. Cannot be fully numeric, as numeric IDs are reserved for placeholder nodes.
+    > - **sex** (required): Genetic sex of individual.
+    > - **y_haplogroup** (required): Y chromosome haplogroup of individual. Can include "*" as a wildcard expansion character at the end if haplogroup is not fully inferred.
+    > - **mt_haplogroup** (required): Mitochondrial haplogroup of individual. Can include "*" as a wildcard expansion character at the end if haplogroup is not fully inferred.
+    > - **can_have_children** (optional): Whether the individual *can* have offspring (e.g., as indicated by age of death). Defaults to "True".
+    > - **can_be_inbred** (optional): Whether the individual *can* have parents related at the 3rd-degree or closer (e.g., as indicated by ROH). Defaults to "True".
+    > - **years_before_present** (optional): (Approximate) date of birth of individual, in years before present. If provided, will be used to prune temporally invalid pedigrees. *This column should only be used when backed by strong dating evidence.*
+</details>
 
 *Relations (-r, required)*: Path to a CSV file that contains information about inferred pairwise kinship relations. All individuals included in this file must be specified in the nodes CSV.
 
-> *Relations CSV file columns*
-> - **id1** (required): ID of individual 1.
-> - **id2** (required): ID of individual 2.
-> - **degree** (required): Degree of (inferred) kinship relation between individual 1 and individual 2. Must be "1", "2", or "3". Higher-degree relatives are considered unrelated.
-> - **constraints** (optional): Semicolon-delimited list of possible configurations of kinship relation. For example, a parental 1st-degree relation can be constrained with "parent-child;child-parent". Many kinship inference methods will classify 1st-degree relation types, which can be used as relation constraints.
+<details open>
+    <summary>Relations CSV file columns</summary>
+    > - **id1** (required): ID of individual 1.
+    > - **id2** (required): ID of individual 2.
+    > - **degree** (required): Degree of (inferred) kinship relation between individual 1 and individual 2. Must be "1", "2", or "3". Higher-degree relatives are considered unrelated.
+    > - **constraints** (optional): Semicolon-delimited list of possible configurations of kinship relation. For example, a parental 1st-degree relation can be constrained with "parent-child;child-parent". Many kinship inference methods will classify 1st-degree relation types, which can be used as relation constraints.
+</details>
 
 *Output (-o, optional)*: Path to directory for saving repare outputs. Defaults to the current working directory.
 
