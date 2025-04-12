@@ -21,20 +21,35 @@ We recommend using repare as a command-line interface.
 repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILON] [-s SEED] [-d] [-w] [-v]
 ```
 
-**Nodes (-n, required)**: path to a CSV file that contains information about the individuals to be analyzed by repare.
+*Nodes (-n, required)*: Path to a CSV file that contains information about the individuals to be analyzed by repare. 
 
-**Relations (-r, required)**: path to a CSV file that contains information about inferred pairwise kinship relations. All individuals included in this file must be specified in the nodes CSV.
+> *Nodes CSV file columns*
+> - **id** (required): ID of individual. Cannot be fully numeric, as numeric IDs are reserved for placeholder nodes.
+> - **sex** (required): Genetic sex of individual.
+> - **y_haplogroup** (required): Y chromosome haplogroup of individual. Can include "*" as a wildcard expansion character at the end if haplogroup is not fully inferred.
+> - **mt_haplogroup** (required): Mitochondrial haplogroup of individual. Can include "*" as a wildcard expansion character at the end if haplogroup is not fully inferred.
+> - **can_have_children** (optional): Whether the individual *can* have offspring (e.g., as indicated by age of death). Defaults to "True".
+> - **can_be_inbred** (optional): Whether the individual *can* have parents related at the 3rd-degree or closer (e.g., as indicated by ROH). Defaults to "True".
+> - **years_before_present** (optional): (Approximate) date of birth of individual, in years before present. If provided, will be used to prune temporally invalid pedigrees. *This column should only be used when backed by strong dating evidence.*
 
-**Output (-o, optional)**: path to directory for saving repare outputs. Defaults to the current working directory.
+*Relations (-r, required)*: Path to a CSV file that contains information about inferred pairwise kinship relations. All individuals included in this file must be specified in the nodes CSV.
 
-**Max Candidate Pedigrees (-m, optional)**: maximum number of candidate pedigrees to keep after each algorithm iteration. Defaults to 1000.
+> *Relations CSV file columns*
+> - **id1** (required): ID of individual 1.
+> - **id2** (required): ID of individual 2.
+> - **degree** (required): Degree of (inferred) kinship relation between individual 1 and individual 2. Must be "1", "2", or "3". Higher-degree relatives are considered unrelated.
+> - **constraints** (optional): Semicolon-delimited list of possible configurations of kinship relation. For example, a parental 1st-degree relation can be constrained with "parent-child;child-parent". Many kinship inference methods will classify 1st-degree relation types, which can be used as relation constraints.
 
-**Epsilon (-e, optional)**: parameter for adapted epsilon-greedy sampling at the end of each algorithm iteration. Defaults to 0.2.
+*Output (-o, optional)*: Path to directory for saving repare outputs. Defaults to the current working directory.
 
-**Seed (-s, optional)**: random seed for reproducibility. Defaults to 42.
+*Max Candidate Pedigrees (-m, optional)*: Maximum number of candidate pedigrees to keep after each algorithm iteration. Defaults to 1000.
 
-**Do Not Plot (-d, flag)**: do not plot reconstructed pedigree(s).
+*Epsilon (-e, optional)*: Parameter for adapted epsilon-greedy sampling at the end of each algorithm iteration. Defaults to 0.2.
 
-**Write Alternate Pedigrees (-w, flag)**: write outputs for alternate reconstructed pedigrees to disk.
+*Seed (-s, optional)*: Random seed for reproducibility. Defaults to 42.
 
-**Verbose (-v, flag)**: enable verbose output (INFO-level logging).
+*Do Not Plot (-d, flag)*: If set, do not plot reconstructed pedigree(s).
+
+*Write Alternate Pedigrees (-w, flag)*: If set, write outputs for alternate reconstructed pedigrees to disk.
+
+*Verbose (-v, flag)*: If set, enable verbose output (INFO-level logging).
