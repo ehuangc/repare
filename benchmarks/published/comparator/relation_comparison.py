@@ -307,13 +307,38 @@ class RelationComparison:
             if degree:
                 pair_to_published_degree[tuple(sorted((id1, id2)))] = degree
 
+        # Map constraints to their flipped value
+        flipped_constraints = {
+            "parent-child": "child-parent",
+            "child-parent": "parent-child",
+            "maternal aunt/uncle-nephew/niece": "maternal nephew/niece-aunt/uncle",
+            "paternal aunt/uncle-nephew/niece": "paternal nephew/niece-aunt/uncle",
+            "maternal nephew/niece-aunt/uncle": "maternal aunt/uncle-nephew/niece",
+            "paternal nephew/niece-aunt/uncle": "paternal aunt/uncle-nephew/niece",
+            "maternal grandparent-grandchild": "maternal grandchild-grandparent",
+            "paternal grandparent-grandchild": "paternal grandchild-grandparent",
+            "maternal grandchild-grandparent": "maternal grandparent-grandchild",
+            "paternal grandchild-grandparent": "paternal grandparent-grandchild",
+            "siblings": "siblings",  # Symmetric
+            "maternal half-siblings": "maternal half-siblings",  # Symmetric
+            "paternal half-siblings": "paternal half-siblings",  # Symmetric
+        }
+
         pair_to_inferred_degree = {}
         pair_to_inferred_constraints = {}
         for id1, id2, degree, constraints in inferred_relations.itertuples(index=False):
             if degree == "1" or degree == "2":
                 pair_to_inferred_degree[tuple(sorted((id1, id2)))] = degree
             if constraints:
-                pair_to_inferred_constraints[tuple(sorted((id1, id2)))] = set(constraints.split(";"))
+                if id2 < id1:
+                    assert sorted((id1, id2)) == [id2, id1]
+                    # Split constraints and map each to its flipped value
+                    constraints_list = [c.strip() for c in constraints.split(";")]
+                    flipped = [flipped_constraints[c] for c in constraints_list]
+                    pair_to_inferred_constraints[tuple(sorted((id1, id2)))] = set(flipped)
+                else:
+                    assert sorted((id1, id2)) == [id1, id2]
+                    pair_to_inferred_constraints[tuple(sorted((id1, id2)))] = set(constraints.split(";"))
 
         # Compare the degree dicts
         kinship_inference_errors = 0
@@ -321,7 +346,6 @@ class RelationComparison:
             if pair not in pair_to_published_degree:
                 kinship_inference_errors += 1
                 continue
-
             published_degree = pair_to_published_degree[pair]
             if algorithm_degree != published_degree:
                 kinship_inference_errors += 1
@@ -335,8 +359,9 @@ class RelationComparison:
         for id1, id2, relation in published_exact_relations.itertuples(index=False):
             if relation == "1" or relation == "2":  # Skip "dotted lines"
                 continue
-
             pair = tuple(sorted((id1, id2)))
+            if id2 < id1:
+                relation = flipped_constraints[relation]
             if pair in pair_to_inferred_constraints and relation not in pair_to_inferred_constraints[pair]:
                 assert relation in first_degree_relations
                 kinship_inference_errors += 1
