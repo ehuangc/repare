@@ -116,6 +116,7 @@ class RelationComparison:
 
                     count -= assign_count
                     if count == 0:
+                        del relation_counts_between_nodes[uncertain_relation]
                         break
 
     def get_metrics(self) -> dict[str, float]:
