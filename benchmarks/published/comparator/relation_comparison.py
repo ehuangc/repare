@@ -355,7 +355,7 @@ class RelationComparison:
             if pair not in pair_to_inferred_degree:
                 kinship_inference_errors += 1
 
-        # Count first-degree exact relation inference errors
+        # Count within-degree relation constraint inference errors
         for id1, id2, relation in published_exact_relations.itertuples(index=False):
             if relation == "1" or relation == "2":  # Skip "dotted lines"
                 continue
@@ -363,6 +363,5 @@ class RelationComparison:
             if id2 < id1:
                 relation = flipped_constraints[relation]
             if pair in pair_to_inferred_constraints and relation not in pair_to_inferred_constraints[pair]:
-                assert relation in first_degree_relations
                 kinship_inference_errors += 1
         return kinship_inference_errors
