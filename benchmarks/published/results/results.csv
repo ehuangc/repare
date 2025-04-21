@@ -1,0 +1,6 @@
+site,relation_data,Pairwise Relation Accuracy,Relation Precision,Relation Recall,Relation F1,Pairwise Degree Accuracy,Degree Precision,Degree Recall,Degree F1,Connectivity R-squared,Kinship Inference Errors
+hazelton_north,inferred_relations_coeffs.csv,0.9865546218487395,0.8840579710144928,0.8840579710144928,0.8840579710144928,1.0,1.0,1.0,1.0,1.0,1
+hazelton_north,inferred_relations_custom.csv,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1
+nepluyevsky,inferred_relations_KIN.csv,0.9827956989247312,0.8947368421052632,0.8947368421052632,0.8947368421052632,1.0,1.0,1.0,1.0,1.0,4
+nepluyevsky,inferred_relations_custom.csv,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,4
+gurgy,inferred_relations_READv2.csv,0.9894760924273621,0.8652173913043478,0.8122448979591836,0.8378947368421051,0.9963395104095173,0.991304347826087,0.9344262295081968,0.9620253164556962,1.0,14
