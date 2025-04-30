@@ -1130,16 +1130,24 @@ class Pedigree:
         # Create colormap for MT haplogroups
         cmap = plt.get_cmap("tab20")
         mt_haplogroups = sorted(
-            set([self.node_to_data[node]["mt_haplogroup"] for node in self.node_to_data if not node.isnumeric()])
+            set(
+                [
+                    self.node_to_data[node]["mt_haplogroup"].replace("*", "")
+                    for node in self.node_to_data
+                    if not node.isnumeric()
+                ]
+            )
         )
         mt_haplogroup_to_color = {
             haplogroup: cmap(i / len(mt_haplogroups)) for i, haplogroup in enumerate(mt_haplogroups)
         }
         male_named_node_colors = [
-            mt_haplogroup_to_color[self.node_to_data[node]["mt_haplogroup"]] for node in male_named_nodes
+            mt_haplogroup_to_color[self.node_to_data[node]["mt_haplogroup"].replace("*", "")]
+            for node in male_named_nodes
         ]
         female_named_node_colors = [
-            mt_haplogroup_to_color[self.node_to_data[node]["mt_haplogroup"]] for node in female_named_nodes
+            mt_haplogroup_to_color[self.node_to_data[node]["mt_haplogroup"].replace("*", "")]
+            for node in female_named_nodes
         ]
 
         plt.figure(figsize=(12, 4.8), dpi=1200)
