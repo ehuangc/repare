@@ -71,7 +71,9 @@ def plot_results(results_dir: str) -> None:
     )
     degree_f1_heatmap_data = results_df.pivot(index="p_mask_node", columns="error_rate_scale", values="mean_degree_f1")
 
-    for heatmap_data, metric in zip([relation_f1_heatmap_data, degree_f1_heatmap_data], ["Relation F1", "Degree F1"]):
+    for heatmap_data, metric in zip(
+        [relation_f1_heatmap_data, degree_f1_heatmap_data], ["Relation F1", "Degree F1"], strict=True
+    ):
         heatmap_data = heatmap_data.sort_index(ascending=False)  # Error rate scale increases from left to right
         heatmap_data = heatmap_data.sort_index(axis=1, ascending=True)  # p(Mask Node) increases from top to bottom
         heatmap_data.rename(columns={1.0: "1.0\n(~0.5x coverage)"}, inplace=True)

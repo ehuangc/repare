@@ -386,7 +386,7 @@ class PedigreeReconstructor:
         if self._write_alternate_pedigrees:
             os.makedirs(os.path.join(self._outputs_dir, "alternate_pedigrees"), exist_ok=True)
             for idx, (pedigree, strike_count, strike_log) in enumerate(
-                zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs)
+                zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs, strict=True)
             ):
                 self._write_corrected_input_relations(
                     strike_count,
@@ -754,7 +754,9 @@ class PedigreeReconstructor:
 
             sorted_pedigrees = [
                 pedigree
-                for pedigree, _, _ in sorted(zip(pedigrees, strikes, third_degree_strikes), key=lambda x: (x[1], x[2]))
+                for pedigree, _, _ in sorted(
+                    zip(pedigrees, strikes, third_degree_strikes, strict=True), key=lambda x: (x[1], x[2])
+                )
             ]
             exploitation_max_candidate_pedigrees = int((1 - epsilon) * max_candidate_pedigrees)
             exploration_max_candidate_pedigrees = max_candidate_pedigrees - exploitation_max_candidate_pedigrees
@@ -778,7 +780,7 @@ class PedigreeReconstructor:
             # Final iteration
             best_pedigrees = [
                 pedigree
-                for pedigree, num_strikes in zip(new_potential_pedigrees, strikes)
+                for pedigree, num_strikes in zip(new_potential_pedigrees, strikes, strict=True)
                 if num_strikes == min(strikes)
             ]
             # Use 3rd-degree strikes as tiebreaker
@@ -788,7 +790,7 @@ class PedigreeReconstructor:
 
             self._final_pedigrees = [
                 pedigree
-                for pedigree, num_strikes in zip(best_pedigrees, third_degree_strikes)
+                for pedigree, num_strikes in zip(best_pedigrees, third_degree_strikes, strict=True)
                 if num_strikes == min(third_degree_strikes)
             ]
             self._final_strike_counts = []
