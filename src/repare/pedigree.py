@@ -1155,6 +1155,7 @@ class Pedigree:
         node_size = min(1000, 10000 / len(tree.nodes))
         # Matplotlib doesn't allow font size less than 1
         font_size = max(min(5, 150 / len(tree.nodes)), 1)
+        line_width = math.sqrt(node_size) / 100
 
         pos = nx.nx_agraph.graphviz_layout(tree, prog="dot")
         nx.draw_networkx_nodes(
@@ -1166,7 +1167,7 @@ class Pedigree:
             node_color=male_named_node_colors,
             alpha=0.5,
             edgecolors="black",
-            linewidths=0.2,
+            linewidths=line_width,
         )
         nx.draw_networkx_nodes(
             tree,
@@ -1177,7 +1178,7 @@ class Pedigree:
             node_color=female_named_node_colors,
             alpha=0.5,
             edgecolors="black",
-            linewidths=0.2,
+            linewidths=line_width,
         )
         nx.draw_networkx_nodes(
             tree,
@@ -1188,7 +1189,7 @@ class Pedigree:
             node_color="#e5e5e5",
             alpha=0.5,
             edgecolors="black",
-            linewidths=0.2,
+            linewidths=line_width,
         )
         nx.draw_networkx_nodes(
             tree,
@@ -1199,10 +1200,12 @@ class Pedigree:
             node_color="#e5e5e5",
             alpha=0.5,
             edgecolors="black",
-            linewidths=0.2,
+            linewidths=line_width,
         )
         nx.draw_networkx_labels(tree, pos=pos, labels=non_placeholder_labels, font_size=font_size)
-        nx.draw_networkx_edges(tree, pos=pos, node_shape="s", node_size=node_size, width=0.2, arrowsize=font_size * 1.2)
+        nx.draw_networkx_edges(
+            tree, pos=pos, node_shape="s", node_size=node_size, width=line_width, arrowsize=line_width * 30
+        )
 
         plt.axis("off")
         plt.savefig(path, bbox_inches="tight")
