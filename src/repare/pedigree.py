@@ -1118,14 +1118,14 @@ class Pedigree:
             y_haplogroup = self.node_to_data[node]["y_haplogroup"][:3]
             if node.isnumeric():
                 if y_haplogroup:
-                    non_placeholder_labels[node] = f"{mt_haplogroup}\n{y_haplogroup}"
+                    non_placeholder_labels[node] = f"MT: {mt_haplogroup}\nY: {y_haplogroup}"
                 else:
-                    non_placeholder_labels[node] = f"{mt_haplogroup}"
+                    non_placeholder_labels[node] = f"MT: {mt_haplogroup}"
             else:
                 if y_haplogroup:
-                    non_placeholder_labels[node] = f"{node}\n{mt_haplogroup}\n{y_haplogroup}"
+                    non_placeholder_labels[node] = f"{node}\nMT: {mt_haplogroup}\nY: {y_haplogroup}"
                 else:
-                    non_placeholder_labels[node] = f"{node}\n{mt_haplogroup}"
+                    non_placeholder_labels[node] = f"{node}\nMT: {mt_haplogroup}"
 
         # Create colormap for MT haplogroups
         cmap = plt.get_cmap("tab20")
