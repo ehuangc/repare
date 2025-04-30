@@ -1164,6 +1164,7 @@ class Pedigree:
             node_shape="s",
             node_size=node_size,
             node_color=male_named_node_colors,
+            alpha=0.5,
             edgecolors="black",
             linewidths=0.2,
         )
@@ -1174,6 +1175,7 @@ class Pedigree:
             node_shape="o",
             node_size=node_size,
             node_color=female_named_node_colors,
+            alpha=0.5,
             edgecolors="black",
             linewidths=0.2,
         )
@@ -1184,6 +1186,7 @@ class Pedigree:
             node_shape="s",
             node_size=node_size,
             node_color="#e5e5e5",
+            alpha=0.5,
             edgecolors="black",
             linewidths=0.2,
         )
@@ -1194,6 +1197,7 @@ class Pedigree:
             node_shape="o",
             node_size=node_size,
             node_color="#e5e5e5",
+            alpha=0.5,
             edgecolors="black",
             linewidths=0.2,
         )
