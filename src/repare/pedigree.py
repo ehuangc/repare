@@ -1114,8 +1114,8 @@ class Pedigree:
 
         non_placeholder_labels = dict()
         for node in tree.nodes:
-            mt_haplogroup = self.node_to_data[node]["mt_haplogroup"][:3]
-            y_haplogroup = self.node_to_data[node]["y_haplogroup"][:3]
+            mt_haplogroup = self.node_to_data[node]["mt_haplogroup"].replace("*", "")[:3]
+            y_haplogroup = self.node_to_data[node]["y_haplogroup"].replace("*", "")[:3]
             if node.isnumeric():
                 if y_haplogroup:
                     non_placeholder_labels[node] = f"MT: {mt_haplogroup}\nY: {y_haplogroup}"
