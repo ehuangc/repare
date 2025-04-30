@@ -7,7 +7,7 @@ name = "repare"
 authors = [
   {name="Edward Huang", email="edwardhuang02@gmail.com"},
 ]
-description = "Reconstruct ancient pedigrees."
+description = "Reconstruct (ancient) pedigrees from pairwise kinship relations."
 dynamic = ["version"]
 requires-python = ">= 3.10"
 dependencies = [
