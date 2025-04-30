@@ -1146,7 +1146,7 @@ class Pedigree:
         # Scale sizes based on pedigree node count
         node_size = min(1000, 10000 / len(tree.nodes))
         # Matplotlib doesn't allow font size less than 1
-        font_size = max(min(4.5, 150 / len(tree.nodes)), 1)
+        font_size = max(min(5, 150 / len(tree.nodes)), 1)
 
         pos = nx.nx_agraph.graphviz_layout(tree, prog="dot")
         nx.draw_networkx_nodes(
