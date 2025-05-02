@@ -829,7 +829,7 @@ class PedigreeReconstructor:
 
         with open(path, "w") as file:
             file.write("id1,id2,degree,constraints\n")  # Header line
-            file.write(f"# Final strike count: {strike_count}\n")
+            file.write(f"# Final inconsistency count: {strike_count}\n")
 
             def write_relations_line(node1, node2, degree, constraints, commented=False):
                 if constraints == self._DEFAULT_CONSTRAINTS[degree]:
