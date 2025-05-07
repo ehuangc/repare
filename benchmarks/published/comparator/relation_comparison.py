@@ -23,22 +23,28 @@ class RelationComparison:
         self._algorithm_relations_path = algorithm_relations_path
 
         self._published_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = (
-            self._load_published_relations(self._published_relations_path)
+            self._load_published_relation_counts(self._published_relations_path)
         )
         self._algorithm_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = (
-            self._load_algorithm_relations(self._algorithm_nodes_path, self._algorithm_relations_path)
+            self._load_algorithm_relation_counts(self._algorithm_nodes_path, self._algorithm_relations_path)
         )
         self._fill_uncertain_relations()
 
-    def _load_published_relations(self, path: str) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
-        published_relations_df = pd.read_csv(path, comment="#")
+    def _load_published_relation_counts(self, path: str) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
+        published_relations_df = pd.read_csv(path, comment="#", dtype=str, keep_default_na=False)
         relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
-        for id1, id2, relation in published_relations_df.itertuples(index=False):
-            id1, id2, relation = self._sort_relation(id1, id2, relation)
-            relation_counts[(id1, id2)][relation] += 1
+        for id1, id2, degree, constraints in published_relations_df.itertuples(index=False):
+            if constraints:
+                # Ensure only one constraint (exact relation) per node pair
+                assert ";" not in constraints
+                id1, id2, relation = self._sort_relation(id1, id2, constraints)
+                relation_counts[(id1, id2)][relation] += 1
+            else:
+                id1, id2, relation = self._sort_relation(id1, id2, degree)
+                relation_counts[(id1, id2)][relation] += 1
         return relation_counts
 
-    def _load_algorithm_relations(
+    def _load_algorithm_relation_counts(
         self, nodes_path: str, relations_path: str
     ) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
         self._algorithm_pedigree: Pedigree = self._run_algorithm(nodes_path, relations_path)
@@ -282,30 +288,10 @@ class RelationComparison:
         )
         inferred_relations = pd.read_csv(self._algorithm_relations_path, dtype=str, comment="#", keep_default_na=False)
 
-        first_degree_relations = {"parent-child", "child-parent", "siblings", "1"}
-        second_degree_relations = {
-            "maternal aunt/uncle-nephew/niece",
-            "paternal aunt/uncle-nephew/niece",
-            "maternal nephew/niece-aunt/uncle",
-            "paternal nephew/niece-aunt/uncle",
-            "maternal grandparent-grandchild",
-            "paternal grandparent-grandchild",
-            "maternal grandchild-grandparent",
-            "paternal grandchild-grandparent",
-            "maternal half-siblings",
-            "paternal half-siblings",
-            "2",
-        }
-
         pair_to_published_degree = {}
-        for id1, id2, relation in published_exact_relations.itertuples(index=False):
-            if relation in first_degree_relations:
-                degree = "1"
-            elif relation in second_degree_relations:
-                degree = "2"
-
-            if degree:
-                pair_to_published_degree[tuple(sorted((id1, id2)))] = degree
+        for id1, id2, degree, _ in published_exact_relations.itertuples(index=False):
+            assert degree in ["1", "2"]
+            pair_to_published_degree[tuple(sorted((id1, id2)))] = degree
 
         # Map constraints to their flipped value
         flipped_constraints = {
@@ -356,12 +342,13 @@ class RelationComparison:
                 kinship_inference_errors += 1
 
         # Count within-degree relation constraint inference errors
-        for id1, id2, relation in published_exact_relations.itertuples(index=False):
-            if relation == "1" or relation == "2":  # Skip "dotted lines"
+        for id1, id2, _, constraints in published_exact_relations.itertuples(index=False):
+            # Skip "dotted lines"
+            if not constraints:
                 continue
             pair = tuple(sorted((id1, id2)))
             if id2 < id1:
-                relation = flipped_constraints[relation]
-            if pair in pair_to_inferred_constraints and relation not in pair_to_inferred_constraints[pair]:
+                constraints = flipped_constraints[constraints]
+            if pair in pair_to_inferred_constraints and constraints not in pair_to_inferred_constraints[pair]:
                 kinship_inference_errors += 1
         return kinship_inference_errors
