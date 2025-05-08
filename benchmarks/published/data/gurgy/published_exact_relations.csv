@@ -4,9 +4,9 @@ GLN320,GLN231A,2,,
 GLN320,GLN270B,2,,
 GLN231A,GLN270B,1,siblings,True
 GLN231A,GLN322,1,parent-child,True
-GLN270B,GLN322,2,,
+GLN270B,GLN322,2,paternal aunt/uncle-nephew/niece,True
 GLN270B,GLN237A,1,parent-child,True
-GLN231A,GLN237A,2,,
+GLN231A,GLN237A,2,paternal aunt/uncle-nephew/niece,True
 GLN237A,GLN325,1,parent-child,True
 GLN237A,GLN265,1,parent-child,True
 GLN237A,GLN221B,1,parent-child,True
