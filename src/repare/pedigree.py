@@ -1112,20 +1112,20 @@ class Pedigree:
             node for node in self.node_to_data if self.node_to_data[node]["sex"] == "F" and node.isnumeric()
         ]
 
-        non_placeholder_labels = dict()
+        node_labels = dict()
         for node in tree.nodes:
             mt_haplogroup = self.node_to_data[node]["mt_haplogroup"].replace("*", "")[:3]
             y_haplogroup = self.node_to_data[node]["y_haplogroup"].replace("*", "")[:3]
             if node.isnumeric():
                 if y_haplogroup:
-                    non_placeholder_labels[node] = f"MT: {mt_haplogroup}\nY: {y_haplogroup}"
+                    node_labels[node] = f"MT: {mt_haplogroup}\nY: {y_haplogroup}"
                 else:
-                    non_placeholder_labels[node] = f"MT: {mt_haplogroup}"
+                    node_labels[node] = f"MT: {mt_haplogroup}"
             else:
                 if y_haplogroup:
-                    non_placeholder_labels[node] = f"{node}\nMT: {mt_haplogroup}\nY: {y_haplogroup}"
+                    node_labels[node] = f"{node}\nMT: {mt_haplogroup}\nY: {y_haplogroup}"
                 else:
-                    non_placeholder_labels[node] = f"{node}\nMT: {mt_haplogroup}"
+                    node_labels[node] = f"{node}\nMT: {mt_haplogroup}"
 
         # Create colormap for MT haplogroups
         cmap = plt.get_cmap("tab20")
@@ -1202,7 +1202,7 @@ class Pedigree:
             edgecolors="black",
             linewidths=line_width,
         )
-        nx.draw_networkx_labels(tree, pos=pos, labels=non_placeholder_labels, font_size=font_size)
+        nx.draw_networkx_labels(tree, pos=pos, labels=node_labels, font_size=font_size)
         nx.draw_networkx_edges(
             tree, pos=pos, node_shape="s", node_size=node_size, width=line_width, arrowsize=line_width * 30
         )
