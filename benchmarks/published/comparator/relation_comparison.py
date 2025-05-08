@@ -33,7 +33,7 @@ class RelationComparison:
     def _load_published_relation_counts(self, path: str) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
         published_relations_df = pd.read_csv(path, comment="#", dtype=str, keep_default_na=False)
         relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
-        for id1, id2, degree, constraints in published_relations_df.itertuples(index=False):
+        for id1, id2, degree, constraints, _ in published_relations_df.itertuples(index=False):
             if constraints:
                 # Ensure only one constraint (exact relation) per node pair
                 assert ";" not in constraints

@@ -1,71 +1,71 @@
 # Data from Fowler et al., 2022 Fig. 1
-id1,id2,degree,constraints
-NC2f,SE1m,1,parent-child
-SE1m,SP2m,1,parent-child
-NC2f,SP2m,2,paternal grandparent-grandchild
-NC2f,NC4m,1,parent-child
-NC1m,NC4m,1,parent-child
-SE1m,NC4m,2,maternal half-siblings
-NC3f,NE1m,1,parent-child
-NC3f,NC6m,2,
-NC3f,NE2m,1,parent-child
-NC1m,NE2m,1,parent-child
-NE1m,NE2m,2,maternal half-siblings
-NE2m,SC5m,1,parent-child
-NE2m,NC7f,1,parent-child
-NE2m,SP3m,1,parent-child
-NE2m,NC8m,1,parent-child
-NC7f,SP3m,1,siblings
-NC7f,NC8m,1,siblings
-SP3m,NC8m,1,siblings
-SC5m,NC7f,2,paternal half-siblings
-SC5m,SP3m,2,paternal half-siblings
-SC5m,NC8m,2,paternal half-siblings
-NC3f,SC5m,2,paternal grandparent-grandchild
-NC3f,NC7f,2,paternal grandparent-grandchild
-NC3f,SP3m,2,paternal grandparent-grandchild
-NC3f,NC8m,2,paternal grandparent-grandchild
-NC1m,SC5m,2,paternal grandparent-grandchild
-NC1m,NC7f,2,paternal grandparent-grandchild
-NC1m,SP3m,2,paternal grandparent-grandchild
-NC1m,NC8m,2,paternal grandparent-grandchild
-NC7f,NC9m,2,maternal half-siblings
-SP3m,NC9m,2,maternal half-siblings
-NC8m,NC9m,2,maternal half-siblings
-NC4m,NE2m,2,paternal half-siblings
-NC1m,SC2m,1,parent-child
-SC2m,NC9m,2,paternal grandparent-grandchild
-NC1m,SP1m,1,parent-child
-SC1f,SC2m,1,parent-child
-SC1f,SP1m,1,parent-child
-SC2m,SP1m,1,siblings
-SC2m,SC6m,2,paternal aunt/uncle-nephew/niece
-SC2m,SC7m,2,paternal aunt/uncle-nephew/niece
-SP1m,SC6m,2,paternal aunt/uncle-nephew/niece
-SP1m,SC7m,2,paternal aunt/uncle-nephew/niece
-SC6m,SC7m,1,siblings
-NC1m,SC6m,2,paternal grandparent-grandchild
-NC1m,SC7m,2,paternal grandparent-grandchild
-SC1f,SC6m,2,paternal grandparent-grandchild
-SC1f,SC7m,2,paternal grandparent-grandchild
-NC4m,SC2m,2,paternal half-siblings
-NC4m,SP1m,2,paternal half-siblings
-NE2m,SC2m,2,paternal half-siblings
-NE2m,SP1m,2,paternal half-siblings
-NC1m,SC3m,1,parent-child
-NC4m,SC3m,2,paternal half-siblings
-NE2m,SC3m,2,paternal half-siblings
-SC2m,SC3m,2,paternal half-siblings
-SP1m,SC3m,2,paternal half-siblings
-SC3m,SE2m,1,parent-child
-SC4f,SE2m,1,parent-child
-NC1m,SE2m,2,paternal grandparent-grandchild
-SC4f,SE3m,1,parent-child
-SE2m,SE3m,2,maternal half-siblings
-SE2m,SC8m,1,parent-child
-SE2m,SC9f,1,parent-child
-SC8m,SC9f,1,siblings
-SC3m,SC8m,2,paternal grandparent-grandchild
-SC3m,SC9f,2,paternal grandparent-grandchild
-SC4f,SC8m,2,paternal grandparent-grandchild
-SC4f,SC9f,2,paternal grandparent-grandchild
+id1,id2,degree,constraints,force_constraints
+NC2f,SE1m,1,parent-child,True
+SE1m,SP2m,1,parent-child,True
+NC2f,SP2m,2,paternal grandparent-grandchild,True
+NC2f,NC4m,1,parent-child,True
+NC1m,NC4m,1,parent-child,True
+SE1m,NC4m,2,maternal half-siblings,True
+NC3f,NE1m,1,parent-child,True
+NC3f,NC6m,2,,
+NC3f,NE2m,1,parent-child,True
+NC1m,NE2m,1,parent-child,True
+NE1m,NE2m,2,maternal half-siblings,True
+NE2m,SC5m,1,parent-child,True
+NE2m,NC7f,1,parent-child,True
+NE2m,SP3m,1,parent-child,True
+NE2m,NC8m,1,parent-child,True
+NC7f,SP3m,1,siblings,True
+NC7f,NC8m,1,siblings,True
+SP3m,NC8m,1,siblings,True
+SC5m,NC7f,2,paternal half-siblings,True
+SC5m,SP3m,2,paternal half-siblings,True
+SC5m,NC8m,2,paternal half-siblings,True
+NC3f,SC5m,2,paternal grandparent-grandchild,True
+NC3f,NC7f,2,paternal grandparent-grandchild,True
+NC3f,SP3m,2,paternal grandparent-grandchild,True
+NC3f,NC8m,2,paternal grandparent-grandchild,True
+NC1m,SC5m,2,paternal grandparent-grandchild,True
+NC1m,NC7f,2,paternal grandparent-grandchild,True
+NC1m,SP3m,2,paternal grandparent-grandchild,True
+NC1m,NC8m,2,paternal grandparent-grandchild,True
+NC7f,NC9m,2,maternal half-siblings,True
+SP3m,NC9m,2,maternal half-siblings,True
+NC8m,NC9m,2,maternal half-siblings,True
+NC4m,NE2m,2,paternal half-siblings,True
+NC1m,SC2m,1,parent-child,True
+SC2m,NC9m,2,paternal grandparent-grandchild,True
+NC1m,SP1m,1,parent-child,True
+SC1f,SC2m,1,parent-child,True
+SC1f,SP1m,1,parent-child,True
+SC2m,SP1m,1,siblings,True
+SC2m,SC6m,2,paternal aunt/uncle-nephew/niece,True
+SC2m,SC7m,2,paternal aunt/uncle-nephew/niece,True
+SP1m,SC6m,2,paternal aunt/uncle-nephew/niece,True
+SP1m,SC7m,2,paternal aunt/uncle-nephew/niece,True
+SC6m,SC7m,1,siblings,True
+NC1m,SC6m,2,paternal grandparent-grandchild,True
+NC1m,SC7m,2,paternal grandparent-grandchild,True
+SC1f,SC6m,2,paternal grandparent-grandchild,True
+SC1f,SC7m,2,paternal grandparent-grandchild,True
+NC4m,SC2m,2,paternal half-siblings,True
+NC4m,SP1m,2,paternal half-siblings,True
+NE2m,SC2m,2,paternal half-siblings,True
+NE2m,SP1m,2,paternal half-siblings,True
+NC1m,SC3m,1,parent-child,True
+NC4m,SC3m,2,paternal half-siblings,True
+NE2m,SC3m,2,paternal half-siblings,True
+SC2m,SC3m,2,paternal half-siblings,True
+SP1m,SC3m,2,paternal half-siblings,True
+SC3m,SE2m,1,parent-child,True
+SC4f,SE2m,1,parent-child,True
+NC1m,SE2m,2,paternal grandparent-grandchild,True
+SC4f,SE3m,1,parent-child,True
+SE2m,SE3m,2,maternal half-siblings,True
+SE2m,SC8m,1,parent-child,True
+SE2m,SC9f,1,parent-child,True
+SC8m,SC9f,1,siblings,True
+SC3m,SC8m,2,paternal grandparent-grandchild,True
+SC3m,SC9f,2,paternal grandparent-grandchild,True
+SC4f,SC8m,2,paternal grandparent-grandchild,True
+SC4f,SC9f,2,paternal grandparent-grandchild,True
