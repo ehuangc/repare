@@ -42,6 +42,7 @@ def parse_arguments():
 
 
 def main():
+    print("Beginning pedigree reconstruction...")
     args = parse_arguments()
     logging_level = logging.INFO if args.verbose else logging.WARNING
     logging.basicConfig(level=logging_level, format="%(levelname)s - %(message)s")
@@ -62,6 +63,7 @@ def main():
             random_seed=args.seed,
         )
         pedigree_reconstructor.find_best_pedigree()
+    print(f"Finished pedigree reconstruction. Outputs written to {os.path.abspath(output_dir)}.")
 
 
 if __name__ == "__main__":
