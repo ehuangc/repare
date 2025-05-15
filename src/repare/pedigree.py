@@ -1087,9 +1087,19 @@ class Pedigree:
                 if self.node_to_mother[node] in placeholder_nodes_to_remove:
                     del self.node_to_mother[node]
 
-    def plot(self, path: str) -> None:
+    def plot(
+        self,
+        path: str,
+        nodes_to_remove: list[str] | None = None,
+        edges_to_remove: list[tuple[str, str]] | None = None,
+        dotted_edges_to_add: list[tuple[str, str]] | None = None,
+    ) -> None:
         """
-        Plot the pedigree to the given path.
+        Plot the pedigree to the given path. Optionally takes arguments to plot uncertain relations.
+        nodes_to_remove is a list of nodes to remove from the plot.
+        edges_to_remove is a list of parent-child edges to remove from the plot.
+        dotted_edges_to_add is a list of node pairs to plot as dotted lines.
+        These arguments can be used in conjunction to replace uncertain relations with dotted lines.
         """
         if not importlib.util.find_spec("pygraphviz"):
             raise ImportError("Plotting pedigree requires PyGraphviz (https://pygraphviz.github.io/).")
@@ -1099,17 +1109,30 @@ class Pedigree:
         for node in self.node_to_data:
             if node not in tree.nodes:
                 tree.add_node(node)
+
+        # Replace relations with dotted edges
+        if nodes_to_remove:
+            tree.remove_nodes_from(nodes_to_remove)
+        if edges_to_remove:
+            tree.remove_edges_from(edges_to_remove)
+        if dotted_edges_to_add:
+            tree.add_edges_from(dotted_edges_to_add, style="dotted")
+        parent_child_edges = [
+            (u, v) for u, v, style in tree.edges.data("style", default="parent_child") if style == "parent_child"
+        ]
+        dotted_edges = [(u, v) for u, v, style in tree.edges.data("style", default="parent_child") if style == "dotted"]
+
         male_named_nodes = [
-            node for node in self.node_to_data if self.node_to_data[node]["sex"] == "M" and not node.isnumeric()
+            node for node in tree.nodes if self.node_to_data[node]["sex"] == "M" and not node.isnumeric()
         ]
         male_placeholder_nodes = [
-            node for node in self.node_to_data if self.node_to_data[node]["sex"] == "M" and node.isnumeric()
+            node for node in tree.nodes if self.node_to_data[node]["sex"] == "M" and node.isnumeric()
         ]
         female_named_nodes = [
-            node for node in self.node_to_data if self.node_to_data[node]["sex"] == "F" and not node.isnumeric()
+            node for node in tree.nodes if self.node_to_data[node]["sex"] == "F" and not node.isnumeric()
         ]
         female_placeholder_nodes = [
-            node for node in self.node_to_data if self.node_to_data[node]["sex"] == "F" and node.isnumeric()
+            node for node in tree.nodes if self.node_to_data[node]["sex"] == "F" and node.isnumeric()
         ]
 
         node_labels = dict()
@@ -1204,7 +1227,25 @@ class Pedigree:
         )
         nx.draw_networkx_labels(tree, pos=pos, labels=node_labels, font_size=font_size)
         nx.draw_networkx_edges(
-            tree, pos=pos, node_shape="s", node_size=node_size, width=line_width, arrowsize=line_width * 30
+            tree,
+            edgelist=parent_child_edges,
+            pos=pos,
+            node_shape="s",
+            node_size=node_size,
+            width=line_width,
+            arrowsize=line_width * 30,
+        )
+        # Setting arrows=False causes edges to overlap their associated nodes for some reason
+        nx.draw_networkx_edges(
+            tree,
+            edgelist=dotted_edges,
+            pos=pos,
+            node_shape="s",
+            node_size=node_size,
+            width=line_width * 1.5,
+            arrowstyle="-",
+            style=(0, (3, 3)),
+            edge_color="blue",
         )
 
         plt.axis("off")
