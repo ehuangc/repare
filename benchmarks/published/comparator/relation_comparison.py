@@ -47,12 +47,12 @@ class RelationComparison:
     def _load_algorithm_relation_counts(
         self, nodes_path: str, relations_path: str
     ) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
-        self._algorithm_pedigree: Pedigree = self._run_algorithm(nodes_path, relations_path)
+        self.algorithm_pedigree: Pedigree = self._run_algorithm(nodes_path, relations_path)
         algorithm_relations: defaultdict[tuple[str, str], defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
 
-        for id1, id2 in combinations(self._algorithm_pedigree.node_to_data, 2):
+        for id1, id2 in combinations(self.algorithm_pedigree.node_to_data, 2):
             if not id1.isnumeric() and not id2.isnumeric():  # Skip placeholder nodes
-                relations_between_nodes = self._algorithm_pedigree.get_relations_between_nodes(
+                relations_between_nodes = self.algorithm_pedigree.get_relations_between_nodes(
                     id1, id2, include_maternal_paternal=True
                 )
                 for relation, count in relations_between_nodes.items():
@@ -175,7 +175,7 @@ class RelationComparison:
         relation_fp: int = 0
         relation_fn: int = 0
 
-        nodes = [node for node in self._algorithm_pedigree.node_to_data if not node.isnumeric()]
+        nodes = [node for node in self.algorithm_pedigree.node_to_data if not node.isnumeric()]
         for id1, id2 in combinations(sorted(nodes), 2):
             published_relations_between_nodes = self._published_relation_counts[(id1, id2)]
             algorithm_relations_between_nodes = self._algorithm_relation_counts[(id1, id2)]
@@ -209,7 +209,7 @@ class RelationComparison:
         degree_fp: int = 0
         degree_fn: int = 0
 
-        nodes = [node for node in self._algorithm_pedigree.node_to_data if not node.isnumeric()]
+        nodes = [node for node in self.algorithm_pedigree.node_to_data if not node.isnumeric()]
         for id1, id2 in combinations(sorted(nodes), 2):
             published_relations_between_nodes = self._published_relation_counts[(id1, id2)]
             algorithm_relations_between_nodes = self._algorithm_relation_counts[(id1, id2)]
@@ -260,7 +260,7 @@ class RelationComparison:
         published_relation_counter: defaultdict[str, int] = defaultdict(int)
         algorithm_relation_counter: defaultdict[str, int] = defaultdict(int)
 
-        nodes = [node for node in self._algorithm_pedigree.node_to_data if not node.isnumeric()]
+        nodes = [node for node in self.algorithm_pedigree.node_to_data if not node.isnumeric()]
         for node1, node2 in combinations(sorted(nodes), 2):
             if not node1.isnumeric() and not node2.isnumeric():
                 relations_between_nodes = self._published_relation_counts[(node1, node2)]
