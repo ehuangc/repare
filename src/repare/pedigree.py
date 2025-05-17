@@ -1090,12 +1090,14 @@ class Pedigree:
     def plot(
         self,
         path: str,
+        mt_haplogroup_to_color: dict[str, str] | None = None,
         nodes_to_remove: list[str] | None = None,
         edges_to_remove: list[tuple[str, str]] | None = None,
         dotted_edges_to_add: list[tuple[str, str]] | None = None,
     ) -> None:
         """
-        Plot the pedigree to the given path. Optionally takes arguments to plot uncertain relations.
+        Plot the pedigree to the given path. Optionally takes a custom mapping of mt_haplogroups to colors.
+        Also optionally takes arguments to plot uncertain relations.
         nodes_to_remove is a list of nodes to remove from the plot.
         edges_to_remove is a list of parent-child edges to remove from the plot.
         dotted_edges_to_add is a list of node pairs to plot as dotted lines.
@@ -1151,19 +1153,20 @@ class Pedigree:
                     node_labels[node] = f"{node}\nMT: {mt_haplogroup}"
 
         # Create colormap for MT haplogroups
-        cmap = plt.get_cmap("tab20")
-        mt_haplogroups = sorted(
-            set(
-                [
-                    self.node_to_data[node]["mt_haplogroup"].replace("*", "")
-                    for node in self.node_to_data
-                    if not node.isnumeric()
-                ]
+        if not mt_haplogroup_to_color:
+            cmap = plt.get_cmap("tab20")
+            mt_haplogroups = sorted(
+                set(
+                    [
+                        self.node_to_data[node]["mt_haplogroup"].replace("*", "")
+                        for node in self.node_to_data
+                        if not node.isnumeric()
+                    ]
+                )
             )
-        )
-        mt_haplogroup_to_color = {
-            haplogroup: cmap(i / len(mt_haplogroups)) for i, haplogroup in enumerate(mt_haplogroups)
-        }
+            mt_haplogroup_to_color = {
+                haplogroup: cmap(i / len(mt_haplogroups)) for i, haplogroup in enumerate(mt_haplogroups)
+            }
         male_named_node_colors = [
             mt_haplogroup_to_color[self.node_to_data[node]["mt_haplogroup"].replace("*", "")]
             for node in male_named_nodes
