@@ -352,3 +352,40 @@ class RelationComparison:
             if pair in pair_to_inferred_constraints and constraints not in pair_to_inferred_constraints[pair]:
                 kinship_inference_errors += 1
         return kinship_inference_errors
+
+    def write_relation_differences(self, path: str) -> None:
+        """
+        Write the differences between the published and inferred relations to a CSV file.
+        """
+        false_positives: defaultdict[tuple[str, str], list[str]] = defaultdict(list)
+        false_negatives: defaultdict[tuple[str, str], list[str]] = defaultdict(list)
+        nodes = [node for node in self.algorithm_pedigree.node_to_data if not node.isnumeric()]
+        for id1, id2 in combinations(sorted(nodes), 2):
+            assert id1 < id2
+            published_relations_between_nodes = self._published_relation_counts[(id1, id2)]
+            algorithm_relations_between_nodes = self._algorithm_relation_counts[(id1, id2)]
+
+            relations = published_relations_between_nodes.keys() | algorithm_relations_between_nodes.keys()
+            for relation in relations:
+                true_count = published_relations_between_nodes[relation]
+                algorithm_count = algorithm_relations_between_nodes[relation]
+
+                if true_count > algorithm_count:
+                    for _ in range(true_count - algorithm_count):
+                        false_negatives[(id1, id2)].append(relation)
+
+                elif algorithm_count > true_count:
+                    for _ in range(algorithm_count - true_count):
+                        false_positives[(id1, id2)].append(relation)
+
+        # Write false positives and false negatives to CSV file
+        with open(path, "w") as file:
+            file.write("id1,id2,published_relation,inferred_relation\n")
+            for id1, id2 in set(false_positives.keys()) | set(false_negatives.keys()):
+                false_positive_relations = (
+                    ";".join(false_positives[(id1, id2)]) if (id1, id2) in false_positives else "None"
+                )
+                false_negative_relations = (
+                    ";".join(false_negatives[(id1, id2)]) if (id1, id2) in false_negatives else "None"
+                )
+                file.write(f"{id1},{id2},{false_positive_relations},{false_negative_relations}\n")
