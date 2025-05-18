@@ -338,6 +338,8 @@ class PedigreeReconstructor:
                 processed_relations = self._all_relations.iloc[: idx + 1]
                 pair_to_relations_so_far = self._get_pair_to_relations_so_far(processed_relations)
                 if degree == "1" and len(processed_relations) < len(self._first_and_second_degree_relations):
+                    # Don't check for extraneous half-sibling relations because
+                    # the 2 non-shared parents might be "merged" later
                     self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=False)
                 else:
                     self._prune_pedigrees(pair_to_relations_so_far, check_half_siblings=True)
