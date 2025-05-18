@@ -22,6 +22,13 @@ We recommend running repare through its command-line interface.
 repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILON] [-s SEED] [-d] [-w] [-v]
 ```
 
+> [!NOTE]
+> Minimal command:
+> ```
+> repare -n nodes.csv -r relations.csv
+> ```
+> For example data inputs, see <ins>[examples/nodes.csv](examples/nodes.csv)</ins> and <ins>[examples/relations.csv](examples/relations.csv)</ins>.
+
 ### Inputs
 **Nodes** *(-n, required)*: Path to a CSV file that contains information about the individuals to be analyzed by repare. 
 
