@@ -27,7 +27,7 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
 > ```
 > repare -n nodes.csv -r relations.csv
 > ```
-> For example data inputs, see <ins>[examples/nodes.csv](examples/nodes.csv)</ins> and <ins>[examples/relations.csv](examples/relations.csv)</ins>.
+> For example data inputs, see [examples/nodes.csv](examples/nodes.csv) and [examples/relations.csv](examples/relations.csv).
 
 ### Inputs
 **Nodes** *(-n, required)*: Path to a CSV file that contains information about the individuals to be analyzed by repare. 
