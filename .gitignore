@@ -1,6 +1,7 @@
-# Data directories
-*raw_data
-*sandbox_data
+# Data / sandbox directories
+*raw_data/
+*sandbox_data/
+*sandbox/
 
 # .DS_Store files
 .DS_Store
