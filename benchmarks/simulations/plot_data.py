@@ -21,22 +21,25 @@ def plot_pedigree_summary_statistics(results_dir: str) -> None:
     for ax in axes:
         ax.set_ylabel("Pedigree Count")
     plt.subplots_adjust(hspace=0.25)
+    plt.suptitle("Pedigree Summary Statistics (Before Masking Nodes)", fontsize=16)
 
     sns.histplot(pedigree_sizes, ax=axes[0])
     axes[0].set_title("Pedigree Size Distribution")
-    axes[0].set_xlabel("# of Individuals in Full Simulated Pedigree")
+    axes[0].set_xlabel("# of Individuals")
 
     sns.histplot(inbred_proportions, ax=axes[1])
     axes[1].set_title("Inbreeding Proportion Distrbution")
-    axes[1].set_xlabel("Proportion of Inbred Individuals in Full Simulated Pedigree")
+    axes[1].set_xlabel("Proportion of Inbred Individuals")
 
     sns.histplot(has_children_proportions, ax=axes[2])
     axes[2].set_title("Has Children Proportion Distribution")
-    axes[2].set_xlabel("Proportion of Non-Leaf Individuals with Children in Full Simulated Pedigree")
+    axes[2].set_xlabel("Proportion of Non-Leaf Individuals with Children")
 
     sns.histplot(mean_children_count, ax=axes[3])
     axes[3].set_title("Mean Children Count Distribution")
-    axes[3].set_xlabel("Mean # of Children per Parent in Full Simulated Pedigree")
+    axes[3].set_xlabel("Mean # of Children per Parent")
+
+    plt.tight_layout(pad=2.0)
     plt.savefig("results/plots/pedigree_summary_statistics.png", dpi=600)
 
 
