@@ -403,7 +403,7 @@ class SimulatedPedigree:
         statistics["Total Node Count"] = len(self._ground_truth_pedigree.node_to_data)
         statistics["Sampled Node Count"] = len(self._final_nodes_df)
         statistics["Proportion of Inbred Nodes"] = self._calculate_inbred_proportion()
-        statistics["Proportion of Non-Leaf Nodes with Children"] = self._calculate_has_children_proportion()
+        statistics["Proportion of Non-Final-Generation Nodes with Children"] = self._calculate_has_children_proportion()
         statistics["Mean Children Count per Parent"] = self._calculate_mean_children_per_node()
         return statistics
 

@@ -1,4 +1,4 @@
-Total Node Count,Sampled Node Count,Proportion of Inbred Nodes,Proportion of Non-Leaf Nodes with Children,Mean Children Count per Parent,Pairwise Relation Accuracy,Relation Precision,Relation Recall,Relation F1,Pairwise Degree Accuracy,Degree Precision,Degree Recall,Degree F1,Connectivity R-squared,p(Mask Node),Error Rate Scale
+Total Node Count,Sampled Node Count,Proportion of Inbred Nodes,Proportion of Non-Final-Generation Nodes with Children,Mean Children Count per Parent,Pairwise Relation Accuracy,Relation Precision,Relation Recall,Relation F1,Pairwise Degree Accuracy,Degree Precision,Degree Recall,Degree F1,Connectivity R-squared,p(Mask Node),Error Rate Scale
 38,21,0.04,0.7931034482758621,2.1739130434782608,0.9857142857142858,0.9117647058823529,0.9117647058823529,0.9117647058823528,1.0,1.0,1.0,1.0,1.0,0.4,0.0
 23,15,0.0,0.631578947368421,2.3333333333333335,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.4,0.0
 29,16,0.47619047619047616,0.75,2.8,0.975,0.9433962264150944,0.9090909090909091,0.9259259259259259,0.9833333333333333,1.0,0.9636363636363636,0.9814814814814815,0.9761668321747765,0.4,0.0

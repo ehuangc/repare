@@ -13,7 +13,7 @@ def plot_pedigree_summary_statistics(results_dir: str) -> None:
     results_df = pd.read_csv(os.path.join(results_dir, results_path))
     pedigree_sizes = results_df["Total Node Count"].values
     inbred_proportions = results_df["Proportion of Inbred Nodes"].values
-    has_children_proportions = results_df["Proportion of Non-Leaf Nodes with Children"].values
+    has_children_proportions = results_df["Proportion of Non-Final-Generation Nodes with Children"].values
     mean_children_count = results_df["Mean Children Count per Parent"].values
 
     fig, axes = plt.subplots(2, 2, figsize=(12, 10))
@@ -33,7 +33,7 @@ def plot_pedigree_summary_statistics(results_dir: str) -> None:
 
     sns.histplot(has_children_proportions, ax=axes[2])
     axes[2].set_title("Has Children Proportion Distribution")
-    axes[2].set_xlabel("Proportion of Non-Leaf Individuals with Children")
+    axes[2].set_xlabel("Proportion of Non-Final-Generation Individuals with Children")
 
     sns.histplot(mean_children_count, ax=axes[3])
     axes[3].set_title("Mean Children Count Distribution")
