@@ -381,7 +381,7 @@ class RelationComparison:
         # Write false positives and false negatives to CSV file
         with open(path, "w") as file:
             file.write("id1,id2,published_relation,inferred_relation\n")
-            for id1, id2 in set(false_positives.keys()) | set(false_negatives.keys()):
+            for id1, id2 in sorted(set(false_positives.keys()) | set(false_negatives.keys())):
                 false_positive_relations = (
                     ";".join(false_positives[(id1, id2)]) if (id1, id2) in false_positives else "None"
                 )
