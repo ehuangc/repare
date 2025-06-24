@@ -48,7 +48,7 @@ def main():
     Compare the Gurgy inferred and published pedigrees by plotting and writing relation differences.
     """
     data_dir = os.path.join(os.path.dirname(__file__), "data", "gurgy")
-    results_dir = os.path.join(os.path.dirname(__file__), "results", "gurgy_comparison")
+    results_dir = os.path.join(os.path.dirname(__file__), "results", "gurgy_analysis")
 
     relation_comparison = RelationComparison(
         published_relations_path=os.path.join(data_dir, "published_exact_relations.csv"),
