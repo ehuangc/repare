@@ -289,7 +289,7 @@ class RelationComparison:
         inferred_relations = pd.read_csv(self._algorithm_relations_path, dtype=str, comment="#", keep_default_na=False)
 
         pair_to_published_degree = {}
-        for id1, id2, degree, _ in published_exact_relations.itertuples(index=False):
+        for id1, id2, degree, _, _ in published_exact_relations.itertuples(index=False):
             assert degree in ["1", "2"]
             pair_to_published_degree[tuple(sorted((id1, id2)))] = degree
 
@@ -342,7 +342,7 @@ class RelationComparison:
                 kinship_inference_errors += 1
 
         # Count within-degree relation constraint inference errors
-        for id1, id2, _, constraints in published_exact_relations.itertuples(index=False):
+        for id1, id2, _, constraints, _ in published_exact_relations.itertuples(index=False):
             # Skip "dotted lines"
             if not constraints:
                 continue
