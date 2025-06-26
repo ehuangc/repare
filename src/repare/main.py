@@ -42,7 +42,6 @@ def parse_arguments():
 
 
 def main():
-    print("Beginning pedigree reconstruction...")
     args = parse_arguments()
     logging_level = logging.INFO if args.verbose else logging.WARNING
     logging.basicConfig(level=logging_level, format="%(levelname)s - %(message)s")
@@ -52,6 +51,7 @@ def main():
         os.makedirs(output_dir, exist_ok=True)
 
     with logging_redirect_tqdm():
+        print("Beginning pedigree reconstruction...")
         pedigree_reconstructor = PedigreeReconstructor(
             relations_path=args.relations,
             nodes_path=args.nodes,
