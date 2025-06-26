@@ -1,0 +1,9 @@
+id1,id2,published_relation,inferred_relation
+b22-1,b2a-1,paternal aunt/uncle-nephew/niece,paternal nephew/niece-aunt/uncle
+b22-1,b2b-1,paternal aunt/uncle-nephew/niece,paternal nephew/niece-aunt/uncle
+b22-1,b32-1,paternal aunt/uncle-nephew/niece,paternal nephew/niece-aunt/uncle
+b22-1,b33-1,maternal half-siblings,maternal aunt/uncle-nephew/niece
+b22-1,j3-1,paternal nephew/niece-aunt/uncle,paternal aunt/uncle-nephew/niece
+b2a-1,b30-1,maternal grandchild-grandparent,paternal aunt/uncle-nephew/niece
+b2b-1,b30-1,maternal grandchild-grandparent,paternal aunt/uncle-nephew/niece
+b30-1,b32-1,maternal grandparent-grandchild,paternal nephew/niece-aunt/uncle
