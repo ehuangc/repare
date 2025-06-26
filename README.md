@@ -4,7 +4,7 @@
 
 ### Recommended
 ```
-conda create -n "repare" -c conda-forge python=3.13 pygraphviz
+conda create -n "repare" -c conda-forge python=3.13 pygraphviz matplotlib networkx pandas tqdm
 conda activate repare
 pip install repare
 ```
