@@ -1,7 +1,7 @@
 import logging
 import os
 
-from comparator.relation_comparison import RelationComparison
+from evaluator.pedigree_evaluator import PedigreeEvaluator
 from tqdm.contrib.logging import logging_redirect_tqdm
 
 
@@ -27,14 +27,14 @@ def main():
 
         logging.basicConfig(level=logging.WARNING)  # Set to logging.INFO for more detailed output
         with logging_redirect_tqdm():
-            relation_comparison = RelationComparison(
+            evaluator = PedigreeEvaluator(
                 published_relations_path=published_relations_path,
                 algorithm_nodes_path=algorithm_nodes_path,
                 algorithm_relations_path=algorithm_relations_path,
             )
 
             with open(results_path, "a") as file:
-                metrics_values = relation_comparison.get_metrics()
+                metrics_values = evaluator.get_metrics()
                 metrics = list(metrics_values.keys())
                 values = list(metrics_values.values())
                 if idx == 0:

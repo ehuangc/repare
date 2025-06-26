@@ -2,7 +2,7 @@ import tempfile
 
 import matplotlib.pyplot as plt
 
-from comparator.relation_comparison import RelationComparison
+from evaluator.pedigree_evaluator import PedigreeEvaluator
 from repare.pedigree import Pedigree
 from repare.pedigree_reconstructor import PedigreeReconstructor
 
@@ -62,5 +62,5 @@ def plot_published_pedigree(
     )
 
 
-def write_relation_differences(relation_comparison: RelationComparison, path: str):
-    relation_comparison.write_relation_differences(path=path)
+def write_relation_differences(evaluator: PedigreeEvaluator, path: str):
+    evaluator.write_relation_differences(path=path)

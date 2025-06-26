@@ -1,13 +1,13 @@
 import os
 
-from comparator.analysis_utils import (
+from evaluator.analysis_utils import (
     get_mt_colormap,
     get_published_pedigree,
     plot_inferred_pedigree,
     plot_published_pedigree,
     write_relation_differences,
 )
-from comparator.relation_comparison import RelationComparison
+from evaluator.pedigree_evaluator import PedigreeEvaluator
 
 
 def main():
@@ -17,12 +17,12 @@ def main():
     data_dir = os.path.join(os.path.dirname(__file__), "data", "gurgy")
     results_dir = os.path.join(os.path.dirname(__file__), "results", "gurgy_analysis")
 
-    relation_comparison = RelationComparison(
+    evaluator = PedigreeEvaluator(
         published_relations_path=os.path.join(data_dir, "published_exact_relations.csv"),
         algorithm_nodes_path=os.path.join(data_dir, "nodes.csv"),
         algorithm_relations_path=os.path.join(data_dir, "inferred_relations_READv2.csv"),
     )
-    inferred_pedigree = relation_comparison.algorithm_pedigree
+    inferred_pedigree = evaluator.algorithm_pedigree
     published_pedigree = get_published_pedigree(
         nodes_path=os.path.join(data_dir, "nodes.csv"),
         relations_path=os.path.join(data_dir, "published_exact_relations.csv"),
@@ -69,7 +69,7 @@ def main():
         dotted_edges_to_add=dotted_edges_to_add,
     )
     write_relation_differences(
-        relation_comparison=relation_comparison,
+        evaluator=evaluator,
         path=os.path.join(results_dir, "relation_differences.csv"),
     )
 
