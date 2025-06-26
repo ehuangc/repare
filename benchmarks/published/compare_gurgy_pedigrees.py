@@ -1,6 +1,6 @@
 import os
 
-from evaluator.analysis_utils import (
+from evaluator.comparison_utils import (
     get_mt_colormap,
     get_published_pedigree,
     plot_inferred_pedigree,
@@ -15,7 +15,7 @@ def main():
     Compare the Gurgy inferred and published pedigrees by plotting and writing relation differences.
     """
     data_dir = os.path.join(os.path.dirname(__file__), "data", "gurgy")
-    results_dir = os.path.join(os.path.dirname(__file__), "results", "gurgy_analysis")
+    results_dir = os.path.join(os.path.dirname(__file__), "results", "gurgy_comparison")
 
     evaluator = PedigreeEvaluator(
         published_relations_path=os.path.join(data_dir, "published_exact_relations.csv"),
