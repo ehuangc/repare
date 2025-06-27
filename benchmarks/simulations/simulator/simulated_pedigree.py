@@ -18,7 +18,13 @@ class SimulatedPedigree:
     runs the pedigree reconstruction algorithm, and calculates performance metrics.
     """
 
-    def __init__(self, p_mask_node: float = 0.4, error_rate_scale: float = 1, random_seed: int | None = None) -> None:
+    def __init__(
+        self,
+        p_mask_node: float = 0.4,
+        error_rate_scale: float = 1,
+        max_candidate_pedigrees: int = 100,
+        random_seed: int | None = None,
+    ) -> None:
         self._ground_truth_pedigree = Pedigree()
         self._y_haplogroup_pool = ["a", "b"]
         self._mt_haplogroup_pool = ["a", "b", "c", "d", "e"]
@@ -44,6 +50,7 @@ class SimulatedPedigree:
         self._generation_to_nodes = defaultdict(set)
         # Maps node ID to generation number
         self._node_to_generation = {}
+        self._max_candidate_pedigrees = max_candidate_pedigrees
         self._random_seed = random_seed
         random.seed(self._random_seed)
 
@@ -388,7 +395,7 @@ class SimulatedPedigree:
                 relations_path,
                 nodes_path,
                 outputs_dir,
-                max_candidate_pedigrees=100,
+                max_candidate_pedigrees=self._max_candidate_pedigrees,
                 random_seed=self._random_seed,
                 plot=False,
             )
