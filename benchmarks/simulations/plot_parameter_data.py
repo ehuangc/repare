@@ -90,7 +90,11 @@ def plot_results(results_dir: str) -> None:
         plt.title(f"{metric} Scores", fontsize=14)
         plt.xlabel("Kinship Relation Error Rate Scale", fontsize=12)
         plt.ylabel("p(Mask Node)", fontsize=12)
-        plt.savefig(f"results/parameter_experiment/plots/{metric.lower().replace(' ', '_')}_heatmap.png", dpi=600)
+        plt.savefig(
+            f"results/parameter_experiment/plots/{metric.lower().replace(' ', '_')}_heatmap.png",
+            bbox_inches="tight",
+            dpi=600,
+        )
 
 
 def main():
