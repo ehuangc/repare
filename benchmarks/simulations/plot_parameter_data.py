@@ -84,7 +84,7 @@ def plot_results(results_dir: str) -> None:
         plt.figure(figsize=(8, 6))
         # Set vmin and vmax so relation and degree F1 scores are on the same color scale
         ax = sns.heatmap(
-            heatmap_data, annot=True, fmt=".2f", cmap="Blues", cbar_kws={"label": metric}, vmin=0.5, vmax=1.0
+            heatmap_data, annot=True, fmt=".2f", cmap="Blues", cbar_kws={"label": f"{metric} Score"}, vmin=0.5, vmax=1.0
         )
         ax.figure.axes[-1].yaxis.label.set_size(12)  # Set colorbar label size
         plt.title(f"{metric} Scores", fontsize=14)
