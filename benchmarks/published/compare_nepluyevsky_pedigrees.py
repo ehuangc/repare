@@ -16,6 +16,7 @@ def main():
     """
     data_dir = os.path.join(os.path.dirname(__file__), "data", "nepluyevsky")
     results_dir = os.path.join(os.path.dirname(__file__), "results", "nepluyevsky_comparison")
+    os.makedirs(results_dir, exist_ok=True)
 
     evaluator = PedigreeEvaluator(
         published_relations_path=os.path.join(data_dir, "published_exact_relations.csv"),
