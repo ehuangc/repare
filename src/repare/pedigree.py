@@ -12,12 +12,12 @@ class Pedigree:
     """
 
     def __init__(self) -> None:
-        self.num_placeholders = 0
+        self.num_placeholders: int = 0
         self.node_to_data: dict[str, dict[str, str | bool | float]] = dict()
-        self.node_to_father = defaultdict(str)
-        self.node_to_mother = defaultdict(str)
-        self.node_to_children = defaultdict(set)
-        self.node_to_siblings = defaultdict(set)
+        self.node_to_father: defaultdict[str, str] = defaultdict(str)
+        self.node_to_mother: defaultdict[str, str] = defaultdict(str)
+        self.node_to_children: defaultdict[str, set[str]] = defaultdict(set)
+        self.node_to_siblings: defaultdict[str, set[str]] = defaultdict(set)
 
     def __deepcopy__(self, memo: dict) -> "Pedigree":
         """
@@ -468,7 +468,7 @@ class Pedigree:
         leaf_nodes: list[str] = [node for node in self.node_to_data if not self.node_to_children[node]]
 
         # DFS
-        def visit(node: str, curr_years_before_present: float) -> None:
+        def visit(node: str, curr_years_before_present: float) -> bool:
             years_before_present = self.node_to_data[node]["years_before_present"]
             if not math.isnan(years_before_present):
                 # Node postdates its descendants
@@ -508,7 +508,7 @@ class Pedigree:
         pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]],
         pair_to_relations_so_far: defaultdict[tuple[str, str], list[tuple[str, str, bool]]],
         check_half_siblings: bool,
-    ) -> tuple[int, list[tuple[str, str, str]]]:
+    ) -> tuple[int, list[tuple[str, str, str, str]]]:
         """
         Validates this tree based on the input relation data.
         If check_half_siblings is False, don't check for extraneous half-sibling relations
@@ -537,7 +537,9 @@ class Pedigree:
                         pair_to_constraints_seen_entries[(node1, node2)].add(idx)
                         break
 
-        def validate_relation(node1: str, node2: str, relation: str, strike_log: list[str, str, str, str]) -> None:
+        def validate_relation(
+            node1: str, node2: str, relation: str, strike_log: list[tuple[str, str, str, str]]
+        ) -> None:
             relation_to_degree = {
                 "parent-child": "1",
                 "child-parent": "1",
@@ -575,7 +577,7 @@ class Pedigree:
             remove_relation_from_input_data(node1, node2, relation)
             remove_relation_from_input_data(node2, node1, flipped_relations[relation])
 
-        strike_log: list[str, str, str, str] = []  # (node1, node2, +/- relation degree, constraints)
+        strike_log: list[tuple[str, str, str, str]] = []  # (node1, node2, +/- relation degree, constraints)
         # Check that relations in the pedigree are present in the input data
         for parent, child in self.get_parent_child_pairs(include_placeholders=False):
             validate_relation(parent, child, "parent-child", strike_log)
@@ -622,7 +624,7 @@ class Pedigree:
                 if not self.is_relation_in_pedigree(node1, node2, constraints.split(";")):
                     strike_log.append((node1, node2, f"-{degree}", constraints))
             else:
-                pedigree_shared_relations: defaultdict(int) = self.get_relations_between_nodes(
+                pedigree_shared_relations: defaultdict[str, int] = self.get_relations_between_nodes(
                     node1, node2, include_maternal_paternal=True
                 )
                 for degree, constraints, _ in degrees_constraints:
@@ -823,7 +825,7 @@ class Pedigree:
         """
         Returns a dictionary of the *1st- and 2nd-degree* relations between node1 and node2.
         """
-        relations = defaultdict(int)
+        relations: defaultdict[str, int] = defaultdict(int)
         if self.is_relation_in_pedigree(node1, node2, ["parent-child"]):
             relations["parent-child"] += 1
         if self.is_relation_in_pedigree(node1, node2, ["child-parent"]):
@@ -1090,7 +1092,7 @@ class Pedigree:
     def plot(
         self,
         path: str,
-        mt_haplogroup_to_color: dict[str, str] | None = None,
+        mt_haplogroup_to_color: dict[str, str] | dict[str, tuple[float, float, float, float]] | None = None,
         nodes_to_remove: list[str] | None = None,
         edges_to_remove: list[tuple[str, str]] | None = None,
         dotted_edges_to_add: list[tuple[str, str]] | None = None,

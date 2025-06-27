@@ -453,7 +453,7 @@ class PedigreeReconstructor:
         self._candidate_pedigrees = new_pedigrees
 
     @staticmethod
-    def _connect_first_degree_relation(pedigree: Pedigree, node1: str, node2: str, constraints: str) -> None:
+    def _connect_first_degree_relation(pedigree: Pedigree, node1: str, node2: str, constraints: str) -> list[Pedigree]:
         """
         Update pedigree with a first-degree relation.
         """
@@ -472,7 +472,7 @@ class PedigreeReconstructor:
         return new_pedigrees
 
     @staticmethod
-    def _connect_second_degree_relation(pedigree: Pedigree, node1: str, node2: str, constraints: str) -> None:
+    def _connect_second_degree_relation(pedigree: Pedigree, node1: str, node2: str, constraints: str) -> list[Pedigree]:
         """
         Update pedigree with a second-degree relation.
         """
@@ -732,7 +732,7 @@ class PedigreeReconstructor:
 
         strikes = []
         third_degree_strikes = []
-        counts = defaultdict(int)
+        counts: defaultdict[int, int] = defaultdict(int)
         for pedigree in new_potential_pedigrees:
             num_strikes, _ = pedigree.count_inconsistencies(
                 self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings
@@ -806,7 +806,7 @@ class PedigreeReconstructor:
                 pedigree.clean_up_relations()
 
     def _write_corrected_input_relations(
-        self, strike_count: int, strike_log: list[tuple[str, str, str]], path: str
+        self, strike_count: int, strike_log: list[tuple[str, str, str, str]], path: str
     ) -> None:
         """
         Write corrected input relations to file. Includes information about added/removed/changed input relations.
