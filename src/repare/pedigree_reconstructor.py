@@ -47,6 +47,7 @@ class PedigreeReconstructor:
         self._write_alternate_pedigrees = write_alternate_pedigrees
         self._random_seed = random_seed
         random.seed(self._random_seed)
+        self._validate_arguments()
 
         # Maximum number of times to run the algorithm if no valid pedigree is found
         self._MAX_RUNS = 10
@@ -274,6 +275,15 @@ class PedigreeReconstructor:
         self._all_relations = pd.concat(
             [self._first_degree_relations, self._second_degree_relations, self._third_degree_relations]
         ).reset_index(drop=True)
+
+    def _validate_arguments(self) -> None:
+        """
+        Validate constructor arguments.
+        """
+        if not isinstance(self._max_candidate_pedigrees, int) or self._max_candidate_pedigrees <= 0:
+            raise ValueError("max_candidate_pedigrees must be a positive integer.")
+        if not (0 <= self._epsilon <= 1):
+            raise ValueError("epsilon must be between 0 and 1.")
 
     def _shuffle_relations(self) -> None:
         """
