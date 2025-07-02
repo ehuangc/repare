@@ -23,6 +23,7 @@ class SimulatedPedigree:
         p_mask_node: float = 0.4,
         error_rate_scale: float = 1,
         max_candidate_pedigrees: int = 100,
+        epsilon: float | None = None,
         random_seed: int | None = None,
     ) -> None:
         self._ground_truth_pedigree = Pedigree()
@@ -51,6 +52,7 @@ class SimulatedPedigree:
         # Maps node ID to generation number
         self._node_to_generation = {}
         self._max_candidate_pedigrees = max_candidate_pedigrees
+        self._epsilon = epsilon
         self._random_seed = random_seed
         random.seed(self._random_seed)
 
@@ -391,14 +393,26 @@ class SimulatedPedigree:
 
             outputs_dir = os.path.join(temp_dir, "outputs")
             os.makedirs(outputs_dir, exist_ok=True)
-            pedigree_reconstructor = PedigreeReconstructor(
-                relations_path,
-                nodes_path,
-                outputs_dir,
-                max_candidate_pedigrees=self._max_candidate_pedigrees,
-                random_seed=self._random_seed,
-                plot=False,
-            )
+            if self._epsilon is not None:
+                pedigree_reconstructor = PedigreeReconstructor(
+                    relations_path,
+                    nodes_path,
+                    outputs_dir,
+                    max_candidate_pedigrees=self._max_candidate_pedigrees,
+                    epsilon=self._epsilon,
+                    random_seed=self._random_seed,
+                    plot=False,
+                )
+            else:
+                pedigree_reconstructor = PedigreeReconstructor(
+                    relations_path,
+                    nodes_path,
+                    outputs_dir,
+                    max_candidate_pedigrees=self._max_candidate_pedigrees,
+                    random_seed=self._random_seed,
+                    plot=False,
+                )
+
             try:
                 self._algorithm_pedigree = pedigree_reconstructor.find_best_pedigree()
                 self._algorithm_found_pedigree = True

@@ -6,12 +6,13 @@ from simulator.simulated_pedigree import SimulatedPedigree
 
 
 def simulate(
-    p_mask_node: float, error_rate_scale: float, max_candidate_pedigrees: int, random_seed: int
+    p_mask_node: float, error_rate_scale: float, max_candidate_pedigrees: int, epsilon: float, random_seed: int
 ) -> tuple[dict[str, int | float], dict[str, float]]:
     simulated_pedigree = SimulatedPedigree(
         p_mask_node=p_mask_node,
         error_rate_scale=error_rate_scale,
         max_candidate_pedigrees=max_candidate_pedigrees,
+        epsilon=epsilon,
         random_seed=random_seed,
     )
     simulated_pedigree.create_pedigree()
@@ -23,11 +24,16 @@ def simulate(
 
 
 def run_experiment(
-    p_mask_node: float, error_rate_scale: float, max_candidate_pedigrees: int, num_simulations: int = 100
+    p_mask_node: float,
+    error_rate_scale: float,
+    max_candidate_pedigrees: int,
+    epsilon: float,
+    num_simulations: int = 100,
 ) -> None:
     print(
         f"Running {num_simulations} simulations: "
         f"max_candidate_pedigrees={max_candidate_pedigrees}, "
+        f"epsilon={epsilon}, "
         f"p_mask_node={p_mask_node}, "
         f"error_rate_scale={error_rate_scale}"
     )
@@ -39,6 +45,7 @@ def run_experiment(
             p_mask_node=p_mask_node,
             error_rate_scale=error_rate_scale,
             max_candidate_pedigrees=max_candidate_pedigrees,
+            epsilon=epsilon,
             random_seed=idx,
         )
         for statistic, value in pedigree_statistics.items():
@@ -50,20 +57,24 @@ def run_experiment(
         [pd.DataFrame.from_dict(experiment_pedigree_statistics), pd.DataFrame.from_dict(experiment_metrics)], axis=1
     )
     results_df["Max Candidate Pedigrees"] = max_candidate_pedigrees
+    results_df["Epsilon"] = epsilon
     os.makedirs("results/sampling_experiment/data", exist_ok=True)
     results_df.to_csv(
-        f"results/sampling_experiment/data/max_candidate_pedigrees={max_candidate_pedigrees}.csv", index=False
+        f"results/sampling_experiment/data/max_candidate_pedigrees={max_candidate_pedigrees}_epsilon={epsilon}.csv",
+        index=False,
     )
 
 
 def main():
     for max_candidate_pedigrees in [10, 100, 1000]:
-        run_experiment(
-            p_mask_node=0.4,
-            error_rate_scale=1,
-            max_candidate_pedigrees=max_candidate_pedigrees,
-            num_simulations=100,
-        )
+        for epsilon in [0.0, 0.2, 0.4]:
+            run_experiment(
+                p_mask_node=0.4,
+                error_rate_scale=1,
+                max_candidate_pedigrees=max_candidate_pedigrees,
+                epsilon=epsilon,
+                num_simulations=100,
+            )
 
 
 if __name__ == "__main__":
