@@ -12,8 +12,8 @@ def main():
 
     for idx, (site, relations_file_name) in enumerate(
         [
-            ("hazelton_north", "inferred_relations_coeffs.csv"),
-            ("hazelton_north", "inferred_relations_custom.csv"),
+            ("hazleton_north", "inferred_relations_coeffs.csv"),
+            ("hazleton_north", "inferred_relations_custom.csv"),
             ("nepluyevsky", "inferred_relations_KIN.csv"),
             ("nepluyevsky", "inferred_relations_custom.csv"),
             ("gurgy", "inferred_relations_READv2.csv"),
