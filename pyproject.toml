@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "repare"
 authors = [
-  {name="Edward Huang", email="edwardhuang02@gmail.com"},
+  {name="Edward Huang", email="edwardhuangc@gmail.com"},
 ]
 description = "Reconstruct (ancient) pedigrees from pairwise kinship relations."
 dynamic = ["version"]
