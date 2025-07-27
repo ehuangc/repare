@@ -39,8 +39,7 @@ def plot_pedigree_summary_statistics(results_dir: str) -> None:
     axes[3].set_title("Mean Children Count Distribution")
     axes[3].set_xlabel("Mean # of Children per Parent")
 
-    plt.tight_layout(pad=2.0)
-    plt.savefig("results/parameter_experiment/plots/pedigree_summary_statistics.png", dpi=600)
+    plt.savefig("results/parameter_experiment/plots/pedigree_summary_statistics.png", bbox_inches="tight", dpi=600)
 
 
 def plot_results(results_dir: str) -> None:
