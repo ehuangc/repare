@@ -1,6 +1,7 @@
 import os
 from statistics import mean
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
@@ -16,30 +17,35 @@ def plot_pedigree_summary_statistics(results_dir: str) -> None:
     has_children_proportions = results_df["Proportion of Non-Final-Generation Nodes with Children"].values
     mean_children_count = results_df["Mean Children Count per Parent"].values
 
-    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
-    axes = axes.flatten()
-    for ax in axes:
-        ax.set_ylabel("Pedigree Count")
-    plt.subplots_adjust(hspace=0.25)
-    plt.suptitle("Pedigree Summary Statistics (Before Masking Nodes)", fontsize=16)
+    with mpl.rc_context(
+        {
+            "figure.constrained_layout.h_pad": 0.1,
+            "figure.constrained_layout.w_pad": 0.1,
+        }
+    ):
+        fig, axes = plt.subplots(2, 2, figsize=(12, 10), constrained_layout=True)
+        axes = axes.flatten()
+        for ax in axes:
+            ax.set_ylabel("Pedigree Count")
+        plt.suptitle("Pedigree Summary Statistics (Before Masking Nodes)", fontsize=16)
 
-    sns.histplot(pedigree_sizes, ax=axes[0])
-    axes[0].set_title("Pedigree Size Distribution")
-    axes[0].set_xlabel("# of Individuals")
+        sns.histplot(pedigree_sizes, ax=axes[0])
+        axes[0].set_title("Pedigree Size Distribution")
+        axes[0].set_xlabel("# of Individuals")
 
-    sns.histplot(inbred_proportions, ax=axes[1])
-    axes[1].set_title("Inbreeding Proportion Distrbution")
-    axes[1].set_xlabel("Proportion of Inbred Individuals")
+        sns.histplot(inbred_proportions, ax=axes[1])
+        axes[1].set_title("Inbreeding Proportion Distrbution")
+        axes[1].set_xlabel("Proportion of Inbred Individuals")
 
-    sns.histplot(has_children_proportions, ax=axes[2])
-    axes[2].set_title("Has Children Proportion Distribution")
-    axes[2].set_xlabel("Proportion of Non-Final-Generation Individuals with Children")
+        sns.histplot(has_children_proportions, ax=axes[2])
+        axes[2].set_title("Has Children Proportion Distribution")
+        axes[2].set_xlabel("Proportion of Non-Final-Generation Individuals with Children")
 
-    sns.histplot(mean_children_count, ax=axes[3])
-    axes[3].set_title("Mean Children Count Distribution")
-    axes[3].set_xlabel("Mean # of Children per Parent")
+        sns.histplot(mean_children_count, ax=axes[3])
+        axes[3].set_title("Mean Children Count Distribution")
+        axes[3].set_xlabel("Mean # of Children per Parent")
 
-    plt.savefig("results/parameter_experiment/plots/pedigree_summary_statistics.png", bbox_inches="tight", dpi=600)
+        plt.savefig("results/parameter_experiment/plots/pedigree_summary_statistics.png", bbox_inches="tight", dpi=600)
 
 
 def plot_results(results_dir: str) -> None:
