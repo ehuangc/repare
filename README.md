@@ -68,3 +68,18 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
 **Write Alternate Pedigrees** *(-w, flag)*: If set, write outputs for alternate reconstructed pedigrees to disk.
 
 **Verbose** *(-v, flag)*: If set, enable verbose output (INFO-level logging).
+
+## Reproducibility
+We recommend using [pixi](https://pixi.sh/) to reproduce the results in this repo.
+```
+git clone https://github.com/ehuangc/repare.git
+cd repare
+pixi shell
+```
+
+Once in the pixi shell, you can run the script(s) corresponding to the results you'd like to reproduce. For example:
+```
+python benchmarks/published/run_parameter_experiment.py
+exit
+```
+To install pixi, see [this page](https://pixi.sh/latest/installation/).
