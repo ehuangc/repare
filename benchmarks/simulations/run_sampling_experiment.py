@@ -66,7 +66,7 @@ def run_experiment(
 
 
 def main():
-    for max_candidate_pedigrees in [10, 100, 1000]:
+    for max_candidate_pedigrees in [10, 100, 1000, 10000]:
         for epsilon in [0.0, 0.2, 0.4]:
             run_experiment(
                 p_mask_node=0.4,
