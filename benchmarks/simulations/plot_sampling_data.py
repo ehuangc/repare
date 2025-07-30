@@ -57,14 +57,18 @@ def plot_results(results_dir: str) -> None:
             cbar_kws={"label": f"{metric} Score"},
             vmin=0.5,
             vmax=1.0,
+            annot_kws={"size": 14},
         )
         # Set colorbar label padding
         ax.figure.axes[-1].yaxis.labelpad = 10
         # Set colorbar label size
-        ax.figure.axes[-1].yaxis.label.set_size(12)
-        plt.title(f"{metric} Scores", fontsize=14, pad=10)
-        plt.xlabel("Max Candidate Pedigrees", fontsize=12, labelpad=10)
-        plt.ylabel("Epsilon", fontsize=12, labelpad=10)
+        ax.figure.axes[-1].yaxis.label.set_size(16)
+        plt.title(f"{metric} Scores", fontsize=18, pad=10)
+        plt.xlabel("Max Candidate Pedigrees", fontsize=16, labelpad=10)
+        plt.ylabel("Epsilon", fontsize=16, labelpad=10)
+        ax.tick_params(axis="x", labelsize=14)
+        ax.tick_params(axis="y", labelsize=14)
+
         plt.savefig(
             f"results/sampling_experiment/plots/{metric.lower().replace(' ', '_')}_heatmap.png",
             bbox_inches="tight",

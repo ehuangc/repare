@@ -20,32 +20,40 @@ def plot_pedigree_summary_statistics(results_dir: str) -> None:
     with mpl.rc_context(
         {
             "figure.constrained_layout.h_pad": 0.1,
-            "figure.constrained_layout.w_pad": 0.1,
+            "figure.constrained_layout.w_pad": 0.15,
         }
     ):
-        fig, axes = plt.subplots(2, 2, figsize=(12, 10), constrained_layout=True)
+        fig, axes = plt.subplots(2, 2, figsize=(10, 8), constrained_layout=True)
         axes = axes.flatten()
-        for ax in axes:
-            ax.set_ylabel("Pedigree Count")
+
         plt.suptitle("Pedigree Summary Statistics (Before Masking Nodes)", fontsize=16)
 
+        for ax in axes:
+            ax.set_ylabel("Pedigree Count", fontsize=14)
+            ax.tick_params(axis="x", labelsize=12)
+            ax.tick_params(axis="y", labelsize=12)
+
         sns.histplot(pedigree_sizes, ax=axes[0])
-        axes[0].set_title("Pedigree Size Distribution")
-        axes[0].set_xlabel("# of Individuals")
+        axes[0].set_title("Pedigree Size Distribution", fontsize=14)
+        axes[0].set_xlabel("# of Individuals", fontsize=14)
 
         sns.histplot(inbred_proportions, ax=axes[1])
-        axes[1].set_title("Inbreeding Proportion Distrbution")
-        axes[1].set_xlabel("Proportion of Inbred Individuals")
+        axes[1].set_title("Inbreeding Proportion Distribution", fontsize=14)
+        axes[1].set_xlabel("Proportion of Inbred Individuals", fontsize=14)
 
         sns.histplot(has_children_proportions, ax=axes[2])
-        axes[2].set_title("Has Children Proportion Distribution")
-        axes[2].set_xlabel("Proportion of Non-Final-Generation Individuals with Children")
+        axes[2].set_title("Has Children Proportion Distribution", fontsize=14)
+        axes[2].set_xlabel("Proportion of Non-Final-Generation\nIndividuals with Children", fontsize=14)
 
         sns.histplot(mean_children_count, ax=axes[3])
-        axes[3].set_title("Mean Children Count Distribution")
-        axes[3].set_xlabel("Mean # of Children per Parent")
+        axes[3].set_title("Mean Children Count Distribution", fontsize=14)
+        axes[3].set_xlabel("Mean # of Children per Parent", fontsize=14)
 
-        plt.savefig("results/parameter_experiment/plots/pedigree_summary_statistics.png", bbox_inches="tight", dpi=600)
+        plt.savefig(
+            "results/parameter_experiment/plots/pedigree_summary_statistics.png",
+            bbox_inches="tight",
+            dpi=600,
+        )
 
 
 def plot_results(results_dir: str) -> None:
@@ -91,15 +99,25 @@ def plot_results(results_dir: str) -> None:
         plt.figure(figsize=(8, 6))
         # Set vmin and vmax so relation and degree F1 scores are on the same color scale
         ax = sns.heatmap(
-            heatmap_data, annot=True, fmt=".2f", cmap="Blues", cbar_kws={"label": f"{metric} Score"}, vmin=0.5, vmax=1.0
+            heatmap_data,
+            annot=True,
+            fmt=".2f",
+            cmap="Blues",
+            cbar_kws={"label": f"{metric} Score"},
+            vmin=0.5,
+            vmax=1.0,
+            annot_kws={"size": 14},
         )
         # Set colorbar label padding
         ax.figure.axes[-1].yaxis.labelpad = 10
         # Set colorbar label size
-        ax.figure.axes[-1].yaxis.label.set_size(12)
-        plt.title(f"{metric} Scores", fontsize=14, pad=10)
-        plt.xlabel("Kinship Relation Error Rate Scale", fontsize=12, labelpad=10)
-        plt.ylabel("p(Mask Node)", fontsize=12, labelpad=10)
+        ax.figure.axes[-1].yaxis.label.set_size(16)
+        plt.title(f"{metric} Scores", fontsize=18, pad=10)
+        plt.xlabel("Kinship Relation Error Rate Scale", fontsize=16, labelpad=10)
+        plt.ylabel("p(Mask Node)", fontsize=16, labelpad=10)
+        ax.tick_params(axis="x", labelsize=14)
+        ax.tick_params(axis="y", labelsize=14)
+
         plt.savefig(
             f"results/parameter_experiment/plots/{metric.lower().replace(' ', '_')}_heatmap.png",
             bbox_inches="tight",
