@@ -23,7 +23,7 @@ def plot_pedigree_summary_statistics(results_dir: str) -> None:
             "figure.constrained_layout.w_pad": 0.15,
         }
     ):
-        fig, axes = plt.subplots(2, 2, figsize=(10, 8), constrained_layout=True)
+        fig, axes = plt.subplots(2, 2, figsize=(12, 9), constrained_layout=True)
         axes = axes.flatten()
 
         plt.suptitle("Pedigree Summary Statistics (Before Masking Nodes)", fontsize=16)
