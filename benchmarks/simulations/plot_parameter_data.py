@@ -93,8 +93,10 @@ def plot_results(results_dir: str) -> None:
         ax = sns.heatmap(
             heatmap_data, annot=True, fmt=".2f", cmap="Blues", cbar_kws={"label": f"{metric} Score"}, vmin=0.5, vmax=1.0
         )
-        ax.figure.axes[-1].yaxis.labelpad = 10  # Set colorbar label padding
-        ax.figure.axes[-1].yaxis.label.set_size(12)  # Set colorbar label size
+        # Set colorbar label padding
+        ax.figure.axes[-1].yaxis.labelpad = 10
+        # Set colorbar label size
+        ax.figure.axes[-1].yaxis.label.set_size(12)
         plt.title(f"{metric} Scores", fontsize=14, pad=10)
         plt.xlabel("Kinship Relation Error Rate Scale", fontsize=12, labelpad=10)
         plt.ylabel("p(Mask Node)", fontsize=12, labelpad=10)
