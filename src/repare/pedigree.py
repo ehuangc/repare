@@ -1108,12 +1108,12 @@ class Pedigree:
                 if node in data_dict:
                     del data_dict[node]
 
-            for node in self.node_to_data:
-                assert node not in self.node_to_siblings[node] and node not in self.node_to_children[node]
-                if self.node_to_father[node] in placeholder_nodes_to_remove:
-                    del self.node_to_father[node]
-                if self.node_to_mother[node] in placeholder_nodes_to_remove:
-                    del self.node_to_mother[node]
+        for node in self.node_to_data:
+            assert node not in self.node_to_siblings[node] and node not in self.node_to_children[node]
+            if self.node_to_father[node] in placeholder_nodes_to_remove:
+                del self.node_to_father[node]
+            if self.node_to_mother[node] in placeholder_nodes_to_remove:
+                del self.node_to_mother[node]
 
         for relation_dict in [self.node_to_father, self.node_to_mother, self.node_to_children, self.node_to_siblings]:
             keys_to_remove = set()
