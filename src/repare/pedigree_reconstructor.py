@@ -377,6 +377,7 @@ class PedigreeReconstructor:
             logger.error(f"No valid pedigree found after {self._MAX_RUNS} runs. Exiting.")
             raise RuntimeError(f"No valid pedigree found after {self._MAX_RUNS} runs.")
 
+        self._clean_pedigree_data()
         # Plot and write outputs of sample pedigree
         sample_idx = random.randint(0, len(self._final_pedigrees) - 1)
         self._sample_pedigree = self._final_pedigrees[sample_idx]
@@ -694,6 +695,9 @@ class PedigreeReconstructor:
         for pedigree in self._candidate_pedigrees:
             pedigree.clean_data()
 
+        for pedigree in self._final_pedigrees:
+            pedigree.clean_data()
+
     def _validate_pedigree_consistency(self) -> None:
         """
         Validate that all candidate pedigrees are consistent.
@@ -829,7 +833,6 @@ class PedigreeReconstructor:
                 )
                 self._final_strike_counts.append(strike_count)
                 self._final_strike_logs.append(strike_log)
-                pedigree.clean_data()
 
     def _write_corrected_input_relations(
         self, strike_count: int, strike_log: list[tuple[str, str, str, str]], path: str
