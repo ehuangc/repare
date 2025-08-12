@@ -328,7 +328,7 @@ class SimulatedPedigree:
                 self._get_unrelated_relations(),
             ]
         )
-        self._ground_truth_pedigree.clean_up_relations()
+        self._ground_truth_pedigree.clean_data()
         self._ground_truth_nodes_df = nodes_df.copy()
         # Remove unrelated entries
         self._ground_truth_relations_df = relations_df[relations_df["degree"] != "Unrelated"].copy()
