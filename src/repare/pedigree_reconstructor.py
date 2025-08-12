@@ -349,7 +349,7 @@ class PedigreeReconstructor:
                 self._add_relation(
                     node1, node2, degree=degree, constraints=constraints, force_constraints=force_constraints
                 )
-                self._clean_relation_dicts()
+                self._clean_pedigree_data()
                 self._validate_pedigree_consistency()
 
                 processed_relations = self._all_relations.iloc[: idx + 1]
@@ -687,12 +687,12 @@ class PedigreeReconstructor:
                 ret.extend(PedigreeReconstructor._connect_parent_relation(new_pedigree, node2_parent, node1))
         return ret
 
-    def _clean_relation_dicts(self) -> None:
+    def _clean_pedigree_data(self) -> None:
         """
         Remove unnecessary entries in Pedigree dicts.
         """
         for pedigree in self._candidate_pedigrees:
-            pedigree.clean_up_relations()
+            pedigree.clean_data()
 
     def _validate_pedigree_consistency(self) -> None:
         """
@@ -827,7 +827,7 @@ class PedigreeReconstructor:
                 )
                 self._final_strike_counts.append(strike_count)
                 self._final_strike_logs.append(strike_log)
-                pedigree.clean_up_relations()
+                pedigree.clean_data()
 
     def _write_corrected_input_relations(
         self, strike_count: int, strike_log: list[tuple[str, str, str, str]], path: str

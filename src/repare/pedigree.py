@@ -1077,7 +1077,7 @@ class Pedigree:
         """
         return set([node for node in self.node_to_data if not node.isnumeric()])
 
-    def clean_up_relations(self) -> None:
+    def clean_data(self) -> None:
         """
         Remove any empty entries in the relation dictionaries.
         Also remove unnecessary placeholder nodes to standardize topological sort output.
