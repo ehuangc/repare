@@ -1046,14 +1046,6 @@ class Pedigree:
         Remove any empty entries in the relation dictionaries.
         Also remove unnecessary placeholder nodes to standardize topological sort output.
         """
-        for relation_dict in [self.node_to_father, self.node_to_mother, self.node_to_children, self.node_to_siblings]:
-            keys_to_remove = set()
-            for k, v in relation_dict.items():
-                if not v:
-                    keys_to_remove.add(k)
-            for key_to_remove in keys_to_remove:
-                del relation_dict[key_to_remove]
-
         placeholder_nodes_to_remove: set[str] = set()
         for node in self.node_to_data:
             mother = self.node_to_mother[node]
@@ -1086,6 +1078,14 @@ class Pedigree:
                     del self.node_to_father[node]
                 if self.node_to_mother[node] in placeholder_nodes_to_remove:
                     del self.node_to_mother[node]
+
+        for relation_dict in [self.node_to_father, self.node_to_mother, self.node_to_children, self.node_to_siblings]:
+            keys_to_remove = set()
+            for k, v in relation_dict.items():
+                if not v:
+                    keys_to_remove.add(k)
+            for key_to_remove in keys_to_remove:
+                del relation_dict[key_to_remove]
 
     def plot(
         self,
