@@ -400,6 +400,42 @@ class Pedigree:
                     if self.node_to_data[curr_node]["sex"] == "F":
                         mt_lineage.extend(self.node_to_children[curr_node])
 
+    def validate_consistency(self) -> bool:
+        """
+        Validates pedigree structure and consistency of internal data.
+        """
+        for child, father in self.node_to_father.items():
+            if father and child not in self.node_to_children[father]:
+                return False
+            if child == father:
+                return False
+
+        for child, mother in self.node_to_mother.items():
+            if mother and child not in self.node_to_children[mother]:
+                return False
+            if child == mother:
+                return False
+
+        for parent, children in self.node_to_children.items():
+            for child in children:
+                if parent != self.node_to_father[child] and parent != self.node_to_mother[child]:
+                    return False
+                if parent == child:
+                    return False
+
+        for node, siblings in self.node_to_siblings.items():
+            for sibling in siblings:
+                if node not in self.node_to_siblings[sibling]:
+                    return False
+                if (
+                    self.node_to_father[node] != self.node_to_father[sibling]
+                    or self.node_to_mother[node] != self.node_to_mother[sibling]
+                ):
+                    return False
+                if node == sibling:
+                    return False
+        return True
+
     def validate_members(self, members: set[str]) -> bool:
         """
         Validates this tree based on the member nodes it should contain.

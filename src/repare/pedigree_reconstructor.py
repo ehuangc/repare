@@ -344,6 +344,7 @@ class PedigreeReconstructor:
                     node1, node2, degree=degree, constraints=constraints, force_constraints=force_constraints
                 )
                 self._clean_relation_dicts()
+                self._validate_pedigree_consistency()
 
                 processed_relations = self._all_relations.iloc[: idx + 1]
                 pair_to_relations_so_far = self._get_pair_to_relations_so_far(processed_relations)
@@ -686,6 +687,13 @@ class PedigreeReconstructor:
         """
         for pedigree in self._candidate_pedigrees:
             pedigree.clean_up_relations()
+
+    def _validate_pedigree_consistency(self) -> None:
+        """
+        Validate that all candidate pedigrees are consistent.
+        """
+        for pedigree in self._candidate_pedigrees:
+            assert pedigree.validate_consistency()
 
     def _get_pair_to_constraints(self) -> defaultdict[tuple[str, str], list[tuple[str, ...]]]:
         """
