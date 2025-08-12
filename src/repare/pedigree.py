@@ -49,20 +49,19 @@ class Pedigree:
         leaf_nodes: list[str] = sorted([node for node in self.node_to_data if not self.node_to_children[node]])
         result: list[str] = []
 
-        # DFS
-        def visit(node: str) -> None:
+        def dfs(node: str) -> None:
             # No father == no mother
             if not self.node_to_father[node]:
                 assert not self.node_to_mother[node]
                 result.append(node)
             else:
                 # Visit father first
-                visit(self.node_to_father[node])
-                visit(self.node_to_mother[node])
+                dfs(self.node_to_father[node])
+                dfs(self.node_to_mother[node])
                 result.append(node)
 
         for node in leaf_nodes:
-            visit(node)
+            dfs(node)
             # Break between each node's path
             result.append("")
 
@@ -467,8 +466,7 @@ class Pedigree:
         """
         leaf_nodes: list[str] = [node for node in self.node_to_data if not self.node_to_children[node]]
 
-        # DFS
-        def visit(node: str, curr_years_before_present: float) -> bool:
+        def dfs(node: str, curr_years_before_present: float) -> bool:
             years_before_present = self.node_to_data[node]["years_before_present"]
             if not math.isnan(years_before_present):
                 # Node postdates its descendants
@@ -479,14 +477,14 @@ class Pedigree:
 
             if self.node_to_father[node]:
                 assert self.node_to_mother[node]
-                if not visit(self.node_to_father[node], curr_years_before_present):
+                if not dfs(self.node_to_father[node], curr_years_before_present):
                     return False
-                if not visit(self.node_to_mother[node], curr_years_before_present):
+                if not dfs(self.node_to_mother[node], curr_years_before_present):
                     return False
             return True
 
         for node in leaf_nodes:
-            if not visit(node, float("-inf")):
+            if not dfs(node, float("-inf")):
                 return False
         return True
 
