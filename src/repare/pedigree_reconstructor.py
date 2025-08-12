@@ -53,7 +53,7 @@ class PedigreeReconstructor:
         self._MAX_RUNS = 10
         self._candidate_pedigrees: list[Pedigree] = [self._get_initial_pedigree()]
         self._pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]] = self._get_pair_to_constraints()
-        self._final_pedigree: Pedigree | None = None
+        self._final_pedigrees: list[Pedigree] = []
 
     def _validate_node_data(self, nodes_path: str) -> None:
         """
@@ -814,11 +814,13 @@ class PedigreeReconstructor:
                 pedigree.count_third_degree_inconcistencies(self._pair_to_constraints) for pedigree in best_pedigrees
             ]
 
-            self._final_pedigrees = [
-                pedigree
-                for pedigree, num_strikes in zip(best_pedigrees, third_degree_strikes, strict=True)
-                if num_strikes == min(third_degree_strikes)
-            ]
+            self._final_pedigrees.extend(
+                [
+                    pedigree
+                    for pedigree, num_strikes in zip(best_pedigrees, third_degree_strikes, strict=True)
+                    if num_strikes == min(third_degree_strikes)
+                ]
+            )
             self._final_strike_counts = []
             self._final_strike_logs = []
             for pedigree in self._final_pedigrees:
