@@ -93,7 +93,7 @@ class Pedigree:
         """
         Add a node to the pedigree. If haplogroup is unknown, set argument to empty string ("").
         """
-        self.node_to_data[node_id]: dict[str, str | bool | float] = dict()
+        self.node_to_data[node_id] = dict()
         self.node_to_data[node_id]["sex"] = sex
         if y_haplogroup and sex == "F":
             raise ValueError("Only males can have y_haplogroup values.")
@@ -262,7 +262,7 @@ class Pedigree:
                     merge_queue.append((curr_mother1, curr_mother2))
 
         # DFS cycle detection
-        def dfs(node):
+        def dfs(node) -> bool:
             merged_nodes: set[str] | None = None
             for merge_set in merge_sets:
                 if node in merge_set:
@@ -400,7 +400,7 @@ class Pedigree:
                     if self.node_to_data[curr_node]["sex"] == "F":
                         mt_lineage.extend(self.node_to_children[curr_node])
 
-    def validate_members(self, members: set) -> bool:
+    def validate_members(self, members: set[str]) -> bool:
         """
         Validates this tree based on the member nodes it should contain.
         """
