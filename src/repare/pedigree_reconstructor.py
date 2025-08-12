@@ -72,6 +72,12 @@ class PedigreeReconstructor:
         if self._node_data["id"].str.isnumeric().any():
             raise ValueError("Sample IDs cannot be completely numeric.")
 
+        if self._node_data["id"].duplicated().any():
+            raise ValueError("Sample IDs must be unique.")
+
+        if self._node_data["id"].str.strip().eq("").any():
+            raise ValueError("Sample IDs cannot be empty.")
+
         if not self._node_data["sex"].isin(["M", "F"]).all():
             raise ValueError('Node sex must be "M" or "F".')
 
