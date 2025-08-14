@@ -30,7 +30,7 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
 > For example data inputs, see [examples/nodes.csv](examples/nodes.csv) and [examples/relations.csv](examples/relations.csv).
 
 ### Inputs
-**Nodes** *(-n, required)*: Path to a CSV file that contains information about the individuals to be analyzed by repare. 
+**Nodes** (-n) (*required*): Path to a CSV file that contains information about the individuals to be analyzed by repare. 
 
 <blockquote><details open>
   <summary><ins>Nodes CSV file columns</ins></summary>
@@ -44,7 +44,7 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
   - **years_before_present** *(optional)*: (Approximate) date of birth of individual, in years before present. If provided, will be used to prune temporally invalid pedigrees. *This column should only be used when backed by strong dating evidence.*
 </details></blockquote>
 
-**Relations** *(-r, required)*: Path to a CSV file that contains information about inferred pairwise kinship relations. All individuals included in this file must be specified in the nodes CSV.
+**Relations** (-r) (*required*): Path to a CSV file that contains information about inferred pairwise kinship relations. All individuals included in this file must be specified in the nodes CSV.
 
 <blockquote><details open>
   <summary><ins>Relations CSV file columns</ins></summary>
@@ -55,19 +55,19 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
   - **constraints** *(optional)*: Semicolon-delimited list of possible configurations of kinship relation. For example, a parental 1st-degree relation can be constrained with "parent-child;child-parent". Many kinship inference methods will classify 1st-degree relation types, which can be used as relation constraints.
 </details></blockquote>
 
-**Output** *(-o, optional)*: Path to directory for saving repare outputs. Defaults to the current working directory.
+**Output** (-o) (*optional*): Path to directory for saving repare outputs. Defaults to the current working directory.
 
-**Max Candidate Pedigrees** *(-m, optional)*: Maximum number of candidate pedigrees to keep after each algorithm iteration. Defaults to 1000.
+**Max Candidate Pedigrees** (-m) (*optional*): Maximum number of candidate pedigrees to keep after each algorithm iteration. Defaults to 1000.
 
-**Epsilon** *(-e, optional)*: Parameter for adapted epsilon-greedy sampling at the end of each algorithm iteration. Defaults to 0.2.
+**Epsilon** (-e) (*optional*): Parameter for adapted epsilon-greedy sampling at the end of each algorithm iteration. Defaults to 0.2.
 
-**Seed** *(-s, optional)*: Random seed for reproducibility. Defaults to 42.
+**Seed** (-s) (*optional*): Random seed for reproducibility. Defaults to 42.
 
-**Do Not Plot** *(-d, flag)*: If set, do not plot reconstructed pedigree(s).
+**Do Not Plot** (-d) (*flag*): If set, do not plot reconstructed pedigree(s).
 
-**Write Alternate Pedigrees** *(-w, flag)*: If set, write outputs for alternate reconstructed pedigrees to disk.
+**Write Alternate Pedigrees** (-w) (*flag*): If set, write outputs for alternate reconstructed pedigrees to disk.
 
-**Verbose** *(-v, flag)*: If set, enable verbose output (INFO-level logging).
+**Verbose** (-v) (*flag*): If set, enable verbose output (INFO-level logging).
 
 ## Reproducibility
 We recommend using [pixi](https://pixi.sh/) to reproduce the results in this repo.
