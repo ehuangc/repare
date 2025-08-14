@@ -120,7 +120,7 @@ class SimulatedPedigree:
         """
         Given a parent node, select a valid mate and produce a random number of children.
         """
-        parent1_sex = self._ground_truth_pedigree.node_to_data[parent1]["sex"]
+        parent1_sex = self._ground_truth_pedigree.get_data(parent1)["sex"]
         parent1_generation = self._node_to_generation[parent1]
 
         # Parent 2 is either an existing node or is an "outside" node
@@ -132,12 +132,12 @@ class SimulatedPedigree:
             for node in self._ground_truth_pedigree.node_to_data:
                 if (
                     node != parent1
-                    and self._ground_truth_pedigree.node_to_data[node]["can_have_children"]
+                    and self._ground_truth_pedigree.get_data(node)["can_have_children"]
                     and 0 <= parent1_generation - self._node_to_generation[node] <= 1
                 ):
-                    if parent1_sex == "M" and self._ground_truth_pedigree.node_to_data[node]["sex"] == "F":
+                    if parent1_sex == "M" and self._ground_truth_pedigree.get_data(node)["sex"] == "F":
                         potential_mates.append(node)
-                    if parent1_sex == "F" and self._ground_truth_pedigree.node_to_data[node]["sex"] == "M":
+                    if parent1_sex == "F" and self._ground_truth_pedigree.get_data(node)["sex"] == "M":
                         potential_mates.append(node)
             if len(potential_mates) > 0:
                 parent2 = random.choice(potential_mates)
@@ -156,12 +156,12 @@ class SimulatedPedigree:
             child_mt_haplogroup = None
             if parent1_sex == "M":
                 if child_sex == "M":
-                    child_y_haplogroup = self._ground_truth_pedigree.node_to_data[parent1]["y_haplogroup"]
-                child_mt_haplogroup = self._ground_truth_pedigree.node_to_data[parent2]["mt_haplogroup"]
+                    child_y_haplogroup = self._ground_truth_pedigree.get_data(parent1)["y_haplogroup"]
+                child_mt_haplogroup = self._ground_truth_pedigree.get_data(parent2)["mt_haplogroup"]
             else:
                 if child_sex == "M":
-                    child_y_haplogroup = self._ground_truth_pedigree.node_to_data[parent2]["y_haplogroup"]
-                child_mt_haplogroup = self._ground_truth_pedigree.node_to_data[parent1]["mt_haplogroup"]
+                    child_y_haplogroup = self._ground_truth_pedigree.get_data(parent2)["y_haplogroup"]
+                child_mt_haplogroup = self._ground_truth_pedigree.get_data(parent1)["mt_haplogroup"]
 
             child = self._create_node(
                 generation=child_generation,
@@ -177,19 +177,19 @@ class SimulatedPedigree:
             str, str, str, str, str, str
         ] = []  # id, sex, y_haplogroup, mt_haplogroup, can_have_children, can_be_inbred
         pedigree_relation_pairs: set[tuple[str, str]] = self._ground_truth_pedigree.get_related_pairs()
-        for node, node_info in self._ground_truth_pedigree.node_to_data.items():
-            sex = node_info["sex"]
-            y_haplogroup = node_info["y_haplogroup"]
-            mt_haplogroup = node_info["mt_haplogroup"]
+        for node in self._ground_truth_pedigree.node_to_data:
+            sex = self._ground_truth_pedigree.get_data(node)["sex"]
+            y_haplogroup = self._ground_truth_pedigree.get_data(node)["y_haplogroup"]
+            mt_haplogroup = self._ground_truth_pedigree.get_data(node)["mt_haplogroup"]
 
             can_have_children = "True"
             # Even if node has no children, conservatively set can_have_children to False
-            if not node_info["can_have_children"] and random.random() < 0.25:
+            if not self._ground_truth_pedigree.get_data(node)["can_have_children"] and random.random() < 0.25:
                 can_have_children = "False"
 
             can_be_inbred = "True"
-            father = self._ground_truth_pedigree.node_to_father[node]
-            mother = self._ground_truth_pedigree.node_to_mother[node]
+            father = self._ground_truth_pedigree.get_father(node)
+            mother = self._ground_truth_pedigree.get_mother(node)
             # Even if node is not inbred, conservatively set can_be_inbred to False
             if (
                 (father, mother) not in pedigree_relation_pairs
@@ -434,8 +434,8 @@ class SimulatedPedigree:
 
         related_pairs = set(self._ground_truth_relations_df[["id1", "id2"]].itertuples(index=False, name=None))
         for node in self._ground_truth_pedigree.node_to_data:
-            father = self._ground_truth_pedigree.node_to_father[node]
-            mother = self._ground_truth_pedigree.node_to_mother[node]
+            father = self._ground_truth_pedigree.get_father(node)
+            mother = self._ground_truth_pedigree.get_mother(node)
             if father and mother:
                 num_nodes_with_parents += 1
                 if (father, mother) in related_pairs or (mother, father) in related_pairs:
@@ -449,7 +449,7 @@ class SimulatedPedigree:
         for node in self._ground_truth_pedigree.node_to_data:
             if self._node_to_generation[node] != max(self._node_to_generation.values()):
                 num_nonleaf_nodes += 1
-                if self._ground_truth_pedigree.node_to_children[node]:
+                if self._ground_truth_pedigree.get_children(node):
                     num_nonleaf_parents += 1
         return num_nonleaf_parents / num_nonleaf_nodes if num_nonleaf_nodes > 0 else 0
 
@@ -458,8 +458,8 @@ class SimulatedPedigree:
         num_parents = 0
 
         for node in self._ground_truth_pedigree.node_to_data:
-            if self._ground_truth_pedigree.node_to_children[node]:
-                num_children += len(self._ground_truth_pedigree.node_to_children[node])
+            if self._ground_truth_pedigree.get_children(node):
+                num_children += len(self._ground_truth_pedigree.get_children(node))
                 num_parents += 1
         return num_children / num_parents if num_parents > 0 else 0
 

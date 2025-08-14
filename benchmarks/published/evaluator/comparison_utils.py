@@ -23,14 +23,14 @@ def get_mt_colormap(
     # Build mt_haplogroup color mapping so both plots can use the same colormap
     inferred_pedigree_mt_haplogroups = set(
         [
-            inferred_pedigree.node_to_data[node]["mt_haplogroup"].replace("*", "")
+            inferred_pedigree.get_data(node)["mt_haplogroup"].replace("*", "")
             for node in inferred_pedigree.node_to_data
             if not node.isnumeric()
         ]
     )
     published_pedigree_mt_haplogroups = set(
         [
-            published_pedigree.node_to_data[node]["mt_haplogroup"].replace("*", "")
+            published_pedigree.get_data(node)["mt_haplogroup"].replace("*", "")
             for node in published_pedigree.node_to_data
             if not node.isnumeric()
         ]

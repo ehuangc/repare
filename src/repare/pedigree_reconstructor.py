@@ -560,12 +560,12 @@ class PedigreeReconstructor:
         new_pedigree = copy.deepcopy(pedigree)
         new_pedigree.fill_node_parents(node2)
         original_parent: str
-        if new_pedigree.node_to_data[node1]["sex"] == "M":
-            original_parent = new_pedigree.node_to_father[node2]
+        if new_pedigree.get_data(node1)["sex"] == "M":
+            original_parent = new_pedigree.get_father(node2)
         else:
-            original_parent = new_pedigree.node_to_mother[node2]
+            original_parent = new_pedigree.get_mother(node2)
 
-        if not new_pedigree.check_cycles_if_merged(node1, original_parent):
+        if new_pedigree.check_valid_merge(node1, original_parent):
             new_pedigree.merge_nodes(node1, original_parent)
             ret.append(new_pedigree)
         return ret
@@ -583,13 +583,13 @@ class PedigreeReconstructor:
         new_pedigree.fill_node_parents(node1)
         new_pedigree.fill_node_parents(node2)
 
-        father1 = new_pedigree.node_to_father[node1]
-        father2 = new_pedigree.node_to_father[node2]
-        if not new_pedigree.check_cycles_if_merged(father1, father2):
+        father1 = new_pedigree.get_father(node1)
+        father2 = new_pedigree.get_father(node2)
+        if new_pedigree.check_valid_merge(father1, father2):
             new_pedigree.merge_nodes(father1, father2)
-            mother1 = new_pedigree.node_to_mother[node1]
-            mother2 = new_pedigree.node_to_mother[node2]
-            if not new_pedigree.check_cycles_if_merged(mother1, mother2):
+            mother1 = new_pedigree.get_mother(node1)
+            mother2 = new_pedigree.get_mother(node2)
+            if new_pedigree.check_valid_merge(mother1, mother2):
                 new_pedigree.merge_nodes(mother1, mother2)
                 new_pedigree.add_sibling_relation(node1, node2)
                 ret.append(new_pedigree)
@@ -612,11 +612,11 @@ class PedigreeReconstructor:
 
         node2_parents: list[str]
         if shared_relative_sex == "M":
-            node2_parents = [new_pedigree.node_to_father[node2]]
+            node2_parents = [new_pedigree.get_father(node2)]
         elif shared_relative_sex == "F":
-            node2_parents = [new_pedigree.node_to_mother[node2]]
+            node2_parents = [new_pedigree.get_mother(node2)]
         else:
-            node2_parents = [new_pedigree.node_to_father[node2], new_pedigree.node_to_mother[node2]]
+            node2_parents = [new_pedigree.get_father(node2), new_pedigree.get_mother(node2)]
 
         for node2_parent in node2_parents:
             if node1 != node2_parent:
@@ -640,11 +640,11 @@ class PedigreeReconstructor:
 
         node2_parents: list[str]
         if shared_relative_sex == "M":
-            node2_parents = [new_pedigree.node_to_father[node2]]
+            node2_parents = [new_pedigree.get_father(node2)]
         elif shared_relative_sex == "F":
-            node2_parents = [new_pedigree.node_to_mother[node2]]
+            node2_parents = [new_pedigree.get_mother(node2)]
         else:
-            node2_parents = [new_pedigree.node_to_father[node2], new_pedigree.node_to_mother[node2]]
+            node2_parents = [new_pedigree.get_father(node2), new_pedigree.get_mother(node2)]
 
         for node2_parent in node2_parents:
             if node1 != node2_parent:
@@ -669,14 +669,14 @@ class PedigreeReconstructor:
         node1_parents: list[str]
         node2_parents: list[str]
         if shared_relative_sex == "M":
-            node1_parents = [new_pedigree.node_to_father[node1]]
-            node2_parents = [new_pedigree.node_to_father[node2]]
+            node1_parents = [new_pedigree.get_father(node1)]
+            node2_parents = [new_pedigree.get_father(node2)]
         elif shared_relative_sex == "F":
-            node1_parents = [new_pedigree.node_to_mother[node1]]
-            node2_parents = [new_pedigree.node_to_mother[node2]]
+            node1_parents = [new_pedigree.get_mother(node1)]
+            node2_parents = [new_pedigree.get_mother(node2)]
         else:
-            node1_parents = [new_pedigree.node_to_father[node1], new_pedigree.node_to_mother[node1]]
-            node2_parents = [new_pedigree.node_to_father[node2], new_pedigree.node_to_mother[node2]]
+            node1_parents = [new_pedigree.get_father(node1), new_pedigree.get_mother(node1)]
+            node2_parents = [new_pedigree.get_father(node2), new_pedigree.get_mother(node2)]
 
         # Node 1 and Node 2 are half-siblings via one of Node 1's parents
         for node1_parent in node1_parents:
