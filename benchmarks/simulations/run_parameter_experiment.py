@@ -47,7 +47,7 @@ def run_experiment(p_mask_node: float, error_rate_scale: float, num_simulations:
 
 def main():
     for p_mask_node in [0.0, 0.2, 0.4, 0.6]:
-        for error_rate_scale in [0.0, 0.5, 1.0, 2]:
+        for error_rate_scale in [0.0, 0.5, 1, 2]:
             run_experiment(p_mask_node=p_mask_node, error_rate_scale=error_rate_scale, num_simulations=100)
 
 
