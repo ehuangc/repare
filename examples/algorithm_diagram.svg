@@ -9,7 +9,7 @@
    id="svg1"
    inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
    sodipodi:docname="figure_less_text_as_paths_white_background.svg"
-   inkscape:export-filename="figure_less_text_as_paths.svg"
+   inkscape:export-filename="../examples/algorithm_diagram.svg"
    inkscape:export-xdpi="1200"
    inkscape:export-ydpi="1200"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -28,8 +28,8 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      inkscape:zoom="1.178272635828602"
-     inkscape:cx="315.7164044112735"
-     inkscape:cy="265.2187537057068"
+     inkscape:cx="159.1312522234241"
+     inkscape:cy="42.85935059884223"
      inkscape:window-width="1368"
      inkscape:window-height="916"
      inkscape:window-x="89"
@@ -452,13 +452,12 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:#ffffff;fill-opacity:0.996337;stroke:#808080;stroke-width:0.17"
+       style="fill:#ffffff;fill-opacity:0.996337;stroke:none;stroke-width:0.17"
        id="rect50"
        width="178"
        height="178"
        x="0"
-       y="0"
-       sodipodi:insensitive="true" />
+       y="0" />
     <path
        style="fill:none;fill-opacity:0.996337;stroke:#000000;stroke-width:0.17;stroke-linecap:butt;stroke-dasharray:none;marker-end:url(#ArrowWide_Fnone_S-000000)"
        d="M 43.76458820004091,25.43889880971089 V 37.35794504436992"
