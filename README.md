@@ -59,6 +59,7 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
   - **id2** *(required)*: ID of individual 2.
   - **degree** *(required)*: Degree of (inferred) kinship relation between individual 1 and individual 2. Must be "1", "2", or "3". Higher-degree relatives are considered unrelated.
   - **constraints** *(optional)*: Semicolon-delimited list of possible configurations of kinship relation. For example, a parental 1st-degree relation can be constrained with "parent-child;child-parent". Many kinship inference methods will classify 1st-degree relation types, which can be used as relation constraints.
+  - **force_constraints** *(optional)*: Whether the corresponding constraint should be forced. If False, breaking the constraint counts as one inconsistency. If True, the constraint must be followed. Defaults to "False".
 </details></blockquote>
 
 **Output** (-o) (*optional*): Path to directory for saving repare outputs. Defaults to the current working directory.

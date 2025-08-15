@@ -1,10 +1,10 @@
-id1,id2,degree,constraints
+id1,id2,degree,constraints,force_constraints
 N1,N2,1,parent-child
 N2,N4,1,parent-child;child-parent
 N2,N3,1,
 N2,N6,1,
 N4,N5,1,
-N3,N6,1,siblings
+N3,N6,1,siblings,True
 N1,N3,2,
 N1,N4,2,
 N3,N4,2,
