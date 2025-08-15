@@ -38,7 +38,9 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
 ### Inputs
 **Nodes** (-n) (*required*): Path to a CSV file that contains information about the individuals to be analyzed by repare. 
 
-<blockquote><details open>
+<dl>
+  <dd>
+<details open>
   <summary><ins>Nodes CSV file columns</ins></summary>
 
   - **id** *(required)*: ID of individual. Cannot be fully numeric, as numeric IDs are reserved for placeholder nodes.
@@ -48,11 +50,15 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
   - **can_have_children** *(optional)*: Whether the individual *can* have offspring (e.g., as indicated by age of death). If provided, value must be "True" or "False". Defaults to "True".
   - **can_be_inbred** *(optional)*: Whether the individual *can* have parents related at the 3rd-degree or closer (e.g., as indicated by ROH). If provided, value must be "True" or "False". Defaults to "True".
   - **years_before_present** *(optional)*: (Approximate) date of birth of individual, in years before present. If provided, will be used to prune temporally invalid pedigrees. *This column should only be used when backed by strong dating evidence.*
-</details></blockquote>
+</details>
+  </dd>
+</dl>
 
 **Relations** (-r) (*required*): Path to a CSV file that contains information about inferred pairwise kinship relations. All individuals included in this file must be specified in the nodes CSV.
 
-<blockquote><details open>
+<dl>
+  <dd>
+<details open>
   <summary><ins>Relations CSV file columns</ins></summary>
 
   - **id1** *(required)*: ID of individual 1.
@@ -60,7 +66,9 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
   - **degree** *(required)*: Degree of (inferred) kinship relation between individual 1 and individual 2. Value must be "1", "2", or "3". Higher-degree relatives are considered unrelated.
   - **constraints** *(optional)*: Semicolon-delimited list of possible configurations of kinship relation. For example, a parental 1st-degree relation can be constrained with "parent-child;child-parent". Many kinship inference methods will classify 1st-degree relation types, which can be used as relation constraints. Valid constraints: "parent-child", "child-parent", "siblings", "maternal aunt/uncle-nephew/niece", "maternal nephew/niece-aunt/uncle", "paternal aunt/uncle-nephew/niece", "paternal nephew/niece-aunt/uncle", "maternal grandparent-grandchild", "maternal grandchild-grandparent", "paternal grandparent-grandchild", "paternal grandchild-grandparent" "maternal half-siblings", "paternal half-siblings".
   - **force_constraints** *(optional)*: Whether the corresponding constraint should be forced. If provided, value must be "True" or "False". If "True", the constraint must be followed. If "False", breaking the constraint counts as one inconsistency. Defaults to "False".
-</details></blockquote>
+</details>
+  </dd>
+</dl>
 
 **Output** (-o) (*optional*): Path to directory for saving repare outputs. Defaults to the current working directory.
 
