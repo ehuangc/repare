@@ -42,11 +42,11 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
   <summary><ins>Nodes CSV file columns</ins></summary>
 
   - **id** *(required)*: ID of individual. Cannot be fully numeric, as numeric IDs are reserved for placeholder nodes.
-  - **sex** *(required)*: Genetic sex of individual.
+  - **sex** *(required)*: Genetic sex of individual. Value must be "M" or "F".
   - **y_haplogroup** *(required)*: Y chromosome haplogroup of individual. Can include "*" as a wildcard expansion character at the end if haplogroup is not fully inferred.
   - **mt_haplogroup** *(required)*: Mitochondrial haplogroup of individual. Can include "*" as a wildcard expansion character at the end if haplogroup is not fully inferred.
-  - **can_have_children** *(optional)*: Whether the individual *can* have offspring (e.g., as indicated by age of death). Defaults to "True".
-  - **can_be_inbred** *(optional)*: Whether the individual *can* have parents related at the 3rd-degree or closer (e.g., as indicated by ROH). Defaults to "True".
+  - **can_have_children** *(optional)*: Whether the individual *can* have offspring (e.g., as indicated by age of death). If provided, value must be "True" or "False". Defaults to "True".
+  - **can_be_inbred** *(optional)*: Whether the individual *can* have parents related at the 3rd-degree or closer (e.g., as indicated by ROH). If provided, value must be "True" or "False". Defaults to "True".
   - **years_before_present** *(optional)*: (Approximate) date of birth of individual, in years before present. If provided, will be used to prune temporally invalid pedigrees. *This column should only be used when backed by strong dating evidence.*
 </details></blockquote>
 
@@ -57,9 +57,9 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
 
   - **id1** *(required)*: ID of individual 1.
   - **id2** *(required)*: ID of individual 2.
-  - **degree** *(required)*: Degree of (inferred) kinship relation between individual 1 and individual 2. Must be "1", "2", or "3". Higher-degree relatives are considered unrelated.
-  - **constraints** *(optional)*: Semicolon-delimited list of possible configurations of kinship relation. For example, a parental 1st-degree relation can be constrained with "parent-child;child-parent". Many kinship inference methods will classify 1st-degree relation types, which can be used as relation constraints.
-  - **force_constraints** *(optional)*: Whether the corresponding constraint should be forced. If False, breaking the constraint counts as one inconsistency. If True, the constraint must be followed. Defaults to "False".
+  - **degree** *(required)*: Degree of (inferred) kinship relation between individual 1 and individual 2. Value must be "1", "2", or "3". Higher-degree relatives are considered unrelated.
+  - **constraints** *(optional)*: Semicolon-delimited list of possible configurations of kinship relation. For example, a parental 1st-degree relation can be constrained with "parent-child;child-parent". Many kinship inference methods will classify 1st-degree relation types, which can be used as relation constraints. Valid constraints: "parent-child", "child-parent", "siblings", "maternal aunt/uncle-nephew/niece", "maternal nephew/niece-aunt/uncle", "paternal aunt/uncle-nephew/niece", "paternal nephew/niece-aunt/uncle", "maternal grandparent-grandchild", "maternal grandchild-grandparent", "paternal grandparent-grandchild", "paternal grandchild-grandparent" "maternal half-siblings", "paternal half-siblings".
+  - **force_constraints** *(optional)*: Whether the corresponding constraint should be forced. If provided, value must be "True" or "False". If "True", the constraint must be followed. If "False", breaking the constraint counts as one inconsistency. Defaults to "False".
 </details></blockquote>
 
 **Output** (-o) (*optional*): Path to directory for saving repare outputs. Defaults to the current working directory.
