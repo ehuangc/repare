@@ -4,6 +4,7 @@ from collections import defaultdict, deque
 
 import matplotlib.pyplot as plt
 import networkx as nx
+from matplotlib.colors import to_rgba
 
 
 class Pedigree:
@@ -1312,12 +1313,19 @@ class Pedigree:
             mt_haplogroup_to_color = {
                 haplogroup: cmap(i / len(mt_haplogroups)) for i, haplogroup in enumerate(mt_haplogroups)
             }
+
+        # Specify alpha here instead of in nx.draw_networkx_nodes so node borders stay opaque
+        face_alpha = 0.5
         male_named_node_colors = [
-            mt_haplogroup_to_color[self.get_data(node)["mt_haplogroup"].replace("*", "")] for node in male_named_nodes
+            to_rgba(mt_haplogroup_to_color[self.get_data(node)["mt_haplogroup"].replace("*", "")], face_alpha)
+            for node in male_named_nodes
         ]
         female_named_node_colors = [
-            mt_haplogroup_to_color[self.get_data(node)["mt_haplogroup"].replace("*", "")] for node in female_named_nodes
+            to_rgba(mt_haplogroup_to_color[self.get_data(node)["mt_haplogroup"].replace("*", "")], face_alpha)
+            for node in female_named_nodes
         ]
+        male_placeholder_node_colors = [to_rgba("#e5e5e5", face_alpha) for node in male_placeholder_nodes]
+        female_placeholder_node_colors = [to_rgba("#e5e5e5", face_alpha) for node in female_placeholder_nodes]
 
         plt.figure(figsize=(12, 4.8), dpi=1200)
         # Scale sizes based on pedigree node count
@@ -1334,7 +1342,6 @@ class Pedigree:
             node_shape="s",
             node_size=node_size,
             node_color=male_named_node_colors,
-            alpha=0.5,
             edgecolors="black",
             linewidths=line_width,
         )
@@ -1345,7 +1352,6 @@ class Pedigree:
             node_shape="o",
             node_size=node_size,
             node_color=female_named_node_colors,
-            alpha=0.5,
             edgecolors="black",
             linewidths=line_width,
         )
@@ -1355,8 +1361,7 @@ class Pedigree:
             nodelist=male_placeholder_nodes,
             node_shape="s",
             node_size=node_size,
-            node_color="#e5e5e5",
-            alpha=0.5,
+            node_color=male_placeholder_node_colors,
             edgecolors="black",
             linewidths=line_width,
         )
@@ -1366,8 +1371,7 @@ class Pedigree:
             nodelist=female_placeholder_nodes,
             node_shape="o",
             node_size=node_size,
-            node_color="#e5e5e5",
-            alpha=0.5,
+            node_color=female_placeholder_node_colors,
             edgecolors="black",
             linewidths=line_width,
         )
