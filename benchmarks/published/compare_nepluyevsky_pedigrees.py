@@ -32,12 +32,12 @@ def main():
     mt_haplogroup_to_color = get_mt_colormap(inferred_pedigree, published_pedigree)
     plot_inferred_pedigree(
         inferred_pedigree,
-        plot_path=os.path.join(results_dir, "inferred_pedigree.png"),
+        plot_path=os.path.join(results_dir, "inferred_pedigree.pdf"),
         mt_haplogroup_to_color=mt_haplogroup_to_color,
     )
     plot_published_pedigree(
         published_pedigree=published_pedigree,
-        plot_path=os.path.join(results_dir, "published_pedigree.png"),
+        plot_path=os.path.join(results_dir, "published_pedigree.pdf"),
         mt_haplogroup_to_color=mt_haplogroup_to_color,
     )
     write_relation_differences(

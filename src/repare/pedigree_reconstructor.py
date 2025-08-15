@@ -393,7 +393,7 @@ class PedigreeReconstructor:
         )
         if self._plot:
             try:
-                self._sample_pedigree.plot(os.path.join(self._outputs_dir, "reconstructed_pedigree.png"))
+                self._sample_pedigree.plot(os.path.join(self._outputs_dir, "reconstructed_pedigree.pdf"))
                 pygraphviz_found = True
             except ImportError:
                 logger.warning(
