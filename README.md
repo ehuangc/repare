@@ -1,8 +1,10 @@
 :evergreen_tree: **repare** is a Python package for (ancient) pedigree reconstruction.
 
-<img src="examples/algorithm_diagram.png" alt="Reconstruction Process Diagram" width="600" />
-
-*Diagram of repare's pedigree reconstruction process*
+<p align="center">
+  <img src="examples/algorithm_diagram.png" alt="Reconstruction Process Diagram" width="600" />
+  <br>
+  <em>Diagram of repare's pedigree reconstruction process</em>
+</p>
 
 ## Installation
 
