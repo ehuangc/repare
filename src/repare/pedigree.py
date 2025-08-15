@@ -1380,6 +1380,7 @@ class Pedigree:
             node_size=node_size,
             width=line_width,
             arrowsize=line_width * 30,
+            edge_color="black",
         )
         # Setting arrows=False causes edges to overlap their associated nodes for some reason
         nx.draw_networkx_edges(
