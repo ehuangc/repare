@@ -155,8 +155,13 @@ class Pedigree:
         assert node1 in self.node_to_data and node2 in self.node_to_data
 
         if self.get_data(node1)["sex"] == "M":
+            # Remove child from original parent
+            if self.get_father(node2):
+                self.node_to_children[self.get_father(node2)].remove(node2)
             self.node_to_father[node2] = node1
         else:
+            if self.get_mother(node2):
+                self.node_to_children[self.get_mother(node2)].remove(node2)
             self.node_to_mother[node2] = node1
 
         if node1 not in self.node_to_children:
@@ -225,6 +230,7 @@ class Pedigree:
                     assert self.get_children(name_to_discard_mother)
                     self.node_to_children[name_to_discard_mother].remove(name_to_discard)
 
+                name_to_discard_children = set()
                 for child in self.get_children(name_to_discard):
                     # Merging a parent and child - we will see this when there is inbreeding
                     # Note: can’t merge a parent and a child if the child has siblings,
@@ -236,8 +242,11 @@ class Pedigree:
                         else:
                             del self.node_to_mother[name_to_keep]
                     else:
-                        # This also handles having the correct name of the merged parents from last loop iteration
-                        self.add_parent_relation(name_to_keep, child)
+                        name_to_discard_children.add(child)
+
+                for child in name_to_discard_children:
+                    # This step also handles having the correct name of the merged parents from last loop iteration
+                    self.add_parent_relation(name_to_keep, child)
 
                 # Remove all occurrences of name_to_discard in its sibling's sibling sets first
                 # so that add_sibling_relation does not add it back in.
