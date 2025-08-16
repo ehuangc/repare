@@ -262,14 +262,16 @@ class PedigreeEvaluator:
 
         nodes = [node for node in self.algorithm_pedigree.node_to_data if not node.isnumeric()]
         for node1, node2 in combinations(sorted(nodes), 2):
-            if not node1.isnumeric() and not node2.isnumeric():
-                relations_between_nodes = self._published_relation_counts[(node1, node2)]
-                for relation, count in relations_between_nodes.items():
-                    published_relation_counter[relation] += count
+            published_relations: defaultdict[str, int] = self._published_relation_counts[(node1, node2)]
+            algorithm_relations: defaultdict[str, int] = self._algorithm_relation_counts[(node1, node2)]
 
-                relations_between_nodes = self._algorithm_relation_counts[(node1, node2)]
-                for relation, count in relations_between_nodes.items():
-                    algorithm_relation_counter[relation] += count
+            for _relation, count in published_relations.items():
+                published_relation_counter[node1] += count
+                published_relation_counter[node2] += count
+
+            for _relation, count in algorithm_relations.items():
+                algorithm_relation_counter[node1] += count
+                algorithm_relation_counter[node2] += count
 
         published_connectivities: list[int] = []
         algorithm_connectivities: list[int] = []
