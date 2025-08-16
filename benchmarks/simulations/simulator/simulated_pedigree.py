@@ -523,10 +523,10 @@ class SimulatedPedigree:
         relation_fn: int = 0
 
         for node1, node2 in combinations(nodes, 2):
-            ground_truth_relations: defaultdict(int) = self._ground_truth_pedigree.get_relations_between_nodes(
+            ground_truth_relations: defaultdict[str, int] = self._ground_truth_pedigree.get_relations_between_nodes(
                 node1, node2, include_maternal_paternal=True
             )
-            algorithm_relations: defaultdict(int) = self._algorithm_pedigree.get_relations_between_nodes(
+            algorithm_relations: defaultdict[str, int] = self._algorithm_pedigree.get_relations_between_nodes(
                 node1, node2, include_maternal_paternal=True
             )
 
@@ -558,10 +558,10 @@ class SimulatedPedigree:
         degree_fn: int = 0
 
         for node1, node2 in combinations(nodes, 2):
-            ground_truth_relations: defaultdict(int) = self._ground_truth_pedigree.get_relations_between_nodes(
+            ground_truth_relations: defaultdict[str, int] = self._ground_truth_pedigree.get_relations_between_nodes(
                 node1, node2, include_maternal_paternal=True
             )
-            algorithm_relations: defaultdict(int) = self._algorithm_pedigree.get_relations_between_nodes(
+            algorithm_relations: defaultdict[str, int] = self._algorithm_pedigree.get_relations_between_nodes(
                 node1, node2, include_maternal_paternal=True
             )
 
@@ -611,10 +611,10 @@ class SimulatedPedigree:
 
         nodes: list[str] = self._final_nodes_df["id"].tolist()  # Use unmasked nodes
         for node1, node2 in combinations(nodes, 2):
-            ground_truth_relations: defaultdict(int) = self._ground_truth_pedigree.get_relations_between_nodes(
+            ground_truth_relations: defaultdict[str, int] = self._ground_truth_pedigree.get_relations_between_nodes(
                 node1, node2, include_maternal_paternal=True
             )
-            algorithm_relations: defaultdict(int) = self._algorithm_pedigree.get_relations_between_nodes(
+            algorithm_relations: defaultdict[str, int] = self._algorithm_pedigree.get_relations_between_nodes(
                 node1, node2, include_maternal_paternal=True
             )
 

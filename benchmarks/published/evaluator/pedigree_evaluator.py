@@ -146,7 +146,7 @@ class PedigreeEvaluator:
 
     @staticmethod
     def _calculate_tp_fp_fn(
-        published_counts: defaultdict(int), algorithm_counts: defaultdict(int), nodes: tuple[str, str]
+        published_counts: defaultdict[str, int], algorithm_counts: defaultdict[str, int], nodes: tuple[str, str]
     ) -> tuple[int, int, int]:
         tp = 0  # True positives
         fp = 0  # False positives
