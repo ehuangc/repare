@@ -1,5 +1,7 @@
 import os
 from collections import defaultdict
+from concurrent.futures import ProcessPoolExecutor
+from itertools import repeat
 
 import pandas as pd
 from simulator.simulated_pedigree import SimulatedPedigree
@@ -21,17 +23,24 @@ def simulate(
 
 def run_experiment(p_mask_node: float, error_rate_scale: float, num_simulations: int = 100) -> None:
     print(f"Running {num_simulations} simulations: p_mask_node={p_mask_node}, error_rate_scale={error_rate_scale}")
+
+    # Parallelize simulations across CPU cores
+    seeds = list(range(num_simulations))
     experiment_pedigree_statistics = defaultdict(list)
     experiment_metrics = defaultdict(list)
 
-    for idx in range(num_simulations):
-        pedigree_statistics, metrics = simulate(
-            p_mask_node=p_mask_node, error_rate_scale=error_rate_scale, random_seed=idx
-        )
-        for statistic, value in pedigree_statistics.items():
-            experiment_pedigree_statistics[statistic].append(value)
-        for metric, value in metrics.items():
-            experiment_metrics[metric].append(value)
+    # Use as many workers as (logical) CPU cores by default
+    with ProcessPoolExecutor() as ex:
+        for pedigree_statistics, metrics in ex.map(
+            simulate,
+            repeat(p_mask_node),
+            repeat(error_rate_scale),
+            seeds,
+        ):
+            for k, v in pedigree_statistics.items():
+                experiment_pedigree_statistics[k].append(v)
+            for k, v in metrics.items():
+                experiment_metrics[k].append(v)
 
     results_df = pd.concat(
         [pd.DataFrame.from_dict(experiment_pedigree_statistics), pd.DataFrame.from_dict(experiment_metrics)], axis=1
