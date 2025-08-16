@@ -376,7 +376,8 @@ class SimulatedPedigree:
         # Ensure at least 2 nodes and 1 relation in input data
         while len(nodes_df) < 2 or len(relations_df) < 1:
             relations_df = self._ground_truth_relations_df.sample(n=1, axis=0, random_state=empty_iters)
-            relations_df.apply(corrupt_relation, axis=1)
+            relations_df = relations_df.apply(corrupt_relation, axis=1)
+            relations_df = relations_df[relations_df["degree"] != "Unrelated"]
             nodes = relations_df["id1"].tolist() + relations_df["id2"].tolist()
             nodes_df = self._ground_truth_nodes_df.loc[self._ground_truth_nodes_df["id"].isin(nodes)]
             empty_iters += 1
