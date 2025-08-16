@@ -810,7 +810,7 @@ class Pedigree:
                 node_pair_strike_balances[(node2, node1)] -= 1
         return strike_count, strike_log
 
-    def count_third_degree_inconcistencies(
+    def count_third_degree_inconsistencies(
         self, pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]]
     ) -> int:
         """

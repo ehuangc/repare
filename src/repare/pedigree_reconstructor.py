@@ -765,7 +765,7 @@ class PedigreeReconstructor:
             num_strikes, _ = pedigree.count_inconsistencies(
                 self._pair_to_constraints, pair_to_relations_so_far, check_half_siblings
             )
-            num_third_degree_strikes = pedigree.count_third_degree_inconcistencies(self._pair_to_constraints)
+            num_third_degree_strikes = pedigree.count_third_degree_inconsistencies(self._pair_to_constraints)
             strikes.append(num_strikes)
             third_degree_strikes.append(num_third_degree_strikes)
             counts[num_strikes] += 1
@@ -815,7 +815,7 @@ class PedigreeReconstructor:
             ]
             # Use 3rd-degree strikes as tiebreaker
             third_degree_strikes = [
-                pedigree.count_third_degree_inconcistencies(self._pair_to_constraints) for pedigree in best_pedigrees
+                pedigree.count_third_degree_inconsistencies(self._pair_to_constraints) for pedigree in best_pedigrees
             ]
 
             self._final_pedigrees.extend(
