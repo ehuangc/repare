@@ -422,6 +422,119 @@ class PedigreeReconstructor:
                     pedigree.plot(os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}.png"))
         return self._sample_pedigree
 
+    @staticmethod
+    def _check_haplogroups(haplogroup1: str, haplogroup2: str) -> bool:
+        """
+        Checks if two haplogroups are compatible. Same semantics as pedigree.validate_haplogroups().
+        "*" is wild card character.
+        """
+        if not haplogroup1 or not haplogroup2:  # empty OK
+            return True
+        haplogroup1_stripped, haplogroup2_stripped = haplogroup1.rstrip("*"), haplogroup2.rstrip("*")
+        return haplogroup1_stripped.startswith(haplogroup2_stripped) or haplogroup2_stripped.startswith(
+            haplogroup1_stripped
+        )
+
+    @staticmethod
+    def _check_parent_child_haplogroups(pedigree: Pedigree, parent: str, child: str) -> bool:
+        """
+        Checks if the haplogroups of a parent and child are compatible.
+        """
+        if pedigree.get_data(parent)["sex"] == "M" and pedigree.get_data(child)["sex"] == "M":
+            return PedigreeReconstructor._check_haplogroups(
+                pedigree.get_data(parent)["y_haplogroup"], pedigree.get_data(child)["y_haplogroup"]
+            )
+        if pedigree.get_data(parent)["sex"] == "F":
+            return PedigreeReconstructor._check_haplogroups(
+                pedigree.get_data(parent)["mt_haplogroup"], pedigree.get_data(child)["mt_haplogroup"]
+            )
+        return True
+
+    @staticmethod
+    def _check_sibling_haplogroups(pedigree: Pedigree, sibling1: str, sibling2: str) -> bool:
+        """
+        Checks if the haplogroups of two full siblings are compatible.
+        """
+        if pedigree.get_data(sibling1)["sex"] == "M" and pedigree.get_data(sibling2)["sex"] == "M":
+            # MT haplogroups still need to agree as well
+            if not PedigreeReconstructor._check_haplogroups(
+                pedigree.get_data(sibling1)["y_haplogroup"], pedigree.get_data(sibling2)["y_haplogroup"]
+            ):
+                return False
+        # All full siblings should share MT haplogroups
+        return PedigreeReconstructor._check_haplogroups(
+            pedigree.get_data(sibling1)["mt_haplogroup"], pedigree.get_data(sibling2)["mt_haplogroup"]
+        )
+
+    @staticmethod
+    def _check_aunt_uncle_nephew_niece_haplogroups(
+        pedigree: Pedigree, aunt_uncle: str, nephew_niece: str, shared_relative_sex: str | None
+    ) -> bool:
+        """
+        Checks if the haplogroups of an aunt/uncle and nephew/niece are compatible.
+        """
+        if not shared_relative_sex:
+            return True
+
+        if (
+            shared_relative_sex == "M"
+            and pedigree.get_data(aunt_uncle)["sex"] == "M"
+            and pedigree.get_data(nephew_niece)["sex"] == "M"
+        ):
+            return PedigreeReconstructor._check_haplogroups(
+                pedigree.get_data(aunt_uncle)["y_haplogroup"], pedigree.get_data(nephew_niece)["y_haplogroup"]
+            )
+        if shared_relative_sex == "F":
+            return PedigreeReconstructor._check_haplogroups(
+                pedigree.get_data(aunt_uncle)["mt_haplogroup"], pedigree.get_data(nephew_niece)["mt_haplogroup"]
+            )
+        return True
+
+    @staticmethod
+    def _check_grandparent_grandchild_haplogroups(
+        pedigree: Pedigree, grandparent: str, grandchild: str, shared_relative_sex: str | None
+    ) -> bool:
+        """
+        Checks if the haplogroups of a grandparent and grandchild are compatible.
+        """
+        if not shared_relative_sex:
+            return True
+
+        if (
+            shared_relative_sex == "M"
+            and pedigree.get_data(grandparent)["sex"] == "M"
+            and pedigree.get_data(grandchild)["sex"] == "M"
+        ):
+            return PedigreeReconstructor._check_haplogroups(
+                pedigree.get_data(grandparent)["y_haplogroup"], pedigree.get_data(grandchild)["y_haplogroup"]
+            )
+        if shared_relative_sex == "F" and pedigree.get_data(grandparent)["sex"] == "F":
+            return PedigreeReconstructor._check_haplogroups(
+                pedigree.get_data(grandparent)["mt_haplogroup"], pedigree.get_data(grandchild)["mt_haplogroup"]
+            )
+        return True
+
+    @staticmethod
+    def _check_half_sibling_haplogroups(
+        pedigree: Pedigree, half_sibling1: str, half_sibling2: str, shared_relative_sex: str | None
+    ) -> bool:
+        """
+        Checks if the haplogroups of two half-siblings are compatible.
+        """
+        if (
+            shared_relative_sex == "M"
+            and pedigree.get_data(half_sibling1)["sex"] == "M"
+            and pedigree.get_data(half_sibling2)["sex"] == "M"
+        ):
+            return PedigreeReconstructor._check_haplogroups(
+                pedigree.get_data(half_sibling1)["y_haplogroup"], pedigree.get_data(half_sibling2)["y_haplogroup"]
+            )
+        if shared_relative_sex == "F":
+            return PedigreeReconstructor._check_haplogroups(
+                pedigree.get_data(half_sibling1)["mt_haplogroup"], pedigree.get_data(half_sibling2)["mt_haplogroup"]
+            )
+        return True
+
     def _add_relation(self, node1: str, node2: str, degree: str, constraints: str, force_constraints: bool) -> None:
         """
         Connects two nodes in every pedigree.
@@ -556,6 +669,10 @@ class PedigreeReconstructor:
         """
         assert node1 in pedigree.node_to_data and node2 in pedigree.node_to_data
 
+        # Pre-check invalid relations to avoid unnecessary deep-copying
+        if not PedigreeReconstructor._check_parent_child_haplogroups(pedigree, node1, node2):
+            return []
+
         ret: list[Pedigree] = []
         new_pedigree = copy.deepcopy(pedigree)
         new_pedigree.fill_node_parents(node2)
@@ -577,6 +694,10 @@ class PedigreeReconstructor:
         Returns a list containing the resulting Pedigree, if successful.
         """
         assert node1 in pedigree.node_to_data and node2 in pedigree.node_to_data
+
+        # Pre-check invalid relations to avoid unnecessary deep-copying
+        if not PedigreeReconstructor._check_sibling_haplogroups(pedigree, node1, node2):
+            return []
 
         ret: list[Pedigree] = []
         new_pedigree = copy.deepcopy(pedigree)
@@ -606,6 +727,12 @@ class PedigreeReconstructor:
         assert node1 in pedigree.node_to_data and node2 in pedigree.node_to_data
         assert shared_relative_sex in ["M", "F", None]
 
+        # Pre-check invalid relations to avoid unnecessary deep-copying
+        if not PedigreeReconstructor._check_aunt_uncle_nephew_niece_haplogroups(
+            pedigree, node1, node2, shared_relative_sex
+        ):
+            return []
+
         ret: list[Pedigree] = []
         new_pedigree = copy.deepcopy(pedigree)
         new_pedigree.fill_node_parents(node2)
@@ -634,6 +761,12 @@ class PedigreeReconstructor:
         assert node1 in pedigree.node_to_data and node2 in pedigree.node_to_data
         assert shared_relative_sex in ["M", "F", None]
 
+        # Pre-check invalid relations to avoid unnecessary deep-copying
+        if not PedigreeReconstructor._check_grandparent_grandchild_haplogroups(
+            pedigree, node1, node2, shared_relative_sex
+        ):
+            return []
+
         ret: list[Pedigree] = []
         new_pedigree = copy.deepcopy(pedigree)
         new_pedigree.fill_node_parents(node2)
@@ -660,6 +793,10 @@ class PedigreeReconstructor:
         Returns a list containing the resulting Pedigree(s), if successful.
         """
         assert node1 in pedigree.node_to_data and node2 in pedigree.node_to_data
+
+        # Pre-check invalid relations to avoid unnecessary deep-copying
+        if not PedigreeReconstructor._check_half_sibling_haplogroups(pedigree, node1, node2, shared_relative_sex):
+            return []
 
         ret: list[Pedigree] = []
         new_pedigree = copy.deepcopy(pedigree)
