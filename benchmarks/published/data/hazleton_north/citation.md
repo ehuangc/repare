@@ -1,0 +1,1 @@
+Fowler, C., Olalde, I., Cummings, V., Armit, I., Büster, L., Cuthbert, S., Rohland, N., Cheronet, O., Pinhasi, R., & Reich, D. (2022). A high-resolution picture of kinship practices in an Early Neolithic tomb. *Nature*, *601*(7894), 584–587. [https://doi.org/10.1038/s41586-021-04241-4](https://doi.org/10.1038/s41586-021-04241-4)
