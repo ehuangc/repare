@@ -562,7 +562,7 @@ class Pedigree:
                     if self.get_data(curr_node)["sex"] == "F":
                         mt_lineage.extend(self.get_children(curr_node))
 
-    def validate_consistency(self) -> bool:
+    def validate_structure(self) -> bool:
         """
         Validates pedigree structure and consistency of internal data.
         """
