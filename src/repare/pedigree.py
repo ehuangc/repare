@@ -351,6 +351,9 @@ class Pedigree:
         if self.check_invalid_parent_child_merge(merge_sets):
             return False
 
+        if self.check_invalid_sibling_child_merge(merge_sets):
+            return False
+
         if self.check_cycle_merge(merge_sets):
             return False
         return True
@@ -387,6 +390,31 @@ class Pedigree:
                     if self.get_father(curr_node1) == curr_node2 or self.get_mother(curr_node1) == curr_node2:
                         if self.get_siblings(curr_node1):
                             return True
+        return False
+
+    def check_invalid_sibling_child_merge(self, merge_sets: list[set[str]]) -> bool:
+        """
+        Returns True if merging Node 1 and Node 2 (and their ancestors) would result in an invalid sibling-child merge.
+        We can't merge a sibling and a child of a common node, because then the common node becomes parent and sibling
+        of the merged node which makes the pedigree internally inconsistent. merge_sets is a list of node sets that
+        would be merged if Node 1 and Node 2 were merged.
+        """
+        for nodes_to_merge in merge_sets:
+            for curr_node1 in nodes_to_merge:
+                for curr_node2 in nodes_to_merge:
+                    if curr_node1 == curr_node2:
+                        continue
+
+                    # A third node is both a parent of Node 1 and a sibling of Node 2
+                    if self.get_father(curr_node1) in self.get_siblings(curr_node2) or self.get_mother(
+                        curr_node1
+                    ) in self.get_siblings(curr_node2):
+                        return True
+                    # A third node is both a parent of Node 2 and a sibling of Node 1
+                    if self.get_father(curr_node2) in self.get_siblings(curr_node1) or self.get_mother(
+                        curr_node2
+                    ) in self.get_siblings(curr_node1):
+                        return True
         return False
 
     def check_cycle_merge(self, merge_sets: list[set[str]]) -> bool:
