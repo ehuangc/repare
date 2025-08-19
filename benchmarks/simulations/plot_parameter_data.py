@@ -50,9 +50,8 @@ def plot_pedigree_summary_statistics(results_dir: str) -> None:
         axes[3].set_xlabel("Mean # of Children per Parent", fontsize=14)
 
         plt.savefig(
-            "results/parameter_experiment/plots/pedigree_summary_statistics.png",
+            "results/parameter_experiment/plots/pedigree_summary_statistics.pdf",
             bbox_inches="tight",
-            dpi=600,
         )
 
 
