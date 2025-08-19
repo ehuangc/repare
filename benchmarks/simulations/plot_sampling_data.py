@@ -63,6 +63,8 @@ def plot_results(results_dir: str) -> None:
         ax.figure.axes[-1].yaxis.labelpad = 10
         # Set colorbar label size
         ax.figure.axes[-1].yaxis.label.set_size(16)
+        # Set colorbar tick label size
+        ax.figure.axes[-1].tick_params(labelsize=14)
         plt.title(f"{metric} Scores", fontsize=18, pad=10)
         plt.xlabel("Max Candidate Pedigrees", fontsize=16, labelpad=10)
         plt.ylabel("Epsilon", fontsize=16, labelpad=10)

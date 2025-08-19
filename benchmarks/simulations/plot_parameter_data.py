@@ -103,7 +103,6 @@ def plot_results(results_dir: str) -> None:
             annot=True,
             fmt=".2f",
             cmap="Blues",
-            cbar_kws={"label": f"{metric} Score"},
             vmin=0.5,
             vmax=1.0,
             annot_kws={"size": 14},
@@ -112,6 +111,8 @@ def plot_results(results_dir: str) -> None:
         ax.figure.axes[-1].yaxis.labelpad = 10
         # Set colorbar label size
         ax.figure.axes[-1].yaxis.label.set_size(16)
+        # Set colorbar tick label size
+        ax.figure.axes[-1].tick_params(labelsize=14)
         plt.title(f"{metric} Scores", fontsize=18, pad=10)
         plt.xlabel("Kinship Relation Error Rate Scale", fontsize=16, labelpad=10)
         plt.ylabel("p(Mask Node)", fontsize=16, labelpad=10)
