@@ -118,9 +118,8 @@ def plot_results(results_dir: str) -> None:
         ax.tick_params(axis="y", labelsize=14)
 
         plt.savefig(
-            f"results/parameter_experiment/plots/{metric.lower().replace(' ', '_')}_heatmap.png",
+            f"results/parameter_experiment/plots/{metric.lower().replace(' ', '_')}_heatmap.pdf",
             bbox_inches="tight",
-            dpi=600,
         )
 
 
