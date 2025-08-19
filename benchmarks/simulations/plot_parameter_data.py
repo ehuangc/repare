@@ -109,8 +109,6 @@ def plot_results(results_dir: str) -> None:
         )
         # Set colorbar label padding
         ax.figure.axes[-1].yaxis.labelpad = 10
-        # Set colorbar label size
-        ax.figure.axes[-1].yaxis.label.set_size(16)
         # Set colorbar tick label size
         ax.figure.axes[-1].tick_params(labelsize=14)
         plt.title(f"{metric} Scores", fontsize=18, pad=10)
