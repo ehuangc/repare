@@ -22,7 +22,7 @@ class SimulatedPedigree:
         self,
         p_mask_node: float = 0.4,
         error_rate_scale: float = 1,
-        max_candidate_pedigrees: int = 100,
+        max_candidate_pedigrees: int = 1000,
         epsilon: float | None = None,
         random_seed: int | None = None,
     ) -> None:
