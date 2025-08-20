@@ -1,7 +1,7 @@
 id,sex,y_haplogroup,mt_haplogroup,can_have_children,can_be_inbred,years_before_present
-N1,F,,ab*,True,True,
-N2,M,xyz,abc,True,False,
-N3,M,xyz,def,False,True,
-N4,M,*,g*,True,True,
-N5,F,,ghi,True,False,
-N6,F,,de*,True,True,
+N1,F,,ab*,True,True
+N2,M,xyz,abc,True,False
+N3,M,xyz,def,False,True
+N4,M,*,g*,True,True
+N5,F,,ghi,True,False
+N6,F,,de*,True,True
