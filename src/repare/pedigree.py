@@ -1331,9 +1331,9 @@ class Pedigree:
             y_haplogroup = self.get_data(node)["y_haplogroup"].replace("*", "")[:3]
             if node.isnumeric():
                 if y_haplogroup:
-                    node_labels[node] = f"{node}\nMT: {mt_haplogroup}\nY: {y_haplogroup}"
+                    node_labels[node] = f"MT: {mt_haplogroup}\nY: {y_haplogroup}"
                 else:
-                    node_labels[node] = f"{node}\nMT: {mt_haplogroup}"
+                    node_labels[node] = f"MT: {mt_haplogroup}"
             else:
                 if y_haplogroup:
                     node_labels[node] = f"{node}\nMT: {mt_haplogroup}\nY: {y_haplogroup}"
