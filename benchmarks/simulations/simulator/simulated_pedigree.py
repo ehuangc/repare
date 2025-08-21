@@ -56,13 +56,13 @@ class SimulatedPedigree:
         self._random_seed = random_seed
         random.seed(self._random_seed)
 
-        self._base_degree_classification_probs: dict[str, tuple(float, float, float, float)] = {
+        self._base_degree_classification_probs: dict[str, tuple[float, float, float, float]] = {
             "1": (0.99, 0.01, 0.0, 0.0),
             "2": (0.01, 0.94, 0.05, 0.0),
             "3": (0.0, 0.02, 0.88, 0.1),
             "Unrelated": (0.0, 0.0, 0.01, 0.99),
         }
-        self._base_relation_classification_probs: dict[str, tuple(float, float)] = {
+        self._base_relation_classification_probs: dict[str, tuple[float, float]] = {
             "parent-child;child-parent": (0.95, 0.05),
             "siblings": (0.05, 0.95),
         }
@@ -278,7 +278,7 @@ class SimulatedPedigree:
 
     def _scale_error_rates(
         self, scale: float
-    ) -> tuple[dict[str, tuple[float, float, float, float], dict[str, tuple[float, float]]]]:
+    ) -> tuple[dict[str, tuple[float, float, float, float]], dict[str, tuple[float, float]]]:
         scaled_degree_probs = {}
         for degree, probs in self._base_degree_classification_probs.items():
             correct_prob_idx = None
