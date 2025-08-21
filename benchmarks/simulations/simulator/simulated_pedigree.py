@@ -421,7 +421,7 @@ class SimulatedPedigree:
                 self._algorithm_found_pedigree = False
 
     def get_pedigree_statistics(self) -> dict[str, int | float]:
-        statistics = defaultdict()
+        statistics: dict[str, int | float] = dict()
         statistics["Total Node Count"] = len(self._ground_truth_pedigree.node_to_data)
         statistics["Sampled Node Count"] = len(self._final_nodes_df)
         statistics["Proportion of Inbred Nodes"] = self._calculate_inbred_proportion()
