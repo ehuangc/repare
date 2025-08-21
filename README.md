@@ -48,7 +48,7 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
   </dd>
 </dl>
 
-**Relations** (-r) (*required*): Path to a CSV file that contains information about inferred pairwise kinship relations. All individuals included in this file must be specified in the nodes CSV.
+**Relations** (-r) (*required*): Path to a CSV file that contains information about inferred pairwise kinship relations. Methods to infer these kinship relations include [KIN](https://doi.org/10.1186/s13059-023-02847-7) and [READv2](https://doi.org/10.1186/s13059-024-03350-3). All individuals included in this file must be specified in the nodes CSV.
 
 <dl>
   <dd>
