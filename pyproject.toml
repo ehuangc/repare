@@ -20,6 +20,9 @@ readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 
+[project.urls]
+Source = "https://github.com/ehuangc/repare"
+
 [project.optional-dependencies]
 benchmark = ["scikit-learn", "seaborn"]
 plot = ["pygraphviz"]
