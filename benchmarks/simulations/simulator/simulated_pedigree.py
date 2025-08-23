@@ -34,7 +34,7 @@ class SimulatedPedigree:
         self._mean_children_per_mate = 2
         self._sd_children_per_mate = 1
         self._num_generations = 4
-        self._generation_zero_size = 3
+        self._generation_zero_starting_size = 3
 
         # Probability that a node will be masked (i.e., not included in node data)
         self._p_mask_node = p_mask_node
