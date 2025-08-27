@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+type: software
+title: "repare"
+message: "If you use repare in your work, please cite our preprint below!"
+authors:
+  - family-names: Huang
+    given-names: Edward C.
+    orcid: https://orcid.org/0009-0000-2471-0531
+  - family-names: Li
+    given-names: Kevin A.
+    orcid: https://orcid.org/0009-0009-0446-6135
+  - family-names: Narasimhan
+    given-names: Vagheesh M.
+    orcid: https://orcid.org/0000-0001-8651-8844
+repository-code: "https://github.com/ehuangc/repare"
+
+preferred-citation:
+  type: article
+  title: "Fault-tolerant pedigree reconstruction from pairwise kinship relations"
+  authors:
+    - family-names: Huang
+      given-names: Edward C.
+    - family-names: Li
+      given-names: Kevin A.
+    - family-names: Narasimhan
+      given-names: Vagheesh M.
+  journal: "bioRxiv"
+  status: preprint
+  date-published: 2025-08-26
+  doi: 10.1101/2025.08.21.671608
+  url: "https://doi.org/10.1101/2025.08.21.671608"
