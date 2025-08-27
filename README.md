@@ -100,3 +100,20 @@ python benchmarks/published/run_parameter_experiment.py
 exit
 ```
 To install pixi, see [this page](https://pixi.sh/latest/installation/).
+
+## Citation
+If you use repare in your work, please cite our preprint:
+
+> Huang, E. C., Li, K. A., & Narasimhan, V. M. (2025). Fault-tolerant pedigree reconstruction from pairwise kinship relations. bioRxiv. [https://doi.org/10.1101/2025.08.21.671608](https://doi.org/10.1101/2025.08.21.671608)
+
+```
+@article{repare_preprint2025,
+  doi     = {10.1101/2025.08.21.671608},
+  author  = {Huang, Edward C. and Li, Kevin A. and Narasimhan, Vagheesh M.},
+  title   = {Fault-tolerant pedigree reconstruction from pairwise kinship relations},
+  journal = {bioRxiv},
+  month   = {aug},
+  year    = {2025},
+  url     = {https://doi.org/10.1101/2025.08.21.671608},
+}
+```
