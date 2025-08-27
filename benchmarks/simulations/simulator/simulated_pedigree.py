@@ -70,7 +70,7 @@ class SimulatedPedigree:
     def create_pedigree(self) -> None:
         self._create_node(generation=0, sex="M", can_have_children=True)
         self._create_node(generation=0, sex="F", can_have_children=True)
-        for _ in range(self._generation_zero_size - 2):
+        for _ in range(self._generation_zero_starting_size - 2):
             self._create_node(generation=0)
 
         for generation in range(self._num_generations - 1):
