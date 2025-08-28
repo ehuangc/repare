@@ -9,7 +9,7 @@ from repare.pedigree_reconstructor import PedigreeReconstructor
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Build and analyze pedigrees.")
+    parser = argparse.ArgumentParser(description="Reconstruct (ancient) pedigrees from pairwise kinship relations.")
     parser.add_argument("-n", "--nodes", type=str, required=True, help="Path to the nodes CSV file.")
     parser.add_argument("-r", "--relations", type=str, required=True, help="Path to the relations CSV file.")
     parser.add_argument(
