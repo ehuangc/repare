@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os
+from datetime import datetime
 
 from tqdm.contrib.logging import logging_redirect_tqdm
 
@@ -15,8 +16,10 @@ def parse_arguments():
         "-o",
         "--output",
         type=str,
-        default=".",
-        help="Directory to save the output files. Defaults to the current directory.",
+        default=datetime.now().strftime("repare_output_%Y%m%d_%H%M%S"),
+        help=(
+            "Directory to save the output files. Defaults to repare_output_<YYYYMMDD_HHMMSS> in the current directory."
+        ),
     )
     parser.add_argument(
         "-m",
