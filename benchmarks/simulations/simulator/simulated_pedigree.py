@@ -1,7 +1,6 @@
 import math
 import os
 import random
-import tempfile
 from collections import defaultdict
 from itertools import combinations
 
@@ -20,12 +19,14 @@ class SimulatedPedigree:
 
     def __init__(
         self,
+        pedigree_data_dir: str,
         p_mask_node: float = 0.4,
         error_rate_scale: float = 1,
         max_candidate_pedigrees: int = 1000,
         epsilon: float | None = None,
         random_seed: int | None = None,
     ) -> None:
+        self._pedigree_data_dir = pedigree_data_dir
         self._ground_truth_pedigree = Pedigree()
         self._y_haplogroup_pool = ["a", "b"]
         self._mt_haplogroup_pool = ["a", "b", "c", "d", "e"]
@@ -386,39 +387,40 @@ class SimulatedPedigree:
         self._final_relations_df = relations_df.copy()
 
     def run_algorithm(self) -> None:
-        with tempfile.TemporaryDirectory() as temp_dir:
-            nodes_path = os.path.join(temp_dir, "nodes.csv")
-            relations_path = os.path.join(temp_dir, "relations.csv")
-            self._final_nodes_df.to_csv(nodes_path, index=False)
-            self._final_relations_df.to_csv(relations_path, index=False)
+        nodes_path = os.path.join(self._pedigree_data_dir, "input_nodes.csv")
+        relations_path = os.path.join(self._pedigree_data_dir, "input_relations.csv")
+        ground_truth_relations_path = os.path.join(self._pedigree_data_dir, "ground_truth_relations.csv")
+        self._final_nodes_df.to_csv(nodes_path, index=False)
+        self._final_relations_df.to_csv(relations_path, index=False)
+        self._ground_truth_pedigree.write_exact_relations(ground_truth_relations_path)
 
-            outputs_dir = os.path.join(temp_dir, "outputs")
-            os.makedirs(outputs_dir, exist_ok=True)
-            if self._epsilon is not None:
-                pedigree_reconstructor = PedigreeReconstructor(
-                    relations_path,
-                    nodes_path,
-                    outputs_dir,
-                    max_candidate_pedigrees=self._max_candidate_pedigrees,
-                    epsilon=self._epsilon,
-                    random_seed=self._random_seed,
-                    plot=False,
-                )
-            else:
-                pedigree_reconstructor = PedigreeReconstructor(
-                    relations_path,
-                    nodes_path,
-                    outputs_dir,
-                    max_candidate_pedigrees=self._max_candidate_pedigrees,
-                    random_seed=self._random_seed,
-                    plot=False,
-                )
+        outputs_dir = os.path.join(self._pedigree_data_dir, "outputs")
+        os.makedirs(outputs_dir, exist_ok=True)
+        if self._epsilon is not None:
+            pedigree_reconstructor = PedigreeReconstructor(
+                relations_path,
+                nodes_path,
+                outputs_dir,
+                max_candidate_pedigrees=self._max_candidate_pedigrees,
+                epsilon=self._epsilon,
+                random_seed=self._random_seed,
+                plot=False,
+            )
+        else:
+            pedigree_reconstructor = PedigreeReconstructor(
+                relations_path,
+                nodes_path,
+                outputs_dir,
+                max_candidate_pedigrees=self._max_candidate_pedigrees,
+                random_seed=self._random_seed,
+                plot=False,
+            )
 
-            try:
-                self._algorithm_pedigree = pedigree_reconstructor.find_best_pedigree()
-                self._algorithm_found_pedigree = True
-            except RuntimeError:
-                self._algorithm_found_pedigree = False
+        try:
+            self._algorithm_pedigree = pedigree_reconstructor.find_best_pedigree()
+            self._algorithm_found_pedigree = True
+        except RuntimeError:
+            self._algorithm_found_pedigree = False
 
     def get_pedigree_statistics(self) -> dict[str, int | float]:
         statistics: dict[str, int | float] = dict()
