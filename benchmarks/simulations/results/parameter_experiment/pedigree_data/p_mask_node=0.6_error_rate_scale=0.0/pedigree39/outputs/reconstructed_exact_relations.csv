@@ -1,0 +1,82 @@
+node1,node2,relation
+N0,N23,paternal grandparent-grandchild
+N0,N24,paternal grandparent-grandchild
+N0,N26,paternal grandparent-grandchild
+N0,N28,paternal grandparent-grandchild
+N0,N31,paternal grandparent-grandchild
+N0,N32,paternal grandparent-grandchild
+N0,N38,paternal grandparent-grandchild
+N0,N39,paternal grandparent-grandchild
+N0,N4,parent-child
+N0,N5,parent-child
+N1,N46,maternal half-siblings
+N1,N47,maternal half-siblings
+N12,N13,siblings
+N12,N15,parent-child
+N12,N19,maternal aunt/uncle-nephew/niece
+N12,N20,maternal aunt/uncle-nephew/niece
+N12,N38,maternal grandparent-grandchild
+N12,N39,maternal grandparent-grandchild
+N13,N15,maternal aunt/uncle-nephew/niece
+N13,N19,parent-child
+N13,N20,parent-child
+N14,N15,parent-child
+N14,N38,maternal grandparent-grandchild
+N14,N39,maternal grandparent-grandchild
+N15,N38,parent-child
+N15,N39,parent-child
+N16,N19,parent-child
+N16,N20,parent-child
+N19,N20,siblings
+N23,N24,siblings
+N23,N3,paternal grandchild-grandparent
+N23,N4,child-parent
+N23,N46,paternal aunt/uncle-nephew/niece
+N23,N47,paternal aunt/uncle-nephew/niece
+N23,N5,paternal nephew/niece-aunt/uncle
+N24,N3,paternal grandchild-grandparent
+N24,N4,child-parent
+N24,N46,paternal aunt/uncle-nephew/niece
+N24,N47,paternal aunt/uncle-nephew/niece
+N24,N5,paternal nephew/niece-aunt/uncle
+N25,N26,parent-child
+N25,N28,parent-child
+N26,N28,siblings
+N26,N3,paternal grandchild-grandparent
+N26,N38,paternal half-siblings
+N26,N39,paternal half-siblings
+N26,N4,paternal nephew/niece-aunt/uncle
+N26,N5,child-parent
+N28,N3,paternal grandchild-grandparent
+N28,N38,paternal half-siblings
+N28,N39,paternal half-siblings
+N28,N4,paternal nephew/niece-aunt/uncle
+N28,N5,child-parent
+N3,N31,paternal grandparent-grandchild
+N3,N32,paternal grandparent-grandchild
+N3,N38,paternal grandparent-grandchild
+N3,N39,paternal grandparent-grandchild
+N3,N4,parent-child
+N3,N5,parent-child
+N31,N32,siblings
+N31,N4,paternal nephew/niece-aunt/uncle
+N31,N49,maternal half-siblings
+N31,N5,paternal nephew/niece-aunt/uncle
+N31,N50,maternal half-siblings
+N32,N4,paternal nephew/niece-aunt/uncle
+N32,N49,maternal half-siblings
+N32,N5,paternal nephew/niece-aunt/uncle
+N32,N50,maternal half-siblings
+N35,N55,paternal grandchild-grandparent
+N38,N39,siblings
+N38,N4,paternal nephew/niece-aunt/uncle
+N38,N5,child-parent
+N39,N4,paternal nephew/niece-aunt/uncle
+N39,N5,child-parent
+N4,N46,paternal grandparent-grandchild
+N4,N47,paternal grandparent-grandchild
+N4,N5,siblings
+N46,N47,siblings
+N48,N49,parent-child
+N48,N50,parent-child
+N49,N50,siblings

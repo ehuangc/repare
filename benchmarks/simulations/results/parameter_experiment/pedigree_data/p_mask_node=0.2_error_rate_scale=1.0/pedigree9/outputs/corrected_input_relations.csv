@@ -1,0 +1,97 @@
+id1,id2,degree,constraints
+# Final inconsistency count: 4
+# Added relations
+N17,N29,2,
+
+# Removed relations
+# N15,N19,2,
+
+# Changed relations
+# N0,N4,2,
+N0,N4,1,
+# N13,N5,1,
+N13,N5,2,
+
+# Unchanged relations
+N0,N5,1,parent-child;child-parent
+N0,N6,1,parent-child;child-parent
+N0,N7,1,parent-child;child-parent
+N12,N13,1,siblings
+N12,N19,1,parent-child;child-parent
+N12,N4,1,child-parent;parent-child
+N13,N4,1,child-parent;parent-child
+N15,N16,1,siblings
+N15,N6,1,child-parent;parent-child
+N16,N6,1,child-parent;parent-child
+N17,N18,1,parent-child;child-parent
+N18,N27,1,parent-child;child-parent
+N18,N29,1,parent-child;child-parent
+N18,N7,1,child-parent;parent-child
+N21,N22,1,parent-child;child-parent
+N21,N23,1,parent-child;child-parent
+N22,N23,1,siblings
+N27,N29,1,siblings
+N3,N4,1,parent-child;child-parent
+N3,N5,1,parent-child;child-parent
+N4,N5,1,siblings
+N6,N7,1,siblings
+N0,N12,2,
+N0,N13,2,
+N0,N15,2,
+N0,N16,2,
+N0,N18,2,
+N12,N15,2,
+N12,N16,2,
+N12,N3,2,
+N12,N5,2,
+N13,N15,2,
+N13,N16,2,
+N13,N19,2,
+N13,N3,2,
+N15,N22,2,
+N15,N23,2,
+N15,N7,2,
+N16,N19,2,
+N16,N22,2,
+N16,N23,2,
+N16,N7,2,
+N17,N27,2,
+N18,N6,2,
+N19,N4,2,
+N22,N6,2,
+N23,N6,2,
+N27,N7,2,
+N29,N7,2,
+N4,N6,2,
+N4,N7,2,
+N5,N6,2,
+N5,N7,2,
+N0,N19,3,
+N0,N22,3,
+N0,N23,3,
+N0,N27,3,
+N12,N22,3,
+N12,N23,3,
+N12,N6,3,
+N12,N7,3,
+N13,N22,3,
+N13,N23,3,
+N13,N7,3,
+N15,N18,3,
+N15,N4,3,
+N15,N5,3,
+N16,N18,3,
+N16,N4,3,
+N16,N5,3,
+N17,N29,3,
+N18,N4,3,
+N18,N5,3,
+N19,N22,3,
+N19,N23,3,
+N19,N3,3,
+N19,N5,3,
+N22,N7,3,
+N23,N7,3,
+N24,N27,3,
+N27,N6,3,
+N29,N6,3,

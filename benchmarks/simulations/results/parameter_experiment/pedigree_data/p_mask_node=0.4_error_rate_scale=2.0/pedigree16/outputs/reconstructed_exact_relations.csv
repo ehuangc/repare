@@ -1,0 +1,63 @@
+node1,node2,relation
+N11,N13,maternal grandparent-grandchild
+N11,N14,parent-child
+N11,N16,parent-child
+N11,N17,maternal grandparent-grandchild
+N11,N18,maternal grandparent-grandchild
+N11,N20,paternal grandparent-grandchild
+N11,N21,paternal grandparent-grandchild
+N11,N22,paternal grandparent-grandchild
+N11,N23,parent-child
+N11,N25,paternal grandparent-grandchild
+N11,N26,paternal grandparent-grandchild
+N11,N28,paternal grandparent-grandchild
+N11,N30,paternal grandparent-grandchild
+N13,N14,paternal grandchild-grandparent
+N13,N16,paternal grandchild-grandparent
+N13,N17,paternal grandparent-grandchild
+N13,N18,paternal grandparent-grandchild
+N13,N20,paternal grandparent-grandchild
+N13,N21,paternal grandparent-grandchild
+N13,N22,paternal grandparent-grandchild
+N13,N23,child-parent
+N13,N4,paternal grandparent-grandchild
+N14,N16,siblings
+N14,N2,maternal grandchild-grandparent
+N14,N23,paternal half-siblings
+N14,N25,paternal aunt/uncle-nephew/niece
+N14,N26,paternal aunt/uncle-nephew/niece
+N14,N28,paternal aunt/uncle-nephew/niece
+N14,N3,maternal nephew/niece-aunt/uncle
+N14,N30,paternal aunt/uncle-nephew/niece
+N14,N7,child-parent
+N16,N2,maternal grandchild-grandparent
+N16,N23,paternal half-siblings
+N16,N25,paternal aunt/uncle-nephew/niece
+N16,N26,paternal aunt/uncle-nephew/niece
+N16,N28,parent-child
+N16,N3,maternal nephew/niece-aunt/uncle
+N16,N30,parent-child
+N16,N7,child-parent
+N17,N18,siblings
+N17,N3,maternal grandchild-grandparent
+N18,N3,maternal grandchild-grandparent
+N19,N20,parent-child
+N19,N21,parent-child
+N19,N22,parent-child
+N2,N3,parent-child
+N2,N7,parent-child
+N2,N9,maternal grandparent-grandchild
+N20,N21,siblings
+N20,N22,siblings
+N21,N22,siblings
+N24,N25,parent-child
+N24,N26,parent-child
+N25,N26,siblings
+N25,N7,paternal grandchild-grandparent
+N26,N7,paternal grandchild-grandparent
+N28,N30,siblings
+N28,N7,paternal grandchild-grandparent
+N3,N7,siblings
+N3,N9,parent-child
+N30,N7,paternal grandchild-grandparent
+N7,N9,maternal aunt/uncle-nephew/niece

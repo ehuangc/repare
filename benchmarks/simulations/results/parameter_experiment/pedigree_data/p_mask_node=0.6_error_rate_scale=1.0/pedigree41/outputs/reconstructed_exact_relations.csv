@@ -1,0 +1,4 @@
+node1,node2,relation
+N11,N13,parent-child
+N11,N21,paternal nephew/niece-aunt/uncle
+N13,N6,paternal grandchild-grandparent

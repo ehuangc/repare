@@ -1,0 +1,9 @@
+node1,node2,relation
+N14,N16,child-parent
+N14,N20,paternal half-siblings
+N14,N21,paternal half-siblings
+N16,N20,parent-child
+N16,N21,parent-child
+N19,N20,parent-child
+N19,N21,parent-child
+N20,N21,siblings

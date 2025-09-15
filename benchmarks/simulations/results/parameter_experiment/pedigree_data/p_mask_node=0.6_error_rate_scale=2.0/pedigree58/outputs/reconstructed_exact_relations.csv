@@ -1,0 +1,7 @@
+node1,node2,relation
+N1,N13,maternal half-siblings
+N1,N15,paternal aunt/uncle-nephew/niece
+N13,N18,paternal half-siblings
+N14,N15,child-parent
+N14,N31,paternal half-siblings
+N15,N31,parent-child

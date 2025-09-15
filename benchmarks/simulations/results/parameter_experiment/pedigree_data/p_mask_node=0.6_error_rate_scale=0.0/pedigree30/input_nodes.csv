@@ -1,0 +1,12 @@
+id,sex,y_haplogroup,mt_haplogroup,can_have_children,can_be_inbred,years_before_present
+N3,F,,a,True,True,
+N6,M,b,a,True,False,
+N9,F,,a,True,False,
+N11,M,b,c,True,False,
+N15,F,,a,True,False,
+N17,F,,a,False,True,
+N21,F,,a,True,False,
+N25,F,,a,True,True,
+N27,F,,a,True,True,
+N30,M,b,c,True,False,
+N33,F,,c,True,False,
