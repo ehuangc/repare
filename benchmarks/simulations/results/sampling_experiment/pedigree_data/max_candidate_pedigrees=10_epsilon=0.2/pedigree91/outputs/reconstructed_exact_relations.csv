@@ -1,0 +1,15 @@
+node1,node2,relation
+N0,N4,parent-child
+N0,N5,parent-child
+N0,N6,parent-child
+N0,N7,parent-child
+N1,N6,maternal grandparent-grandchild
+N1,N7,maternal grandparent-grandchild
+N3,N4,parent-child
+N3,N5,parent-child
+N4,N5,siblings
+N4,N6,paternal half-siblings
+N4,N7,paternal half-siblings
+N5,N6,paternal half-siblings
+N5,N7,paternal half-siblings
+N6,N7,siblings
