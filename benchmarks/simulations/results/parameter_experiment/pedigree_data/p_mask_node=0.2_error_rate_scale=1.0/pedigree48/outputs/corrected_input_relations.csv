@@ -1,0 +1,243 @@
+id1,id2,degree,constraints
+# Final inconsistency count: 24
+# Added relations
+N15,N36,2,
+N35,N12,2,
+N35,N13,2,
+N36,N12,2,
+N4,N15,2,
+
+# Removed relations
+# N12,N30,2,
+# N15,N30,2,
+# N15,N31,2,
+# N15,N5,2,
+# N3,N34,2,
+# N3,N35,2,
+# N34,N4,2,
+# N35,N4,2,
+# N36,N4,2,
+# N36,N7,2,
+
+# Changed relations
+# N0,N7,1,siblings
+N0,N7,1,
+# N17,N20,1,siblings
+N17,N20,2,
+# N21,N23,1,siblings
+N21,N23,1,
+# N12,N3,1,siblings
+N12,N3,1,
+# N30,N4,1,siblings
+N30,N4,1,
+# N4,N5,1,parent-child;child-parent
+N4,N5,2,
+# N13,N5,1,siblings
+N13,N5,1,
+# N3,N5,1,parent-child;child-parent
+N3,N5,2,
+# N5,N6,1,parent-child;child-parent
+N5,N6,2,
+
+# Unchanged relations
+N0,N4,1,parent-child;child-parent
+N0,N5,1,parent-child;child-parent
+N0,N6,1,parent-child;child-parent
+N0,N8,1,parent-child;child-parent
+N1,N15,1,parent-child;child-parent
+N1,N7,1,parent-child;child-parent
+N11,N12,1,siblings
+N11,N13,1,siblings
+N11,N23,1,parent-child;child-parent
+N11,N24,1,parent-child;child-parent
+N11,N3,1,child-parent;parent-child
+N11,N5,1,child-parent;parent-child
+N12,N13,1,siblings
+N12,N27,1,parent-child;child-parent
+N12,N28,1,parent-child;child-parent
+N12,N29,1,parent-child;child-parent
+N12,N5,1,child-parent;parent-child
+N13,N3,1,child-parent;parent-child
+N15,N33,1,parent-child;child-parent
+N15,N6,1,child-parent;parent-child
+N2,N8,1,parent-child;child-parent
+N21,N24,1,parent-child;child-parent
+N23,N24,1,siblings
+N25,N27,1,parent-child;child-parent
+N25,N28,1,parent-child;child-parent
+N25,N29,1,parent-child;child-parent
+N27,N28,1,siblings
+N27,N29,1,siblings
+N28,N29,1,siblings
+N3,N4,1,parent-child;child-parent
+N3,N6,1,parent-child;child-parent
+N30,N31,1,siblings
+N31,N4,1,child-parent;parent-child
+N34,N35,1,siblings
+N34,N36,1,siblings
+N34,N5,1,child-parent;parent-child
+N35,N36,1,siblings
+N35,N5,1,child-parent;parent-child
+N36,N5,1,child-parent;parent-child
+N4,N6,1,siblings
+N0,N11,2,
+N0,N12,2,
+N0,N13,2,
+N0,N15,2,
+N0,N30,2,
+N0,N31,2,
+N0,N34,2,
+N0,N35,2,
+N0,N36,2,
+N1,N30,2,
+N1,N31,2,
+N1,N33,2,
+N1,N34,2,
+N1,N35,2,
+N1,N36,2,
+N11,N27,2,
+N11,N28,2,
+N11,N29,2,
+N11,N34,2,
+N11,N35,2,
+N11,N36,2,
+N11,N4,2,
+N11,N6,2,
+N12,N23,2,
+N12,N24,2,
+N12,N34,2,
+N12,N4,2,
+N12,N6,2,
+N13,N23,2,
+N13,N24,2,
+N13,N27,2,
+N13,N28,2,
+N13,N29,2,
+N13,N34,2,
+N13,N36,2,
+N13,N4,2,
+N13,N6,2,
+N15,N3,2,
+N15,N34,2,
+N15,N35,2,
+N15,N7,2,
+N17,N18,2,
+N18,N20,2,
+N18,N4,2,
+N18,N9,2,
+N20,N4,2,
+N20,N9,2,
+N23,N3,2,
+N23,N5,2,
+N24,N3,2,
+N24,N5,2,
+N27,N3,2,
+N27,N5,2,
+N28,N3,2,
+N28,N5,2,
+N29,N3,2,
+N29,N5,2,
+N3,N30,2,
+N3,N31,2,
+N30,N5,2,
+N30,N6,2,
+N31,N5,2,
+N31,N6,2,
+N33,N6,2,
+N34,N6,2,
+N35,N6,2,
+N36,N6,2,
+N4,N7,2,
+N4,N8,2,
+N5,N7,2,
+N5,N8,2,
+N6,N7,2,
+N6,N8,2,
+N7,N8,2,
+N0,N18,3,
+N0,N20,3,
+N0,N23,3,
+N0,N27,3,
+N0,N29,3,
+N0,N33,3,
+N1,N27,3,
+N1,N8,3,
+N11,N15,3,
+N11,N30,3,
+N11,N31,3,
+N11,N7,3,
+N11,N8,3,
+N12,N15,3,
+N12,N31,3,
+N12,N35,3,
+N12,N36,3,
+N12,N7,3,
+N12,N8,3,
+N13,N15,3,
+N13,N30,3,
+N13,N31,3,
+N13,N35,3,
+N13,N7,3,
+N13,N8,3,
+N15,N36,3,
+N15,N4,3,
+N18,N3,3,
+N18,N30,3,
+N18,N31,3,
+N18,N6,3,
+N20,N3,3,
+N20,N30,3,
+N20,N31,3,
+N20,N6,3,
+N23,N27,3,
+N23,N28,3,
+N23,N29,3,
+N23,N34,3,
+N23,N35,3,
+N23,N4,3,
+N23,N6,3,
+N24,N27,3,
+N24,N28,3,
+N24,N29,3,
+N24,N34,3,
+N24,N35,3,
+N24,N36,3,
+N24,N4,3,
+N24,N6,3,
+N27,N35,3,
+N27,N36,3,
+N27,N4,3,
+N27,N6,3,
+N28,N34,3,
+N28,N35,3,
+N28,N36,3,
+N28,N4,3,
+N28,N6,3,
+N29,N34,3,
+N29,N35,3,
+N29,N4,3,
+N29,N6,3,
+N3,N33,3,
+N3,N36,3,
+N30,N33,3,
+N30,N34,3,
+N30,N36,3,
+N30,N7,3,
+N30,N8,3,
+N31,N33,3,
+N31,N34,3,
+N31,N35,3,
+N31,N36,3,
+N31,N7,3,
+N31,N8,3,
+N33,N34,3,
+N33,N35,3,
+N33,N36,3,
+N33,N4,3,
+N33,N5,3,
+N33,N7,3,
+N34,N7,3,
+N34,N8,3,
+N35,N7,3,
+N35,N8,3,
+N36,N8,3,

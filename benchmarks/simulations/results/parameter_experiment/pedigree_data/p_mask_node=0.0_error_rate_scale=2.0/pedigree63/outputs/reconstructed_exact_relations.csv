@@ -1,0 +1,5 @@
+node1,node2,relation
+N0,N4,parent-child
+N1,N6,parent-child
+N3,N4,maternal aunt/uncle-nephew/niece
+N5,N6,parent-child

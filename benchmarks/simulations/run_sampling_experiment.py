@@ -10,7 +10,14 @@ from simulator.simulated_pedigree import SimulatedPedigree
 def simulate(
     p_mask_node: float, error_rate_scale: float, max_candidate_pedigrees: int, epsilon: float, random_seed: int
 ) -> tuple[dict[str, int | float], dict[str, float]]:
+    pedigree_data_dir = (
+        f"results/sampling_experiment/pedigree_data/"
+        f"max_candidate_pedigrees={max_candidate_pedigrees}_epsilon={epsilon}/"
+        f"pedigree{random_seed}"
+    )
+    os.makedirs(pedigree_data_dir, exist_ok=True)
     simulated_pedigree = SimulatedPedigree(
+        pedigree_data_dir=pedigree_data_dir,
         p_mask_node=p_mask_node,
         error_rate_scale=error_rate_scale,
         max_candidate_pedigrees=max_candidate_pedigrees,

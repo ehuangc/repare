@@ -1,0 +1,14 @@
+id1,id2,degree,constraints
+# Final inconsistency count: 1
+# Added relations
+
+# Removed relations
+
+# Changed relations
+# N3,N4,1,siblings
+N3,N4,2,
+
+# Unchanged relations
+N0,N4,1,parent-child;child-parent
+N1,N6,1,parent-child;child-parent
+N5,N6,1,parent-child;child-parent

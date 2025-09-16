@@ -1,0 +1,9 @@
+node1,node2,relation
+N11,N3,maternal half-siblings
+N11,N4,child-parent
+N13,N14,parent-child
+N14,N6,maternal half-siblings
+N14,N8,maternal nephew/niece-aunt/uncle
+N3,N4,child-parent
+N6,N8,maternal nephew/niece-aunt/uncle
+N8,N9,paternal nephew/niece-aunt/uncle

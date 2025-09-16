@@ -1,0 +1,100 @@
+node1,node2,relation
+N0,N11,paternal grandparent-grandchild
+N0,N12,paternal grandparent-grandchild
+N0,N14,paternal grandparent-grandchild
+N0,N15,paternal grandparent-grandchild
+N0,N16,paternal grandparent-grandchild
+N0,N3,parent-child
+N0,N4,parent-child
+N0,N5,parent-child
+N0,N6,parent-child
+N0,N8,maternal grandparent-grandchild
+N0,N9,maternal grandparent-grandchild
+N1,N11,paternal grandparent-grandchild
+N1,N12,paternal grandparent-grandchild
+N1,N14,paternal grandparent-grandchild
+N1,N15,paternal grandparent-grandchild
+N1,N16,paternal grandparent-grandchild
+N1,N3,parent-child
+N1,N4,parent-child
+N1,N5,parent-child
+N1,N6,parent-child
+N1,N8,maternal grandparent-grandchild
+N1,N9,maternal grandparent-grandchild
+N10,N11,parent-child
+N10,N12,parent-child
+N10,N18,maternal grandparent-grandchild
+N10,N20,maternal grandparent-grandchild
+N10,N21,maternal grandparent-grandchild
+N11,N12,siblings
+N11,N18,parent-child
+N11,N20,maternal aunt/uncle-nephew/niece
+N11,N21,maternal aunt/uncle-nephew/niece
+N11,N3,paternal nephew/niece-aunt/uncle
+N11,N4,paternal nephew/niece-aunt/uncle
+N11,N5,child-parent
+N11,N6,paternal nephew/niece-aunt/uncle
+N12,N18,maternal aunt/uncle-nephew/niece
+N12,N20,parent-child
+N12,N21,parent-child
+N12,N3,paternal nephew/niece-aunt/uncle
+N12,N4,paternal nephew/niece-aunt/uncle
+N12,N5,child-parent
+N12,N6,paternal nephew/niece-aunt/uncle
+N13,N14,parent-child
+N13,N15,parent-child
+N13,N16,parent-child
+N13,N22,maternal grandparent-grandchild
+N13,N23,maternal grandparent-grandchild
+N14,N15,siblings
+N14,N16,siblings
+N14,N22,parent-child
+N14,N23,parent-child
+N14,N3,paternal nephew/niece-aunt/uncle
+N14,N4,paternal nephew/niece-aunt/uncle
+N14,N5,paternal nephew/niece-aunt/uncle
+N14,N6,child-parent
+N15,N16,siblings
+N15,N22,maternal aunt/uncle-nephew/niece
+N15,N23,maternal aunt/uncle-nephew/niece
+N15,N3,paternal nephew/niece-aunt/uncle
+N15,N4,paternal nephew/niece-aunt/uncle
+N15,N5,paternal nephew/niece-aunt/uncle
+N15,N6,child-parent
+N16,N22,maternal aunt/uncle-nephew/niece
+N16,N23,maternal aunt/uncle-nephew/niece
+N16,N3,paternal nephew/niece-aunt/uncle
+N16,N4,paternal nephew/niece-aunt/uncle
+N16,N5,paternal nephew/niece-aunt/uncle
+N16,N6,child-parent
+N17,N18,parent-child
+N17,N22,parent-child
+N17,N23,parent-child
+N18,N22,paternal half-siblings
+N18,N23,paternal half-siblings
+N18,N5,maternal grandchild-grandparent
+N19,N20,parent-child
+N19,N21,parent-child
+N20,N21,siblings
+N20,N5,maternal grandchild-grandparent
+N21,N5,maternal grandchild-grandparent
+N22,N23,siblings
+N22,N6,maternal grandchild-grandparent
+N23,N6,maternal grandchild-grandparent
+N3,N4,siblings
+N3,N5,siblings
+N3,N6,siblings
+N3,N8,maternal aunt/uncle-nephew/niece
+N3,N9,maternal aunt/uncle-nephew/niece
+N4,N5,siblings
+N4,N6,siblings
+N4,N8,parent-child
+N4,N9,parent-child
+N5,N6,siblings
+N5,N8,maternal aunt/uncle-nephew/niece
+N5,N9,maternal aunt/uncle-nephew/niece
+N6,N8,maternal aunt/uncle-nephew/niece
+N6,N9,maternal aunt/uncle-nephew/niece
+N7,N8,parent-child
+N7,N9,parent-child
+N8,N9,siblings

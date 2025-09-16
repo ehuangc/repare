@@ -1,0 +1,18 @@
+node1,node2,relation
+N10,N16,maternal aunt/uncle-nephew/niece
+N10,N3,siblings
+N10,N4,child-parent
+N10,N8,siblings
+N10,N9,siblings
+N11,N12,parent-child
+N12,N5,maternal grandchild-grandparent
+N16,N3,maternal nephew/niece-aunt/uncle
+N16,N4,maternal grandchild-grandparent
+N16,N8,child-parent
+N16,N9,maternal nephew/niece-aunt/uncle
+N3,N4,child-parent
+N3,N8,siblings
+N3,N9,siblings
+N4,N8,parent-child
+N4,N9,parent-child
+N8,N9,siblings

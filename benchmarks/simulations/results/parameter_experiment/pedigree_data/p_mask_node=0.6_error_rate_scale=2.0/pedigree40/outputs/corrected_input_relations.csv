@@ -1,0 +1,33 @@
+id1,id2,degree,constraints
+# Final inconsistency count: 3
+# Added relations
+
+# Removed relations
+# N12,N5,2,
+
+# Changed relations
+# N1,N6,1,parent-child;child-parent
+N1,N6,2,
+# N12,N9,1,siblings
+N12,N9,1,
+
+# Unchanged relations
+N10,N12,1,siblings
+N10,N16,1,parent-child;child-parent
+N10,N9,1,child-parent;parent-child
+N5,N6,1,parent-child;child-parent
+N1,N10,2,
+N1,N12,2,
+N1,N16,2,
+N10,N6,2,
+N12,N16,2,
+N16,N23,2,
+N16,N9,2,
+N1,N23,3,
+N10,N5,3,
+N12,N6,3,
+N16,N5,3,
+N16,N6,3,
+N23,N5,3,
+N23,N6,3,
+N6,N9,3,
