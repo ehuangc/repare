@@ -384,10 +384,12 @@ class PedigreeEvaluator:
         with open(path, "w") as file:
             file.write("id1,id2,published_relation,inferred_relation\n")
             for id1, id2 in sorted(set(false_positives.keys()) | set(false_negatives.keys())):
-                false_positive_relations = (
-                    ";".join(false_positives[(id1, id2)]) if (id1, id2) in false_positives else "None"
-                )
+                # False negatives are published relations not inferred by the algorithm
                 false_negative_relations = (
                     ";".join(false_negatives[(id1, id2)]) if (id1, id2) in false_negatives else "None"
                 )
-                file.write(f"{id1},{id2},{false_positive_relations},{false_negative_relations}\n")
+                # False positives are inferred relations not in the published pedigree
+                false_positive_relations = (
+                    ";".join(false_positives[(id1, id2)]) if (id1, id2) in false_positives else "None"
+                )
+                file.write(f"{id1},{id2},{false_negative_relations},{false_positive_relations}\n")
