@@ -844,36 +844,32 @@ class PedigreeReconstructor:
         new_pedigree = copy.deepcopy(pedigree)
         new_pedigree.fill_node_parents(node1)
         new_pedigree.fill_node_parents(node2)
-        father1 = new_pedigree.get_father(node1)
-        mother1 = new_pedigree.get_mother(node1)
-        father2 = new_pedigree.get_father(node2)
-        mother2 = new_pedigree.get_mother(node2)
 
         if same_sex_siblings is None or same_sex_siblings:
+            father1 = new_pedigree.get_father(node1)
+            father2 = new_pedigree.get_father(node2)
             if father1 != father2:
                 temp_same_sex_pedigrees = PedigreeReconstructor._connect_sibling_relation(
                     new_pedigree, father1, father2
                 )
                 for same_sex_pedigree in temp_same_sex_pedigrees:
                     # Get parents again in case they changed during previous merge
-                    new_mother1 = same_sex_pedigree.get_mother(node1)
-                    new_mother2 = same_sex_pedigree.get_mother(node2)
-                    if mother1 != new_mother2:
-                        ret.extend(
-                            PedigreeReconstructor._connect_sibling_relation(same_sex_pedigree, new_mother1, new_mother2)
-                        )
+                    mother1 = same_sex_pedigree.get_mother(node1)
+                    mother2 = same_sex_pedigree.get_mother(node2)
+                    if mother1 != mother2:
+                        ret.extend(PedigreeReconstructor._connect_sibling_relation(same_sex_pedigree, mother1, mother2))
 
         if same_sex_siblings is None or not same_sex_siblings:
+            father1 = new_pedigree.get_father(node1)
+            mother2 = new_pedigree.get_mother(node2)
             temp_opposite_sex_pedigrees = PedigreeReconstructor._connect_sibling_relation(
                 new_pedigree, father1, mother2
             )
             for opposite_sex_pedigree in temp_opposite_sex_pedigrees:
                 # Get parents again in case they changed during previous merge
-                new_mother1 = opposite_sex_pedigree.get_mother(node1)
-                new_father2 = opposite_sex_pedigree.get_father(node2)
-                ret.extend(
-                    PedigreeReconstructor._connect_sibling_relation(opposite_sex_pedigree, new_mother1, new_father2)
-                )
+                mother1 = opposite_sex_pedigree.get_mother(node1)
+                father2 = opposite_sex_pedigree.get_father(node2)
+                ret.extend(PedigreeReconstructor._connect_sibling_relation(opposite_sex_pedigree, mother1, father2))
         return ret
 
     def _clean_pedigree_data(self) -> None:
