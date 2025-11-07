@@ -165,6 +165,7 @@ class PedigreeReconstructor:
                 "paternal grandchild-grandparent",
                 "maternal half-siblings",
                 "paternal half-siblings",
+                "double cousins",
             }
             if constraints:
                 constraints_list = [c for c in constraints.split(";")]
@@ -205,6 +206,7 @@ class PedigreeReconstructor:
                 "siblings": "siblings",  # Symmetric
                 "maternal half-siblings": "maternal half-siblings",  # Symmetric
                 "paternal half-siblings": "paternal half-siblings",  # Symmetric
+                "double cousins": "double cousins",  # Symmetric
             }
             if row["id2"] < row["id1"]:
                 constraints = row["constraints"]
@@ -243,7 +245,8 @@ class PedigreeReconstructor:
                 "paternal grandparent-grandchild;"
                 "paternal grandchild-grandparent;"
                 "maternal half-siblings;"
-                "paternal half-siblings"
+                "paternal half-siblings;"
+                "double cousins"
             ),
             "3": (
                 "half aunt/uncle-half nephew/niece;"
@@ -659,6 +662,8 @@ class PedigreeReconstructor:
                         pedigree, node1, node2, shared_relative_sex="M"
                     )
                 )
+            if relation == "double cousins":
+                new_pedigrees.extend(PedigreeReconstructor._connect_double_cousin_relation(pedigree, node1, node2))
         return new_pedigrees
 
     @staticmethod
@@ -823,6 +828,52 @@ class PedigreeReconstructor:
         for node2_parent in node2_parents:
             if node2_parent != node1:
                 ret.extend(PedigreeReconstructor._connect_parent_relation(new_pedigree, node2_parent, node1))
+        return ret
+
+    @staticmethod
+    def _connect_double_cousin_relation(
+        pedigree: Pedigree, node1: str, node2: str, same_sex_siblings: bool | None = None
+    ) -> list[Pedigree]:
+        """
+        Adds a double (first) cousin relation and merges nodes appropriately.
+        Returns a list containing the resulting Pedigree(s), if successful.
+        """
+        assert node1 in pedigree.node_to_data and node2 in pedigree.node_to_data
+
+        ret: list[Pedigree] = []
+        new_pedigree = copy.deepcopy(pedigree)
+        new_pedigree.fill_node_parents(node1)
+        new_pedigree.fill_node_parents(node2)
+        father1 = new_pedigree.get_father(node1)
+        mother1 = new_pedigree.get_mother(node1)
+        father2 = new_pedigree.get_father(node2)
+        mother2 = new_pedigree.get_mother(node2)
+
+        if same_sex_siblings is None or same_sex_siblings:
+            if father1 != father2:
+                temp_same_sex_pedigrees = PedigreeReconstructor._connect_sibling_relation(
+                    new_pedigree, father1, father2
+                )
+                for same_sex_pedigree in temp_same_sex_pedigrees:
+                    # Get parents again in case they changed during previous merge
+                    new_mother1 = same_sex_pedigree.get_mother(node1)
+                    new_mother2 = same_sex_pedigree.get_mother(node2)
+                    if mother1 != new_mother2:
+                        ret.extend(
+                            PedigreeReconstructor._connect_sibling_relation(same_sex_pedigree, new_mother1, new_mother2)
+                        )
+
+        if same_sex_siblings is None or not same_sex_siblings:
+            temp_opposite_sex_pedigrees = PedigreeReconstructor._connect_sibling_relation(
+                new_pedigree, father1, mother2
+            )
+            for opposite_sex_pedigree in temp_opposite_sex_pedigrees:
+                # Get parents again in case they changed during previous merge
+                new_mother1 = opposite_sex_pedigree.get_mother(node1)
+                new_father2 = opposite_sex_pedigree.get_father(node2)
+                ret.extend(
+                    PedigreeReconstructor._connect_sibling_relation(opposite_sex_pedigree, new_mother1, new_father2)
+                )
         return ret
 
     def _clean_pedigree_data(self) -> None:

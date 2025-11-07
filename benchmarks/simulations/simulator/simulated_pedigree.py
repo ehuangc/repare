@@ -242,6 +242,11 @@ class SimulatedPedigree:
             include_placeholders=False
         ):
             relations_list.append((half_sibling1, half_sibling2, "2", ""))
+
+        for double_cousin1, double_cousin2 in self._ground_truth_pedigree.get_double_cousin_pairs(
+            include_placeholders=False
+        ):
+            relations_list.append((double_cousin1, double_cousin2, "2", ""))
         return pd.DataFrame(relations_list, columns=["id1", "id2", "degree", "constraints"])
 
     def _get_third_degree_relations(self) -> pd.DataFrame:

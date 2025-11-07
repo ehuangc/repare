@@ -76,6 +76,7 @@ class PedigreeEvaluator:
             "paternal grandchild-grandparent": "paternal grandparent-grandchild",
             "maternal half-siblings": "maternal half-siblings",  # Symmetric
             "paternal half-siblings": "paternal half-siblings",  # Symmetric
+            "double cousins": "double cousins",  # Symmetric
             "1": "1",  # Symmetric
             "2": "2",  # Symmetric
         }
@@ -106,6 +107,7 @@ class PedigreeEvaluator:
                 "paternal grandchild-grandparent",
                 "maternal half-siblings",
                 "paternal half-siblings",
+                "double cousins",
             ],
         }
 
@@ -231,6 +233,7 @@ class PedigreeEvaluator:
                 "paternal grandchild-grandparent",
                 "maternal half-siblings",
                 "paternal half-siblings",
+                "double cousins",
             ]:
                 published_degrees_between_nodes["2"] += published_relations_between_nodes[relation]
                 algorithm_degrees_between_nodes["2"] += algorithm_relations_between_nodes[relation]
@@ -310,6 +313,7 @@ class PedigreeEvaluator:
             "siblings": "siblings",  # Symmetric
             "maternal half-siblings": "maternal half-siblings",  # Symmetric
             "paternal half-siblings": "paternal half-siblings",  # Symmetric
+            "double cousins": "double cousins",  # Symmetric
         }
 
         pair_to_inferred_degree = {}

@@ -750,6 +750,7 @@ class Pedigree:
                 "paternal grandchild-grandparent": "2",
                 "maternal half-siblings": "2",
                 "paternal half-siblings": "2",
+                "double cousins": "2",
             }
             flipped_relations = {
                 "parent-child": "child-parent",
@@ -765,6 +766,7 @@ class Pedigree:
                 "siblings": "siblings",  # Symmetric
                 "maternal half-siblings": "maternal half-siblings",  # Symmetric
                 "paternal half-siblings": "paternal half-siblings",  # Symmetric
+                "double cousins": "double cousins",  # Symmetric
             }
             if not is_relation_in_input_data(node1, node2, relation) and not is_relation_in_input_data(
                 node2, node1, flipped_relations[relation]
@@ -797,6 +799,8 @@ class Pedigree:
             include_placeholders=False, shared_relative_sex="M"
         ):
             validate_relation(grandparent, grandchild, "paternal grandparent-grandchild", strike_log)
+        for double_cousin1, double_cousin2 in self.get_double_cousin_pairs(include_placeholders=False):
+            validate_relation(double_cousin1, double_cousin2, "double cousins", strike_log)
 
         if check_half_siblings:
             for half_sibling1, half_sibling2 in self.get_half_sibling_pairs(
@@ -898,6 +902,12 @@ class Pedigree:
             remove_relation_from_input_data(node2, node1, flipped_relations[relation])
             return ret
 
+        # Double cousins are also twice-first cousins, so don't count the first cousin relations separately
+        accounted_cousin_pairs: defaultdict[tuple[str, str], int] = defaultdict(int)
+        for double_cousin1, double_cousin2 in self.get_double_cousin_pairs(include_placeholders=False):
+            accounted_cousin_pairs[(double_cousin1, double_cousin2)] += 2
+            accounted_cousin_pairs[(double_cousin2, double_cousin1)] += 2
+
         strike_count: int = 0
         for half_aunt_uncle, half_nephew_niece in self.get_half_aunt_uncle_nephew_niece_pairs(
             include_placeholders=False
@@ -914,7 +924,12 @@ class Pedigree:
                 grandaunt_granduncle, grandnephew_grandniece, "grandaunt/granduncle-grandnephew/grandniece"
             )
         for first_cousin1, first_cousin2 in self.get_first_cousin_pairs(include_placeholders=False):
-            strike_count += validate_relation(first_cousin1, first_cousin2, "first cousins")
+            # Only count cousin relation if not already accounted for by a double cousin relation
+            if accounted_cousin_pairs[(first_cousin1, first_cousin2)] > 0:
+                accounted_cousin_pairs[(first_cousin1, first_cousin2)] -= 1
+                accounted_cousin_pairs[(first_cousin2, first_cousin1)] -= 1
+            else:
+                strike_count += validate_relation(first_cousin1, first_cousin2, "first cousins")
         return strike_count
 
     def is_relation_in_pedigree(self, node1: str, node2: str, relations_list: list[str]) -> bool:
@@ -962,6 +977,20 @@ class Pedigree:
                         node2
                     ):
                         return True
+            if relation == "double cousins":
+                father1 = self.get_father(node1)
+                mother1 = self.get_mother(node1)
+                father2 = self.get_father(node2)
+                mother2 = self.get_mother(node2)
+                if not father1 or not mother1 or not father2 or not mother2:
+                    continue
+                fathers_are_siblings = father2 in self.get_siblings(father1)
+                mothers_are_siblings = mother1 in self.get_siblings(mother2)
+                cross_parents_are_siblings = father2 in self.get_siblings(mother1) and father1 in self.get_siblings(
+                    mother2
+                )
+                if (fathers_are_siblings and mothers_are_siblings) or cross_parents_are_siblings:
+                    return True
 
             if relation == "maternal aunt/uncle-nephew/niece":
                 for sibling in self.get_siblings(node1):
@@ -1047,6 +1076,9 @@ class Pedigree:
             relations["maternal half-siblings"] += 1
         if self.is_relation_in_pedigree(node1, node2, ["paternal half-siblings"]):
             relations["paternal half-siblings"] += 1
+
+        if self.is_relation_in_pedigree(node1, node2, ["double cousins"]):
+            relations["double cousins"] += 1
 
         if not include_maternal_paternal:
             relations["aunt/uncle-nephew/niece"] = (
@@ -1156,6 +1188,31 @@ class Pedigree:
                             if (other_child, child) not in half_sibling_pairs:
                                 half_sibling_pairs.append((child, other_child))
         return half_sibling_pairs
+
+    def get_double_cousin_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
+        """
+        Gets all (double cousin, double cousin) pairs in the tree.
+        """
+        double_cousin_pairs: list[tuple[str, str]] = []
+        for cousin1, cousin2 in self.get_first_cousin_pairs(include_placeholders=include_placeholders):
+            father1, mother1 = self.get_father(cousin1), self.get_mother(cousin1)
+            father2, mother2 = self.get_father(cousin2), self.get_mother(cousin2)
+            # Need both parents to be known to determine double cousins
+            if not father1 or not mother1 or not father2 or not mother2:
+                continue
+
+            fathers_are_siblings = father2 in self.get_siblings(father1)
+            mothers_are_siblings = mother2 in self.get_siblings(mother1)
+            cross_parent_siblings = mother2 in self.get_siblings(father1) and father2 in self.get_siblings(mother1)
+
+            if fathers_are_siblings and mothers_are_siblings:
+                if (cousin2, cousin1) not in double_cousin_pairs:
+                    double_cousin_pairs.append((cousin1, cousin2))
+
+            if cross_parent_siblings:
+                if (cousin2, cousin1) not in double_cousin_pairs:
+                    double_cousin_pairs.append((cousin1, cousin2))
+        return double_cousin_pairs
 
     def get_half_aunt_uncle_nephew_niece_pairs(self, include_placeholders: bool = True) -> list[tuple[str, str]]:
         """
