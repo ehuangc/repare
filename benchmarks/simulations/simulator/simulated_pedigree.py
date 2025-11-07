@@ -388,6 +388,11 @@ class SimulatedPedigree:
             nodes_df = self._ground_truth_nodes_df.loc[self._ground_truth_nodes_df["id"].isin(nodes)]
             empty_iters += 1
 
+        # Sort IDs lexicographically for consistency
+        # All simulated constraints are symmetric so they don't need to flipped
+        swap_mask = relations_df["id1"] > relations_df["id2"]
+        relations_df.loc[swap_mask, ["id1", "id2"]] = relations_df.loc[swap_mask, ["id2", "id1"]].values
+
         self._final_nodes_df = nodes_df.copy()
         self._final_relations_df = relations_df.copy()
 
