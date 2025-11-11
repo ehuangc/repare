@@ -46,7 +46,7 @@ class PedigreeReconstructor:
         # Whether to write corrected relations and plots of alternate final pedigrees
         self._write_alternate_pedigrees = write_alternate_pedigrees
         self._random_seed = random_seed
-        random.seed(self._random_seed)
+        self._rng = random.Random(self._random_seed)
         self._validate_arguments()
 
         # Maximum number of times to run the algorithm if no valid pedigree is found
@@ -382,7 +382,7 @@ class PedigreeReconstructor:
 
         self._clean_pedigree_data()
         # Plot and write outputs of sample pedigree
-        sample_idx = random.randint(0, len(self._final_pedigrees) - 1)
+        sample_idx = self._rng.randint(0, len(self._final_pedigrees) - 1)
         self._sample_pedigree = self._final_pedigrees[sample_idx]
         self._sample_strike_count = self._final_strike_counts[sample_idx]
         self._sample_strike_log = self._final_strike_logs[sample_idx]
@@ -940,7 +940,7 @@ class PedigreeReconstructor:
                         new_potential_pedigrees.append(pedigree)
                         seen_topologies.add(topology)
         # Shuffle to avoid ordering bias in epsilon-greedy sampling
-        random.shuffle(new_potential_pedigrees)
+        self._rng.shuffle(new_potential_pedigrees)
 
         strikes = []
         third_degree_strikes = []
@@ -976,7 +976,7 @@ class PedigreeReconstructor:
             exploration_max_candidate_pedigrees = max_candidate_pedigrees - exploitation_max_candidate_pedigrees
 
             exploitation_pedigrees = sorted_pedigrees[:exploitation_max_candidate_pedigrees]
-            exploration_pedigrees = random.sample(
+            exploration_pedigrees = self._rng.sample(
                 sorted_pedigrees[exploitation_max_candidate_pedigrees:], exploration_max_candidate_pedigrees
             )
             return exploitation_pedigrees + exploration_pedigrees

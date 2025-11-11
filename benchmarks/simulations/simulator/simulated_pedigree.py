@@ -55,7 +55,7 @@ class SimulatedPedigree:
         self._max_candidate_pedigrees = max_candidate_pedigrees
         self._epsilon = epsilon
         self._random_seed = random_seed
-        random.seed(self._random_seed)
+        self._rng = random.Random(self._random_seed)
 
         self._base_degree_classification_probs: dict[str, tuple[float, float, float, float]] = {
             "1": (0.99, 0.01, 0.0, 0.0),
@@ -95,13 +95,13 @@ class SimulatedPedigree:
         self._node_count += 1
 
         if sex is None:
-            sex = random.choice(["M", "F"])
+            sex = self._rng.choice(["M", "F"])
         if y_haplogroup is None and sex == "M":
-            y_haplogroup = random.choice(self._y_haplogroup_pool)
+            y_haplogroup = self._rng.choice(self._y_haplogroup_pool)
         if mt_haplogroup is None:
-            mt_haplogroup = random.choice(self._mt_haplogroup_pool)
+            mt_haplogroup = self._rng.choice(self._mt_haplogroup_pool)
         if can_have_children is None:
-            can_have_children = random.random() < self._p_can_have_children
+            can_have_children = self._rng.random() < self._p_can_have_children
 
         # Set can_be_inbred to True; we will update later in self._get_nodes()
         self._ground_truth_pedigree.add_node(
@@ -127,7 +127,7 @@ class SimulatedPedigree:
         # Parent 2 is either an existing node or is an "outside" node
         parent2 = None
         parent2_sex = "F" if parent1_sex == "M" else "M"
-        if random.random() < 0.25:
+        if self._rng.random() < 0.25:
             # Existing mate
             potential_mates = []
             for node in self._ground_truth_pedigree.node_to_data:
@@ -141,7 +141,7 @@ class SimulatedPedigree:
                     if parent1_sex == "F" and self._ground_truth_pedigree.get_data(node)["sex"] == "M":
                         potential_mates.append(node)
             if len(potential_mates) > 0:
-                parent2 = random.choice(potential_mates)
+                parent2 = self._rng.choice(potential_mates)
             else:
                 parent2 = self._create_node(generation=parent1_generation, sex=parent2_sex, can_have_children=True)
         else:
@@ -149,10 +149,10 @@ class SimulatedPedigree:
             parent2 = self._create_node(generation=parent1_generation, sex=parent2_sex, can_have_children=True)
 
         child_generation = max(parent1_generation, self._node_to_generation[parent2]) + 1
-        num_children = round(random.normalvariate(mu=self._mean_children_per_mate, sigma=self._sd_children_per_mate))
+        num_children = round(self._rng.normalvariate(mu=self._mean_children_per_mate, sigma=self._sd_children_per_mate))
         num_children = max(1, num_children)
         for _ in range(num_children):
-            child_sex = random.choice(["M", "F"])
+            child_sex = self._rng.choice(["M", "F"])
             child_y_haplogroup = None
             child_mt_haplogroup = None
             if parent1_sex == "M":
@@ -185,7 +185,7 @@ class SimulatedPedigree:
 
             can_have_children = "True"
             # Even if node has no children, conservatively set can_have_children to False
-            if not self._ground_truth_pedigree.get_data(node)["can_have_children"] and random.random() < 0.25:
+            if not self._ground_truth_pedigree.get_data(node)["can_have_children"] and self._rng.random() < 0.25:
                 can_have_children = "False"
 
             can_be_inbred = "True"
@@ -195,7 +195,7 @@ class SimulatedPedigree:
             if (
                 (father, mother) not in pedigree_relation_pairs
                 and (mother, father) not in pedigree_relation_pairs
-                and random.random() < 0.5
+                and self._rng.random() < 0.5
             ):
                 can_be_inbred = "False"
 
@@ -339,7 +339,7 @@ class SimulatedPedigree:
         # Remove unrelated entries
         self._ground_truth_relations_df = relations_df[relations_df["degree"] != "Unrelated"].copy()
 
-        nodes_to_mask = [node for node in nodes_df["id"] if random.random() < self._p_mask_node]
+        nodes_to_mask = [node for node in nodes_df["id"] if self._rng.random() < self._p_mask_node]
         nodes_df = nodes_df.loc[~nodes_df["id"].isin(nodes_to_mask)]
         relations_df = relations_df.loc[
             ~relations_df["id1"].isin(nodes_to_mask) & ~relations_df["id2"].isin(nodes_to_mask)
@@ -360,14 +360,14 @@ class SimulatedPedigree:
         def corrupt_relation(row: pd.Series) -> pd.Series:
             node1, node2, degree, constraints = row
             new_degree_probs = degree_classification_probs[degree]
-            new_degree = random.choices(population=["1", "2", "3", "Unrelated"], weights=new_degree_probs, k=1)[0]
+            new_degree = self._rng.choices(population=["1", "2", "3", "Unrelated"], weights=new_degree_probs, k=1)[0]
 
             new_constraints = ""
             if constraints:
                 assert degree == "1"
                 if new_degree == "1":
                     new_constraints_probs = relation_classification_probs[constraints]
-                    new_constraints = random.choices(
+                    new_constraints = self._rng.choices(
                         population=["parent-child;child-parent", "siblings"], weights=new_constraints_probs, k=1
                     )[0]
                 else:
