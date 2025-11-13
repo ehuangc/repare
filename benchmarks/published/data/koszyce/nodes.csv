@@ -1,0 +1,9 @@
+# Data from Schroeder et al. 2019 Supplementary Tables
+id,sex,y_haplogroup,mt_haplogroup,can_have_children,can_be_inbred
+K1,F,,T2b*,True,True
+K2,M,I2a2a*,T2b*,False,True
+K5,M,I2a2a*,HV0a*,True,True
+K10,M,I2a2a*,HV0a*,True,True
+K11,M,I2a2a*,HV0a*,True,True
+K14,F,,HV0a*,True,True
+K15,M,I2a2a*,HV0a*,True,True
