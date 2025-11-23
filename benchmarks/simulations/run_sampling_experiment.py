@@ -1,7 +1,7 @@
-import os
 from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor
 from itertools import repeat
+from pathlib import Path
 
 import pandas as pd
 from simulator.simulated_pedigree import SimulatedPedigree
@@ -11,11 +11,13 @@ def simulate(
     p_mask_node: float, error_rate_scale: float, max_candidate_pedigrees: int, epsilon: float, random_seed: int
 ) -> tuple[dict[str, int | float], dict[str, float]]:
     pedigree_data_dir = (
-        f"results/sampling_experiment/pedigree_data/"
-        f"max_candidate_pedigrees={max_candidate_pedigrees}_epsilon={epsilon}/"
-        f"pedigree{random_seed}"
+        Path("results")
+        / "sampling_experiment"
+        / "pedigree_data"
+        / f"max_candidate_pedigrees={max_candidate_pedigrees}_epsilon={epsilon}"
+        / f"pedigree{random_seed}"
     )
-    os.makedirs(pedigree_data_dir, exist_ok=True)
+    pedigree_data_dir.mkdir(parents=True, exist_ok=True)
     simulated_pedigree = SimulatedPedigree(
         pedigree_data_dir=pedigree_data_dir,
         p_mask_node=p_mask_node,
@@ -72,9 +74,10 @@ def run_experiment(
     )
     results_df["Max Candidate Pedigrees"] = max_candidate_pedigrees
     results_df["Epsilon"] = epsilon
-    os.makedirs("results/sampling_experiment/data", exist_ok=True)
+    results_dir = Path("results") / "sampling_experiment" / "data"
+    results_dir.mkdir(parents=True, exist_ok=True)
     results_df.to_csv(
-        f"results/sampling_experiment/data/max_candidate_pedigrees={max_candidate_pedigrees}_epsilon={epsilon}.csv",
+        results_dir / f"max_candidate_pedigrees={max_candidate_pedigrees}_epsilon={epsilon}.csv",
         index=False,
     )
 

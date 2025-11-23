@@ -1,7 +1,7 @@
 import argparse
 import logging
-import os
 from datetime import datetime
+from pathlib import Path
 
 from tqdm.contrib.logging import logging_redirect_tqdm
 
@@ -49,9 +49,8 @@ def main():
     logging_level = logging.INFO if args.verbose else logging.WARNING
     logging.basicConfig(level=logging_level, format="%(levelname)s - %(message)s")
 
-    output_dir = args.output
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir, exist_ok=True)
+    output_dir = Path(args.output)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     with logging_redirect_tqdm():
         print("Beginning pedigree reconstruction...")
@@ -66,7 +65,7 @@ def main():
             random_seed=args.seed,
         )
         pedigree_reconstructor.find_best_pedigree()
-    print(f"Finished pedigree reconstruction. Outputs written to {os.path.abspath(output_dir)}.")
+    print(f"Finished pedigree reconstruction. Outputs written to {output_dir.resolve()}.")
 
 
 if __name__ == "__main__":

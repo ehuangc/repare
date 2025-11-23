@@ -1,8 +1,8 @@
 import math
-import os
 import random
 from collections import defaultdict
 from itertools import combinations
+from pathlib import Path
 
 import pandas as pd
 from sklearn.metrics import r2_score
@@ -19,14 +19,14 @@ class SimulatedPedigree:
 
     def __init__(
         self,
-        pedigree_data_dir: str,
+        pedigree_data_dir: Path | str,
         p_mask_node: float = 0.4,
         error_rate_scale: float = 1,
         max_candidate_pedigrees: int = 1000,
         epsilon: float | None = None,
         random_seed: int | None = None,
     ) -> None:
-        self._pedigree_data_dir = pedigree_data_dir
+        self._pedigree_data_dir = Path(pedigree_data_dir)
         self._ground_truth_pedigree = Pedigree()
         self._y_haplogroup_pool = ["a", "b"]
         self._mt_haplogroup_pool = ["a", "b", "c", "d", "e"]
@@ -397,15 +397,15 @@ class SimulatedPedigree:
         self._final_relations_df = relations_df.copy()
 
     def run_algorithm(self) -> None:
-        nodes_path = os.path.join(self._pedigree_data_dir, "input_nodes.csv")
-        relations_path = os.path.join(self._pedigree_data_dir, "input_relations.csv")
-        ground_truth_relations_path = os.path.join(self._pedigree_data_dir, "ground_truth_relations.csv")
+        nodes_path = self._pedigree_data_dir / "input_nodes.csv"
+        relations_path = self._pedigree_data_dir / "input_relations.csv"
+        ground_truth_relations_path = self._pedigree_data_dir / "ground_truth_relations.csv"
         self._final_nodes_df.to_csv(nodes_path, index=False)
         self._final_relations_df.to_csv(relations_path, index=False)
         self._ground_truth_pedigree.write_exact_relations(ground_truth_relations_path)
 
-        outputs_dir = os.path.join(self._pedigree_data_dir, "outputs")
-        os.makedirs(outputs_dir, exist_ok=True)
+        outputs_dir = self._pedigree_data_dir / "outputs"
+        outputs_dir.mkdir(parents=True, exist_ok=True)
         if self._epsilon is not None:
             pedigree_reconstructor = PedigreeReconstructor(
                 relations_path,

@@ -1,7 +1,7 @@
-import os
 from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor
 from itertools import repeat
+from pathlib import Path
 
 import pandas as pd
 from simulator.simulated_pedigree import SimulatedPedigree
@@ -11,11 +11,13 @@ def simulate(
     p_mask_node: float, error_rate_scale: float, random_seed: int
 ) -> tuple[dict[str, int | float], dict[str, float]]:
     pedigree_data_dir = (
-        f"results/parameter_experiment/pedigree_data/"
-        f"p_mask_node={p_mask_node}_error_rate_scale={error_rate_scale}/"
-        f"pedigree{random_seed}"
+        Path("results")
+        / "parameter_experiment"
+        / "pedigree_data"
+        / f"p_mask_node={p_mask_node}_error_rate_scale={error_rate_scale}"
+        / f"pedigree{random_seed}"
     )
-    os.makedirs(pedigree_data_dir, exist_ok=True)
+    pedigree_data_dir.mkdir(parents=True, exist_ok=True)
     simulated_pedigree = SimulatedPedigree(
         pedigree_data_dir=pedigree_data_dir,
         p_mask_node=p_mask_node,
@@ -56,9 +58,10 @@ def run_experiment(p_mask_node: float, error_rate_scale: float, num_simulations:
     )
     results_df["p(Mask Node)"] = p_mask_node
     results_df["Error Rate Scale"] = error_rate_scale
-    os.makedirs("results/parameter_experiment/data", exist_ok=True)
+    results_dir = Path("results") / "parameter_experiment" / "data"
+    results_dir.mkdir(parents=True, exist_ok=True)
     results_df.to_csv(
-        f"results/parameter_experiment/data/p_mask_node={p_mask_node}_error_rate_scale={error_rate_scale}.csv",
+        results_dir / f"p_mask_node={p_mask_node}_error_rate_scale={error_rate_scale}.csv",
         index=False,
     )
 

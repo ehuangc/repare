@@ -1,14 +1,15 @@
 import logging
-import os
+from pathlib import Path
 
 from evaluator.pedigree_evaluator import PedigreeEvaluator
 from tqdm.contrib.logging import logging_redirect_tqdm
 
 
 def main():
-    results_dir = os.path.join(os.path.dirname(__file__), "results")
-    os.makedirs(results_dir, exist_ok=True)
-    results_path = os.path.join(results_dir, "results.csv")
+    module_dir = Path(__file__).resolve().parent
+    results_dir = module_dir / "results"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    results_path = results_dir / "results.csv"
 
     for idx, (site, relations_file_name) in enumerate(
         [
@@ -20,10 +21,10 @@ def main():
         ]
     ):
         print(f"Reconstructing pedigree: site={site}, relation_data={relations_file_name}")
-        data_dir = os.path.join(os.path.dirname(__file__), "data", site)
-        algorithm_nodes_path = os.path.join(data_dir, "nodes.csv")
-        algorithm_relations_path = os.path.join(data_dir, relations_file_name)
-        published_relations_path = os.path.join(data_dir, "published_exact_relations.csv")
+        data_dir = module_dir / "data" / site
+        algorithm_nodes_path = data_dir / "nodes.csv"
+        algorithm_relations_path = data_dir / relations_file_name
+        published_relations_path = data_dir / "published_exact_relations.csv"
 
         logging.basicConfig(level=logging.WARNING)  # Set to logging.INFO for more detailed output
         with logging_redirect_tqdm():
@@ -33,7 +34,7 @@ def main():
                 algorithm_relations_path=algorithm_relations_path,
             )
 
-            with open(results_path, "a") as file:
+            with results_path.open("a") as file:
                 metrics_values = evaluator.get_metrics()
                 metrics = list(metrics_values.keys())
                 values = list(metrics_values.values())

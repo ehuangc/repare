@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 from statistics import mean
 
 import matplotlib as mpl
@@ -7,11 +7,12 @@ import pandas as pd
 import seaborn as sns
 
 
-def plot_pedigree_summary_statistics(results_dir: str) -> None:
+def plot_pedigree_summary_statistics(results_dir: Path | str) -> None:
+    results_dir = Path(results_dir)
     # We can use any results file to get pedigree statistics because
     # all experiments are run on same simulated pedigrees since seed is fixed
-    results_path = os.listdir(results_dir)[0]
-    results_df = pd.read_csv(os.path.join(results_dir, results_path))
+    results_path = next(path for path in results_dir.iterdir() if path.is_file())
+    results_df = pd.read_csv(results_path)
     pedigree_sizes = results_df["Total Node Count"].values
     inbred_proportions = results_df["Proportion of Inbred Nodes"].values
     has_children_proportions = results_df["Proportion of Non-Final-Generation Nodes with Children"].values
@@ -50,19 +51,22 @@ def plot_pedigree_summary_statistics(results_dir: str) -> None:
         axes[3].set_xlabel("Mean # of Children per Parent", fontsize=14)
 
         plt.savefig(
-            "results/parameter_experiment/plots/pedigree_summary_statistics.pdf",
+            Path("results") / "parameter_experiment" / "plots" / "pedigree_summary_statistics.pdf",
             bbox_inches="tight",
         )
 
 
-def plot_results(results_dir: str) -> None:
+def plot_results(results_dir: Path | str) -> None:
+    results_dir = Path(results_dir)
     p_mask_nodes = []
     error_rate_scales = []
     mean_relation_f1s = []
     mean_degree_f1s = []
 
-    for file in os.listdir(results_dir):
-        results_df = pd.read_csv(os.path.join(results_dir, file))
+    for path in results_dir.iterdir():
+        if not path.is_file():
+            continue
+        results_df = pd.read_csv(path)
         p_mask_node = results_df["p(Mask Node)"].iloc[0]
         error_rate_scale = results_df["Error Rate Scale"].iloc[0]
         mean_relation_f1 = mean(results_df["Relation F1"])
@@ -117,14 +121,15 @@ def plot_results(results_dir: str) -> None:
         ax.tick_params(axis="y", labelsize=14)
 
         plt.savefig(
-            f"results/parameter_experiment/plots/{metric.lower().replace(' ', '_')}_heatmap.pdf",
+            Path("results") / "parameter_experiment" / "plots" / f"{metric.lower().replace(' ', '_')}_heatmap.pdf",
             bbox_inches="tight",
         )
 
 
 def main():
-    os.makedirs("results/parameter_experiment/plots", exist_ok=True)
-    results_dir = "results/parameter_experiment/data"
+    plots_dir = Path("results") / "parameter_experiment" / "plots"
+    plots_dir.mkdir(parents=True, exist_ok=True)
+    results_dir = Path("results") / "parameter_experiment" / "data"
     plot_pedigree_summary_statistics(results_dir)
     plot_results(results_dir)
 

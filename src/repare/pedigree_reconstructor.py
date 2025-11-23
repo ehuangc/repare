@@ -1,9 +1,9 @@
 import copy
 import logging
-import os
 import random
 import time
 from collections import defaultdict
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
@@ -21,15 +21,18 @@ class PedigreeReconstructor:
 
     def __init__(
         self,
-        relations_path: str,
-        nodes_path: str,
-        outputs_dir: str,
+        relations_path: Path | str,
+        nodes_path: Path | str,
+        outputs_dir: Path | str,
         max_candidate_pedigrees: int = 1000,
         epsilon: float = 0.2,
         plot: bool = True,
         write_alternate_pedigrees: bool = False,
         random_seed: Any = 42,
     ) -> None:
+        relations_path = Path(relations_path)
+        nodes_path = Path(nodes_path)
+        outputs_dir = Path(outputs_dir)
         self._start_time = time.time()
         self._validate_node_data(nodes_path)
         self._process_node_data()
@@ -55,7 +58,7 @@ class PedigreeReconstructor:
         self._pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]] = self._get_pair_to_constraints()
         self._final_pedigrees: list[Pedigree] = []
 
-    def _validate_node_data(self, nodes_path: str) -> None:
+    def _validate_node_data(self, nodes_path: Path | str) -> None:
         """
         Validate node data input.
         """
@@ -116,7 +119,7 @@ class PedigreeReconstructor:
             self._node_data["years_before_present"], errors="coerce"
         )
 
-    def _validate_relation_data(self, relations_path: str) -> None:
+    def _validate_relation_data(self, relations_path: Path | str) -> None:
         """
         Validate relation data input.
         """
@@ -389,14 +392,12 @@ class PedigreeReconstructor:
         self._write_corrected_input_relations(
             self._sample_strike_count,
             self._sample_strike_log,
-            os.path.join(self._outputs_dir, "corrected_input_relations.csv"),
+            self._outputs_dir / "corrected_input_relations.csv",
         )
-        self._sample_pedigree.write_exact_relations(
-            os.path.join(self._outputs_dir, "reconstructed_exact_relations.csv")
-        )
+        self._sample_pedigree.write_exact_relations(self._outputs_dir / "reconstructed_exact_relations.csv")
         if self._plot:
             try:
-                self._sample_pedigree.plot(os.path.join(self._outputs_dir, "reconstructed_pedigree.pdf"))
+                self._sample_pedigree.plot(self._outputs_dir / "reconstructed_pedigree.pdf")
                 pygraphviz_found = True
             except ImportError:
                 logger.warning(
@@ -407,22 +408,19 @@ class PedigreeReconstructor:
 
         # Plot and write outputs of alternate pedigrees
         if self._write_alternate_pedigrees:
-            os.makedirs(os.path.join(self._outputs_dir, "alternate_pedigrees"), exist_ok=True)
+            alternate_dir = self._outputs_dir / "alternate_pedigrees"
+            alternate_dir.mkdir(parents=True, exist_ok=True)
             for idx, (pedigree, strike_count, strike_log) in enumerate(
                 zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs, strict=True)
             ):
                 self._write_corrected_input_relations(
                     strike_count,
                     strike_log,
-                    os.path.join(
-                        self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_corrected_input_relations.csv"
-                    ),
+                    alternate_dir / f"pedigree_{idx}_corrected_input_relations.csv",
                 )
-                pedigree.write_exact_relations(
-                    os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}_exact_relations.csv")
-                )
+                pedigree.write_exact_relations(alternate_dir / f"pedigree_{idx}_exact_relations.csv")
                 if self._plot and pygraphviz_found:
-                    pedigree.plot(os.path.join(self._outputs_dir, "alternate_pedigrees", f"pedigree_{idx}.png"))
+                    pedigree.plot(alternate_dir / f"pedigree_{idx}.png")
         return self._sample_pedigree
 
     @staticmethod
@@ -1019,11 +1017,12 @@ class PedigreeReconstructor:
                 self._final_strike_logs.append(strike_log)
 
     def _write_corrected_input_relations(
-        self, strike_count: int, strike_log: list[tuple[str, str, str, str]], path: str
+        self, strike_count: int, strike_log: list[tuple[str, str, str, str]], path: Path | str
     ) -> None:
         """
         Write corrected input relations to file. Includes information about added/removed/changed input relations.
         """
+        path = Path(path)
         added_relations = []
         removed_relations = []
         for node1, node2, degree, constraints in strike_log:
@@ -1042,7 +1041,7 @@ class PedigreeReconstructor:
                 ):
                     changed_node_pairs.add((add_node1, add_node2))
 
-        with open(path, "w") as file:
+        with path.open("w") as file:
             file.write("id1,id2,degree,constraints\n")  # Header line
             file.write(f"# Final inconsistency count: {strike_count}\n")
 

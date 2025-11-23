@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 from statistics import mean
 
 import matplotlib.pyplot as plt
@@ -6,14 +6,17 @@ import pandas as pd
 import seaborn as sns
 
 
-def plot_results(results_dir: str) -> None:
+def plot_results(results_dir: Path | str) -> None:
+    results_dir = Path(results_dir)
     max_candidate_pedigrees_values = []
     epsilons = []
     mean_relation_f1s = []
     mean_degree_f1s = []
 
-    for file in os.listdir(results_dir):
-        results_df = pd.read_csv(os.path.join(results_dir, file))
+    for path in results_dir.iterdir():
+        if not path.is_file():
+            continue
+        results_df = pd.read_csv(path)
         max_candidate_pedigrees = results_df["Max Candidate Pedigrees"].iloc[0]
         epsilon = results_df["Epsilon"].iloc[0]
         mean_relation_f1 = mean(results_df["Relation F1"])
@@ -69,14 +72,15 @@ def plot_results(results_dir: str) -> None:
         ax.tick_params(axis="y", labelsize=14)
 
         plt.savefig(
-            f"results/sampling_experiment/plots/{metric.lower().replace(' ', '_')}_heatmap.pdf",
+            Path("results") / "sampling_experiment" / "plots" / f"{metric.lower().replace(' ', '_')}_heatmap.pdf",
             bbox_inches="tight",
         )
 
 
 def main():
-    os.makedirs("results/sampling_experiment/plots", exist_ok=True)
-    results_dir = "results/sampling_experiment/data"
+    plots_dir = Path("results") / "sampling_experiment" / "plots"
+    plots_dir.mkdir(parents=True, exist_ok=True)
+    results_dir = Path("results") / "sampling_experiment" / "data"
     plot_results(results_dir)
 
 
