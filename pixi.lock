@@ -6292,8 +6292,8 @@ packages:
   timestamp: 1740379663071
 - pypi: ./
   name: repare
-  version: 0.1.2.dev7+gf68ea5614.d20250828
-  sha256: 0f172b4560db64d24d092d7dbf70afac9f6349e0ba36ef203aa736eedc57ee69
+  version: 0.1.3.dev11+g128f5165a.d20251123
+  sha256: 5a250d50ab65c68ce49c77723d87961d49c2a12833c636c8fa5ba3dd52ec1636
   requires_dist:
   - matplotlib
   - networkx

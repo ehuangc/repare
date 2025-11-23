@@ -74,3 +74,10 @@ tqdm = ">=4.67.1,<5"
 scikit-learn = ">=1.7.1,<2"
 seaborn = ">=0.13.2,<0.14"
 pygraphviz = ">=1.14,<2"
+
+[tool.pytest.ini_options]
+pythonpath = [
+    ".",
+    "benchmarks/published",
+    "benchmarks/simulations",
+]
