@@ -154,20 +154,23 @@ class Pedigree:
         assert node1 != node2
         assert node1 in self.node_to_data and node2 in self.node_to_data
 
+        def clear_siblings(node: str) -> None:
+            for sibling in self.get_siblings(node):
+                self.node_to_siblings[sibling].remove(node)
+            if node in self.node_to_siblings:
+                del self.node_to_siblings[node]
+
         # Remove child from original parent
         if self.get_data(node1)["sex"] == "M":
             if self.get_father(node2):
                 self.node_to_children[self.get_father(node2)].remove(node2)
+                clear_siblings(node2)
             self.node_to_father[node2] = node1
         else:
             if self.get_mother(node2):
                 self.node_to_children[self.get_mother(node2)].remove(node2)
+                clear_siblings(node2)
             self.node_to_mother[node2] = node1
-
-        for sibling in self.get_siblings(node2):
-            self.node_to_siblings[sibling].remove(node2)
-        if node2 in self.node_to_siblings:
-            del self.node_to_siblings[node2]
 
         if node1 not in self.node_to_children:
             self.node_to_children[node1] = set()
