@@ -54,6 +54,8 @@ class SimulatedPedigree:
         self._random_seed = random_seed
         self._rng = random.Random(self._random_seed)
 
+        # Degree classification probs from Lefeuvre et al. 2025 Fig. 3a (https://doi.org/10.21203/rs.3.rs-7045281/v1)
+        # 1st-degree relation classification probs from Popli et al. 2023 Fig. 5(https://doi.org/10.1186/s13059-023-02847-7)
         self._0_1x_degree_classification_probs: dict[str, tuple[float, float, float, float]] = {
             "1": (284 / 300, 16 / 300, 0 / 300, 0 / 300),
             "2": (0 / 300, 187 / 300, 105 / 300, 8 / 300),
