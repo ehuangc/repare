@@ -40,7 +40,7 @@ def clear_dummy_instances():
 def test_simulate_runs_full_pipeline(monkeypatch, tmp_path):
     params = dict(
         p_mask_node=0.3,
-        error_rate_scale=0.5,
+        coverage_level=0.5,
         max_candidate_pedigrees=50,
         epsilon=0.2,
         random_seed=7,

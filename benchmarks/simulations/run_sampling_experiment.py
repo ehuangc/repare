@@ -8,7 +8,7 @@ from simulator.simulated_pedigree import SimulatedPedigree
 
 
 def simulate(
-    p_mask_node: float, error_rate_scale: float, max_candidate_pedigrees: int, epsilon: float, random_seed: int
+    p_mask_node: float, coverage_level: float, max_candidate_pedigrees: int, epsilon: float, random_seed: int
 ) -> tuple[dict[str, int | float], dict[str, float]]:
     pedigree_data_dir = (
         Path("results")
@@ -21,7 +21,7 @@ def simulate(
     simulated_pedigree = SimulatedPedigree(
         pedigree_data_dir=pedigree_data_dir,
         p_mask_node=p_mask_node,
-        error_rate_scale=error_rate_scale,
+        coverage_level=coverage_level,
         max_candidate_pedigrees=max_candidate_pedigrees,
         epsilon=epsilon,
         random_seed=random_seed,
@@ -36,7 +36,7 @@ def simulate(
 
 def run_experiment(
     p_mask_node: float,
-    error_rate_scale: float,
+    coverage_level: float,
     max_candidate_pedigrees: int,
     epsilon: float,
     num_simulations: int = 100,
@@ -46,7 +46,7 @@ def run_experiment(
         f"max_candidate_pedigrees={max_candidate_pedigrees}, "
         f"epsilon={epsilon}, "
         f"p_mask_node={p_mask_node}, "
-        f"error_rate_scale={error_rate_scale}"
+        f"coverage_level={coverage_level}"
     )
 
     # Parallelize simulations across CPU cores
@@ -59,7 +59,7 @@ def run_experiment(
         for pedigree_statistics, metrics in ex.map(
             simulate,
             repeat(p_mask_node),
-            repeat(error_rate_scale),
+            repeat(coverage_level),
             repeat(max_candidate_pedigrees),
             repeat(epsilon),
             seeds,
@@ -83,11 +83,12 @@ def run_experiment(
 
 
 def main():
-    for max_candidate_pedigrees in [10, 100, 1000, 10000]:
+    # for max_candidate_pedigrees in [10, 100, 1000, 10000]:
+    for max_candidate_pedigrees in [10]:
         for epsilon in [0.0, 0.2, 0.4]:
             run_experiment(
                 p_mask_node=0.4,
-                error_rate_scale=1,
+                coverage_level=0.5,
                 max_candidate_pedigrees=max_candidate_pedigrees,
                 epsilon=epsilon,
                 num_simulations=100,

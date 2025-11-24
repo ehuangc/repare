@@ -18,7 +18,7 @@ class StubRelationsPedigree:
 
 
 def _build_simulated_pedigree(tmp_path, truth_relations, inferred_relations):
-    pedigree = SimulatedPedigree(pedigree_data_dir=tmp_path)
+    pedigree = SimulatedPedigree(pedigree_data_dir=tmp_path, coverage_level=0.5)
     nodes = sorted(
         {node for pair in truth_relations for node in pair} | {node for pair in inferred_relations for node in pair}
     )
@@ -29,22 +29,17 @@ def _build_simulated_pedigree(tmp_path, truth_relations, inferred_relations):
     return pedigree
 
 
-def test_scale_error_rates_respects_scale(tmp_path):
-    pedigree = SimulatedPedigree(pedigree_data_dir=tmp_path, random_seed=0)
+def test_coverage_level_sets_expected_probabilities(tmp_path):
+    pedigree = SimulatedPedigree(pedigree_data_dir=tmp_path, coverage_level=0.1)
 
-    degree_probs, relation_probs = pedigree._scale_error_rates(scale=0.5)
-
-    assert degree_probs["1"][0] == pytest.approx(0.995)
-    assert degree_probs["1"][1] == pytest.approx(0.005)
-    assert relation_probs["parent-child;child-parent"][0] == pytest.approx(0.975)
-    assert relation_probs["parent-child;child-parent"][1] == pytest.approx(0.025)
+    assert pedigree._degree_classification_probs["1"][0] == pytest.approx(284 / 300)
+    assert pedigree._degree_classification_probs["3"][3] == pytest.approx(206 / 300)
+    assert pedigree._relation_classification_probs["parent-child;child-parent"][0] == pytest.approx(0.99)
 
 
-def test_scale_error_rates_raises_when_probabilities_exceed_one(tmp_path):
-    pedigree = SimulatedPedigree(pedigree_data_dir=tmp_path)
-
+def test_invalid_coverage_level_raises(tmp_path):
     with pytest.raises(ValueError):
-        pedigree._scale_error_rates(scale=25)
+        SimulatedPedigree(pedigree_data_dir=tmp_path, coverage_level=0.3)
 
 
 def test_calculate_tp_fp_fn_counts():

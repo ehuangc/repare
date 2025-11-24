@@ -20,8 +20,8 @@ class SimulatedPedigree:
     def __init__(
         self,
         pedigree_data_dir: Path | str,
+        coverage_level: float,
         p_mask_node: float = 0.4,
-        error_rate_scale: float = 1,
         max_candidate_pedigrees: int = 1000,
         epsilon: float | None = None,
         random_seed: int | None = None,
@@ -39,13 +39,10 @@ class SimulatedPedigree:
 
         # Probability that a node will be masked (i.e., not included in node data)
         self._p_mask_node = p_mask_node
-        # Scale to apply to relation classification error rates
-        self._error_rate_scale = error_rate_scale
+        self._coverage_level = coverage_level
 
         if p_mask_node < 0 or p_mask_node > 1:
             raise ValueError("p_mask_node must be between 0 and 1.")
-        if error_rate_scale < 0:
-            raise ValueError("error_rate_scale must be non-negative.")
 
         self._node_count = 0
         # Maps generation number to set of node IDs
@@ -57,16 +54,66 @@ class SimulatedPedigree:
         self._random_seed = random_seed
         self._rng = random.Random(self._random_seed)
 
-        self._base_degree_classification_probs: dict[str, tuple[float, float, float, float]] = {
-            "1": (0.99, 0.01, 0.0, 0.0),
-            "2": (0.01, 0.94, 0.05, 0.0),
-            "3": (0.0, 0.02, 0.88, 0.1),
-            "Unrelated": (0.0, 0.0, 0.01, 0.99),
+        self._0_1x_degree_classification_probs: dict[str, tuple[float, float, float, float]] = {
+            "1": (284 / 300, 16 / 300, 0 / 300, 0 / 300),
+            "2": (0 / 300, 187 / 300, 105 / 300, 8 / 300),
+            "3": (0 / 300, 1 / 300, 93 / 300, 206 / 300),
+            "Unrelated": (0 / 300, 0 / 300, 0 / 300, 300 / 300),
         }
-        self._base_relation_classification_probs: dict[str, tuple[float, float]] = {
-            "parent-child;child-parent": (0.95, 0.05),
-            "siblings": (0.05, 0.95),
+        self._0_1x_relation_classification_probs: dict[str, tuple[float, float]] = {
+            "parent-child;child-parent": (0.99, 0.01),
+            "siblings": (0.01, 0.99),
         }
+
+        self._0_2x_degree_classification_probs: dict[str, tuple[float, float, float, float]] = {
+            "1": (300 / 300, 0 / 300, 0 / 300, 0 / 300),
+            "2": (0 / 300, 274 / 300, 26 / 300, 0 / 300),
+            "3": (0 / 300, 2 / 300, 132 / 300, 166 / 300),
+            "Unrelated": (0 / 300, 0 / 300, 0 / 300, 300 / 300),
+        }
+        self._0_2x_relation_classification_probs: dict[str, tuple[float, float]] = {
+            "parent-child;child-parent": (0.99, 0.01),
+            "siblings": (0.01, 0.99),
+        }
+
+        self._0_5x_degree_classification_probs: dict[str, tuple[float, float, float, float]] = {
+            "1": (300 / 300, 0 / 300, 0 / 300, 0 / 300),
+            "2": (0 / 300, 283 / 300, 17 / 300, 0 / 300),
+            "3": (0 / 300, 5 / 300, 196 / 300, 99 / 300),
+            "Unrelated": (0 / 300, 0 / 300, 0 / 300, 300 / 300),
+        }
+        self._0_5x_relation_classification_probs: dict[str, tuple[float, float]] = {
+            "parent-child;child-parent": (0.99, 0.01),
+            "siblings": (0.01, 0.99),
+        }
+
+        self._1_0x_degree_classification_probs: dict[str, tuple[float, float, float, float]] = {
+            "1": (295 / 300, 5 / 300, 0 / 300, 0 / 300),
+            "2": (0 / 300, 280 / 300, 20 / 300, 0 / 300),
+            "3": (0 / 300, 13 / 300, 213 / 300, 74 / 300),
+            "Unrelated": (0 / 300, 0 / 300, 0 / 300, 300 / 300),
+        }
+        self._1_0x_relation_classification_probs: dict[str, tuple[float, float]] = {
+            "parent-child;child-parent": (0.99, 0.01),
+            "siblings": (0.01, 0.99),
+        }
+
+        coverage_to_degree_probs = {
+            0.1: self._0_1x_degree_classification_probs,
+            0.2: self._0_2x_degree_classification_probs,
+            0.5: self._0_5x_degree_classification_probs,
+            1.0: self._1_0x_degree_classification_probs,
+        }
+        coverage_to_relation_probs = {
+            0.1: self._0_1x_relation_classification_probs,
+            0.2: self._0_2x_relation_classification_probs,
+            0.5: self._0_5x_relation_classification_probs,
+            1.0: self._1_0x_relation_classification_probs,
+        }
+        if coverage_level not in coverage_to_degree_probs:
+            raise ValueError("coverage_level must be one of 0.1, 0.2, 0.5, or 1.0.")
+        self._degree_classification_probs = coverage_to_degree_probs[coverage_level]
+        self._relation_classification_probs = coverage_to_relation_probs[coverage_level]
 
     def create_pedigree(self) -> None:
         self._create_node(generation=0, sex="M", can_have_children=True)
@@ -282,48 +329,6 @@ class SimulatedPedigree:
                 relations_list.append((node1, node2, "Unrelated", ""))
         return pd.DataFrame(relations_list, columns=["id1", "id2", "degree", "constraints"])
 
-    def _scale_error_rates(
-        self, scale: float
-    ) -> tuple[dict[str, tuple[float, float, float, float]], dict[str, tuple[float, float]]]:
-        scaled_degree_probs = {}
-        for degree, probs in self._base_degree_classification_probs.items():
-            correct_prob_idx = None
-            if degree == "1":
-                correct_prob_idx = 0
-            elif degree == "2":
-                correct_prob_idx = 1
-            elif degree == "3":
-                correct_prob_idx = 2
-            else:
-                correct_prob_idx = 3
-
-            scaled_probs = []
-            for idx, prob in enumerate(probs):
-                if idx == correct_prob_idx:
-                    scaled_probs.append(1 - ((1 - prob) * scale))
-                else:
-                    scaled_probs.append(prob * scale)
-            scaled_degree_probs[degree] = tuple(scaled_probs)
-
-        scaled_relation_probs = {}
-        for relation, probs in self._base_relation_classification_probs.items():
-            correct_prob_idx = 0 if relation == "parent-child;child-parent" else 1
-            scaled_probs = []
-            for idx, prob in enumerate(probs):
-                if idx == correct_prob_idx:
-                    scaled_probs.append(1 - ((1 - prob) * scale))
-                else:
-                    scaled_probs.append(prob * scale)
-            scaled_relation_probs[relation] = tuple(scaled_probs)
-
-        for _degree, probs in scaled_degree_probs.items():
-            if any(prob > 1 for prob in probs):
-                raise ValueError("Scale is too high. Error rates exceed 1.")
-        for _relation, probs in scaled_relation_probs.items():
-            if any(prob > 1 for prob in probs):
-                raise ValueError("Scale is too high. Error rates exceed 1.")
-        return scaled_degree_probs, scaled_relation_probs
-
     def mask_and_corrupt_data(self) -> None:
         nodes_df = self._get_nodes()
         relations_df = pd.concat(
@@ -353,9 +358,8 @@ class SimulatedPedigree:
             .drop(columns=["pair"])
         )
 
-        degree_classification_probs, relation_classification_probs = self._scale_error_rates(
-            scale=self._error_rate_scale
-        )
+        degree_classification_probs = self._degree_classification_probs
+        relation_classification_probs = self._relation_classification_probs
 
         def corrupt_relation(row: pd.Series) -> pd.Series:
             node1, node2, degree, constraints = row

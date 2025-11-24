@@ -59,7 +59,7 @@ def plot_pedigree_summary_statistics(results_dir: Path | str) -> None:
 def plot_results(results_dir: Path | str) -> None:
     results_dir = Path(results_dir)
     p_mask_nodes = []
-    error_rate_scales = []
+    coverage_levels = []
     mean_relation_f1s = []
     mean_degree_f1s = []
 
@@ -68,36 +68,35 @@ def plot_results(results_dir: Path | str) -> None:
             continue
         results_df = pd.read_csv(path)
         p_mask_node = results_df["p(Mask Node)"].iloc[0]
-        error_rate_scale = results_df["Error Rate Scale"].iloc[0]
+        coverage_level = results_df["Coverage Level"].iloc[0]
         mean_relation_f1 = mean(results_df["Relation F1"])
         mean_degree_f1 = mean(results_df["Degree F1"])
 
         p_mask_nodes.append(p_mask_node)
-        error_rate_scales.append(error_rate_scale)
+        coverage_levels.append(coverage_level)
         mean_relation_f1s.append(mean_relation_f1)
         mean_degree_f1s.append(mean_degree_f1)
 
     results_df = pd.DataFrame(
         {
             "p_mask_node": p_mask_nodes,
-            "error_rate_scale": error_rate_scales,
+            "coverage_level": coverage_levels,
             "mean_relation_f1": mean_relation_f1s,
             "mean_degree_f1": mean_degree_f1s,
         }
     )
     relation_f1_heatmap_data = results_df.pivot(
-        index="p_mask_node", columns="error_rate_scale", values="mean_relation_f1"
+        index="p_mask_node", columns="coverage_level", values="mean_relation_f1"
     )
-    degree_f1_heatmap_data = results_df.pivot(index="p_mask_node", columns="error_rate_scale", values="mean_degree_f1")
+    degree_f1_heatmap_data = results_df.pivot(index="p_mask_node", columns="coverage_level", values="mean_degree_f1")
 
     for heatmap_data, metric in zip(
         [relation_f1_heatmap_data, degree_f1_heatmap_data], ["Relation F1", "Degree F1"], strict=True
     ):
         # p(Mask Node) increases from bottom to top
         heatmap_data = heatmap_data.sort_index(ascending=False)
-        # Error rate scale increases from left to right
+        # Coverage level increases from left to right
         heatmap_data = heatmap_data.sort_index(axis=1, ascending=True)
-        heatmap_data.rename(columns={1.0: "1.0\n(~0.5x coverage)"}, inplace=True)
 
         plt.figure(figsize=(8, 6))
         # Set vmin and vmax so relation and degree F1 scores are on the same color scale
@@ -115,10 +114,11 @@ def plot_results(results_dir: Path | str) -> None:
         # Set colorbar tick label size
         ax.figure.axes[-1].tick_params(labelsize=14)
         plt.title(f"{metric} Scores", fontsize=18, pad=10)
-        plt.xlabel("Kinship Relation Error Rate Scale", fontsize=16, labelpad=10)
+        plt.xlabel("Coverage Level", fontsize=16, labelpad=10)
         plt.ylabel("p(Mask Node)", fontsize=16, labelpad=10)
         ax.tick_params(axis="x", labelsize=14)
         ax.tick_params(axis="y", labelsize=14)
+        ax.set_xticklabels([f"{value}x" for value in heatmap_data.columns])
 
         plt.savefig(
             Path("results") / "parameter_experiment" / "plots" / f"{metric.lower().replace(' ', '_')}_heatmap.pdf",
