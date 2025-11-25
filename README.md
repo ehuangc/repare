@@ -76,7 +76,7 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
 
 **Do Not Plot** (-d) (*flag*): If set, do not plot reconstructed pedigree(s).
 
-**Write Alternate Pedigrees** (-w) (*flag*): If set, write outputs for alternate reconstructed pedigrees to disk.
+**Write Alternate Pedigrees** (-w) (*flag*): If set, write outputs for alternate reconstructed pedigrees. These pedigrees share the same number of inconsistencies and 3rd-degree "tiebreaker" inconsistencies as the primary output pedigree.
 
 **Verbose** (-v) (*flag*): If set, enable verbose output (INFO-level logging).
 
