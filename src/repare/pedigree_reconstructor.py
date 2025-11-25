@@ -1045,7 +1045,7 @@ class PedigreeReconstructor:
             file.write("id1,id2,degree,constraints\n")  # Header line
             file.write(f"# Final inconsistency count: {strike_count}\n")
             file.write(
-                "# Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here.\n"
+                "# Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here\n"
             )
 
             def write_relations_line(node1, node2, degree, constraints, commented=False):
