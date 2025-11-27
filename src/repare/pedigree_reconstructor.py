@@ -425,6 +425,8 @@ class PedigreeReconstructor:
                 pedigree.write_exact_relations(alternate_dir / f"pedigree_{idx}_exact_relations.csv")
                 if self._plot and pygraphviz_found:
                     pedigree.plot(alternate_dir / f"pedigree_{idx}.png")
+            self._write_constant_relations(alternate_dir / "constant_relations.csv")
+
         return self._sample_pedigree
 
     @staticmethod
@@ -1095,3 +1097,43 @@ class PedigreeReconstructor:
                 if (node1, node2, degree, constraints) not in removed_relations_set:
                     assert (node2, node1, degree, constraints) not in removed_relations_set
                     write_relations_line(node1, node2, degree, constraints)
+
+    def _write_constant_relations(self, path: Path | str) -> None:
+        """
+        Write relations that are identical across all final pedigrees.
+        """
+        path = Path(path)
+        node_sets = [pedigree.get_non_placeholder_nodes() for pedigree in self._final_pedigrees]
+        nodes = next(iter(node_sets))
+        assert all(node_set == nodes for node_set in node_sets)
+
+        nodes = sorted(nodes)
+        with path.open("w") as file:
+            file.write("# Constant kinship relations across all output pedigrees\n")
+            file.write("node1,node2,relation\n")
+            for i in range(len(nodes)):
+                node1 = nodes[i]
+                for j in range(i + 1, len(nodes)):
+                    node2 = nodes[j]
+                    shared_relations: dict[str, int] | None = None
+                    for pedigree in self._final_pedigrees:
+                        relations = pedigree.get_relations_between_nodes(node1, node2, include_maternal_paternal=True)
+                        if shared_relations is None:
+                            shared_relations = dict(relations)
+                        else:
+                            to_remove = [
+                                relation
+                                for relation, count in shared_relations.items()
+                                if relations.get(relation, 0) != count
+                            ]
+                            for relation in to_remove:
+                                del shared_relations[relation]
+                        if not shared_relations:
+                            break
+
+                    if not shared_relations:
+                        continue
+
+                    for relation, count in shared_relations.items():
+                        for _ in range(count):
+                            file.write(f"{node1},{node2},{relation}\n")

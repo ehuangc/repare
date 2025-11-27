@@ -79,6 +79,19 @@ def _build_reconstructor(
     )
 
 
+def _build_family_pedigree(include_maternal_sibling: bool) -> Pedigree:
+    pedigree = Pedigree()
+    pedigree.add_node("Alice", "F", "", "H1", True, True, 0)
+    pedigree.add_node("Ben", "M", "Y1", "H2", True, True, 0)
+    pedigree.add_node("Cara", "F", "", "H3", True, True, 0)
+    pedigree.add_node("Dora", "F", "", "H4", True, True, 0)
+    pedigree.add_parent_relation("Alice", "Cara")
+    pedigree.add_parent_relation("Ben", "Cara")
+    if include_maternal_sibling:
+        pedigree.add_sibling_relation("Alice", "Dora")
+    return pedigree
+
+
 def test_process_data_normalizes_node_and_relation_inputs(tmp_path):
     reconstructor = _build_reconstructor(tmp_path)
 
@@ -192,6 +205,25 @@ def test_find_best_pedigree_logs_removed_conflicting_relations(tmp_path):
     exact_relations = (tmp_path / "outputs" / "reconstructed_exact_relations.csv").read_text()
     assert "Ada,Cara,parent-child" in exact_relations
     assert "Ben,Cara,parent-child" in exact_relations
+
+
+def test_write_constant_relations_emits_shared_pairs_only(tmp_path):
+    reconstructor = _build_reconstructor(tmp_path)
+    reconstructor._final_pedigrees = [
+        _build_family_pedigree(include_maternal_sibling=True),
+        _build_family_pedigree(include_maternal_sibling=False),
+    ]
+
+    constants_path = tmp_path / "outputs" / "constant_relations.csv"
+    reconstructor._write_constant_relations(constants_path)
+
+    output_lines = constants_path.read_text().splitlines()
+    assert output_lines[1] == "node1,node2,relation"
+    assert output_lines[2:] == [
+        "Alice,Cara,parent-child",
+        "Ben,Cara,parent-child",
+    ]
+    assert "Alice,Dora,siblings" not in output_lines
 
 
 def test_connect_parent_relation_assigns_known_parent():
