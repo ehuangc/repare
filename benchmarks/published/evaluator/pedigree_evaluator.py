@@ -421,6 +421,8 @@ class PedigreeEvaluator:
             self._published_relations_path, dtype=str, comment="#", keep_default_na=False
         )
         inferred_relations = pd.read_csv(self._algorithm_relations_path, dtype=str, comment="#", keep_default_na=False)
+        if "force_constraints" not in inferred_relations.columns:
+            inferred_relations["force_constraints"] = ""
 
         pair_to_published_degree = {}
         for id1, id2, degree, _, _ in published_exact_relations.itertuples(index=False):
@@ -447,7 +449,7 @@ class PedigreeEvaluator:
 
         pair_to_inferred_degree = {}
         pair_to_inferred_constraints = {}
-        for id1, id2, degree, constraints in inferred_relations.itertuples(index=False):
+        for id1, id2, degree, constraints, _ in inferred_relations.itertuples(index=False):
             if degree == "1" or degree == "2":
                 pair_to_inferred_degree[tuple(sorted((id1, id2)))] = degree
             if constraints:
