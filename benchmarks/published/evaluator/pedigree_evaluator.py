@@ -28,6 +28,11 @@ class PedigreeEvaluator:
         self._algorithm_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = (
             self._load_algorithm_relation_counts(self._algorithm_nodes_path, self._algorithm_relations_path)
         )
+        (
+            self._input_pair_to_constraints,
+            self._input_pair_to_relations,
+        ) = self._load_input_relation_mappings(self._algorithm_relations_path)
+        self._published_pedigree: Pedigree | None = None
         self._fill_uncertain_relations()
 
     def _load_published_relation_counts(self, path: str) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
@@ -59,6 +64,109 @@ class PedigreeEvaluator:
                     id1, id2, relation = self._sort_relation(id1, id2, relation)
                     algorithm_relations[(id1, id2)][relation] += count
         return algorithm_relations
+
+    def _load_input_relation_mappings(
+        self, relations_path: str
+    ) -> tuple[
+        defaultdict[tuple[str, str], list[tuple[str, ...]]],
+        defaultdict[tuple[str, str], list[tuple[str, str, bool]]],
+    ]:
+        relation_data = pd.read_csv(relations_path, dtype=str, comment="#", keep_default_na=False)
+        if "force_constraints" not in relation_data.columns:
+            relation_data["force_constraints"] = ""
+        relation_data = relation_data[["id1", "id2", "degree", "constraints", "force_constraints"]]
+        relation_data["force_constraints"] = (
+            relation_data["force_constraints"]
+            .map({"True": True, "False": False})
+            .fillna(False)
+            .infer_objects(copy=False)
+        )
+
+        flipped_constraints = {
+            "parent-child": "child-parent",
+            "child-parent": "parent-child",
+            "siblings": "siblings",
+            "maternal aunt/uncle-nephew/niece": "maternal nephew/niece-aunt/uncle",
+            "maternal nephew/niece-aunt/uncle": "maternal aunt/uncle-nephew/niece",
+            "paternal aunt/uncle-nephew/niece": "paternal nephew/niece-aunt/uncle",
+            "paternal nephew/niece-aunt/uncle": "paternal aunt/uncle-nephew/niece",
+            "maternal grandparent-grandchild": "maternal grandchild-grandparent",
+            "maternal grandchild-grandparent": "maternal grandparent-grandchild",
+            "paternal grandparent-grandchild": "paternal grandchild-grandparent",
+            "paternal grandchild-grandparent": "paternal grandparent-grandchild",
+            "maternal half-siblings": "maternal half-siblings",
+            "paternal half-siblings": "paternal half-siblings",
+            "double cousins": "double cousins",
+            "half aunt/uncle-half nephew/niece": "half nephew/niece-half aunt/uncle",
+            "half nephew/niece-half aunt/uncle": "half aunt/uncle-half nephew/niece",
+            "greatgrandparent-greatgrandchild": "greatgrandchild-greatgrandparent",
+            "greatgrandchild-greatgrandparent": "greatgrandparent-greatgrandchild",
+            "grandaunt/granduncle-grandnephew/grandniece": "grandnephew/grandniece-grandaunt/granduncle",
+            "grandnephew/grandniece-grandaunt/granduncle": "grandaunt/granduncle-grandnephew/grandniece",
+            "first cousins": "first cousins",
+        }
+
+        def sort_nodes(row: pd.Series) -> pd.Series:
+            if row["id2"] < row["id1"]:
+                constraints = row["constraints"]
+                if constraints:
+                    constraints_list = [c.strip() for c in constraints.split(";")]
+                    flipped = [flipped_constraints[c] for c in constraints_list]
+                    constraints = ";".join(flipped)
+                return pd.Series(
+                    {
+                        "id1": row["id2"],
+                        "id2": row["id1"],
+                        "degree": row["degree"],
+                        "constraints": constraints,
+                        "force_constraints": row["force_constraints"],
+                    }
+                )
+            return row
+
+        relation_data = relation_data.apply(sort_nodes, axis=1)
+
+        default_constraints = {
+            "1": "parent-child;child-parent;siblings",
+            "2": (
+                "maternal aunt/uncle-nephew/niece;"
+                "maternal nephew/niece-aunt/uncle;"
+                "paternal aunt/uncle-nephew/niece;"
+                "paternal nephew/niece-aunt/uncle;"
+                "maternal grandparent-grandchild;"
+                "maternal grandchild-grandparent;"
+                "paternal grandparent-grandchild;"
+                "paternal grandchild-grandparent;"
+                "maternal half-siblings;"
+                "paternal half-siblings;"
+                "double cousins"
+            ),
+            "3": (
+                "half aunt/uncle-half nephew/niece;"
+                "half nephew/niece-half aunt/uncle;"
+                "greatgrandparent-greatgrandchild;"
+                "greatgrandchild-greatgrandparent;"
+                "grandaunt/granduncle-grandnephew/grandniece;"
+                "grandnephew/grandniece-grandaunt/granduncle;"
+                "first cousins"
+            ),
+        }
+        relation_data["constraints"] = relation_data.apply(
+            lambda row: row["constraints"] if row["constraints"] else default_constraints[row["degree"]], axis=1
+        )
+
+        pair_to_constraints: defaultdict[tuple[str, str], list[tuple[str, ...]]] = defaultdict(list)
+        pair_to_relations: defaultdict[tuple[str, str], list[tuple[str, str, bool]]] = defaultdict(list)
+        for id1, id2, degree, constraints, force_constraints in relation_data.itertuples(index=False):
+            constraint_tuple = tuple(c.strip() for c in constraints.split(";"))
+            pair_to_constraints[(id1, id2)].append(constraint_tuple)
+            # Only 1st- and 2nd-degree relations are included in pair_to_relations(_so_far)
+            if degree in ["1", "2"]:
+                pair_to_relations[(id1, id2)].append((degree, constraints, bool(force_constraints)))
+
+        for constraint_lists in pair_to_constraints.values():
+            constraint_lists.sort(key=len)
+        return pair_to_constraints, pair_to_relations
 
     @staticmethod
     def _sort_relation(id1: str, id2: str, relation: str) -> tuple[str, str, str]:
@@ -92,6 +200,11 @@ class PedigreeEvaluator:
                 relations_path, nodes_path, outputs_dir=temp_dir, max_candidate_pedigrees=1000, plot=False
             )
             return pedigree_reconstructor.find_best_pedigree()
+
+    def _get_published_pedigree(self) -> Pedigree:
+        if self._published_pedigree is None:
+            self._published_pedigree = self._run_algorithm(self._algorithm_nodes_path, self._published_relations_path)
+        return self._published_pedigree
 
     def _fill_uncertain_relations(self) -> None:
         uncertain_to_exact_relations = {
@@ -145,6 +258,22 @@ class PedigreeEvaluator:
         metrics["Connectivity R-squared"] = self._calculate_connectivity_r_squared()
         metrics["Kinship Inference Errors"] = self._calculate_kinship_inference_errors()
         return metrics
+
+    def count_input_relation_inconsistencies(self) -> dict[str, int]:
+        """
+        Count how many input relations are inconsistent with the published pedigree and with the inferred pedigree.
+        """
+        published_pedigree = self._get_published_pedigree()
+        published_inconsistencies, _ = published_pedigree.count_inconsistencies(
+            self._input_pair_to_constraints, self._input_pair_to_relations, check_half_siblings=True
+        )
+        inferred_inconsistencies, _ = self.algorithm_pedigree.count_inconsistencies(
+            self._input_pair_to_constraints, self._input_pair_to_relations, check_half_siblings=True
+        )
+        return {
+            "Published Pedigree Input Inconsistencies": published_inconsistencies,
+            "Inferred Pedigree Input Inconsistencies": inferred_inconsistencies,
+        }
 
     @staticmethod
     def _calculate_tp_fp_fn(
