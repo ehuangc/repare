@@ -413,6 +413,10 @@ class PedigreeReconstructor:
             for idx, (pedigree, strike_count, strike_log) in enumerate(
                 zip(self._final_pedigrees, self._final_strike_counts, self._final_strike_logs, strict=True)
             ):
+                # Skip sample pedigree since it is already written
+                if idx == sample_idx:
+                    continue
+
                 self._write_corrected_input_relations(
                     strike_count,
                     strike_log,
