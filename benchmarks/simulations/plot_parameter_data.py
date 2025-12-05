@@ -9,6 +9,8 @@ import seaborn as sns
 
 def plot_pedigree_summary_statistics(results_dir: Path | str) -> None:
     results_dir = Path(results_dir)
+    plots_dir = results_dir.parent / "plots"
+    plots_dir.mkdir(parents=True, exist_ok=True)
     # We can use any results file to get pedigree statistics because
     # all experiments are run on same simulated pedigrees since seed is fixed
     results_path = next(path for path in results_dir.iterdir() if path.is_file())
@@ -50,14 +52,13 @@ def plot_pedigree_summary_statistics(results_dir: Path | str) -> None:
         axes[3].set_title("Mean Children Count Distribution", fontsize=14)
         axes[3].set_xlabel("Mean # of Children per Parent", fontsize=14)
 
-        plt.savefig(
-            Path("results") / "parameter_experiment" / "plots" / "pedigree_summary_statistics.pdf",
-            bbox_inches="tight",
-        )
+        plt.savefig(plots_dir / "pedigree_summary_statistics.pdf", bbox_inches="tight")
 
 
 def plot_results(results_dir: Path | str) -> None:
     results_dir = Path(results_dir)
+    plots_dir = results_dir.parent / "plots"
+    plots_dir.mkdir(parents=True, exist_ok=True)
     p_mask_nodes = []
     coverage_levels = []
     mean_relation_f1s = []
@@ -120,16 +121,12 @@ def plot_results(results_dir: Path | str) -> None:
         ax.tick_params(axis="y", labelsize=14)
         ax.set_xticklabels([f"{value}x" for value in heatmap_data.columns])
 
-        plt.savefig(
-            Path("results") / "parameter_experiment" / "plots" / f"{metric.lower().replace(' ', '_')}_heatmap.pdf",
-            bbox_inches="tight",
-        )
+        plt.savefig(plots_dir / f"{metric.lower().replace(' ', '_')}_heatmap.pdf", bbox_inches="tight")
 
 
 def main():
-    plots_dir = Path("results") / "parameter_experiment" / "plots"
-    plots_dir.mkdir(parents=True, exist_ok=True)
-    results_dir = Path("results") / "parameter_experiment" / "data"
+    script_dir = Path(__file__).resolve().parent
+    results_dir = script_dir / "results" / "parameter_experiment" / "data"
     plot_pedigree_summary_statistics(results_dir)
     plot_results(results_dir)
 

@@ -8,6 +8,8 @@ import seaborn as sns
 
 def plot_results(results_dir: Path | str) -> None:
     results_dir = Path(results_dir)
+    plots_dir = results_dir.parent / "plots"
+    plots_dir.mkdir(parents=True, exist_ok=True)
     max_candidate_pedigrees_values = []
     epsilons = []
     mean_relation_f1s = []
@@ -71,16 +73,12 @@ def plot_results(results_dir: Path | str) -> None:
         ax.tick_params(axis="x", labelsize=14)
         ax.tick_params(axis="y", labelsize=14)
 
-        plt.savefig(
-            Path("results") / "sampling_experiment" / "plots" / f"{metric.lower().replace(' ', '_')}_heatmap.pdf",
-            bbox_inches="tight",
-        )
+        plt.savefig(plots_dir / f"{metric.lower().replace(' ', '_')}_heatmap.pdf", bbox_inches="tight")
 
 
 def main():
-    plots_dir = Path("results") / "sampling_experiment" / "plots"
-    plots_dir.mkdir(parents=True, exist_ok=True)
-    results_dir = Path("results") / "sampling_experiment" / "data"
+    script_dir = Path(__file__).resolve().parent
+    results_dir = script_dir / "results" / "sampling_experiment" / "data"
     plot_results(results_dir)
 
 

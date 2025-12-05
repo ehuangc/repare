@@ -8,10 +8,16 @@ from simulator.simulated_pedigree import SimulatedPedigree
 
 
 def simulate(
-    p_mask_node: float, coverage_level: float, max_candidate_pedigrees: int, epsilon: float, random_seed: int
+    script_dir: Path,
+    p_mask_node: float,
+    coverage_level: float,
+    max_candidate_pedigrees: int,
+    epsilon: float,
+    random_seed: int,
 ) -> tuple[dict[str, int | float], dict[str, float]]:
     pedigree_data_dir = (
-        Path("results")
+        script_dir
+        / "results"
         / "sampling_experiment"
         / "pedigree_data"
         / f"max_candidate_pedigrees={max_candidate_pedigrees}_epsilon={epsilon}"
@@ -35,6 +41,7 @@ def simulate(
 
 
 def run_experiment(
+    script_dir: Path,
     p_mask_node: float,
     coverage_level: float,
     max_candidate_pedigrees: int,
@@ -58,6 +65,7 @@ def run_experiment(
     with ProcessPoolExecutor() as ex:
         for pedigree_statistics, metrics in ex.map(
             simulate,
+            repeat(script_dir),
             repeat(p_mask_node),
             repeat(coverage_level),
             repeat(max_candidate_pedigrees),
@@ -74,7 +82,7 @@ def run_experiment(
     )
     results_df["Max Candidate Pedigrees"] = max_candidate_pedigrees
     results_df["Epsilon"] = epsilon
-    results_dir = Path("results") / "sampling_experiment" / "data"
+    results_dir = script_dir / "results" / "sampling_experiment" / "data"
     results_dir.mkdir(parents=True, exist_ok=True)
     results_df.to_csv(
         results_dir / f"max_candidate_pedigrees={max_candidate_pedigrees}_epsilon={epsilon}.csv",
@@ -83,9 +91,11 @@ def run_experiment(
 
 
 def main():
+    script_dir = Path(__file__).resolve().parent
     for max_candidate_pedigrees in [10, 100, 1000, 10000]:
         for epsilon in [0.0, 0.2, 0.4]:
             run_experiment(
+                script_dir=script_dir,
                 p_mask_node=0.4,
                 coverage_level=0.5,
                 max_candidate_pedigrees=max_candidate_pedigrees,

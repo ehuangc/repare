@@ -46,22 +46,26 @@ def test_simulate_runs_full_pipeline(monkeypatch, tmp_path):
         random_seed=7,
     )
     monkeypatch.setattr(run_sampling_experiment, "SimulatedPedigree", DummySimulatedPedigree)
-    monkeypatch.chdir(tmp_path)
+    script_dir = tmp_path / "script"
+    script_dir.mkdir()
+    work_dir = tmp_path / "work"
+    work_dir.mkdir()
+    monkeypatch.chdir(work_dir)
 
-    stats, metrics = run_sampling_experiment.simulate(**params)
+    stats, metrics = run_sampling_experiment.simulate(script_dir, **params)
 
-    relative_expected_dir = (
-        Path("results")
+    expected_dir = (
+        script_dir
+        / "results"
         / "sampling_experiment"
         / "pedigree_data"
         / "max_candidate_pedigrees=50_epsilon=0.2"
         / "pedigree7"
     )
-    absolute_expected_dir = tmp_path / relative_expected_dir
-    assert absolute_expected_dir.exists()
+    assert expected_dir.exists()
 
     instance = DummySimulatedPedigree.created_instances[-1]
-    assert instance.pedigree_data_dir == relative_expected_dir
+    assert instance.pedigree_data_dir == expected_dir
     assert instance.kwargs == params
     assert instance.calls == ["create", "mask", "run", "stats", "metrics"]
 
