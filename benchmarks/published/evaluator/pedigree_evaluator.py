@@ -251,6 +251,7 @@ class PedigreeEvaluator:
         metrics["Degree F1"] = degree_f1
         metrics["Connectivity R-squared"] = self._calculate_connectivity_r_squared()
         metrics["Kinship Inference Errors"] = self._calculate_kinship_inference_errors()
+        metrics.update(self.count_input_relation_inconsistencies())
         return metrics
 
     def count_input_relation_inconsistencies(self) -> dict[str, int]:
@@ -405,84 +406,6 @@ class PedigreeEvaluator:
             published_connectivities.append(published_relation_counter[node])
             algorithm_connectivities.append(algorithm_relation_counter[node])
         return r2_score(published_connectivities, algorithm_connectivities)
-
-    def _calculate_kinship_inference_errors(self) -> int:
-        """
-        Calculate the number of node pairs that share a different inferred kinship degree than in the published pedigree
-        or share a relation constraint not consistent with the published pedigree.
-        """
-        published_exact_relations = pd.read_csv(
-            self._published_relations_path, dtype=str, comment="#", keep_default_na=False
-        )
-        inferred_relations = pd.read_csv(self._algorithm_relations_path, dtype=str, comment="#", keep_default_na=False)
-        if "force_constraints" not in inferred_relations.columns:
-            inferred_relations["force_constraints"] = ""
-
-        pair_to_published_degree = {}
-        for id1, id2, degree, _, _ in published_exact_relations.itertuples(index=False):
-            assert degree in ["1", "2"]
-            pair_to_published_degree[tuple(sorted((id1, id2)))] = degree
-
-        # Map constraints to their flipped value
-        flipped_constraints = {
-            "parent-child": "child-parent",
-            "child-parent": "parent-child",
-            "maternal aunt/uncle-nephew/niece": "maternal nephew/niece-aunt/uncle",
-            "paternal aunt/uncle-nephew/niece": "paternal nephew/niece-aunt/uncle",
-            "maternal nephew/niece-aunt/uncle": "maternal aunt/uncle-nephew/niece",
-            "paternal nephew/niece-aunt/uncle": "paternal aunt/uncle-nephew/niece",
-            "maternal grandparent-grandchild": "maternal grandchild-grandparent",
-            "paternal grandparent-grandchild": "paternal grandchild-grandparent",
-            "maternal grandchild-grandparent": "maternal grandparent-grandchild",
-            "paternal grandchild-grandparent": "paternal grandparent-grandchild",
-            "siblings": "siblings",  # Symmetric
-            "maternal half-siblings": "maternal half-siblings",  # Symmetric
-            "paternal half-siblings": "paternal half-siblings",  # Symmetric
-            "double cousins": "double cousins",  # Symmetric
-        }
-
-        pair_to_inferred_degree = {}
-        pair_to_inferred_constraints = {}
-        for id1, id2, degree, constraints, _ in inferred_relations.itertuples(index=False):
-            if degree == "1" or degree == "2":
-                pair_to_inferred_degree[tuple(sorted((id1, id2)))] = degree
-            if constraints:
-                if id2 < id1:
-                    assert sorted((id1, id2)) == [id2, id1]
-                    # Split constraints and map each to its flipped value
-                    constraints_list = [c.strip() for c in constraints.split(";")]
-                    flipped = [flipped_constraints[c] for c in constraints_list]
-                    pair_to_inferred_constraints[tuple(sorted((id1, id2)))] = set(flipped)
-                else:
-                    assert sorted((id1, id2)) == [id1, id2]
-                    pair_to_inferred_constraints[tuple(sorted((id1, id2)))] = set(constraints.split(";"))
-
-        # Compare the degree dicts
-        kinship_inference_errors = 0
-        for pair, algorithm_degree in pair_to_inferred_degree.items():
-            if pair not in pair_to_published_degree:
-                kinship_inference_errors += 1
-                continue
-            published_degree = pair_to_published_degree[pair]
-            if algorithm_degree != published_degree:
-                kinship_inference_errors += 1
-                continue
-
-        for pair in pair_to_published_degree:
-            if pair not in pair_to_inferred_degree:
-                kinship_inference_errors += 1
-
-        # Count within-degree relation constraint inference errors
-        for id1, id2, _, constraints, _ in published_exact_relations.itertuples(index=False):
-            # Skip "dotted lines"
-            if not constraints:
-                continue
-            pair = tuple(sorted((id1, id2)))
-            if id2 < id1:
-                constraints = flipped_constraints[constraints]
-            if pair in pair_to_inferred_constraints and constraints not in pair_to_inferred_constraints[pair]:
-                kinship_inference_errors += 1
-        return kinship_inference_errors
 
     def write_relation_differences(self, path: str) -> None:
         """
