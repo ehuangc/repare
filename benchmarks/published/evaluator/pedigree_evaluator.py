@@ -250,7 +250,6 @@ class PedigreeEvaluator:
         metrics["Degree Recall"] = degree_recall
         metrics["Degree F1"] = degree_f1
         metrics["Connectivity R-squared"] = self._calculate_connectivity_r_squared()
-        metrics["Kinship Inference Errors"] = self._calculate_kinship_inference_errors()
         metrics.update(self.count_input_relation_inconsistencies())
         return metrics
 

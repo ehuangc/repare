@@ -107,7 +107,6 @@ def test_get_metrics_reports_perfect_scores(monkeypatch, tmp_path):
     assert metrics["Degree Recall"] == pytest.approx(1.0)
     assert metrics["Degree F1"] == pytest.approx(1.0)
     assert metrics["Connectivity R-squared"] == pytest.approx(1.0)
-    assert metrics["Kinship Inference Errors"] == 0
 
 
 def test_get_metrics_detects_relation_and_degree_errors(monkeypatch, tmp_path):
@@ -140,7 +139,6 @@ def test_get_metrics_detects_relation_and_degree_errors(monkeypatch, tmp_path):
     assert metrics["Degree Recall"] == two_thirds
     assert metrics["Degree F1"] == two_thirds
     assert metrics["Connectivity R-squared"] == pytest.approx(1.0)
-    assert metrics["Kinship Inference Errors"] == 2
 
 
 def test_count_input_relation_inconsistencies_reports_counts(monkeypatch, tmp_path):
