@@ -74,13 +74,7 @@ class PedigreeEvaluator:
         relation_data = pd.read_csv(relations_path, dtype=str, comment="#", keep_default_na=False)
         if "force_constraints" not in relation_data.columns:
             relation_data["force_constraints"] = ""
-        relation_data = relation_data[["id1", "id2", "degree", "constraints", "force_constraints"]]
-        relation_data["force_constraints"] = (
-            relation_data["force_constraints"]
-            .map({"True": True, "False": False})
-            .fillna(False)
-            .infer_objects(copy=False)
-        )
+        relation_data["force_constraints"] = relation_data["force_constraints"].eq("True")
 
         flipped_constraints = {
             "parent-child": "child-parent",
