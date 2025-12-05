@@ -6,8 +6,8 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 
 
 def main():
-    module_dir = Path(__file__).resolve().parent
-    results_dir = module_dir / "results"
+    script_dir = Path(__file__).resolve().parent
+    results_dir = script_dir / "results"
     results_dir.mkdir(parents=True, exist_ok=True)
     results_path = results_dir / "results.csv"
 
@@ -21,7 +21,7 @@ def main():
         ]
     ):
         print(f"Reconstructing pedigree: site={site}, relation_data={relations_file_name}")
-        data_dir = module_dir / "data" / site
+        data_dir = script_dir / "data" / site
         algorithm_nodes_path = data_dir / "nodes.csv"
         algorithm_relations_path = data_dir / relations_file_name
         published_relations_path = data_dir / "published_exact_relations.csv"

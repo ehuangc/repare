@@ -14,9 +14,9 @@ def main():
     """
     Compare the Nepluyevsky inferred and published pedigrees by plotting and writing relation differences.
     """
-    module_dir = Path(__file__).resolve().parent
-    data_dir = module_dir / "data" / "nepluyevsky"
-    results_dir = module_dir / "results" / "nepluyevsky_comparison"
+    script_dir = Path(__file__).resolve().parent
+    data_dir = script_dir / "data" / "nepluyevsky"
+    results_dir = script_dir / "results" / "nepluyevsky_comparison"
     results_dir.mkdir(parents=True, exist_ok=True)
 
     evaluator = PedigreeEvaluator(
