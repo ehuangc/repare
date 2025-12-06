@@ -2,6 +2,7 @@ import logging
 import tempfile
 from collections import defaultdict
 from itertools import combinations
+from pathlib import Path
 
 import pandas as pd
 from sklearn.metrics import r2_score
@@ -17,10 +18,17 @@ class PedigreeEvaluator:
     Generates an algorithm-reconstructed pedigree and scores it against a published/ground-truth pedigree.
     """
 
-    def __init__(self, published_relations_path: str, algorithm_nodes_path: str, algorithm_relations_path: str) -> None:
+    def __init__(
+        self,
+        published_relations_path: str,
+        algorithm_nodes_path: str,
+        algorithm_relations_path: str,
+        outputs_dir: Path | str,
+    ) -> None:
         self._published_relations_path = published_relations_path
         self._algorithm_nodes_path = algorithm_nodes_path
         self._algorithm_relations_path = algorithm_relations_path
+        self._outputs_dir = Path(outputs_dir)
 
         self._published_relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = (
             self._load_published_relation_counts(self._published_relations_path)
@@ -52,7 +60,9 @@ class PedigreeEvaluator:
     def _load_algorithm_relation_counts(
         self, nodes_path: str, relations_path: str
     ) -> defaultdict[tuple[str, str], defaultdict[str, int]]:
-        self.algorithm_pedigree: Pedigree = self._run_algorithm(nodes_path, relations_path)
+        self.algorithm_pedigree: Pedigree = self._run_algorithm(
+            nodes_path, relations_path, outputs_dir=self._outputs_dir
+        )
         algorithm_relations: defaultdict[tuple[str, str], defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
 
         for id1, id2 in combinations(self.algorithm_pedigree.node_to_data, 2):
@@ -188,16 +198,20 @@ class PedigreeEvaluator:
             return id1, id2, relation
 
     @staticmethod
-    def _run_algorithm(nodes_path: str, relations_path: str) -> Pedigree:
-        with tempfile.TemporaryDirectory() as temp_dir:
-            pedigree_reconstructor = PedigreeReconstructor(
-                relations_path, nodes_path, outputs_dir=temp_dir, max_candidate_pedigrees=1000, plot=False
-            )
-            return pedigree_reconstructor.find_best_pedigree()
+    def _run_algorithm(nodes_path: str, relations_path: str, outputs_dir: Path | str) -> Pedigree:
+        outputs_path = Path(outputs_dir)
+        outputs_path.mkdir(parents=True, exist_ok=True)
+        pedigree_reconstructor = PedigreeReconstructor(
+            relations_path, nodes_path, outputs_dir=outputs_path, max_candidate_pedigrees=1000, plot=False
+        )
+        return pedigree_reconstructor.find_best_pedigree()
 
     def _get_published_pedigree(self) -> Pedigree:
         if self._published_pedigree is None:
-            self._published_pedigree = self._run_algorithm(self._algorithm_nodes_path, self._published_relations_path)
+            with tempfile.TemporaryDirectory() as temp_dir:
+                self._published_pedigree = self._run_algorithm(
+                    self._algorithm_nodes_path, self._published_relations_path, outputs_dir=temp_dir
+                )
         return self._published_pedigree
 
     def _fill_uncertain_relations(self) -> None:

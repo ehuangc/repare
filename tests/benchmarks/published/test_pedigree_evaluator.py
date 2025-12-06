@@ -59,10 +59,16 @@ def _instantiate_evaluator(
     monkeypatch.setattr(
         PedigreeEvaluator,
         "_run_algorithm",
-        staticmethod(lambda nodes_path, relations_path, _stub=stub_pedigree: _stub),
+        staticmethod(lambda nodes_path, relations_path, outputs_dir=None, _stub=stub_pedigree: _stub),
     )
 
-    return PedigreeEvaluator(str(published_path), str(algorithm_nodes_path), str(algorithm_relations_path))
+    outputs_dir = tmp_path / "outputs"
+    return PedigreeEvaluator(
+        str(published_path),
+        str(algorithm_nodes_path),
+        str(algorithm_relations_path),
+        str(outputs_dir),
+    )
 
 
 def test_sort_relation_flips_directional_relation_when_ids_are_unsorted():
