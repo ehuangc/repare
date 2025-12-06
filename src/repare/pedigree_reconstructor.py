@@ -1045,7 +1045,9 @@ class PedigreeReconstructor:
                 if (add_node1 == remove_node1 and add_node2 == remove_node2) or (
                     add_node2 == remove_node1 and add_node1 == remove_node2
                 ):
-                    changed_node_pairs.add((add_node1, add_node2))
+                    # Removed pairs follow the input pair order and will be written to file in that order, so use those
+                    # Then, we can sort changed_node_pairs on the tuple order that will actually be written to file
+                    changed_node_pairs.add((remove_node1, remove_node2))
 
         with path.open("w") as file:
             file.write("id1,id2,degree,constraints\n")  # Header line

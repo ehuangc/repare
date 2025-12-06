@@ -774,7 +774,10 @@ class Pedigree:
             if not is_relation_in_input_data(node1, node2, relation) and not is_relation_in_input_data(
                 node2, node1, flipped_relations[relation]
             ):
-                strike_log.append((node1, node2, f"+{relation_to_degree[relation]}", ""))
+                if node1 < node2:
+                    strike_log.append((node1, node2, f"+{relation_to_degree[relation]}", ""))
+                else:
+                    strike_log.append((node2, node1, f"+{relation_to_degree[relation]}", ""))
             remove_relation_from_input_data(node1, node2, relation)
             remove_relation_from_input_data(node2, node1, flipped_relations[relation])
 
