@@ -10,7 +10,7 @@ N12,N16,parent-child
 N16,N5,maternal grandchild-grandparent
 N17,N19,parent-child
 N19,N5,maternal grandchild-grandparent
-N3,N4,child-parent
-N3,N9,paternal grandchild-grandparent
-N4,N5,maternal grandchild-grandparent
-N4,N9,child-parent
+N3,N4,parent-child
+N3,N9,paternal grandparent-grandchild
+N4,N5,paternal grandchild-grandparent
+N4,N9,parent-child

@@ -1,0 +1,14 @@
+node1,node2,relation
+N0,N5,parent-child
+N10,N11,parent-child
+N10,N12,parent-child
+N11,N12,siblings
+N15,N21,paternal half-siblings
+N15,N22,paternal half-siblings
+N18,N25,paternal aunt/uncle-nephew/niece
+N18,N5,paternal grandchild-grandparent
+N20,N21,parent-child
+N20,N22,parent-child
+N21,N22,siblings
+N24,N25,parent-child
+N3,N5,parent-child

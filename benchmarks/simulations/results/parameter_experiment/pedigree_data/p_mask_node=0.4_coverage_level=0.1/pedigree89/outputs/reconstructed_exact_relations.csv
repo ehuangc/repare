@@ -1,0 +1,13 @@
+node1,node2,relation
+N10,N11,siblings
+N10,N16,maternal grandparent-grandchild
+N10,N19,maternal half-siblings
+N10,N5,child-parent
+N11,N19,maternal half-siblings
+N11,N5,child-parent
+N12,N16,parent-child
+N17,N19,parent-child
+N3,N4,parent-child
+N3,N9,paternal grandparent-grandchild
+N4,N5,paternal grandchild-grandparent
+N4,N9,parent-child

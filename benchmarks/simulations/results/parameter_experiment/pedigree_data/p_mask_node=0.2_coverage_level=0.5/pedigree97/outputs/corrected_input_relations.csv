@@ -1,0 +1,36 @@
+id1,id2,degree,constraints
+# Final inconsistency count: 0
+# Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here
+# Added relations
+
+# Removed relations
+
+# Changed relations
+
+# Unchanged relations
+N1,N5,1,parent-child;child-parent
+N12,N13,1,parent-child;child-parent
+N12,N14,1,parent-child;child-parent
+N13,N14,1,siblings
+N18,N19,1,siblings
+N18,N20,1,siblings
+N19,N20,1,siblings
+N1,N18,2,
+N1,N19,2,
+N1,N20,2,
+N1,N6,2,
+N13,N5,2,
+N14,N5,2,
+N16,N6,2,
+N18,N5,2,
+N18,N6,2,
+N19,N5,2,
+N19,N6,2,
+N20,N5,2,
+N20,N6,2,
+N5,N6,2,
+N1,N14,3,
+N1,N16,3,
+N16,N19,3,
+N16,N20,3,
+N16,N5,3,

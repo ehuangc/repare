@@ -15,14 +15,14 @@ N11,N5,child-parent
 N15,N17,parent-child
 N15,N24,maternal grandparent-grandchild
 N17,N24,parent-child
-N17,N7,paternal grandparent-grandchild
-N17,N9,paternal nephew/niece-aunt/uncle
+N17,N9,child-parent
 N19,N3,paternal grandchild-grandparent
 N19,N5,paternal grandchild-grandparent
 N22,N3,paternal grandchild-grandparent
 N22,N5,paternal grandchild-grandparent
 N23,N24,parent-child
+N24,N9,maternal grandchild-grandparent
 N3,N4,child-parent
-N3,N5,paternal aunt/uncle-nephew/niece
-N4,N5,paternal grandparent-grandchild
-N7,N9,maternal grandchild-grandparent
+N3,N5,paternal half-siblings
+N4,N5,maternal aunt/uncle-nephew/niece
+N7,N9,paternal aunt/uncle-nephew/niece

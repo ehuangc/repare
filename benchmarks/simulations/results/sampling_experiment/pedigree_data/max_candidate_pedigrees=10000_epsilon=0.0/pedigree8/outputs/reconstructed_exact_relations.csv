@@ -7,13 +7,13 @@ N1,N21,maternal grandparent-grandchild
 N1,N4,child-parent
 N1,N6,parent-child
 N1,N7,parent-child
-N10,N11,paternal aunt/uncle-nephew/niece
-N10,N14,paternal half-siblings
-N10,N2,siblings
-N10,N9,child-parent
-N11,N2,child-parent
-N11,N9,paternal grandchild-grandparent
-N14,N2,paternal half-siblings
+N10,N11,parent-child
+N10,N14,paternal aunt/uncle-nephew/niece
+N10,N2,child-parent
+N10,N9,siblings
+N11,N2,maternal grandchild-grandparent
+N11,N9,maternal nephew/niece-aunt/uncle
+N14,N2,paternal grandchild-grandparent
 N14,N33,parent-child
 N14,N4,maternal grandchild-grandparent
 N14,N9,child-parent
@@ -37,16 +37,21 @@ N19,N45,maternal grandparent-grandchild
 N19,N47,paternal grandparent-grandchild
 N19,N48,paternal grandparent-grandchild
 N19,N49,paternal grandparent-grandchild
-N19,N53,paternal grandchild-grandparent
-N19,N56,maternal grandparent-grandchild
-N2,N9,child-parent
+N19,N51,paternal grandparent-grandchild
+N19,N52,paternal grandparent-grandchild
+N19,N53,paternal grandparent-grandchild
+N19,N56,paternal grandparent-grandchild
+N2,N9,parent-child
 N20,N21,siblings
 N20,N45,parent-child
 N20,N47,paternal aunt/uncle-nephew/niece
 N20,N48,paternal aunt/uncle-nephew/niece
 N20,N49,paternal aunt/uncle-nephew/niece
 N20,N5,maternal grandchild-grandparent
-N20,N56,maternal aunt/uncle-nephew/niece
+N20,N51,paternal aunt/uncle-nephew/niece
+N20,N52,paternal aunt/uncle-nephew/niece
+N20,N53,paternal aunt/uncle-nephew/niece
+N20,N56,paternal aunt/uncle-nephew/niece
 N20,N6,child-parent
 N20,N7,maternal nephew/niece-aunt/uncle
 N21,N45,maternal aunt/uncle-nephew/niece
@@ -54,7 +59,10 @@ N21,N47,parent-child
 N21,N48,parent-child
 N21,N49,parent-child
 N21,N5,maternal grandchild-grandparent
-N21,N56,maternal aunt/uncle-nephew/niece
+N21,N51,paternal aunt/uncle-nephew/niece
+N21,N52,paternal aunt/uncle-nephew/niece
+N21,N53,paternal aunt/uncle-nephew/niece
+N21,N56,paternal aunt/uncle-nephew/niece
 N21,N6,child-parent
 N21,N7,maternal nephew/niece-aunt/uncle
 N33,N9,maternal grandchild-grandparent
@@ -83,6 +91,6 @@ N51,N6,paternal grandchild-grandparent
 N52,N53,siblings
 N52,N6,paternal grandchild-grandparent
 N53,N6,paternal grandchild-grandparent
-N56,N6,maternal grandchild-grandparent
-N56,N7,paternal grandchild-grandparent
+N56,N6,paternal grandchild-grandparent
+N56,N7,maternal grandchild-grandparent
 N6,N7,siblings

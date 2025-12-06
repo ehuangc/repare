@@ -4,9 +4,9 @@ N1,N20,paternal grandparent-grandchild
 N1,N6,parent-child
 N1,N9,parent-child
 N11,N15,parent-child
-N11,N2,parent-child
-N11,N20,maternal aunt/uncle-nephew/niece
-N15,N2,paternal half-siblings
+N11,N2,child-parent
+N11,N20,maternal half-siblings
+N15,N2,paternal grandchild-grandparent
 N16,N18,parent-child
 N16,N27,paternal grandparent-grandchild
 N16,N28,paternal grandparent-grandchild

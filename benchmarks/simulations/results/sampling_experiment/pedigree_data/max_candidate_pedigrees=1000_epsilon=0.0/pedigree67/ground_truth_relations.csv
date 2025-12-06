@@ -138,7 +138,9 @@ N21,N42,parent-child
 N21,N43,parent-child
 N21,N9,maternal grandchild-grandparent
 N22,N23,siblings
+N22,N23,double cousins
 N22,N24,siblings
+N22,N24,double cousins
 N22,N26,paternal half-siblings
 N22,N27,paternal half-siblings
 N22,N28,paternal half-siblings
@@ -148,6 +150,7 @@ N22,N47,paternal aunt/uncle-nephew/niece
 N22,N48,maternal aunt/uncle-nephew/niece
 N22,N48,paternal aunt/uncle-nephew/niece
 N23,N24,siblings
+N23,N24,double cousins
 N23,N26,paternal half-siblings
 N23,N27,paternal half-siblings
 N23,N28,paternal half-siblings

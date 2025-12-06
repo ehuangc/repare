@@ -28,17 +28,17 @@ N16,N3,paternal grandchild-grandparent
 N16,N34,maternal half-siblings
 N16,N4,paternal nephew/niece-aunt/uncle
 N16,N6,paternal nephew/niece-aunt/uncle
-N17,N29,maternal grandparent-grandchild
+N17,N29,paternal grandchild-grandparent
 N17,N31,maternal grandparent-grandchild
 N17,N33,maternal grandparent-grandchild
 N20,N21,parent-child
-N20,N34,paternal grandparent-grandchild
-N21,N34,parent-child
+N21,N34,paternal grandparent-grandchild
 N21,N7,paternal nephew/niece-aunt/uncle
 N23,N24,parent-child
 N23,N26,parent-child
 N24,N26,siblings
 N27,N29,parent-child
+N29,N7,maternal grandchild-grandparent
 N3,N4,parent-child
 N3,N6,parent-child
 N30,N31,parent-child

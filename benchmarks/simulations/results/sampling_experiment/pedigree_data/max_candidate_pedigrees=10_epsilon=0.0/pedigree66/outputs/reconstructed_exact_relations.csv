@@ -9,10 +9,10 @@ N1,N16,paternal grandparent-grandchild
 N1,N17,paternal grandparent-grandchild
 N1,N19,maternal grandparent-grandchild
 N1,N22,maternal grandparent-grandchild
-N1,N24,paternal aunt/uncle-nephew/niece
+N1,N24,paternal grandparent-grandchild
 N12,N19,maternal aunt/uncle-nephew/niece
 N12,N22,parent-child
-N12,N24,maternal grandparent-grandchild
+N12,N24,paternal aunt/uncle-nephew/niece
 N12,N3,paternal grandchild-grandparent
 N12,N4,paternal nephew/niece-aunt/uncle
 N12,N5,paternal nephew/niece-aunt/uncle
@@ -39,9 +39,10 @@ N17,N27,maternal aunt/uncle-nephew/niece
 N17,N28,maternal aunt/uncle-nephew/niece
 N17,N7,paternal grandchild-grandparent
 N18,N19,parent-child
+N19,N24,maternal grandparent-grandchild
 N19,N6,maternal grandchild-grandparent
 N22,N6,maternal grandchild-grandparent
-N24,N6,maternal grandchild-grandparent
+N24,N6,paternal grandchild-grandparent
 N25,N26,parent-child
 N25,N27,parent-child
 N25,N28,parent-child

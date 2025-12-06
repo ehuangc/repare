@@ -1,0 +1,7 @@
+node1,node2,relation
+N12,N2,maternal grandparent-grandchild
+N17,N2,paternal grandparent-grandchild
+N17,N3,maternal grandparent-grandchild
+N17,N6,maternal grandparent-grandchild
+N3,N6,maternal grandparent-grandchild
+N5,N6,parent-child

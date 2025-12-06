@@ -1,8 +1,9 @@
 id1,id2,degree,constraints
-# Final inconsistency count: 12
+# Final inconsistency count: 10
+# Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here
 # Added relations
-N11,N25,2,
 N11,N26,2,
+N25,N11,2,
 N5,N11,2,
 N5,N15,2,
 
@@ -10,13 +11,10 @@ N5,N15,2,
 # N20,N5,2,
 # N23,N5,2,
 # N31,N5,2,
-# N33,N9,2,
 
 # Changed relations
 # N15,N16,1,parent-child;child-parent
 N15,N16,1,
-# N25,N26,1,parent-child;child-parent
-N25,N26,1,
 # N13,N5,1,siblings
 N13,N5,1,
 N13,N5,2,
@@ -35,14 +33,14 @@ N13,N26,1,parent-child;child-parent
 N15,N18,1,siblings
 N15,N29,1,parent-child;child-parent
 N15,N31,1,parent-child;child-parent
-N15,N6,1,child-parent;parent-child
-N15,N7,1,child-parent;parent-child
+N15,N6,1,parent-child;child-parent
+N15,N7,1,parent-child;child-parent
 N16,N18,1,siblings
 N16,N33,1,parent-child;child-parent
-N16,N6,1,child-parent;parent-child
-N16,N7,1,child-parent;parent-child
-N18,N6,1,child-parent;parent-child
-N18,N7,1,child-parent;parent-child
+N16,N6,1,parent-child;child-parent
+N16,N7,1,parent-child;child-parent
+N18,N6,1,parent-child;child-parent
+N18,N7,1,parent-child;child-parent
 N19,N20,1,parent-child;child-parent
 N19,N23,1,parent-child;child-parent
 N19,N24,1,parent-child;child-parent
@@ -51,6 +49,7 @@ N19,N26,1,parent-child;child-parent
 N20,N23,1,siblings
 N24,N25,1,siblings
 N24,N26,1,siblings
+N25,N26,1,siblings
 N27,N28,1,parent-child;child-parent
 N29,N31,1,siblings
 N3,N5,1,parent-child;child-parent
@@ -113,21 +112,16 @@ N33,N6,2,
 N33,N7,2,
 N36,N6,2,
 N36,N7,2,
-N0,N20,3,
 N0,N23,3,
 N0,N24,3,
-N0,N25,3,
-N0,N29,3,
 N0,N31,3,
 N0,N33,3,
 N0,N36,3,
 N11,N25,3,
 N11,N26,3,
-N13,N15,3,
 N13,N16,3,
 N13,N18,3,
 N15,N5,3,
-N16,N25,3,
 N20,N28,3,
 N20,N6,3,
 N23,N28,3,
@@ -138,35 +132,25 @@ N23,N6,3,
 N24,N28,3,
 N24,N29,3,
 N24,N3,3,
-N24,N31,3,
 N24,N6,3,
 N25,N28,3,
 N25,N29,3,
 N25,N3,3,
 N25,N31,3,
 N25,N6,3,
-N26,N28,3,
 N26,N29,3,
 N26,N3,3,
-N26,N31,3,
-N27,N5,3,
 N28,N29,3,
-N28,N3,3,
 N28,N31,3,
 N28,N6,3,
 N29,N3,3,
 N29,N33,3,
 N29,N36,3,
-N29,N5,3,
 N29,N8,3,
-N29,N9,3,
-N3,N31,3,
-N3,N33,3,
 N31,N36,3,
 N31,N8,3,
 N31,N9,3,
 N33,N36,3,
 N33,N5,3,
 N33,N8,3,
-N36,N5,3,
-N36,N9,3,
+N33,N9,3,

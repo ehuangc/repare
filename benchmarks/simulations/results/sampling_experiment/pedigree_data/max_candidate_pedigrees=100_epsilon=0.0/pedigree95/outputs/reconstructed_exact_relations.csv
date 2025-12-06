@@ -56,10 +56,10 @@ N26,N6,child-parent
 N27,N46,maternal aunt/uncle-nephew/niece
 N27,N5,paternal nephew/niece-aunt/uncle
 N27,N6,child-parent
-N28,N51,paternal grandparent-grandchild
-N28,N53,paternal grandparent-grandchild
+N28,N51,maternal half-siblings
+N28,N53,maternal half-siblings
 N28,N54,paternal grandparent-grandchild
-N32,N54,parent-child
+N32,N54,child-parent
 N34,N35,siblings
 N34,N40,paternal half-siblings
 N34,N41,paternal half-siblings
@@ -71,8 +71,8 @@ N40,N41,siblings
 N46,N6,maternal grandchild-grandparent
 N5,N6,siblings
 N51,N53,siblings
-N51,N8,maternal grandchild-grandparent
-N53,N8,maternal grandchild-grandparent
+N51,N8,paternal grandchild-grandparent
+N53,N8,paternal grandchild-grandparent
 N54,N8,paternal grandchild-grandparent
 N7,N8,parent-child
 N7,N9,parent-child

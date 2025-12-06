@@ -1,32 +1,35 @@
 id1,id2,degree,constraints
-# Final inconsistency count: 6
+# Final inconsistency count: 8
+# Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here
 # Added relations
 N26,N58,2,
-N27,N36,2,
+N5,N21,2,
 N6,N42,2,
 N7,N17,2,
 
 # Removed relations
+# N27,N35,2,
+# N28,N35,2,
+# N28,N36,2,
 # N53,N59,2,
 
 # Changed relations
-# N25,N27,1,siblings
-N25,N27,1,
 
 # Unchanged relations
 N1,N5,1,parent-child;child-parent
 N1,N6,1,parent-child;child-parent
 N1,N7,1,parent-child;child-parent
 N16,N17,1,parent-child;child-parent
-N17,N5,1,child-parent;parent-child
+N17,N5,1,parent-child;child-parent
 N19,N21,1,parent-child;child-parent
 N21,N42,1,parent-child;child-parent
-N21,N6,1,child-parent;parent-child
+N21,N6,1,parent-child;child-parent
 N22,N23,1,parent-child;child-parent
 N23,N45,1,parent-child;child-parent
 N23,N46,1,parent-child;child-parent
-N23,N7,1,child-parent;parent-child
+N23,N7,1,parent-child;child-parent
 N25,N26,1,parent-child;child-parent
+N25,N27,1,parent-child;child-parent
 N25,N28,1,parent-child;child-parent
 N26,N27,1,siblings
 N26,N28,1,siblings
@@ -75,7 +78,6 @@ N2,N35,2,
 N2,N36,2,
 N21,N39,2,
 N21,N4,2,
-N21,N5,2,
 N21,N7,2,
 N22,N45,2,
 N22,N46,2,
@@ -92,7 +94,6 @@ N26,N35,2,
 N26,N36,2,
 N26,N59,2,
 N26,N8,2,
-N27,N35,2,
 N27,N52,2,
 N27,N53,2,
 N27,N54,2,
@@ -100,8 +101,6 @@ N27,N55,2,
 N27,N58,2,
 N27,N59,2,
 N27,N8,2,
-N28,N35,2,
-N28,N36,2,
 N28,N52,2,
 N28,N53,2,
 N28,N54,2,
@@ -117,27 +116,21 @@ N1,N35,3,
 N1,N36,3,
 N1,N39,3,
 N1,N42,3,
-N1,N45,3,
 N1,N46,3,
 N17,N21,3,
 N17,N23,3,
 N17,N7,3,
-N19,N26,3,
-N2,N52,3,
-N2,N53,3,
 N2,N54,3,
 N2,N55,3,
 N2,N58,3,
 N2,N59,3,
 N21,N23,3,
+N21,N5,3,
 N26,N58,3,
 N27,N36,3,
-N29,N56,3,
 N33,N35,3,
-N33,N36,3,
 N35,N52,3,
 N35,N53,3,
-N35,N55,3,
 N35,N58,3,
 N35,N59,3,
 N36,N52,3,
@@ -147,27 +140,18 @@ N36,N59,3,
 N39,N4,3,
 N39,N42,3,
 N39,N5,3,
-N39,N59,3,
 N4,N42,3,
 N4,N45,3,
-N4,N46,3,
-N42,N5,3,
 N42,N6,3,
-N42,N7,3,
 N45,N5,3,
 N45,N6,3,
 N46,N5,3,
 N46,N6,3,
 N52,N58,3,
 N52,N59,3,
-N52,N8,3,
 N53,N58,3,
 N53,N8,3,
-N54,N56,3,
-N54,N58,3,
 N54,N59,3,
 N54,N8,3,
-N55,N59,3,
-N55,N8,3,
 N58,N8,3,
 N59,N8,3,

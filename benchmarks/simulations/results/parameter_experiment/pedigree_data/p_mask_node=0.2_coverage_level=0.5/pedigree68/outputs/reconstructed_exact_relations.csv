@@ -1,0 +1,71 @@
+node1,node2,relation
+N0,N18,paternal grandparent-grandchild
+N0,N19,paternal grandparent-grandchild
+N0,N21,paternal grandparent-grandchild
+N0,N4,parent-child
+N1,N7,parent-child
+N1,N8,parent-child
+N11,N13,paternal aunt/uncle-nephew/niece
+N11,N2,child-parent
+N11,N27,paternal grandparent-grandchild
+N11,N28,paternal grandparent-grandchild
+N11,N9,child-parent
+N12,N13,parent-child
+N12,N25,maternal grandparent-grandchild
+N13,N2,paternal grandchild-grandparent
+N13,N25,parent-child
+N13,N9,paternal grandchild-grandparent
+N14,N27,paternal grandparent-grandchild
+N14,N28,paternal grandparent-grandchild
+N18,N19,siblings
+N18,N27,maternal half-siblings
+N18,N28,maternal half-siblings
+N18,N30,parent-child
+N18,N31,parent-child
+N18,N32,parent-child
+N18,N34,parent-child
+N18,N35,parent-child
+N18,N36,parent-child
+N18,N4,child-parent
+N19,N27,maternal half-siblings
+N19,N28,maternal half-siblings
+N19,N30,maternal aunt/uncle-nephew/niece
+N19,N31,maternal aunt/uncle-nephew/niece
+N19,N32,maternal aunt/uncle-nephew/niece
+N19,N34,maternal aunt/uncle-nephew/niece
+N19,N35,maternal aunt/uncle-nephew/niece
+N19,N36,maternal aunt/uncle-nephew/niece
+N19,N4,child-parent
+N21,N34,parent-child
+N21,N35,parent-child
+N21,N36,parent-child
+N21,N4,paternal nephew/niece-aunt/uncle
+N23,N25,parent-child
+N27,N28,siblings
+N29,N30,parent-child
+N29,N31,parent-child
+N29,N32,parent-child
+N30,N31,siblings
+N30,N32,siblings
+N30,N34,maternal half-siblings
+N30,N35,maternal half-siblings
+N30,N36,maternal half-siblings
+N30,N4,maternal grandchild-grandparent
+N31,N32,siblings
+N31,N34,maternal half-siblings
+N31,N35,maternal half-siblings
+N31,N36,maternal half-siblings
+N31,N4,maternal grandchild-grandparent
+N32,N34,maternal half-siblings
+N32,N35,maternal half-siblings
+N32,N36,maternal half-siblings
+N32,N4,maternal grandchild-grandparent
+N34,N35,siblings
+N34,N36,siblings
+N34,N4,maternal grandchild-grandparent
+N35,N36,siblings
+N35,N4,maternal grandchild-grandparent
+N36,N4,maternal grandchild-grandparent
+N6,N7,parent-child
+N6,N8,parent-child
+N7,N8,siblings

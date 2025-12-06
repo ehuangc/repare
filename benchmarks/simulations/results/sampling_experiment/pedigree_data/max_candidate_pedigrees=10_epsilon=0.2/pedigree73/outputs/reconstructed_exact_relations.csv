@@ -4,14 +4,14 @@ N0,N18,paternal aunt/uncle-nephew/niece
 N0,N19,paternal aunt/uncle-nephew/niece
 N0,N4,child-parent
 N1,N7,parent-child
-N10,N13,paternal half-siblings
-N10,N14,paternal half-siblings
-N10,N2,siblings
+N10,N13,paternal aunt/uncle-nephew/niece
+N10,N14,paternal aunt/uncle-nephew/niece
+N10,N2,child-parent
 N13,N14,siblings
 N13,N15,maternal half-siblings
-N13,N2,paternal half-siblings
+N13,N2,paternal grandchild-grandparent
 N14,N15,maternal half-siblings
-N14,N2,paternal half-siblings
+N14,N2,paternal grandchild-grandparent
 N15,N4,child-parent
 N18,N19,siblings
 N18,N25,maternal half-siblings

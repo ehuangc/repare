@@ -48,8 +48,8 @@ N28,N6,paternal grandchild-grandparent
 N3,N5,parent-child
 N3,N6,parent-child
 N5,N6,siblings
-N5,N7,paternal half-siblings
-N5,N8,paternal half-siblings
-N6,N7,paternal half-siblings
-N6,N8,paternal half-siblings
+N5,N7,paternal nephew/niece-aunt/uncle
+N5,N8,paternal nephew/niece-aunt/uncle
+N6,N7,paternal nephew/niece-aunt/uncle
+N6,N8,paternal nephew/niece-aunt/uncle
 N7,N8,siblings

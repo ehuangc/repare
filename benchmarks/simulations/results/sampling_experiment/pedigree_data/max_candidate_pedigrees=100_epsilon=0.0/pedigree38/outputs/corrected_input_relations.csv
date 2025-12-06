@@ -1,5 +1,6 @@
 id1,id2,degree,constraints
 # Final inconsistency count: 0
+# Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here
 # Added relations
 
 # Removed relations
@@ -8,21 +9,21 @@ id1,id2,degree,constraints
 
 # Unchanged relations
 N1,N7,1,parent-child;child-parent
-N11,N9,1,child-parent;parent-child
+N11,N9,1,parent-child;child-parent
 N14,N15,1,parent-child;child-parent
 N14,N16,1,parent-child;child-parent
 N15,N16,1,siblings
 N15,N24,1,parent-child;child-parent
-N15,N5,1,child-parent;parent-child
+N15,N5,1,parent-child;child-parent
 N16,N27,1,parent-child;child-parent
-N16,N5,1,child-parent;parent-child
+N16,N5,1,parent-child;child-parent
 N18,N19,1,siblings
 N18,N20,1,siblings
-N18,N7,1,child-parent;parent-child
+N18,N7,1,parent-child;child-parent
 N19,N20,1,siblings
 N19,N28,1,parent-child;child-parent
-N19,N7,1,child-parent;parent-child
-N20,N7,1,child-parent;parent-child
+N19,N7,1,parent-child;child-parent
+N20,N7,1,parent-child;child-parent
 N23,N24,1,parent-child;child-parent
 N25,N27,1,parent-child;child-parent
 N4,N5,1,siblings
@@ -43,7 +44,5 @@ N28,N7,2,
 N28,N9,2,
 N1,N28,3,
 N11,N28,3,
-N14,N9,3,
-N24,N27,3,
 N24,N4,3,
 N27,N4,3,

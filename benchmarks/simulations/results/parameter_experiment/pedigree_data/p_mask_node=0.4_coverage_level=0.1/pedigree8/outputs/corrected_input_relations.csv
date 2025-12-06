@@ -1,0 +1,130 @@
+id1,id2,degree,constraints
+# Final inconsistency count: 17
+# Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here
+# Added relations
+N7,N4,2,
+
+# Removed relations
+# N1,N20,2,
+# N16,N43,2,
+# N18,N39,2,
+# N20,N52,2,
+# N20,N7,2,
+# N21,N53,2,
+# N21,N7,2,
+# N47,N6,2,
+# N48,N6,2,
+
+# Changed relations
+# N10,N11,1,parent-child;child-parent
+N10,N11,2,
+# N18,N43,1,parent-child;child-parent
+N18,N43,2,
+# N42,N43,1,siblings
+N42,N43,2,
+# N51,N53,1,siblings
+N51,N53,2,
+# N20,N6,1,parent-child;child-parent
+N20,N6,2,
+# N21,N6,1,parent-child;child-parent
+N21,N6,2,
+# N14,N9,1,parent-child;child-parent
+N14,N9,2,
+
+# Unchanged relations
+N1,N4,1,parent-child;child-parent
+N1,N6,1,parent-child;child-parent
+N1,N7,1,parent-child;child-parent
+N10,N2,1,parent-child;child-parent
+N10,N9,1,siblings
+N11,N2,1,parent-child;child-parent
+N14,N33,1,parent-child;child-parent
+N15,N16,1,parent-child;child-parent
+N15,N18,1,parent-child;child-parent
+N16,N18,1,siblings
+N16,N4,1,parent-child;child-parent
+N18,N4,1,parent-child;child-parent
+N18,N42,1,parent-child;child-parent
+N19,N20,1,parent-child;child-parent
+N19,N21,1,parent-child;child-parent
+N2,N9,1,parent-child;child-parent
+N20,N21,1,siblings
+N20,N45,1,parent-child;child-parent
+N21,N47,1,parent-child;child-parent
+N21,N48,1,parent-child;child-parent
+N21,N49,1,parent-child;child-parent
+N44,N45,1,parent-child;child-parent
+N47,N48,1,siblings
+N47,N49,1,siblings
+N48,N49,1,siblings
+N5,N6,1,parent-child;child-parent
+N5,N7,1,parent-child;child-parent
+N50,N51,1,parent-child;child-parent
+N50,N52,1,parent-child;child-parent
+N50,N53,1,parent-child;child-parent
+N52,N53,1,siblings
+N6,N7,1,siblings
+N1,N14,2,
+N1,N16,2,
+N1,N18,2,
+N10,N14,2,
+N11,N9,2,
+N14,N4,2,
+N15,N42,2,
+N16,N39,2,
+N16,N42,2,
+N19,N45,2,
+N19,N47,2,
+N19,N48,2,
+N19,N49,2,
+N19,N53,2,
+N19,N56,2,
+N20,N47,2,
+N20,N48,2,
+N20,N49,2,
+N20,N5,2,
+N20,N51,2,
+N20,N56,2,
+N21,N45,2,
+N21,N5,2,
+N21,N51,2,
+N4,N42,2,
+N4,N6,2,
+N51,N52,2,
+N52,N6,2,
+N53,N6,2,
+N1,N21,3,
+N1,N42,3,
+N1,N45,3,
+N1,N51,3,
+N1,N52,3,
+N11,N14,3,
+N14,N18,3,
+N14,N2,3,
+N15,N39,3,
+N15,N43,3,
+N16,N6,3,
+N16,N7,3,
+N19,N51,3,
+N19,N52,3,
+N20,N53,3,
+N21,N52,3,
+N21,N56,3,
+N33,N9,3,
+N39,N4,3,
+N4,N43,3,
+N4,N7,3,
+N45,N6,3,
+N47,N51,3,
+N47,N53,3,
+N48,N5,3,
+N48,N52,3,
+N48,N53,3,
+N49,N51,3,
+N49,N52,3,
+N49,N56,3,
+N49,N6,3,
+N5,N52,3,
+N51,N6,3,
+N53,N7,3,
+N56,N6,3,

@@ -1,7 +1,7 @@
 node1,node2,relation
 N0,N17,paternal grandparent-grandchild
 N0,N4,parent-child
-N1,N23,maternal half-siblings
+N1,N23,maternal nephew/niece-aunt/uncle
 N1,N6,child-parent
 N10,N11,siblings
 N10,N12,parent-child

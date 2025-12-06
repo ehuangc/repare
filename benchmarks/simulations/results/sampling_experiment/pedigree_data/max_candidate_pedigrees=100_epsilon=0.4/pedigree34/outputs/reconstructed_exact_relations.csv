@@ -5,7 +5,7 @@ N0,N18,paternal grandparent-grandchild
 N0,N4,parent-child
 N0,N5,parent-child
 N0,N6,parent-child
-N0,N7,child-parent
+N0,N7,parent-child
 N10,N11,siblings
 N10,N13,parent-child
 N10,N21,maternal aunt/uncle-nephew/niece
@@ -66,9 +66,9 @@ N38,N40,siblings
 N38,N9,paternal grandchild-grandparent
 N4,N5,siblings
 N4,N6,siblings
-N4,N7,paternal grandchild-grandparent
+N4,N7,paternal half-siblings
 N40,N9,paternal grandchild-grandparent
 N5,N6,siblings
-N5,N7,paternal grandchild-grandparent
-N6,N7,paternal grandchild-grandparent
+N5,N7,paternal half-siblings
+N6,N7,paternal half-siblings
 N8,N9,parent-child

@@ -1,8 +1,0 @@
-node1,node2,relation
-N0,N27,paternal half-siblings
-N0,N6,parent-child
-N1,N27,parent-child
-N1,N6,parent-child
-N10,N27,paternal grandchild-grandparent
-N10,N3,paternal grandchild-grandparent
-N27,N6,maternal half-siblings

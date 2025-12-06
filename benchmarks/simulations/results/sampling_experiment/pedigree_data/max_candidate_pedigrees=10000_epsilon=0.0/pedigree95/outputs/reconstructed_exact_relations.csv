@@ -35,15 +35,15 @@ N18,N37,parent-child
 N19,N34,maternal aunt/uncle-nephew/niece
 N19,N35,maternal aunt/uncle-nephew/niece
 N19,N37,paternal aunt/uncle-nephew/niece
-N21,N22,maternal grandparent-grandchild
+N21,N22,paternal grandparent-grandchild
 N21,N34,parent-child
 N21,N35,parent-child
 N21,N40,parent-child
 N21,N41,parent-child
 N21,N5,maternal grandparent-grandchild
 N21,N6,maternal grandparent-grandchild
-N22,N5,paternal nephew/niece-aunt/uncle
-N22,N6,paternal nephew/niece-aunt/uncle
+N22,N5,paternal grandchild-grandparent
+N22,N6,maternal grandchild-grandparent
 N22,N8,maternal grandparent-grandchild
 N22,N9,maternal grandparent-grandchild
 N25,N26,parent-child

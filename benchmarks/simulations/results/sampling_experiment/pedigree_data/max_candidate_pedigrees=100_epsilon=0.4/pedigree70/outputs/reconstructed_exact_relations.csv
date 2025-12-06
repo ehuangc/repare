@@ -8,7 +8,7 @@ N0,N4,parent-child
 N0,N50,maternal grandparent-grandchild
 N1,N13,maternal grandparent-grandchild
 N1,N14,maternal grandparent-grandchild
-N1,N16,paternal aunt/uncle-nephew/niece
+N1,N16,paternal grandparent-grandchild
 N1,N20,maternal grandparent-grandchild
 N1,N21,maternal grandparent-grandchild
 N1,N22,parent-child
@@ -66,18 +66,18 @@ N23,N39,maternal aunt/uncle-nephew/niece
 N23,N4,maternal half-siblings
 N23,N42,parent-child
 N23,N43,parent-child
-N24,N25,child-parent
-N24,N46,maternal half-siblings
-N24,N47,maternal half-siblings
+N24,N25,parent-child
+N24,N46,maternal grandparent-grandchild
+N24,N47,maternal grandparent-grandchild
 N25,N46,parent-child
 N25,N47,parent-child
 N25,N50,paternal grandchild-grandparent
 N28,N35,paternal half-siblings
+N28,N50,paternal grandparent-grandchild
 N3,N4,siblings
 N3,N50,maternal aunt/uncle-nephew/niece
 N32,N33,siblings
-N34,N35,maternal aunt/uncle-nephew/niece
-N35,N50,paternal grandparent-grandchild
+N34,N35,parent-child
 N37,N38,parent-child
 N37,N39,parent-child
 N38,N39,siblings

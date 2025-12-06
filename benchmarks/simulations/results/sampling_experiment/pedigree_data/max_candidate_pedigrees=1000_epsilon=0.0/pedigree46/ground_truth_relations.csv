@@ -86,6 +86,7 @@ N17,N7,child-parent
 N17,N8,maternal nephew/niece-aunt/uncle
 N17,N9,maternal nephew/niece-aunt/uncle
 N18,N19,siblings
+N18,N19,double cousins
 N18,N2,maternal grandchild-grandparent
 N18,N2,paternal grandchild-grandparent
 N18,N36,parent-child

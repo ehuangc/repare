@@ -1,5 +1,6 @@
 node1,node2,relation
-N0,N6,child-parent
+N0,N10,maternal grandparent-grandchild
+N0,N6,parent-child
 N1,N12,maternal grandparent-grandchild
 N1,N13,maternal grandparent-grandchild
 N1,N14,maternal grandparent-grandchild

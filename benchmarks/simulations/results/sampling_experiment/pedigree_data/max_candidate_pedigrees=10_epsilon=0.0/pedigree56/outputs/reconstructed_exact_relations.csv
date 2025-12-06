@@ -5,7 +5,7 @@ N1,N8,parent-child
 N1,N9,parent-child
 N5,N6,parent-child
 N5,N8,parent-child
-N5,N9,paternal grandparent-grandchild
+N5,N9,paternal half-siblings
 N6,N8,siblings
 N6,N9,maternal half-siblings
 N8,N9,maternal half-siblings

@@ -1,5 +1,6 @@
 id1,id2,degree,constraints
-# Final inconsistency count: 6
+# Final inconsistency count: 4
+# Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here
 # Added relations
 N15,N38,2,
 
@@ -7,12 +8,8 @@ N15,N38,2,
 # N31,N35,2,
 
 # Changed relations
-# N13,N28,1,siblings
-N13,N28,1,
 # N15,N31,1,siblings
 N15,N31,2,
-# N24,N4,1,
-N24,N4,2,
 # N5,N9,1,parent-child;child-parent
 N5,N9,2,
 
@@ -26,11 +23,12 @@ N11,N12,1,siblings
 N11,N13,1,siblings
 N11,N24,1,parent-child;child-parent
 N11,N26,1,parent-child;child-parent
-N11,N4,1,child-parent;parent-child
+N11,N4,1,parent-child;child-parent
 N12,N13,1,siblings
-N12,N4,1,child-parent;parent-child
+N12,N4,1,parent-child;child-parent
+N13,N28,1,parent-child;child-parent
 N13,N29,1,parent-child;child-parent
-N13,N4,1,child-parent;parent-child
+N13,N4,1,parent-child;child-parent
 N15,N16,1,siblings
 N15,N17,1,siblings
 N16,N17,1,siblings
@@ -41,8 +39,8 @@ N17,N38,1,parent-child;child-parent
 N17,N39,1,parent-child;child-parent
 N19,N41,1,parent-child;child-parent
 N2,N9,1,parent-child;child-parent
-N21,N5,1,child-parent;parent-child
-N21,N9,1,child-parent;parent-child
+N21,N5,1,parent-child;child-parent
+N21,N9,1,parent-child;child-parent
 N24,N26,1,siblings
 N27,N28,1,parent-child;child-parent
 N27,N29,1,parent-child;child-parent
@@ -100,6 +98,7 @@ N2,N21,2,
 N21,N43,2,
 N21,N45,2,
 N21,N6,2,
+N24,N4,2,
 N26,N4,2,
 N28,N4,2,
 N29,N4,2,
@@ -113,30 +112,19 @@ N0,N26,3,
 N0,N28,3,
 N0,N29,3,
 N1,N31,3,
-N1,N33,3,
 N1,N34,3,
 N1,N35,3,
-N1,N38,3,
-N1,N39,3,
-N12,N15,3,
-N15,N21,3,
 N15,N38,3,
 N15,N9,3,
 N16,N21,3,
 N16,N31,3,
 N16,N9,3,
-N17,N21,3,
 N17,N9,3,
 N19,N21,3,
 N19,N6,3,
 N2,N41,3,
 N2,N43,3,
 N2,N45,3,
-N2,N5,3,
-N24,N28,3,
-N24,N3,3,
-N24,N31,3,
-N26,N28,3,
 N26,N29,3,
 N26,N3,3,
 N28,N3,3,
@@ -144,21 +132,11 @@ N29,N3,3,
 N31,N33,3,
 N31,N34,3,
 N31,N39,3,
-N31,N5,3,
 N31,N6,3,
-N33,N38,3,
-N33,N39,3,
-N33,N5,3,
-N34,N38,3,
-N34,N39,3,
 N34,N5,3,
 N34,N6,3,
 N35,N38,3,
-N35,N39,3,
 N35,N5,3,
-N38,N5,3,
-N38,N6,3,
-N39,N6,3,
 N41,N5,3,
 N41,N9,3,
 N43,N6,3,

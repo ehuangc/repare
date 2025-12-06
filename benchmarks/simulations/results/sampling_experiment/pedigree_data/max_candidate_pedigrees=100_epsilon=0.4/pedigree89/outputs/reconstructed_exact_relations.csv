@@ -12,5 +12,5 @@ N17,N19,parent-child
 N19,N5,maternal grandchild-grandparent
 N3,N4,parent-child
 N3,N9,paternal grandparent-grandchild
-N4,N5,paternal half-siblings
+N4,N5,paternal nephew/niece-aunt/uncle
 N4,N9,parent-child

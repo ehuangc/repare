@@ -28,8 +28,8 @@ N13,N3,child-parent
 N13,N4,maternal nephew/niece-aunt/uncle
 N14,N3,child-parent
 N14,N4,maternal nephew/niece-aunt/uncle
-N15,N16,parent-child
-N16,N28,maternal grandparent-grandchild
+N15,N16,maternal half-siblings
+N16,N28,parent-child
 N16,N3,paternal nephew/niece-aunt/uncle
 N16,N4,child-parent
 N18,N20,parent-child
@@ -79,8 +79,7 @@ N28,N50,paternal grandparent-grandchild
 N3,N4,siblings
 N3,N50,maternal aunt/uncle-nephew/niece
 N32,N33,siblings
-N34,N35,paternal grandchild-grandparent
-N35,N50,maternal grandchild-grandparent
+N34,N35,parent-child
 N37,N38,parent-child
 N37,N39,parent-child
 N38,N39,siblings

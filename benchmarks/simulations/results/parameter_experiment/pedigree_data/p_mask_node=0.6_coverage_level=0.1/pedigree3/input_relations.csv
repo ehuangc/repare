@@ -1,0 +1,10 @@
+id1,id2,degree,constraints
+N16,N17,1,siblings
+N16,N19,2,
+N16,N2,3,
+N16,N9,3,
+N17,N19,3,
+N17,N2,3,
+N17,N3,3,
+N19,N2,2,
+N2,N9,1,parent-child;child-parent

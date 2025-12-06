@@ -1,5 +1,0 @@
-id1,id2,degree,constraints
-N0,N4,1,parent-child;child-parent
-N1,N6,1,parent-child;child-parent
-N3,N4,1,siblings
-N5,N6,1,parent-child;child-parent

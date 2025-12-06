@@ -19,7 +19,7 @@ N1,N7,parent-child
 N10,N16,parent-child
 N10,N17,parent-child
 N10,N18,parent-child
-N10,N20,maternal aunt/uncle-nephew/niece
+N10,N20,maternal grandchild-grandparent
 N10,N3,paternal half-siblings
 N10,N4,paternal half-siblings
 N10,N5,paternal half-siblings
@@ -35,6 +35,7 @@ N17,N18,siblings
 N19,N20,parent-child
 N2,N3,parent-child
 N2,N8,parent-child
+N20,N6,maternal grandchild-grandparent
 N23,N24,parent-child
 N24,N5,maternal grandchild-grandparent
 N3,N4,paternal half-siblings

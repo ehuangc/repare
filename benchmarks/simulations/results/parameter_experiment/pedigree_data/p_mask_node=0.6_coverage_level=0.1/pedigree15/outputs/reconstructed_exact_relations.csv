@@ -1,0 +1,10 @@
+node1,node2,relation
+N0,N4,paternal grandparent-grandchild
+N1,N7,parent-child
+N12,N23,parent-child
+N21,N23,parent-child
+N26,N4,paternal grandparent-grandchild
+N28,N29,siblings
+N3,N4,parent-child
+N32,N34,child-parent
+N5,N7,parent-child

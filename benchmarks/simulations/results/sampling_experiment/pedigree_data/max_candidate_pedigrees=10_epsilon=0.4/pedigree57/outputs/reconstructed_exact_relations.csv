@@ -2,10 +2,10 @@ node1,node2,relation
 N0,N21,maternal grandparent-grandchild
 N0,N22,maternal grandparent-grandchild
 N10,N14,parent-child
-N10,N16,maternal aunt/uncle-nephew/niece
+N10,N16,maternal grandparent-grandchild
 N10,N27,maternal grandparent-grandchild
 N10,N28,maternal grandparent-grandchild
-N10,N9,paternal aunt/uncle-nephew/niece
+N10,N9,maternal grandparent-grandchild
 N14,N27,parent-child
 N14,N28,parent-child
 N21,N22,siblings

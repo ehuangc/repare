@@ -3,8 +3,8 @@ N0,N18,paternal half-siblings
 N0,N19,paternal half-siblings
 N0,N21,paternal aunt/uncle-nephew/niece
 N0,N4,child-parent
-N12,N13,child-parent
-N12,N25,maternal half-siblings
+N12,N13,parent-child
+N12,N25,maternal grandparent-grandchild
 N13,N25,parent-child
 N18,N19,siblings
 N18,N27,maternal half-siblings

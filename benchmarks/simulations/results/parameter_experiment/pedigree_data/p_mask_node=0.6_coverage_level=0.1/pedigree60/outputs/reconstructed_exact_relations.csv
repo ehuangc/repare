@@ -1,0 +1,26 @@
+node1,node2,relation
+N10,N14,parent-child
+N10,N15,maternal half-siblings
+N10,N16,maternal half-siblings
+N10,N30,parent-child
+N10,N7,child-parent
+N10,N8,siblings
+N14,N30,paternal half-siblings
+N14,N7,paternal grandchild-grandparent
+N14,N8,paternal nephew/niece-aunt/uncle
+N15,N16,siblings
+N15,N6,paternal grandchild-grandparent
+N15,N8,maternal half-siblings
+N16,N6,paternal grandchild-grandparent
+N16,N8,maternal half-siblings
+N18,N32,paternal grandparent-grandchild
+N18,N33,paternal grandparent-grandchild
+N23,N25,siblings
+N23,N6,child-parent
+N25,N6,child-parent
+N30,N7,paternal grandchild-grandparent
+N30,N8,paternal nephew/niece-aunt/uncle
+N32,N33,siblings
+N33,N6,paternal grandparent-grandchild
+N35,N6,paternal grandparent-grandchild
+N7,N8,parent-child

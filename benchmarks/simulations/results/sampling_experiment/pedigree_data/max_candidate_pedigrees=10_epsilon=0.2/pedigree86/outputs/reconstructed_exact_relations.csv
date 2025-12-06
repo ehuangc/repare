@@ -1,9 +1,9 @@
 node1,node2,relation
-N1,N14,maternal grandparent-grandchild
-N1,N16,maternal aunt/uncle-nephew/niece
-N1,N17,maternal aunt/uncle-nephew/niece
-N1,N18,maternal aunt/uncle-nephew/niece
-N1,N19,maternal aunt/uncle-nephew/niece
+N1,N14,paternal grandparent-grandchild
+N1,N16,maternal grandparent-grandchild
+N1,N17,maternal grandparent-grandchild
+N1,N18,maternal grandparent-grandchild
+N1,N19,maternal grandparent-grandchild
 N1,N21,maternal grandparent-grandchild
 N1,N24,maternal grandparent-grandchild
 N1,N9,parent-child
@@ -17,8 +17,8 @@ N12,N3,paternal grandchild-grandparent
 N12,N35,parent-child
 N12,N4,child-parent
 N12,N5,paternal nephew/niece-aunt/uncle
-N14,N6,maternal grandchild-grandparent
-N14,N9,maternal nephew/niece-aunt/uncle
+N14,N6,paternal grandchild-grandparent
+N14,N9,paternal nephew/niece-aunt/uncle
 N15,N16,parent-child
 N15,N17,parent-child
 N15,N18,parent-child
@@ -36,7 +36,8 @@ N16,N26,paternal half-siblings
 N16,N33,parent-child
 N16,N34,parent-child
 N16,N35,paternal aunt/uncle-nephew/niece
-N16,N6,maternal grandparent-grandchild
+N16,N6,maternal grandchild-grandparent
+N16,N9,maternal nephew/niece-aunt/uncle
 N17,N18,siblings
 N17,N19,siblings
 N17,N25,paternal half-siblings
@@ -44,18 +45,23 @@ N17,N26,paternal half-siblings
 N17,N33,maternal aunt/uncle-nephew/niece
 N17,N34,maternal aunt/uncle-nephew/niece
 N17,N35,paternal aunt/uncle-nephew/niece
-N17,N6,maternal grandparent-grandchild
+N17,N6,maternal grandchild-grandparent
+N17,N9,maternal nephew/niece-aunt/uncle
 N18,N19,siblings
 N18,N25,paternal half-siblings
 N18,N26,paternal half-siblings
 N18,N33,maternal aunt/uncle-nephew/niece
 N18,N34,maternal aunt/uncle-nephew/niece
-N18,N35,paternal aunt/uncle-nephew/niece
+N18,N35,parent-child
+N18,N6,maternal grandchild-grandparent
+N18,N9,maternal nephew/niece-aunt/uncle
 N19,N25,paternal half-siblings
 N19,N26,paternal half-siblings
 N19,N33,maternal aunt/uncle-nephew/niece
 N19,N34,maternal aunt/uncle-nephew/niece
 N19,N35,paternal aunt/uncle-nephew/niece
+N19,N6,maternal grandchild-grandparent
+N19,N9,maternal nephew/niece-aunt/uncle
 N21,N24,siblings
 N21,N37,paternal aunt/uncle-nephew/niece
 N21,N6,maternal grandchild-grandparent

@@ -1,0 +1,75 @@
+node1,node2,relation
+N0,N15,paternal grandparent-grandchild
+N0,N4,parent-child
+N0,N5,parent-child
+N1,N16,maternal half-siblings
+N1,N17,maternal half-siblings
+N1,N6,maternal half-siblings
+N1,N7,child-parent
+N10,N12,parent-child
+N10,N16,paternal half-siblings
+N10,N19,maternal grandparent-grandchild
+N10,N2,child-parent
+N10,N8,child-parent
+N10,N9,siblings
+N11,N12,parent-child
+N11,N19,maternal grandparent-grandchild
+N12,N19,parent-child
+N12,N2,paternal grandchild-grandparent
+N12,N8,paternal grandchild-grandparent
+N12,N9,paternal nephew/niece-aunt/uncle
+N13,N15,parent-child
+N13,N24,paternal grandchild-grandparent
+N13,N26,maternal grandparent-grandchild
+N13,N27,maternal grandparent-grandchild
+N14,N15,paternal grandparent-grandchild
+N14,N21,parent-child
+N14,N22,parent-child
+N14,N23,parent-child
+N14,N24,parent-child
+N14,N3,maternal grandparent-grandchild
+N14,N4,parent-child
+N15,N26,parent-child
+N15,N27,parent-child
+N15,N4,child-parent
+N16,N17,maternal half-siblings
+N16,N6,maternal half-siblings
+N16,N7,child-parent
+N16,N8,child-parent
+N16,N9,paternal half-siblings
+N17,N29,parent-child
+N17,N30,parent-child
+N17,N6,maternal half-siblings
+N17,N7,child-parent
+N17,N8,paternal half-siblings
+N18,N19,parent-child
+N2,N9,parent-child
+N20,N21,parent-child
+N20,N22,parent-child
+N20,N23,parent-child
+N20,N24,parent-child
+N21,N22,siblings
+N21,N23,siblings
+N21,N24,siblings
+N21,N4,maternal half-siblings
+N22,N23,siblings
+N22,N24,siblings
+N22,N4,maternal half-siblings
+N23,N24,siblings
+N23,N4,maternal half-siblings
+N24,N4,maternal half-siblings
+N25,N26,parent-child
+N25,N27,parent-child
+N26,N27,siblings
+N26,N4,maternal grandchild-grandparent
+N27,N4,maternal grandchild-grandparent
+N28,N29,parent-child
+N28,N30,parent-child
+N29,N30,siblings
+N29,N7,maternal grandchild-grandparent
+N3,N4,maternal grandchild-grandparent
+N3,N5,maternal grandparent-grandchild
+N30,N7,maternal grandchild-grandparent
+N4,N5,paternal half-siblings
+N6,N7,child-parent
+N8,N9,parent-child

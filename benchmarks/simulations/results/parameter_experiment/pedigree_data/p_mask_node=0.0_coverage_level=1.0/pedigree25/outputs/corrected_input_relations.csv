@@ -1,0 +1,113 @@
+id1,id2,degree,constraints
+# Final inconsistency count: 10
+# Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here
+# Added relations
+N0,N13,2,
+N16,N23,2,
+N2,N16,2,
+N4,N7,2,
+N8,N4,2,
+N8,N6,2,
+
+# Removed relations
+# N0,N20,2,
+# N13,N9,2,
+# N19,N5,2,
+
+# Changed relations
+# N17,N8,2,
+N17,N8,1,
+
+# Unchanged relations
+N0,N4,1,parent-child;child-parent
+N0,N5,1,parent-child;child-parent
+N0,N6,1,parent-child;child-parent
+N0,N7,1,parent-child;child-parent
+N0,N8,1,parent-child;child-parent
+N0,N9,1,parent-child;child-parent
+N1,N6,1,parent-child;child-parent
+N1,N7,1,parent-child;child-parent
+N10,N11,1,parent-child;child-parent
+N11,N19,1,parent-child;child-parent
+N11,N20,1,parent-child;child-parent
+N11,N21,1,parent-child;child-parent
+N11,N4,1,parent-child;child-parent
+N12,N13,1,parent-child;child-parent
+N12,N14,1,parent-child;child-parent
+N13,N14,1,siblings
+N13,N7,1,parent-child;child-parent
+N14,N7,1,parent-child;child-parent
+N15,N16,1,parent-child;child-parent
+N15,N17,1,parent-child;child-parent
+N16,N17,1,siblings
+N16,N8,1,parent-child;child-parent
+N17,N23,1,parent-child;child-parent
+N18,N19,1,parent-child;child-parent
+N18,N20,1,parent-child;child-parent
+N18,N21,1,parent-child;child-parent
+N19,N20,1,siblings
+N19,N21,1,siblings
+N2,N8,1,parent-child;child-parent
+N2,N9,1,parent-child;child-parent
+N20,N21,1,siblings
+N22,N23,1,parent-child;child-parent
+N3,N4,1,parent-child;child-parent
+N3,N5,1,parent-child;child-parent
+N4,N5,1,siblings
+N6,N7,1,siblings
+N8,N9,1,siblings
+N0,N11,2,
+N0,N14,2,
+N0,N16,2,
+N0,N17,2,
+N1,N13,2,
+N1,N14,2,
+N10,N19,2,
+N10,N20,2,
+N10,N21,2,
+N11,N3,2,
+N11,N5,2,
+N13,N6,2,
+N14,N6,2,
+N15,N23,2,
+N16,N9,2,
+N17,N2,2,
+N17,N9,2,
+N19,N4,2,
+N20,N4,2,
+N21,N4,2,
+N23,N8,2,
+N4,N6,2,
+N4,N9,2,
+N5,N6,2,
+N5,N7,2,
+N5,N8,2,
+N5,N9,2,
+N6,N9,2,
+N7,N8,2,
+N7,N9,2,
+N0,N13,3,
+N0,N23,3,
+N11,N7,3,
+N11,N8,3,
+N13,N4,3,
+N13,N5,3,
+N13,N8,3,
+N14,N4,3,
+N14,N5,3,
+N14,N8,3,
+N14,N9,3,
+N16,N2,3,
+N16,N23,3,
+N16,N6,3,
+N16,N7,3,
+N17,N4,3,
+N17,N7,3,
+N19,N3,3,
+N20,N3,3,
+N20,N5,3,
+N21,N5,3,
+N23,N9,3,
+N4,N7,3,
+N4,N8,3,
+N6,N8,3,

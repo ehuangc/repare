@@ -13,11 +13,9 @@ N15,N16,siblings
 N15,N20,paternal aunt/uncle-nephew/niece
 N15,N21,paternal aunt/uncle-nephew/niece
 N15,N6,paternal grandchild-grandparent
-N15,N7,paternal nephew/niece-aunt/uncle
 N16,N20,parent-child
 N16,N21,parent-child
 N16,N6,paternal grandchild-grandparent
-N16,N7,paternal nephew/niece-aunt/uncle
 N19,N20,parent-child
 N19,N21,parent-child
 N20,N21,siblings

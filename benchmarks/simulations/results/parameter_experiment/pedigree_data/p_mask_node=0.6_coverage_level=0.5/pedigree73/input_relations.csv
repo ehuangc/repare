@@ -1,0 +1,11 @@
+id1,id2,degree,constraints
+N0,N15,2,
+N0,N19,2,
+N13,N15,2,
+N13,N2,2,
+N15,N19,3,
+N19,N25,2,
+N19,N27,2,
+N24,N25,1,parent-child;child-parent
+N24,N27,1,parent-child;child-parent
+N25,N27,2,
