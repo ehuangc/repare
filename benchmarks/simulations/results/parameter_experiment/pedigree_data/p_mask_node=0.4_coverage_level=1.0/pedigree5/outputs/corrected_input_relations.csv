@@ -7,10 +7,10 @@ N16,N6,2,
 # Removed relations
 
 # Changed relations
-# N16,N25,2,
-N16,N25,1,
 # N14,N6,1,siblings
 N14,N6,1,
+# N16,N25,2,
+N16,N25,1,
 # N6,N7,1,siblings
 N6,N7,2,
 

@@ -7,10 +7,10 @@ N11,N23,2,
 # Removed relations
 
 # Changed relations
-# N21,N23,2,
-N21,N23,1,
 # N14,N6,1,siblings
 N14,N6,1,
+# N21,N23,2,
+N21,N23,1,
 
 # Unchanged relations
 N0,N4,1,parent-child;child-parent

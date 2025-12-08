@@ -5,7 +5,7 @@ id1,id2,degree,constraints
 N11,N19,2,
 N13,N22,2,
 N13,N26,2,
-N4,N21,2,
+N21,N4,2,
 
 # Removed relations
 # N14,N5,2,

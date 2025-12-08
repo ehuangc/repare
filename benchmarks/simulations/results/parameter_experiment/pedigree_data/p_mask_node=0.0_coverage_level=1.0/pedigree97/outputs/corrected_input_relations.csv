@@ -16,10 +16,10 @@ id1,id2,degree,constraints
 # N20,N5,2,
 
 # Changed relations
-# N15,N16,1,parent-child;child-parent
-N15,N16,2,
 # N0,N3,1,parent-child;child-parent
 N0,N3,2,
+# N15,N16,1,parent-child;child-parent
+N15,N16,2,
 # N3,N4,1,siblings
 N3,N4,2,
 # N3,N5,1,siblings

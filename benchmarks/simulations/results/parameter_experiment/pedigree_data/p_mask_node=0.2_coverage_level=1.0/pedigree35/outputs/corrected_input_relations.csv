@@ -3,8 +3,8 @@ id1,id2,degree,constraints
 # Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here
 # Added relations
 N12,N17,2,
-N3,N19,2,
-N9,N37,2,
+N19,N3,2,
+N37,N9,2,
 
 # Removed relations
 # N15,N17,2,
@@ -16,12 +16,12 @@ N9,N37,2,
 # Changed relations
 # N10,N12,2,
 N10,N12,1,
+# N17,N4,1,parent-child;child-parent
+N17,N4,2,
 # N21,N24,2,
 N21,N24,1,
 # N3,N4,1,parent-child;child-parent
 N3,N4,2,
-# N17,N4,1,parent-child;child-parent
-N17,N4,2,
 
 # Unchanged relations
 N0,N4,1,parent-child;child-parent

@@ -4,7 +4,7 @@ id1,id2,degree,constraints
 # Added relations
 N0,N11,2,
 N1,N16,2,
-N3,N20,2,
+N20,N3,2,
 
 # Removed relations
 # N13,N20,2,

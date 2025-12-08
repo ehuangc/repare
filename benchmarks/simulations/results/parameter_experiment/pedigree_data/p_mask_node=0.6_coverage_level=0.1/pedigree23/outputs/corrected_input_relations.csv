@@ -2,7 +2,7 @@ id1,id2,degree,constraints
 # Final inconsistency count: 4
 # Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here
 # Added relations
-N27,N23,2,
+N23,N27,2,
 
 # Removed relations
 # N17,N24,2,

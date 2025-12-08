@@ -4,17 +4,17 @@ id1,id2,degree,constraints
 # Added relations
 N20,N38,2,
 N23,N37,2,
-N9,N39,2,
+N39,N9,2,
 
 # Removed relations
 # N14,N22,2,
 # N29,N32,2,
 
 # Changed relations
-# N13,N25,1,parent-child;child-parent
-N13,N25,2,
 # N11,N2,2,
 N11,N2,1,
+# N13,N25,1,parent-child;child-parent
+N13,N25,2,
 # N2,N9,2,
 N2,N9,1,
 # N23,N38,1,parent-child;child-parent

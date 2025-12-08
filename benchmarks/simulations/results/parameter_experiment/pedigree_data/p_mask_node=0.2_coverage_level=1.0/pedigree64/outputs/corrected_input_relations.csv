@@ -11,10 +11,10 @@ id1,id2,degree,constraints
 # N3,N8,2,
 
 # Changed relations
-# N17,N19,1,siblings
-N17,N19,1,
 # N1,N8,1,parent-child;child-parent
 N1,N8,2,
+# N17,N19,1,siblings
+N17,N19,1,
 
 # Unchanged relations
 N0,N3,1,parent-child;child-parent

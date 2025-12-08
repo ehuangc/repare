@@ -5,8 +5,8 @@ id1,id2,degree,constraints
 N14,N26,2,
 N15,N27,2,
 N15,N28,2,
+N15,N7,2,
 N17,N27,2,
-N7,N15,2,
 
 # Removed relations
 # N1,N17,2,
@@ -14,10 +14,10 @@ N7,N15,2,
 # Changed relations
 # N1,N12,1,parent-child;child-parent
 N1,N12,2,
-# N14,N16,2,
-N14,N16,1,
 # N12,N6,1,parent-child;child-parent
 N12,N6,2,
+# N14,N16,2,
+N14,N16,1,
 
 # Unchanged relations
 N0,N4,1,parent-child;child-parent

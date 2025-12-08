@@ -7,7 +7,7 @@ N0,N17,2,
 N0,N18,2,
 N1,N18,2,
 N14,N28,2,
-N5,N32,2,
+N32,N5,2,
 
 # Removed relations
 # N12,N17,2,

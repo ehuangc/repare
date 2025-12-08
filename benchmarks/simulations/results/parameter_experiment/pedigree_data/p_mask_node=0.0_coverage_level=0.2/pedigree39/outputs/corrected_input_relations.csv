@@ -5,16 +5,16 @@ id1,id2,degree,constraints
 N1,N37,2,
 N11,N19,2,
 N12,N20,2,
-N2,N18,2,
+N18,N2,2,
 N2,N20,2,
 N23,N47,2,
+N23,N5,2,
 N26,N39,2,
+N27,N6,2,
 N28,N38,2,
 N35,N55,2,
+N37,N46,2,
 N4,N46,2,
-N46,N37,2,
-N5,N23,2,
-N6,N27,2,
 
 # Removed relations
 # N0,N31,2,
@@ -30,12 +30,6 @@ N6,N27,2,
 # N52,N6,2,
 
 # Changed relations
-# N30,N31,1,siblings
-N30,N31,2,
-N30,N31,2,
-# N30,N32,1,siblings
-N30,N32,2,
-N30,N32,2,
 # N30,N31,1,siblings
 N30,N31,2,
 N30,N31,2,

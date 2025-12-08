@@ -5,12 +5,12 @@ id1,id2,degree,constraints
 N0,N19,2,
 N1,N19,2,
 N1,N8,2,
+N14,N9,2,
+N16,N6,2,
 N19,N6,2,
 N20,N7,2,
 N4,N8,2,
 N5,N7,2,
-N6,N16,2,
-N9,N14,2,
 
 # Removed relations
 # N0,N11,2,
@@ -28,26 +28,26 @@ N9,N14,2,
 # N20,N4,2,
 
 # Changed relations
-# N18,N8,1,parent-child;child-parent
-N18,N8,2,
-# N19,N8,1,parent-child;child-parent
-N19,N8,2,
-# N20,N8,1,parent-child;child-parent
-N20,N8,2,
-# N19,N3,1,parent-child;child-parent
-N19,N3,2,
-# N20,N3,1,parent-child;child-parent
-N20,N3,2,
-# N3,N6,1,parent-child;child-parent
-N3,N6,2,
-# N3,N7,1,parent-child;child-parent
-N3,N7,2,
 # N10,N5,1,parent-child;child-parent
 N10,N5,2,
 # N11,N5,1,parent-child;child-parent
 N11,N5,2,
 # N17,N7,1,parent-child;child-parent
 N17,N7,2,
+# N18,N8,1,parent-child;child-parent
+N18,N8,2,
+# N19,N3,1,parent-child;child-parent
+N19,N3,2,
+# N19,N8,1,parent-child;child-parent
+N19,N8,2,
+# N20,N3,1,parent-child;child-parent
+N20,N3,2,
+# N20,N8,1,parent-child;child-parent
+N20,N8,2,
+# N3,N6,1,parent-child;child-parent
+N3,N6,2,
+# N3,N7,1,parent-child;child-parent
+N3,N7,2,
 
 # Unchanged relations
 N0,N3,1,parent-child;child-parent

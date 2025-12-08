@@ -4,11 +4,11 @@ id1,id2,degree,constraints
 # Added relations
 N0,N20,2,
 N19,N29,2,
+N22,N4,2,
+N22,N6,2,
 N23,N32,2,
-N36,N25,2,
-N4,N22,2,
-N6,N22,2,
-N8,N36,2,
+N25,N36,2,
+N36,N8,2,
 
 # Removed relations
 # N32,N6,2,

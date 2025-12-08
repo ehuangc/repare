@@ -10,13 +10,13 @@ N14,N2,2,
 N15,N9,2,
 N17,N42,2,
 N18,N47,2,
+N19,N5,2,
 N21,N50,2,
+N22,N8,2,
+N27,N49,2,
 N34,N43,2,
-N49,N27,2,
-N5,N19,2,
-N6,N39,2,
-N6,N40,2,
-N8,N22,2,
+N39,N6,2,
+N40,N6,2,
 
 # Removed relations
 # N0,N33,2,
@@ -39,20 +39,20 @@ N8,N22,2,
 N1,N10,2,
 # N10,N11,1,siblings
 N10,N11,2,
-# N14,N37,1,parent-child;child-parent
-N14,N37,2,
-# N15,N7,1,parent-child;child-parent
-N15,N7,2,
 # N11,N2,1,parent-child;child-parent
 N11,N2,2,
-# N36,N37,1,siblings
-N36,N37,2,
+# N14,N37,1,parent-child;child-parent
+N14,N37,2,
 # N15,N6,2,
 N15,N6,1,
+# N15,N7,1,parent-child;child-parent
+N15,N7,2,
 # N16,N6,2,
 N16,N6,1,
 # N16,N7,1,parent-child;child-parent
 N16,N7,2,
+# N36,N37,1,siblings
+N36,N37,2,
 
 # Unchanged relations
 N0,N4,1,parent-child;child-parent

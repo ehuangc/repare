@@ -7,10 +7,10 @@ N10,N4,2,
 # Removed relations
 
 # Changed relations
-# N3,N4,1,parent-child;child-parent
-N3,N4,2,
 # N10,N5,1,parent-child;child-parent
 N10,N5,2,
+# N3,N4,1,parent-child;child-parent
+N3,N4,2,
 
 # Unchanged relations
 N0,N10,1,parent-child;child-parent

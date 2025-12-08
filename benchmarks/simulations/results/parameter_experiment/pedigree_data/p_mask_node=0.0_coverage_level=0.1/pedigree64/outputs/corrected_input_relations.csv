@@ -7,23 +7,23 @@ N1,N18,1,
 N1,N31,2,
 N1,N32,2,
 N10,N18,2,
+N10,N19,2,
 N10,N3,2,
 N10,N6,2,
 N11,N18,2,
+N11,N19,2,
 N11,N21,2,
 N11,N3,2,
 N18,N3,2,
-N19,N10,2,
-N19,N11,2,
+N18,N4,2,
+N18,N6,2,
+N18,N9,2,
 N19,N3,2,
+N19,N4,2,
 N19,N6,2,
 N19,N9,2,
-N4,N18,2,
-N4,N19,2,
-N6,N18,2,
-N8,N3,2,
-N9,N18,2,
-N9,N6,2,
+N3,N8,2,
+N6,N9,2,
 
 # Removed relations
 # N0,N10,2,
@@ -50,8 +50,14 @@ N1,N19,1,
 N1,N5,2,
 # N10,N21,1,parent-child;child-parent
 N10,N21,2,
+# N10,N4,1,parent-child;child-parent
+N10,N4,2,
 # N11,N25,1,parent-child;child-parent
 N11,N25,2,
+# N11,N4,1,parent-child;child-parent
+N11,N4,2,
+# N16,N6,1,parent-child;child-parent
+N16,N6,2,
 # N18,N28,1,parent-child;child-parent
 N18,N28,2,
 # N18,N8,1,parent-child;child-parent
@@ -59,41 +65,32 @@ N18,N8,2,
 N18,N8,2,
 # N19,N30,1,parent-child;child-parent
 N19,N30,2,
+# N19,N8,1,parent-child;child-parent
+N19,N8,2,
+# N20,N8,1,parent-child;child-parent
+N20,N8,2,
 # N23,N26,1,siblings
 N23,N26,2,
 # N24,N26,1,siblings
 N24,N26,2,
 # N25,N26,1,siblings
 N25,N26,2,
+# N3,N5,1,siblings
+N3,N5,2,
 # N30,N31,1,siblings
 N30,N31,2,
 # N30,N32,1,siblings
 N30,N32,2,
 # N31,N32,2,
 N31,N32,1,
-# N10,N4,1,parent-child;child-parent
-N10,N4,2,
-# N11,N4,1,parent-child;child-parent
-N11,N4,2,
-# N4,N9,1,parent-child;child-parent
-N4,N9,2,
-# N3,N5,1,siblings
-N3,N5,2,
-# N5,N6,1,siblings
-N5,N6,2,
-# N16,N6,1,parent-child;child-parent
-N16,N6,2,
-# N18,N8,1,parent-child;child-parent
-N18,N8,2,
-N18,N8,2,
-# N19,N8,1,parent-child;child-parent
-N19,N8,2,
-# N20,N8,1,parent-child;child-parent
-N20,N8,2,
-# N7,N8,1,parent-child;child-parent
-N7,N8,2,
 # N34,N9,1,parent-child;child-parent
 N34,N9,2,
+# N4,N9,1,parent-child;child-parent
+N4,N9,2,
+# N5,N6,1,siblings
+N5,N6,2,
+# N7,N8,1,parent-child;child-parent
+N7,N8,2,
 
 # Unchanged relations
 N0,N3,1,parent-child;child-parent

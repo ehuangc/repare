@@ -10,12 +10,12 @@ N46,N7,2,
 # N25,N54,2,
 
 # Changed relations
+# N21,N6,1,parent-child;child-parent
+N21,N6,2,
 # N25,N26,1,parent-child;child-parent
 N25,N26,2,
 # N51,N52,2,
 N51,N52,1,
-# N21,N6,1,parent-child;child-parent
-N21,N6,2,
 # N6,N7,1,siblings
 N6,N7,2,
 

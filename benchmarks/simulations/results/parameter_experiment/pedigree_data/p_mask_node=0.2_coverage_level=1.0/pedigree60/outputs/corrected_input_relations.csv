@@ -2,9 +2,9 @@ id1,id2,degree,constraints
 # Final inconsistency count: 10
 # Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here
 # Added relations
+N12,N27,2,
+N12,N9,2,
 N20,N30,2,
-N27,N12,2,
-N9,N12,2,
 
 # Removed relations
 # N18,N32,2,
@@ -14,10 +14,10 @@ N9,N12,2,
 # N29,N6,2,
 
 # Changed relations
-# N32,N33,1,siblings
-N32,N33,2,
 # N15,N4,2,
 N15,N4,1,
+# N32,N33,1,siblings
+N32,N33,2,
 
 # Unchanged relations
 N0,N4,1,parent-child;child-parent

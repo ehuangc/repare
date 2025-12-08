@@ -6,19 +6,16 @@ N10,N14,2,
 N10,N29,2,
 N11,N30,2,
 N13,N28,2,
-N7,N4,2,
-N8,N14,2,
-N9,N13,2,
-N9,N16,2,
-N9,N30,2,
+N13,N9,2,
+N14,N8,2,
+N16,N9,2,
+N30,N9,2,
+N4,N7,2,
 
 # Removed relations
 # N35,N4,2,
 
 # Changed relations
-# N13,N14,1,siblings
-N13,N14,1,
-N13,N14,2,
 # N13,N14,1,siblings
 N13,N14,1,
 N13,N14,2,

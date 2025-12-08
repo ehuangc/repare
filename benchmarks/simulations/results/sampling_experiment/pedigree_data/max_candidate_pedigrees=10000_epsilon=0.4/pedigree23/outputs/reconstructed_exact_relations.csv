@@ -6,16 +6,16 @@ N0,N17,maternal grandparent-grandchild
 N0,N20,maternal grandparent-grandchild
 N0,N21,maternal grandparent-grandchild
 N0,N22,maternal grandparent-grandchild
-N0,N23,maternal half-siblings
-N0,N24,maternal half-siblings
-N0,N27,maternal half-siblings
+N0,N23,maternal grandparent-grandchild
+N0,N24,maternal grandparent-grandchild
+N0,N27,maternal grandparent-grandchild
 N0,N5,parent-child
 N11,N12,parent-child
 N12,N13,maternal half-siblings
 N12,N2,child-parent
 N13,N2,child-parent
 N13,N29,parent-child
-N13,N5,paternal nephew/niece-aunt/uncle
+N13,N5,paternal grandchild-grandparent
 N15,N16,siblings
 N15,N17,siblings
 N15,N23,paternal aunt/uncle-nephew/niece

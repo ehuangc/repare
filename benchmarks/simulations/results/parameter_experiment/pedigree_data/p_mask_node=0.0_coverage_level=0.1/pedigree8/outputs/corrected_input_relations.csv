@@ -10,22 +10,22 @@ N12,N29,2,
 N13,N9,2,
 N15,N38,2,
 N15,N39,2,
+N16,N3,2,
 N16,N39,2,
 N17,N43,2,
 N18,N3,2,
 N18,N38,2,
 N18,N39,2,
 N2,N8,2,
+N20,N3,2,
 N20,N47,2,
 N20,N53,2,
+N21,N3,2,
 N21,N56,2,
+N22,N3,2,
 N22,N49,2,
-N3,N16,2,
-N3,N20,2,
-N3,N21,2,
-N3,N22,2,
-N3,N23,2,
-N6,N49,2,
+N23,N3,2,
+N49,N6,2,
 
 # Removed relations
 # N0,N17,2,
@@ -59,24 +59,38 @@ N6,N49,2,
 # N54,N6,2,
 
 # Changed relations
-# N10,N12,1,parent-child;child-parent
-N10,N12,2,
+# N1,N3,1,parent-child;child-parent
+N1,N3,2,
+# N1,N4,1,parent-child;child-parent
+N1,N4,2,
 # N10,N11,1,parent-child;child-parent
 N10,N11,2,
-# N11,N27,1,siblings
-N11,N27,2,
+# N10,N12,1,parent-child;child-parent
+N10,N12,2,
 # N10,N13,1,parent-child;child-parent
 N10,N13,2,
+# N11,N27,1,siblings
+N11,N27,2,
+# N14,N3,1,parent-child;child-parent
+N14,N3,2,
+# N14,N9,1,parent-child;child-parent
+N14,N9,2,
 # N15,N16,1,parent-child;child-parent
 N15,N16,2,
 # N15,N17,1,parent-child;child-parent
 N15,N17,2,
-# N17,N39,1,parent-child;child-parent
-N17,N39,2,
-# N17,N40,1,parent-child;child-parent
-N17,N40,2,
 # N15,N18,1,parent-child;child-parent
 N15,N18,2,
+# N16,N4,1,parent-child;child-parent
+N16,N4,2,
+# N17,N38,1,parent-child;child-parent
+N17,N38,2,
+# N17,N39,1,parent-child;child-parent
+N17,N39,2,
+# N17,N4,1,parent-child;child-parent
+N17,N4,2,
+# N17,N40,1,parent-child;child-parent
+N17,N40,2,
 # N18,N4,1,parent-child;child-parent
 N18,N4,2,
 # N20,N45,1,parent-child;child-parent
@@ -85,22 +99,12 @@ N20,N45,2,
 N22,N51,2,
 # N22,N53,1,parent-child;child-parent
 N22,N53,2,
-# N1,N3,1,parent-child;child-parent
-N1,N3,2,
-# N14,N3,1,parent-child;child-parent
-N14,N3,2,
+# N25,N9,1,parent-child;child-parent
+N25,N9,2,
 # N3,N6,2,
 N3,N6,1,
 # N34,N36,1,parent-child;child-parent
 N34,N36,2,
-# N17,N38,1,parent-child;child-parent
-N17,N38,2,
-# N1,N4,1,parent-child;child-parent
-N1,N4,2,
-# N16,N4,1,parent-child;child-parent
-N16,N4,2,
-# N17,N4,1,parent-child;child-parent
-N17,N4,2,
 # N5,N6,1,parent-child;child-parent
 N5,N6,2,
 # N51,N52,1,siblings
@@ -111,10 +115,6 @@ N52,N53,2,
 N52,N54,2,
 # N6,N7,1,siblings
 N6,N7,2,
-# N14,N9,1,parent-child;child-parent
-N14,N9,2,
-# N25,N9,1,parent-child;child-parent
-N25,N9,2,
 
 # Unchanged relations
 N38,N39,1,siblings

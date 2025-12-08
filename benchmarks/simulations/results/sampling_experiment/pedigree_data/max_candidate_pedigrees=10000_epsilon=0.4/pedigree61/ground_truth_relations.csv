@@ -66,6 +66,9 @@ N13,N31,maternal grandparent-grandchild
 N13,N8,child-parent
 N13,N9,siblings
 N14,N15,siblings
+N14,N16,double cousins
+N14,N17,double cousins
+N14,N18,double cousins
 N14,N2,maternal grandchild-grandparent
 N14,N22,paternal half-siblings
 N14,N23,paternal half-siblings
@@ -76,6 +79,9 @@ N14,N4,paternal nephew/niece-aunt/uncle
 N14,N5,child-parent
 N14,N8,maternal grandchild-grandparent
 N14,N9,maternal nephew/niece-aunt/uncle
+N15,N16,double cousins
+N15,N17,double cousins
+N15,N18,double cousins
 N15,N2,maternal grandchild-grandparent
 N15,N22,paternal half-siblings
 N15,N23,paternal half-siblings

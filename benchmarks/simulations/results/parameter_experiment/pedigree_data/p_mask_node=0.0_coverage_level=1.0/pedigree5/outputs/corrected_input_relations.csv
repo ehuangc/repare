@@ -5,9 +5,9 @@ id1,id2,degree,constraints
 N1,N16,2,
 N10,N20,2,
 N12,N19,2,
-N6,N20,2,
-N6,N21,2,
-N6,N22,2,
+N20,N6,2,
+N21,N6,2,
+N22,N6,2,
 
 # Removed relations
 # N13,N16,2,

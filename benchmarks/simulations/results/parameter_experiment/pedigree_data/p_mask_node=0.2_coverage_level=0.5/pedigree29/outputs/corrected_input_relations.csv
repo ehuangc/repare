@@ -14,12 +14,12 @@ N24,N34,2,
 # N55,N8,2,
 
 # Changed relations
+# N28,N9,1,siblings
+N28,N9,1,
 # N30,N8,1,siblings
 N30,N8,2,
 # N31,N8,1,parent-child;child-parent
 N31,N8,2,
-# N28,N9,1,siblings
-N28,N9,1,
 
 # Unchanged relations
 N1,N10,1,parent-child;child-parent

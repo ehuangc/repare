@@ -169,10 +169,13 @@ N37,N39,paternal half-siblings
 N37,N40,paternal half-siblings
 N37,N9,paternal grandchild-grandparent
 N38,N39,siblings
+N38,N39,double cousins
 N38,N40,siblings
+N38,N40,double cousins
 N38,N9,maternal grandchild-grandparent
 N38,N9,paternal grandchild-grandparent
 N39,N40,siblings
+N39,N40,double cousins
 N39,N9,maternal grandchild-grandparent
 N39,N9,paternal grandchild-grandparent
 N4,N5,siblings
