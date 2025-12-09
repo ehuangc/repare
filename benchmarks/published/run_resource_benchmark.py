@@ -38,8 +38,10 @@ def run_trial(nodes_df, relations_df):
         nodes_df.to_csv(nodes_file, index=False)
         relations_df.to_csv(relations_file, index=False)
         outputs_dir = tmpdir_path / "outputs"
-        parent_conn, child_conn = mp.Pipe(duplex=False)
-        process = mp.Process(
+
+        # Use a fresh interpreter per run to avoid forked memory sharing skewing RSS
+        parent_conn, child_conn = mp.get_context("spawn").Pipe(duplex=False)
+        process = mp.get_context("spawn").Process(
             target=reconstruct,
             args=(str(nodes_file), str(relations_file), str(outputs_dir), child_conn),
         )
