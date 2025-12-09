@@ -389,6 +389,14 @@ class PedigreeReconstructor:
         self._sample_pedigree = self._final_pedigrees[sample_idx]
         self._sample_strike_count = self._final_strike_counts[sample_idx]
         self._sample_strike_log = self._final_strike_logs[sample_idx]
+        self._sample_third_degree_strike_count = self._sample_pedigree.count_third_degree_inconsistencies(
+            self._pair_to_constraints
+        )
+        logger.info(
+            "Final pedigree strike counts — 1st/2nd degree: %s, 3rd degree: %s",
+            self._sample_strike_count,
+            self._sample_third_degree_strike_count,
+        )
         self._write_corrected_input_relations(
             self._sample_strike_count,
             self._sample_strike_log,
