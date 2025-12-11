@@ -1,0 +1,4 @@
+id1,id2,published_relation,inferred_relation
+GLN288,GLN291,2,None
+GLN301,GLN309,paternal aunt/uncle-nephew/niece,paternal grandparent-grandchild
+GLN306,GLN309,paternal aunt/uncle-nephew/niece,None

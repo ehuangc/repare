@@ -1,0 +1,14 @@
+# Data from Rivollat et al., 2023 Supplementary Tables
+id,sex,y_haplogroup,mt_haplogroup,can_have_children,can_be_inbred
+GLN277,F,,J1c1b1*,True,False
+GLN280,M,G2a2b2a*,H+152*,True,False
+GLN288,F,,K1a2c*,True,False
+GLN289B,F,,K1a2c*,True,False
+GLN291,M,G2a2b2a1a2*,H+152*,True,False
+GLN298,F,,H+152*,True,False
+GLN300,M,G2a2b2a1a2*,H+152*,True,False
+GLN301,F,,H4a1a+195*,True,False
+GLN305,M,G2a2b2a1*,J1c3*,True,False
+GLN306,F,,H4a1a+195*,True,False
+GLN307,F,,J1c1b1*,False,False
+GLN309,M,G2a2b2a1a2*,K1a3a*,False,False

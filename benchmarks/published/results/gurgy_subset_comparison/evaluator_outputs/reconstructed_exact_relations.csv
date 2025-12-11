@@ -1,0 +1,34 @@
+node1,node2,relation
+GLN277,GLN280,paternal nephew/niece-aunt/uncle
+GLN277,GLN291,paternal nephew/niece-aunt/uncle
+GLN277,GLN298,paternal grandchild-grandparent
+GLN277,GLN300,child-parent
+GLN277,GLN305,paternal grandchild-grandparent
+GLN277,GLN307,siblings
+GLN280,GLN291,siblings
+GLN280,GLN298,child-parent
+GLN280,GLN300,siblings
+GLN280,GLN301,paternal aunt/uncle-nephew/niece
+GLN280,GLN305,child-parent
+GLN280,GLN306,paternal aunt/uncle-nephew/niece
+GLN280,GLN307,paternal aunt/uncle-nephew/niece
+GLN288,GLN289B,parent-child
+GLN291,GLN298,child-parent
+GLN291,GLN300,siblings
+GLN291,GLN301,paternal aunt/uncle-nephew/niece
+GLN291,GLN305,child-parent
+GLN291,GLN306,paternal aunt/uncle-nephew/niece
+GLN291,GLN307,paternal aunt/uncle-nephew/niece
+GLN298,GLN300,parent-child
+GLN298,GLN301,paternal grandparent-grandchild
+GLN298,GLN306,paternal grandparent-grandchild
+GLN298,GLN307,paternal grandparent-grandchild
+GLN300,GLN301,paternal aunt/uncle-nephew/niece
+GLN300,GLN305,child-parent
+GLN300,GLN306,paternal aunt/uncle-nephew/niece
+GLN300,GLN307,parent-child
+GLN301,GLN305,paternal grandchild-grandparent
+GLN301,GLN306,siblings
+GLN301,GLN309,paternal grandparent-grandchild
+GLN305,GLN306,paternal grandparent-grandchild
+GLN305,GLN307,paternal grandparent-grandchild
