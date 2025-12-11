@@ -445,8 +445,16 @@ class PedigreeEvaluator:
                     for _ in range(algorithm_count - true_count):
                         false_positives[(id1, id2)].append(relation)
 
+        inconsistencies = self.count_input_relation_inconsistencies()
+        published_inconsistencies = inconsistencies["Published Pedigree Input Inconsistencies"]
+        inferred_inconsistencies = inconsistencies["Inferred Pedigree Input Inconsistencies"]
+
         # Write false positives and false negatives to CSV file
         with open(path, "w") as file:
+            file.write(
+                f"# Published pedigree inconsistencies: {published_inconsistencies}, "
+                f"inferred pedigree inconsistencies: {inferred_inconsistencies}\n"
+            )
             file.write("id1,id2,published_relation,inferred_relation\n")
             for id1, id2 in sorted(set(false_positives.keys()) | set(false_negatives.keys())):
                 # False negatives are published relations not inferred by the algorithm
