@@ -18,14 +18,14 @@ def main():
     data_dir = script_dir / "data" / "gurgy"
     results_dir = script_dir / "results" / "gurgy_subset_comparison"
     results_dir.mkdir(parents=True, exist_ok=True)
-    evaluator_outputs_dir = results_dir / "evaluator_outputs"
-    evaluator_outputs_dir.mkdir(parents=True, exist_ok=True)
+    reconstructor_outputs_dir = results_dir / "reconstructor_outputs"
+    reconstructor_outputs_dir.mkdir(parents=True, exist_ok=True)
 
     evaluator = PedigreeEvaluator(
         published_relations_path=data_dir / "published_exact_relations_subset.csv",
         algorithm_nodes_path=data_dir / "nodes_subset.csv",
         algorithm_relations_path=data_dir / "inferred_relations_READv2_subset.csv",
-        outputs_dir=evaluator_outputs_dir,
+        outputs_dir=reconstructor_outputs_dir,
     )
     inferred_pedigree = evaluator.algorithm_pedigree
     published_pedigree = get_published_pedigree(
