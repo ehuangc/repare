@@ -1,9 +1,7 @@
+# Published pedigree inconsistencies: 4, inferred pedigree inconsistencies: 4
 id1,id2,published_relation,inferred_relation
 b22-1,b2a-1,paternal nephew/niece-aunt/uncle,paternal aunt/uncle-nephew/niece
 b22-1,b2b-1,paternal nephew/niece-aunt/uncle,paternal aunt/uncle-nephew/niece
 b22-1,b32-1,paternal nephew/niece-aunt/uncle,paternal aunt/uncle-nephew/niece
 b22-1,b33-1,maternal aunt/uncle-nephew/niece,maternal half-siblings
 b22-1,j3-1,paternal aunt/uncle-nephew/niece,paternal nephew/niece-aunt/uncle
-b2a-1,b30-1,paternal aunt/uncle-nephew/niece,maternal grandchild-grandparent
-b2b-1,b30-1,paternal aunt/uncle-nephew/niece,maternal grandchild-grandparent
-b30-1,b32-1,paternal nephew/niece-aunt/uncle,maternal grandparent-grandchild

@@ -1,0 +1,77 @@
+node1,node2,relation
+b1-1,b1-2,siblings
+b1-1,b10-2,paternal half-siblings
+b1-1,b27-1,siblings
+b1-1,b28-1,siblings
+b1-1,b2a-1,paternal nephew/niece-aunt/uncle
+b1-1,b2b-1,paternal nephew/niece-aunt/uncle
+b1-1,b32-1,child-parent
+b1-1,b32-2,child-parent
+b1-1,b4-1,siblings
+b1-1,b6-1,paternal aunt/uncle-nephew/niece
+b1-1,j15-2,siblings
+b1-2,b10-2,paternal half-siblings
+b1-2,b27-1,siblings
+b1-2,b28-1,siblings
+b1-2,b2a-1,paternal nephew/niece-aunt/uncle
+b1-2,b2b-1,paternal nephew/niece-aunt/uncle
+b1-2,b32-1,child-parent
+b1-2,b32-2,child-parent
+b1-2,b4-1,siblings
+b1-2,b6-1,paternal aunt/uncle-nephew/niece
+b1-2,j15-2,siblings
+b10-2,b27-1,paternal half-siblings
+b10-2,b28-1,paternal half-siblings
+b10-2,b28-2,child-parent
+b10-2,b2a-1,paternal nephew/niece-aunt/uncle
+b10-2,b2b-1,paternal nephew/niece-aunt/uncle
+b10-2,b32-1,child-parent
+b10-2,b4-1,paternal half-siblings
+b10-2,j15-2,paternal half-siblings
+b17-1/j11-1,b2a-1,paternal nephew/niece-aunt/uncle
+b17-1/j11-1,b2b-1,paternal nephew/niece-aunt/uncle
+b17-1/j11-1,b32-1,paternal nephew/niece-aunt/uncle
+b22-1,b2a-1,paternal aunt/uncle-nephew/niece
+b22-1,b2b-1,paternal aunt/uncle-nephew/niece
+b22-1,b32-1,paternal aunt/uncle-nephew/niece
+b22-1,b33-1,maternal half-siblings
+b22-1,j3-1,paternal nephew/niece-aunt/uncle
+b25-1,b7-1,parent-child
+b27-1,b28-1,siblings
+b27-1,b2a-1,paternal nephew/niece-aunt/uncle
+b27-1,b2b-1,paternal nephew/niece-aunt/uncle
+b27-1,b32-1,child-parent
+b27-1,b32-2,child-parent
+b27-1,b4-1,siblings
+b27-1,b6-1,paternal aunt/uncle-nephew/niece
+b27-1,j15-2,siblings
+b28-1,b2a-1,paternal nephew/niece-aunt/uncle
+b28-1,b2b-1,paternal nephew/niece-aunt/uncle
+b28-1,b32-1,child-parent
+b28-1,b32-2,child-parent
+b28-1,b4-1,siblings
+b28-1,b6-1,paternal aunt/uncle-nephew/niece
+b28-1,j15-2,siblings
+b2a-1,b2b-1,siblings
+b2a-1,b30-1,paternal aunt/uncle-nephew/niece
+b2a-1,b32-1,siblings
+b2a-1,b4-1,paternal aunt/uncle-nephew/niece
+b2a-1,b7-1,paternal aunt/uncle-nephew/niece
+b2a-1,j15-2,paternal aunt/uncle-nephew/niece
+b2b-1,b30-1,paternal aunt/uncle-nephew/niece
+b2b-1,b32-1,siblings
+b2b-1,b4-1,paternal aunt/uncle-nephew/niece
+b2b-1,b7-1,parent-child
+b2b-1,j15-2,paternal aunt/uncle-nephew/niece
+b3-1,j6-1,siblings
+b30-1,b32-1,paternal nephew/niece-aunt/uncle
+b32-1,b4-1,parent-child
+b32-1,b6-1,paternal grandparent-grandchild
+b32-1,b7-1,paternal aunt/uncle-nephew/niece
+b32-1,j15-2,parent-child
+b32-2,b4-1,parent-child
+b32-2,b6-1,paternal grandparent-grandchild
+b32-2,j15-2,parent-child
+b4-1,b6-1,paternal aunt/uncle-nephew/niece
+b4-1,j15-2,siblings
+b6-1,j15-2,paternal nephew/niece-aunt/uncle
