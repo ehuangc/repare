@@ -27,6 +27,7 @@ class PedigreeReconstructor:
         max_candidate_pedigrees: int = 1000,
         epsilon: float = 0.2,
         plot: bool = True,
+        plot_haplogroups: bool = True,
         write_alternate_pedigrees: bool = False,
         random_seed: Any = 42,
     ) -> None:
@@ -46,6 +47,8 @@ class PedigreeReconstructor:
         self._epsilon = epsilon
         # Whether to plot the reconstructed pedigree(s)
         self._plot = plot
+        # Whether to plot haplogroups of the reconstructed pedigree(s)
+        self._plot_haplogroups = plot_haplogroups
         # Whether to write corrected relations and plots of alternate final pedigrees
         self._write_alternate_pedigrees = write_alternate_pedigrees
         self._random_seed = random_seed
@@ -405,7 +408,7 @@ class PedigreeReconstructor:
         self._sample_pedigree.write_exact_relations(self._outputs_dir / "reconstructed_exact_relations.csv")
         if self._plot:
             try:
-                self._sample_pedigree.plot(self._outputs_dir / "reconstructed_pedigree.pdf")
+                self._sample_pedigree.plot(self._outputs_dir / "reconstructed_pedigree.pdf", plot_haplogroups=self._plot_haplogroups)
                 pygraphviz_found = True
             except ImportError:
                 logger.warning(
@@ -432,7 +435,7 @@ class PedigreeReconstructor:
                 )
                 pedigree.write_exact_relations(alternate_dir / f"pedigree_{idx}_exact_relations.csv")
                 if self._plot and pygraphviz_found:
-                    pedigree.plot(alternate_dir / f"pedigree_{idx}.png")
+                    pedigree.plot(alternate_dir / f"pedigree_{idx}.png", plot_haplogroups=self._plot_haplogroups)
             self._write_constant_relations(alternate_dir / "constant_relations.csv")
 
         return self._sample_pedigree
