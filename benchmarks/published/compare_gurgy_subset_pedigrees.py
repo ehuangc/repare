@@ -38,6 +38,7 @@ def main():
         inferred_pedigree,
         plot_path=results_dir / "inferred_pedigree.pdf",
         mt_haplogroup_to_color=mt_haplogroup_to_color,
+        plot_haplogroups=False,
     )
     # Define dotted edges to add to the published pedigree plot
     nodes_to_remove = [
@@ -58,6 +59,7 @@ def main():
         nodes_to_remove=nodes_to_remove,
         edges_to_remove=edges_to_remove,
         dotted_edges_to_add=dotted_edges_to_add,
+        plot_haplogroups=False,
     )
     write_relation_differences(
         evaluator=evaluator,

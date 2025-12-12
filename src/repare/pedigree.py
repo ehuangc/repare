@@ -1351,6 +1351,7 @@ class Pedigree:
         nodes_to_remove: list[str] | None = None,
         edges_to_remove: list[tuple[str, str]] | None = None,
         dotted_edges_to_add: list[tuple[str, str]] | None = None,
+        plot_haplogroups: bool = True,
     ) -> None:
         """
         Plot the pedigree to the given path. Optionally takes a custom mapping of mt_haplogroups to colors.
@@ -1393,12 +1394,16 @@ class Pedigree:
             mt_haplogroup = self.get_data(node)["mt_haplogroup"].replace("*", "")[:3]
             y_haplogroup = self.get_data(node)["y_haplogroup"].replace("*", "")[:3]
             if node.isnumeric():
-                if y_haplogroup:
+                if not plot_haplogroups:
+                    node_labels[node] = ""
+                elif y_haplogroup:
                     node_labels[node] = f"MT: {mt_haplogroup}\nY: {y_haplogroup}"
                 else:
                     node_labels[node] = f"MT: {mt_haplogroup}"
             else:
-                if y_haplogroup:
+                if not plot_haplogroups:
+                    node_labels[node] = node
+                elif y_haplogroup:
                     node_labels[node] = f"{node}\nMT: {mt_haplogroup}\nY: {y_haplogroup}"
                 else:
                     node_labels[node] = f"{node}\nMT: {mt_haplogroup}"
@@ -1436,7 +1441,10 @@ class Pedigree:
         # Scale sizes based on pedigree node count
         node_size = min(1000, 9000 / len(tree.nodes))
         # Matplotlib doesn't allow font size less than 1
-        font_size = max(math.sqrt(node_size) / 5, 1)
+        if plot_haplogroups:
+            font_size = max(math.sqrt(node_size) / 5, 1)
+        else:
+            font_size = max(math.sqrt(node_size) / 4.25, 1)
         line_width = math.sqrt(node_size) / 100
 
         pos = nx.nx_agraph.graphviz_layout(tree, prog="dot")
