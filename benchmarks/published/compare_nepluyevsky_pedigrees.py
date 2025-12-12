@@ -39,12 +39,14 @@ def main():
         # Plot as SVG because we will need to crop and shift nodes
         plot_path=results_dir / "inferred_pedigree.svg",
         mt_haplogroup_to_color=mt_haplogroup_to_color,
+        plot_haplogroups=False,
     )
     plot_published_pedigree(
         published_pedigree=published_pedigree,
         # Plot as SVG because we will need to crop and shift nodes
         plot_path=results_dir / "published_pedigree.svg",
         mt_haplogroup_to_color=mt_haplogroup_to_color,
+        plot_haplogroups=False,
     )
     write_relation_differences(
         evaluator=evaluator,

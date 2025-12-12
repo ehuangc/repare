@@ -21,8 +21,10 @@ def main() -> None:
             relations_path=relations_path,
             nodes_path=nodes_path,
             outputs_dir=outputs_dir,
+            plot_haplogroups=False,
         )
         pedigree_reconstructor.find_best_pedigree()
+
     print(f"Finished pedigree reconstruction. Outputs written to {outputs_dir.resolve()}.")
 
 
