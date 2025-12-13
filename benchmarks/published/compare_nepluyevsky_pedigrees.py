@@ -40,6 +40,7 @@ def main():
         plot_path=results_dir / "inferred_pedigree.svg",
         mt_haplogroup_to_color=mt_haplogroup_to_color,
         plot_haplogroups=False,
+        font_size=4.5,
     )
     plot_published_pedigree(
         published_pedigree=published_pedigree,
@@ -47,6 +48,7 @@ def main():
         plot_path=results_dir / "published_pedigree.svg",
         mt_haplogroup_to_color=mt_haplogroup_to_color,
         plot_haplogroups=False,
+        font_size=4.5,
     )
     write_relation_differences(
         evaluator=evaluator,
