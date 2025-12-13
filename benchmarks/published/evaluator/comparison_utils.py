@@ -42,10 +42,17 @@ def get_mt_colormap(
 
 
 def plot_inferred_pedigree(
-    inferred_pedigree: Pedigree, plot_path: str, mt_haplogroup_to_color: dict[str, str], plot_haplogroups: bool = True
+    inferred_pedigree: Pedigree,
+    plot_path: str,
+    mt_haplogroup_to_color: dict[str, str],
+    plot_haplogroups: bool = True,
+    font_size: float | None = None,
 ) -> None:
     inferred_pedigree.plot(
-        path=plot_path, mt_haplogroup_to_color=mt_haplogroup_to_color, plot_haplogroups=plot_haplogroups
+        path=plot_path,
+        mt_haplogroup_to_color=mt_haplogroup_to_color,
+        plot_haplogroups=plot_haplogroups,
+        font_size=font_size,
     )
 
 
@@ -57,6 +64,7 @@ def plot_published_pedigree(
     edges_to_remove: list[tuple[str, str]] | None = None,
     dotted_edges_to_add: list[tuple[str, str]] | None = None,
     plot_haplogroups: bool = True,
+    font_size: float | None = None,
 ) -> None:
     published_pedigree.plot(
         path=plot_path,
@@ -65,6 +73,7 @@ def plot_published_pedigree(
         edges_to_remove=edges_to_remove,
         dotted_edges_to_add=dotted_edges_to_add,
         plot_haplogroups=plot_haplogroups,
+        font_size=font_size,
     )
 
 

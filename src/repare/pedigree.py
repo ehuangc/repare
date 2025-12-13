@@ -1352,6 +1352,7 @@ class Pedigree:
         edges_to_remove: list[tuple[str, str]] | None = None,
         dotted_edges_to_add: list[tuple[str, str]] | None = None,
         plot_haplogroups: bool = True,
+        font_size: float | None = None,
     ) -> None:
         """
         Plot the pedigree to the given path. Optionally takes a custom mapping of mt_haplogroups to colors.
@@ -1441,9 +1442,9 @@ class Pedigree:
         # Scale sizes based on pedigree node count
         node_size = min(1000, 9000 / len(tree.nodes))
         # Matplotlib doesn't allow font size less than 1
-        if plot_haplogroups:
+        if font_size is None and plot_haplogroups:
             font_size = max(math.sqrt(node_size) / 5, 1)
-        else:
+        elif font_size is None and not plot_haplogroups:
             font_size = max(math.sqrt(node_size) / 4.25, 1)
         line_width = math.sqrt(node_size) / 100
 
