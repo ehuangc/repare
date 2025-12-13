@@ -408,7 +408,9 @@ class PedigreeReconstructor:
         self._sample_pedigree.write_exact_relations(self._outputs_dir / "reconstructed_exact_relations.csv")
         if self._plot:
             try:
-                self._sample_pedigree.plot(self._outputs_dir / "reconstructed_pedigree.pdf", plot_haplogroups=self._plot_haplogroups)
+                self._sample_pedigree.plot(
+                    self._outputs_dir / "reconstructed_pedigree.pdf", plot_haplogroups=self._plot_haplogroups
+                )
                 pygraphviz_found = True
             except ImportError:
                 logger.warning(
