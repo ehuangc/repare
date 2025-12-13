@@ -21,9 +21,10 @@ def main() -> None:
             relations_path=relations_path,
             nodes_path=nodes_path,
             outputs_dir=outputs_dir,
-            plot_haplogroups=False,
+            plot=False,
         )
-        pedigree_reconstructor.find_best_pedigree()
+        pedigree = pedigree_reconstructor.find_best_pedigree()
+        pedigree.plot(outputs_dir / "reconstructed_pedigree.svg", plot_haplogroups=False, font_size=10)
 
     print(f"Finished pedigree reconstruction. Outputs written to {outputs_dir.resolve()}.")
 
