@@ -115,7 +115,7 @@ def plot_results(results_dir: Path | str) -> None:
         # Set colorbar tick label size
         ax.figure.axes[-1].tick_params(labelsize=14)
         plt.title(f"{metric} Scores", fontsize=18, pad=10)
-        plt.xlabel("Coverage Level", fontsize=16, labelpad=10)
+        plt.xlabel("Simulated Sequence Coverage", fontsize=16, labelpad=10)
         plt.ylabel("p(Mask Node)", fontsize=16, labelpad=10)
         ax.tick_params(axis="x", labelsize=14)
         ax.tick_params(axis="y", labelsize=14)
