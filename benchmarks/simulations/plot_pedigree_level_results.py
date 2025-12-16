@@ -60,7 +60,7 @@ def plot_pedigree_level_results(
             "figure.constrained_layout.w_pad": 0.15,
         }
     ):
-        fig, axes = plt.subplots(n_rows, n_cols, figsize=(12, 9), constrained_layout=True)
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(10, 6.5), constrained_layout=True)
         axes = axes.reshape(n_rows, n_cols)
 
         for row_idx, (metric_col, metric_label) in enumerate(metric_columns.items()):
@@ -89,10 +89,10 @@ def plot_pedigree_level_results(
                 ax.tick_params(axis="both", labelsize=14)
                 ax.grid(True, linewidth=0.8, alpha=0.4)
 
-        plt.suptitle("Pedigree-Level Reconstruction Performance", fontsize=18, y=1.065)
+        plt.suptitle("Pedigree-Level Reconstruction Performance", fontsize=18, y=1.09)
         fig.text(
             0.5,
-            1.035,
+            1.045,
             f"p(Mask Node)={p_mask_node}, Simulated Sequence Coverage={coverage_level}x",
             ha="center",
             va="top",
