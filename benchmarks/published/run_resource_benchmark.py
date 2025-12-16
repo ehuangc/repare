@@ -59,7 +59,7 @@ def run_trial(nodes_df, relations_df):
 
 def node_counts(total_nodes):
     counts = set()
-    for frac in [0.1, 0.3, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 1.0]:
+    for frac in [0.1, 0.3, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.975, 1.0]:
         counts.add(max(1, min(total_nodes, math.ceil(total_nodes * frac))))
     counts = sorted(counts)
     if counts[-1] != total_nodes:
