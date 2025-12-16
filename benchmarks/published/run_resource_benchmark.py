@@ -105,7 +105,7 @@ def main():
     nodes_df = pd.read_csv(nodes_path, dtype=str, comment="#", keep_default_na=False)
     relations_df = pd.read_csv(relations_path, dtype=str, comment="#", keep_default_na=False)
     counts = node_counts(len(nodes_df))
-    repeats = 1
+    repeats = 3
     results = []
     rng = random.Random(42)
 
