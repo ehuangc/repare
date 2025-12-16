@@ -73,7 +73,7 @@ def plot_pedigree_level_results(
                     ax=ax,
                     scatter_kws={"s": 40, "alpha": 0.65},
                     line_kws={"lw": 2.0},
-                    lowess=True,
+                    ci=95,
                 )
                 if row_idx == n_rows - 1:
                     ax.set_xlabel(feature_label, fontsize=16)
