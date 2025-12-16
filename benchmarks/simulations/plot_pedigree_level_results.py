@@ -76,27 +76,27 @@ def plot_pedigree_level_results(
                     lowess=True,
                 )
                 if row_idx == n_rows - 1:
-                    ax.set_xlabel(feature_label, fontsize=14)
+                    ax.set_xlabel(feature_label, fontsize=16)
                 else:
                     ax.set_xlabel("")
                 if col_idx == 0:
-                    ax.set_ylabel(metric_label, fontsize=14)
+                    ax.set_ylabel(metric_label, fontsize=16)
                 else:
                     ax.set_ylabel("")
                 if row_idx == 0:
-                    ax.set_title(feature_label, fontsize=14)
+                    ax.set_title(feature_label, fontsize=16)
                 ax.set_ylim(0.0, 1.05)
-                ax.tick_params(axis="both", labelsize=12)
+                ax.tick_params(axis="both", labelsize=14)
                 ax.grid(True, linewidth=0.8, alpha=0.4)
 
-        plt.suptitle("Pedigree-Level Reconstruction Performance", fontsize=16, y=1.065)
+        plt.suptitle("Pedigree-Level Reconstruction Performance", fontsize=18, y=1.065)
         fig.text(
             0.5,
             1.035,
             f"p(Mask Node)={p_mask_node}, Simulated Sequence Coverage={coverage_level}x",
             ha="center",
             va="top",
-            fontsize=14,
+            fontsize=16,
         )
         sns.despine()
 

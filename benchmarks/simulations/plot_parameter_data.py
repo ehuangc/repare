@@ -29,28 +29,28 @@ def plot_pedigree_summary_statistics(results_dir: Path | str) -> None:
         fig, axes = plt.subplots(2, 2, figsize=(12, 9), constrained_layout=True)
         axes = axes.flatten()
 
-        plt.suptitle("Pedigree Summary Statistics (Before Masking Nodes)", fontsize=16)
+        plt.suptitle("Pedigree Summary Statistics (Before Masking Nodes)", fontsize=18)
 
         for ax in axes:
-            ax.set_ylabel("Pedigree Count", fontsize=14)
-            ax.tick_params(axis="x", labelsize=12)
-            ax.tick_params(axis="y", labelsize=12)
+            ax.set_ylabel("Pedigree Count", fontsize=16)
+            ax.tick_params(axis="x", labelsize=14)
+            ax.tick_params(axis="y", labelsize=14)
 
         sns.histplot(pedigree_sizes, ax=axes[0])
-        axes[0].set_title("Pedigree Size Distribution", fontsize=14)
-        axes[0].set_xlabel("# of Individuals", fontsize=14)
+        axes[0].set_title("Pedigree Size Distribution", fontsize=18)
+        axes[0].set_xlabel("# of Individuals", fontsize=16)
 
         sns.histplot(inbred_proportions, ax=axes[1])
-        axes[1].set_title("Inbreeding Proportion Distribution", fontsize=14)
-        axes[1].set_xlabel("Proportion of Inbred Individuals", fontsize=14)
+        axes[1].set_title("Inbreeding Proportion Distribution", fontsize=18)
+        axes[1].set_xlabel("Proportion of Inbred Individuals", fontsize=16)
 
         sns.histplot(has_children_proportions, ax=axes[2])
-        axes[2].set_title("Has Children Proportion Distribution", fontsize=14)
-        axes[2].set_xlabel("Proportion of Non-Final-Generation\nIndividuals with Children", fontsize=14)
+        axes[2].set_title("Has Children Proportion Distribution", fontsize=18)
+        axes[2].set_xlabel("Proportion of Non-Final-Generation\nIndividuals with Children", fontsize=16)
 
         sns.histplot(mean_children_count, ax=axes[3])
-        axes[3].set_title("Mean Children Count Distribution", fontsize=14)
-        axes[3].set_xlabel("Mean # of Children per Parent", fontsize=14)
+        axes[3].set_title("Mean Children Count Distribution", fontsize=18)
+        axes[3].set_xlabel("Mean # of Children per Parent", fontsize=16)
 
         plt.savefig(plots_dir / "pedigree_summary_statistics.pdf", bbox_inches="tight")
 
