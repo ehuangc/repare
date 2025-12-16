@@ -98,7 +98,10 @@ def main():
     data_dir = script_dir / "data" / "gurgy"
     nodes_path = data_dir / "nodes.csv"
     relations_path = data_dir / "inferred_relations_READv2.csv"
-    results_path = script_dir / "results" / "gurgy_resource_benchmark.csv"
+    results_dir = script_dir / "results" / "resource_benchmark"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    results_path = results_dir / "gurgy_results.csv"
+
     nodes_df = pd.read_csv(nodes_path, dtype=str, comment="#", keep_default_na=False)
     relations_df = pd.read_csv(relations_path, dtype=str, comment="#", keep_default_na=False)
     counts = node_counts(len(nodes_df))
@@ -130,7 +133,6 @@ def main():
                 "\n"
             )
 
-    results_path.parent.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(results).to_csv(results_path, index=False)
     print(f"\nBenchmark complete. Results saved to {results_path}.")
 
