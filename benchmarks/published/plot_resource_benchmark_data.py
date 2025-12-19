@@ -110,7 +110,7 @@ def plot_rss_vs_relations(results_df: pd.DataFrame, *, output_path: Path) -> Non
 
 def plot_results(results_path: Path | str) -> None:
     script_dir = Path(__file__).resolve().parent
-    plots_dir = script_dir / "results" / "plots"
+    plots_dir = script_dir / "results" / "resource_benchmark" / "plots"
     plots_dir.mkdir(parents=True, exist_ok=True)
     relations_vs_runtime_path = plots_dir / "gurgy_relations_vs_runtime.pdf"
     rss_vs_relations_path = plots_dir / "gurgy_rss_vs_relations.pdf"
