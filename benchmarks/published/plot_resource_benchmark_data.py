@@ -48,7 +48,7 @@ def plot_relations_vs_runtime(results_df: pd.DataFrame, *, output_path: Path) ->
             "figure.constrained_layout.w_pad": 0.15,
         }
     ):
-        fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
+        fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
 
         for dataset, subset in grouped.groupby("dataset"):
             ax.errorbar(
@@ -57,8 +57,9 @@ def plot_relations_vs_runtime(results_df: pd.DataFrame, *, output_path: Path) ->
                 yerr=subset["runtime_ci"] / 60.0,
                 fmt="-o",
                 label=dataset,
-                capsize=5,
-                markersize=5,
+                capsize=10,
+                markersize=10,
+                elinewidth=8,
             )
 
         ax.set_xlabel("# of 1st- and 2nd-Degree Relations", fontsize=16)
@@ -82,7 +83,7 @@ def plot_rss_vs_relations(results_df: pd.DataFrame, *, output_path: Path) -> Non
             "figure.constrained_layout.w_pad": 0.15,
         }
     ):
-        fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
+        fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
 
         for dataset, subset in grouped.groupby("dataset"):
             ax.errorbar(
@@ -91,8 +92,9 @@ def plot_rss_vs_relations(results_df: pd.DataFrame, *, output_path: Path) -> Non
                 yerr=subset["peak_ci"],
                 fmt="-o",
                 label=dataset,
-                capsize=5,
-                markersize=5,
+                capsize=10,
+                markersize=10,
+                elinewidth=8,
             )
 
         ax.set_xlabel("# of 1st- and 2nd-Degree Relations", fontsize=16)
