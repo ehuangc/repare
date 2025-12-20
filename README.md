@@ -7,7 +7,6 @@
 curl -O https://raw.githubusercontent.com/ehuangc/repare/main/repare-environment.yml
 conda env create -f repare-environment.yml
 conda activate repare
-pip install repare
 ```
 repare uses PyGraphviz to plot reconstructed pedigrees. Since PyGraphviz relies on Graphviz which cannot be installed using `pip`, we recommend installing repare and its dependencies in a fresh conda environment, as shown above. This conda-based installation method automatically installs Graphviz and ensures PyGraphviz is linked to it.
 
