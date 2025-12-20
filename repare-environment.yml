@@ -1,0 +1,12 @@
+name: repare
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10,<=3.13
+  - pip
+  - graphviz
+  - pygraphviz>=1.14,<2
+  - matplotlib>=3.10.8,<4
+  - networkx>=3.6,<4
+  - pandas>=2.3.3,<3
+  - tqdm>=4.67.1,<5

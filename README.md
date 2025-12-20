@@ -4,7 +4,8 @@
 
 ### Recommended
 ```
-conda create -n "repare" -c conda-forge python=3.13 pygraphviz matplotlib networkx pandas tqdm
+curl -O https://raw.githubusercontent.com/ehuangc/repare/main/repare-environment.yml
+conda env create -f repare-environment.yml
 conda activate repare
 pip install repare
 ```
