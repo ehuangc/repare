@@ -19,6 +19,32 @@ class PedigreeReconstructor:
     Manages and builds up a collection of potential Pedigrees.
     """
 
+    ALLOWED_CONSTRAINTS: frozenset[str] = frozenset(
+        {
+            "parent-child",
+            "child-parent",
+            "siblings",
+            "maternal aunt/uncle-nephew/niece",
+            "maternal nephew/niece-aunt/uncle",
+            "paternal aunt/uncle-nephew/niece",
+            "paternal nephew/niece-aunt/uncle",
+            "maternal grandparent-grandchild",
+            "maternal grandchild-grandparent",
+            "paternal grandparent-grandchild",
+            "paternal grandchild-grandparent",
+            "maternal half-siblings",
+            "paternal half-siblings",
+            "double cousins",
+        }
+    )
+
+    @classmethod
+    def get_allowed_constraints(cls) -> frozenset[str]:
+        """
+        Returns the set of allowed constraint strings.
+        """
+        return cls.ALLOWED_CONSTRAINTS
+
     def __init__(
         self,
         relations_path: Path | str,
@@ -156,23 +182,9 @@ class PedigreeReconstructor:
             raise ValueError("Node pairs cannot have multiple non-empty constraints of the same degree.")
         self._relation_data.drop("pair_degree", axis=1, inplace=True)
 
+        allowed_constraints = self.get_allowed_constraints()
+
         def split_and_validate_constraints(constraints: str) -> None:
-            allowed_constraints = {
-                "parent-child",
-                "child-parent",
-                "siblings",
-                "maternal aunt/uncle-nephew/niece",
-                "maternal nephew/niece-aunt/uncle",
-                "paternal aunt/uncle-nephew/niece",
-                "paternal nephew/niece-aunt/uncle",
-                "maternal grandparent-grandchild",
-                "maternal grandchild-grandparent",
-                "paternal grandparent-grandchild",
-                "paternal grandchild-grandparent",
-                "maternal half-siblings",
-                "paternal half-siblings",
-                "double cousins",
-            }
             if constraints:
                 constraints_list = [c for c in constraints.split(";")]
                 if any(c not in allowed_constraints for c in constraints_list):

@@ -9,7 +9,24 @@ from repare.pedigree_reconstructor import PedigreeReconstructor
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Reconstruct (ancient) pedigrees from pairwise kinship relations.")
+    base_parser = argparse.ArgumentParser(add_help=False)
+    base_parser.add_argument(
+        "--print-allowed-constraints",
+        action="store_true",
+        help="Print the list of allowed constraint strings and exit.",
+    )
+
+    # Handle the informational flag before enforcing required arguments
+    base_args, remaining_args = base_parser.parse_known_args()
+    if base_args.print_allowed_constraints:
+        for constraint in sorted(PedigreeReconstructor.get_allowed_constraints()):
+            print(constraint)
+        base_parser.exit()
+
+    parser = argparse.ArgumentParser(
+        parents=[base_parser],
+        description="Reconstruct (ancient) pedigrees from pairwise kinship relations.",
+    )
     parser.add_argument("-n", "--nodes", type=str, required=True, help="Path to the nodes CSV file.")
     parser.add_argument("-r", "--relations", type=str, required=True, help="Path to the relations CSV file.")
     parser.add_argument(
@@ -41,7 +58,7 @@ def parse_arguments():
         "-w", "--write_alternates", action="store_true", help="Write outputs of alternate pedigrees to disk."
     )
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output (INFO-level logging).")
-    return parser.parse_args()
+    return parser.parse_args(remaining_args)
 
 
 def main():

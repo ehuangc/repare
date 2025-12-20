@@ -80,6 +80,9 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
 
 **Verbose** (-v) (*flag*): If set, enable verbose output (INFO-level logging).
 
+> [!TIP]
+> Run `repare --print-allowed-constraints` to print a list of allowed relation constraint strings directly from the CLI.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/ehuangc/repare/main/examples/algorithm_diagram.svg" alt="Reconstruction Process Diagram" />
   <br>
