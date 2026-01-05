@@ -265,6 +265,7 @@ class PedigreeEvaluator:
         metrics["Degree F1"] = degree_f1
         metrics["Connectivity R-squared"] = self._calculate_connectivity_r_squared()
         metrics.update(self.count_input_relation_inconsistencies())
+        metrics.update(self.count_third_degree_inconsistencies())
         return metrics
 
     def count_input_relation_inconsistencies(self) -> dict[str, int]:
@@ -281,6 +282,22 @@ class PedigreeEvaluator:
         return {
             "Published Pedigree Input Inconsistencies": published_inconsistencies,
             "Inferred Pedigree Input Inconsistencies": inferred_inconsistencies,
+        }
+
+    def count_third_degree_inconsistencies(self) -> dict[str, int]:
+        """
+        Count third-degree relation inconsistencies for the published and inferred pedigrees.
+        """
+        published_pedigree = self.get_published_pedigree()
+        published_inconsistencies = published_pedigree.count_third_degree_inconsistencies(
+            self._input_pair_to_constraints
+        )
+        inferred_inconsistencies = self.algorithm_pedigree.count_third_degree_inconsistencies(
+            self._input_pair_to_constraints
+        )
+        return {
+            "3rd-Degree Published Pedigree Input Inconsistencies": published_inconsistencies,
+            "3rd-Degree Inferred Pedigree Input Inconsistencies": inferred_inconsistencies,
         }
 
     @staticmethod
