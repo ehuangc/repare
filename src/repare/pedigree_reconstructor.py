@@ -292,10 +292,30 @@ class PedigreeReconstructor:
             return row
 
         self._relation_data = self._relation_data.apply(fill_constraints, axis=1)
+        self._set_relation_processing_order()
 
-        self._first_degree_relations = self._relation_data[self._relation_data["degree"] == "1"].reset_index(drop=True)
-        self._second_degree_relations = self._relation_data[self._relation_data["degree"] == "2"].reset_index(drop=True)
-        self._third_degree_relations = self._relation_data[self._relation_data["degree"] == "3"].reset_index(drop=True)
+    def _set_relation_processing_order(self) -> None:
+        """
+        Sort relations within each degree so nodes with more kinship relations are processed first.
+        """
+        node_relation_counts = pd.concat([self._relation_data["id1"], self._relation_data["id2"]]).value_counts()
+
+        def prioritize(relations: pd.DataFrame) -> pd.DataFrame:
+            node1_counts = relations["id1"].map(node_relation_counts)
+            node2_counts = relations["id2"].map(node_relation_counts)
+            prioritized = relations.assign(
+                max_node_degree=pd.concat([node1_counts, node2_counts], axis=1).max(axis=1),
+                total_node_degree=node1_counts + node2_counts,
+            )
+            prioritized = prioritized.sort_values(
+                by=["max_node_degree", "total_node_degree"],
+                ascending=[False, False],
+            )
+            return prioritized.drop(columns=["max_node_degree", "total_node_degree"]).reset_index(drop=True)
+
+        self._first_degree_relations = prioritize(self._relation_data[self._relation_data["degree"] == "1"])
+        self._second_degree_relations = prioritize(self._relation_data[self._relation_data["degree"] == "2"])
+        self._third_degree_relations = prioritize(self._relation_data[self._relation_data["degree"] == "3"])
         self._first_and_second_degree_relations = pd.concat(
             [self._first_degree_relations, self._second_degree_relations]
         ).reset_index(drop=True)
