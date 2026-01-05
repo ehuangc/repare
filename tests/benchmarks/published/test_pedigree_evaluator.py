@@ -189,7 +189,7 @@ def test_get_metrics_reports_third_degree_inconsistencies(monkeypatch, tmp_path)
 
     metrics = evaluator.get_metrics()
 
-    assert metrics["Published Pedigree Third-Degree Inconsistencies"] == 3
-    assert metrics["Inferred Pedigree Third-Degree Inconsistencies"] == 1
+    assert metrics["3rd-Degree Published Pedigree Input Inconsistencies"] == 3
+    assert metrics["3rd-Degree Inferred Pedigree Input Inconsistencies"] == 1
     assert len(published_stub.count_third_degree_inconsistencies_calls) == 1
     assert len(evaluator.algorithm_pedigree.count_third_degree_inconsistencies_calls) == 1
