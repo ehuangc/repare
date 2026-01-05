@@ -7,7 +7,12 @@ from benchmarks.published.evaluator.pedigree_evaluator import PedigreeEvaluator
 
 
 class StubPedigree:
-    def __init__(self, relations: dict[tuple[str, str], dict[str, int]], inconsistency_count: int = 0):
+    def __init__(
+        self,
+        relations: dict[tuple[str, str], dict[str, int]],
+        inconsistency_count: int = 0,
+        third_degree_inconsistency_count: int = 0,
+    ):
         self._relations = {}
         nodes: set[str] = set()
         for pair, relation_counts in relations.items():
@@ -16,7 +21,9 @@ class StubPedigree:
             self._relations[key] = defaultdict(int, relation_counts)
         self.node_to_data = {node: {} for node in sorted(nodes)}
         self._inconsistency_count = inconsistency_count
+        self._third_degree_inconsistency_count = third_degree_inconsistency_count
         self.count_inconsistencies_calls: list[tuple[defaultdict, defaultdict, bool]] = []
+        self.count_third_degree_inconsistencies_calls: list[defaultdict] = []
 
     def get_relations_between_nodes(self, id1: str, id2: str, include_maternal_paternal: bool = True):
         return defaultdict(int, self._relations.get(tuple(sorted((id1, id2))), {}))
@@ -29,6 +36,10 @@ class StubPedigree:
     ):
         self.count_inconsistencies_calls.append((pair_to_constraints, pair_to_relations_so_far, check_half_siblings))
         return self._inconsistency_count, []
+
+    def count_third_degree_inconsistencies(self, pair_to_constraints):
+        self.count_third_degree_inconsistencies_calls.append(pair_to_constraints)
+        return self._third_degree_inconsistency_count
 
 
 def _write_csv(path: Path, header: list[str], rows: list[tuple[str, ...]]) -> None:
@@ -164,3 +175,21 @@ def test_count_input_relation_inconsistencies_reports_counts(monkeypatch, tmp_pa
     assert metrics["Inferred Pedigree Input Inconsistencies"] == 2
     assert published_stub.count_inconsistencies_calls[0][2] is True
     assert inferred_stub.count_inconsistencies_calls[0][2] is True
+
+
+def test_get_metrics_reports_third_degree_inconsistencies(monkeypatch, tmp_path):
+    relations = {("A", "B"): {"parent-child": 1}}
+    published_rows = [("A", "B", "1", "parent-child", "")]
+    algorithm_rows = [("A", "B", "1", "parent-child")]
+
+    evaluator = _instantiate_evaluator(tmp_path, monkeypatch, relations, published_rows, algorithm_rows)
+    published_stub = StubPedigree({}, third_degree_inconsistency_count=3)
+    evaluator._published_pedigree = published_stub
+    evaluator.algorithm_pedigree._third_degree_inconsistency_count = 1
+
+    metrics = evaluator.get_metrics()
+
+    assert metrics["Published Pedigree Third-Degree Inconsistencies"] == 3
+    assert metrics["Inferred Pedigree Third-Degree Inconsistencies"] == 1
+    assert len(published_stub.count_third_degree_inconsistencies_calls) == 1
+    assert len(evaluator.algorithm_pedigree.count_third_degree_inconsistencies_calls) == 1
