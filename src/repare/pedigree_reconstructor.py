@@ -317,13 +317,13 @@ class PedigreeReconstructor:
         Shuffle relation DataFrames (when we want to restart the algorithm).
         """
         self._first_degree_relations = self._first_degree_relations.sample(
-            frac=1, random_state=self._random_seed
+            frac=1, random_state=self._rng.randint(0, 1_000_000)
         ).reset_index(drop=True)
         self._second_degree_relations = self._second_degree_relations.sample(
-            frac=1, random_state=self._random_seed
+            frac=1, random_state=self._rng.randint(0, 1_000_000)
         ).reset_index(drop=True)
         self._third_degree_relations = self._third_degree_relations.sample(
-            frac=1, random_state=self._random_seed
+            frac=1, random_state=self._rng.randint(0, 1_000_000)
         ).reset_index(drop=True)
         self._first_and_second_degree_relations = pd.concat(
             [self._first_degree_relations, self._second_degree_relations]
