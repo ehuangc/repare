@@ -1,20 +1,7 @@
-import tempfile
-
 import matplotlib.pyplot as plt
 
 from evaluator.pedigree_evaluator import PedigreeEvaluator
 from repare.pedigree import Pedigree
-from repare.pedigree_reconstructor import PedigreeReconstructor
-
-
-def get_published_pedigree(nodes_path: str, relations_path: str) -> Pedigree:
-    # Write outputs other than the plot to a temporary directory
-    with tempfile.TemporaryDirectory() as temp_dir:
-        pedigree_reconstructor = PedigreeReconstructor(
-            relations_path, nodes_path, outputs_dir=temp_dir, max_candidate_pedigrees=1000, plot=False
-        )
-        published_pedigree = pedigree_reconstructor.find_best_pedigree()
-    return published_pedigree
 
 
 def get_mt_colormap(

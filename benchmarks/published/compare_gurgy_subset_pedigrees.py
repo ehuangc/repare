@@ -2,7 +2,6 @@ from pathlib import Path
 
 from evaluator.comparison_utils import (
     get_mt_colormap,
-    get_published_pedigree,
     plot_inferred_pedigree,
     plot_published_pedigree,
     write_relation_differences,
@@ -28,10 +27,7 @@ def main():
         outputs_dir=reconstructor_outputs_dir,
     )
     inferred_pedigree = evaluator.algorithm_pedigree
-    published_pedigree = get_published_pedigree(
-        nodes_path=data_dir / "nodes_subset.csv",
-        relations_path=data_dir / "published_exact_relations_subset.csv",
-    )
+    published_pedigree = evaluator.get_published_pedigree()
 
     mt_haplogroup_to_color = get_mt_colormap(inferred_pedigree, published_pedigree)
     plot_inferred_pedigree(

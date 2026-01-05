@@ -206,7 +206,7 @@ class PedigreeEvaluator:
         )
         return pedigree_reconstructor.find_best_pedigree()
 
-    def _get_published_pedigree(self) -> Pedigree:
+    def get_published_pedigree(self) -> Pedigree:
         if self._published_pedigree is None:
             with tempfile.TemporaryDirectory() as temp_dir:
                 self._published_pedigree = self._run_algorithm(
@@ -271,7 +271,7 @@ class PedigreeEvaluator:
         """
         Count how many input relations are inconsistent with the published pedigree and with the inferred pedigree.
         """
-        published_pedigree = self._get_published_pedigree()
+        published_pedigree = self.get_published_pedigree()
         published_inconsistencies, _ = published_pedigree.count_inconsistencies(
             self._input_pair_to_constraints, self._input_pair_to_relations, check_half_siblings=True
         )
