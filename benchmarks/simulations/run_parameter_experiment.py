@@ -37,7 +37,7 @@ def simulate(
 
 
 def run_experiment(script_dir: Path, p_mask_node: float, coverage_level: float, num_simulations: int = 100) -> None:
-    print(f"Running {num_simulations} simulations: p_mask_node={p_mask_node}, coverage_level={coverage_level}")
+    print(f"Running {num_simulations} simulations: p_mask_node={p_mask_node}, coverage_level={coverage_level}x")
 
     # Parallelize simulations across CPU cores
     seeds = list(range(num_simulations))

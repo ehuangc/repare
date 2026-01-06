@@ -53,7 +53,7 @@ def run_experiment(
         f"max_candidate_pedigrees={max_candidate_pedigrees}, "
         f"epsilon={epsilon}, "
         f"p_mask_node={p_mask_node}, "
-        f"coverage_level={coverage_level}"
+        f"coverage_level={coverage_level}x"
     )
 
     # Parallelize simulations across CPU cores
