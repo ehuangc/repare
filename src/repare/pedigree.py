@@ -271,20 +271,15 @@ class Pedigree:
                 mother2 = self.get_mother(name_to_discard)
                 if father1 and father2:
                     pair_queue.append((father1, father2))
-                elif father2:
-                    if father2 == name_to_keep:
-                        del self.node_to_father[name_to_keep]
-                    else:
-                        # Set name_to_keep's father to name_to_discard's father
-                        self.add_parent_relation(father2, name_to_keep)
+                elif father2 and father2 != name_to_keep:
+                    # Set name_to_keep's father to name_to_discard's father
+                    self.add_parent_relation(father2, name_to_keep)
+
                 if mother1 and mother2:
                     pair_queue.append((mother1, mother2))
-                elif mother2:
-                    if mother2 == name_to_keep:
-                        del self.node_to_mother[name_to_keep]
-                    else:
-                        # Set name_to_keep's mother to name_to_discard's mother
-                        self.add_parent_relation(mother2, name_to_keep)
+                elif mother2 and mother2 != name_to_keep:
+                    # Set name_to_keep's mother to name_to_discard's mother
+                    self.add_parent_relation(mother2, name_to_keep)
 
                 # Update any nodes in the queue whose names might have been changed
                 for idx, (node1, node2) in enumerate(pair_queue):
