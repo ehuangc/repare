@@ -737,8 +737,8 @@ class PedigreeReconstructor:
             original_parent = new_pedigree.get_mother(node2)
 
         if new_pedigree.check_valid_merge(node1, original_parent):
-            new_pedigree.merge_nodes(node1, original_parent)
-            ret.append(new_pedigree)
+            if new_pedigree.merge_nodes(node1, original_parent):
+                ret.append(new_pedigree)
         return ret
 
     @staticmethod
@@ -761,13 +761,13 @@ class PedigreeReconstructor:
         father1 = new_pedigree.get_father(node1)
         father2 = new_pedigree.get_father(node2)
         if new_pedigree.check_valid_merge(father1, father2):
-            new_pedigree.merge_nodes(father1, father2)
-            mother1 = new_pedigree.get_mother(node1)
-            mother2 = new_pedigree.get_mother(node2)
-            if new_pedigree.check_valid_merge(mother1, mother2):
-                new_pedigree.merge_nodes(mother1, mother2)
-                new_pedigree.add_sibling_relation(node1, node2)
-                ret.append(new_pedigree)
+            if new_pedigree.merge_nodes(father1, father2):
+                mother1 = new_pedigree.get_mother(node1)
+                mother2 = new_pedigree.get_mother(node2)
+                if new_pedigree.check_valid_merge(mother1, mother2):
+                    if new_pedigree.merge_nodes(mother1, mother2):
+                        new_pedigree.add_sibling_relation(node1, node2)
+                        ret.append(new_pedigree)
         return ret
 
     @staticmethod

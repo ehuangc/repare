@@ -212,11 +212,10 @@ class Pedigree:
                 self.node_to_siblings[node1].add(node2_sibling)
                 self.node_to_siblings[node2_sibling].add(node1)
 
-    def merge_nodes(self, node1: str, node2: str) -> None:
+    def merge_nodes(self, node1: str, node2: str) -> bool:
         """
         Merge the two nodes as if they were one person. Note this involves merging the nodes' ancestors.
-        When merging nodes, if one is named and one is a placeholder, keep the named one's name.
-        If both are placeholders (doesn't matter) or both are named (will be pruned), just keep any name.
+        Returns True if the merge was successful, False if it was invalid.
         """
         assert node1 in self.node_to_data and node2 in self.node_to_data
 
@@ -224,81 +223,104 @@ class Pedigree:
         pair_queue: deque[tuple[str, str]] = deque([(node1, node2)])
         while pair_queue:
             node1, node2 = pair_queue.popleft()
-            if node1 != node2:
-                name_to_keep = node1 if not node1.isnumeric() else node2
-                name_to_discard = node2 if name_to_keep == node1 else node1
+            if node1 == node2:
+                continue
 
-                # Update relations for relatives of the discarded node
-                name_to_discard_father = self.get_father(name_to_discard)
-                name_to_discard_mother = self.get_mother(name_to_discard)
-                if name_to_discard_father:
-                    assert self.get_children(name_to_discard_father)
-                    self.node_to_children[name_to_discard_father].remove(name_to_discard)
-                if name_to_discard_mother:
-                    assert self.get_children(name_to_discard_mother)
-                    self.node_to_children[name_to_discard_mother].remove(name_to_discard)
+            # Cannot merge two named nodes
+            if not node1.isnumeric() and not node2.isnumeric():
+                return False
 
-                name_to_discard_children = set()
-                for child in self.get_children(name_to_discard):
-                    # Merging a parent and child - we will see this when there is inbreeding
-                    # Note: can’t merge a parent and a child if the child has siblings,
-                    # because then the child becomes the parent of its siblings (this is
-                    # handled by check_invalid_parent_child_merge)
-                    if name_to_keep == child:
-                        if self.get_data(name_to_keep)["sex"] == "M":
-                            del self.node_to_father[name_to_keep]
-                        else:
-                            del self.node_to_mother[name_to_keep]
+            # Cannot merge nodes if it will create a node that is the parent and sibling of another
+            # For example, don't merge a parent and child if the child has siblings,
+            # and don't merge a node's sibling and child
+            combined_parents = set(
+                [
+                    self.get_father(node1),
+                    self.get_mother(node1),
+                    self.get_father(node2),
+                    self.get_mother(node2),
+                ]
+            )
+            combined_children = self.get_children(node1) | self.get_children(node2)
+            combined_siblings = self.get_siblings(node1) | self.get_siblings(node2)
+            if (combined_parents & combined_siblings) or (combined_children & combined_siblings):
+                return False
+
+            name_to_keep = node1 if not node1.isnumeric() else node2
+            name_to_discard = node2 if name_to_keep == node1 else node1
+
+            # Update relations for relatives of the discarded node
+            name_to_discard_father = self.get_father(name_to_discard)
+            name_to_discard_mother = self.get_mother(name_to_discard)
+            if name_to_discard_father:
+                assert self.get_children(name_to_discard_father)
+                self.node_to_children[name_to_discard_father].remove(name_to_discard)
+            if name_to_discard_mother:
+                assert self.get_children(name_to_discard_mother)
+                self.node_to_children[name_to_discard_mother].remove(name_to_discard)
+
+            name_to_discard_children = set()
+            for child in self.get_children(name_to_discard):
+                # Merging a parent and child - we will see this when there is inbreeding
+                # Note: can’t merge a parent and a child if the child has siblings,
+                # because then the child becomes the parent of its siblings (this is
+                # handled by check_invalid_parent_child_merge)
+                if name_to_keep == child:
+                    if self.get_data(name_to_keep)["sex"] == "M":
+                        del self.node_to_father[name_to_keep]
                     else:
-                        name_to_discard_children.add(child)
+                        del self.node_to_mother[name_to_keep]
+                else:
+                    name_to_discard_children.add(child)
 
-                for child in name_to_discard_children:
-                    # This step also handles having the correct name of the merged parents from last loop iteration
-                    self.add_parent_relation(name_to_keep, child)
+            for child in name_to_discard_children:
+                # This step also handles having the correct name of the merged parents from last loop iteration
+                self.add_parent_relation(name_to_keep, child)
 
-                # Remove all occurrences of name_to_discard in its sibling's sibling sets first
-                # so that add_sibling_relation does not add it back in.
-                for sibling in self.get_siblings(name_to_discard):
-                    self.node_to_siblings[sibling].remove(name_to_discard)
-                for sibling in self.get_siblings(name_to_discard):
-                    if sibling != name_to_keep:
-                        self.add_sibling_relation(sibling, name_to_keep)
+            # Remove all occurrences of name_to_discard in its sibling's sibling sets first
+            # so that add_sibling_relation does not add it back in.
+            for sibling in self.get_siblings(name_to_discard):
+                self.node_to_siblings[sibling].remove(name_to_discard)
+            for sibling in self.get_siblings(name_to_discard):
+                if sibling != name_to_keep:
+                    self.add_sibling_relation(sibling, name_to_keep)
 
-                # Recursively merge parent relations of Node 1 and Node 2
-                father1 = self.get_father(name_to_keep)
-                father2 = self.get_father(name_to_discard)
-                mother1 = self.get_mother(name_to_keep)
-                mother2 = self.get_mother(name_to_discard)
-                if father1 and father2:
-                    pair_queue.append((father1, father2))
-                elif father2 and father2 != name_to_keep:
-                    # Set name_to_keep's father to name_to_discard's father
-                    self.add_parent_relation(father2, name_to_keep)
+            # Recursively merge parent relations of Node 1 and Node 2
+            father1 = self.get_father(name_to_keep)
+            father2 = self.get_father(name_to_discard)
+            mother1 = self.get_mother(name_to_keep)
+            mother2 = self.get_mother(name_to_discard)
+            if father1 and father2:
+                pair_queue.append((father1, father2))
+            elif father2 and father2 != name_to_keep:
+                # Set name_to_keep's father to name_to_discard's father
+                self.add_parent_relation(father2, name_to_keep)
 
-                if mother1 and mother2:
-                    pair_queue.append((mother1, mother2))
-                elif mother2 and mother2 != name_to_keep:
-                    # Set name_to_keep's mother to name_to_discard's mother
-                    self.add_parent_relation(mother2, name_to_keep)
+            if mother1 and mother2:
+                pair_queue.append((mother1, mother2))
+            elif mother2 and mother2 != name_to_keep:
+                # Set name_to_keep's mother to name_to_discard's mother
+                self.add_parent_relation(mother2, name_to_keep)
 
-                # Update any nodes in the queue whose names might have been changed
-                for idx, (node1, node2) in enumerate(pair_queue):
-                    if node1 == name_to_discard and node2 == name_to_discard:
-                        pair_queue[idx] = (name_to_keep, name_to_keep)
-                    elif node1 == name_to_discard:
-                        pair_queue[idx] = (name_to_keep, node2)
-                    elif node2 == name_to_discard:
-                        pair_queue[idx] = (node1, name_to_keep)
+            # Update any nodes in the queue whose names might have been changed
+            for idx, (node1, node2) in enumerate(pair_queue):
+                if node1 == name_to_discard and node2 == name_to_discard:
+                    pair_queue[idx] = (name_to_keep, name_to_keep)
+                elif node1 == name_to_discard:
+                    pair_queue[idx] = (name_to_keep, node2)
+                elif node2 == name_to_discard:
+                    pair_queue[idx] = (node1, name_to_keep)
 
-                for data_dict in [
-                    self.node_to_data,
-                    self.node_to_father,
-                    self.node_to_mother,
-                    self.node_to_children,
-                    self.node_to_siblings,
-                ]:
-                    if name_to_discard in data_dict:
-                        del data_dict[name_to_discard]
+            for data_dict in [
+                self.node_to_data,
+                self.node_to_father,
+                self.node_to_mother,
+                self.node_to_children,
+                self.node_to_siblings,
+            ]:
+                if name_to_discard in data_dict:
+                    del data_dict[name_to_discard]
+        return True
 
     def check_valid_merge(self, node1: str, node2: str) -> bool:
         """
@@ -343,77 +365,9 @@ class Pedigree:
             if len(curr_mothers) > 1 and not curr_mothers.issubset(included_nodes):
                 merge_queue.append(curr_mothers)
 
-        if self.check_named_node_merge(merge_sets):
-            return False
-
-        if self.check_invalid_parent_child_merge(merge_sets):
-            return False
-
-        if self.check_invalid_sibling_child_merge(merge_sets):
-            return False
-
         if self.check_cycle_merge(merge_sets):
             return False
         return True
-
-    def check_named_node_merge(self, merge_sets: list[set[str]]) -> bool:
-        """
-        Returns True if merging Node 1 and Node 2 (and their ancestors) would result in
-        at least one named node being lost.
-        """
-        for nodes_to_merge in merge_sets:
-            named_nodes = [node for node in nodes_to_merge if not node.isnumeric()]
-            if len(named_nodes) > 1:
-                return True
-        return False
-
-    def check_invalid_parent_child_merge(self, merge_sets: list[set[str]]) -> bool:
-        """
-        Returns True if merging Node 1 and Node 2 (and their ancestors) would result in an invalid parent-child merge.
-        We can't merge a parent and a child where the child has siblings, because then the child becomes the parent
-        of its siblings which makes the pedigree internally inconsistent. merge_sets is a list of node sets that would
-        be merged if Node 1 and Node 2 were merged.
-        """
-        for nodes_to_merge in merge_sets:
-            for curr_node1 in nodes_to_merge:
-                for curr_node2 in nodes_to_merge:
-                    if curr_node1 == curr_node2:
-                        continue
-
-                    # If Node 1 is a parent of Node 2, and Node 2 has siblings, don't merge
-                    if self.get_father(curr_node2) == curr_node1 or self.get_mother(curr_node2) == curr_node1:
-                        if self.get_siblings(curr_node2):
-                            return True
-                    # If Node 2 is a parent of Node 1, and Node 1 has siblings, don't merge
-                    if self.get_father(curr_node1) == curr_node2 or self.get_mother(curr_node1) == curr_node2:
-                        if self.get_siblings(curr_node1):
-                            return True
-        return False
-
-    def check_invalid_sibling_child_merge(self, merge_sets: list[set[str]]) -> bool:
-        """
-        Returns True if merging Node 1 and Node 2 (and their ancestors) would result in an invalid sibling-child merge.
-        We can't merge a sibling and a child of a common node, because then the common node becomes parent and sibling
-        of the merged node which makes the pedigree internally inconsistent. merge_sets is a list of node sets that
-        would be merged if Node 1 and Node 2 were merged.
-        """
-        for nodes_to_merge in merge_sets:
-            for curr_node1 in nodes_to_merge:
-                for curr_node2 in nodes_to_merge:
-                    if curr_node1 == curr_node2:
-                        continue
-
-                    # A third node is both a parent of Node 1 and a sibling of Node 2
-                    if self.get_father(curr_node1) in self.get_siblings(curr_node2) or self.get_mother(
-                        curr_node1
-                    ) in self.get_siblings(curr_node2):
-                        return True
-                    # A third node is both a parent of Node 2 and a sibling of Node 1
-                    if self.get_father(curr_node2) in self.get_siblings(curr_node1) or self.get_mother(
-                        curr_node2
-                    ) in self.get_siblings(curr_node1):
-                        return True
-        return False
 
     def check_cycle_merge(self, merge_sets: list[set[str]]) -> bool:
         """
