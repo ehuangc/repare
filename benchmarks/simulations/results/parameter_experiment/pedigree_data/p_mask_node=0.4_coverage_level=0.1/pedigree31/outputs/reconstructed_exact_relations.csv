@@ -13,10 +13,8 @@ N11,N6,maternal grandchild-grandparent
 N12,N13,parent-child
 N14,N16,parent-child
 N14,N17,parent-child
-N16,N17,siblings
-N16,N5,maternal grandchild-grandparent
-N16,N8,maternal grandchild-grandparent
-N16,N9,child-parent
+N16,N17,paternal half-siblings
+N16,N9,maternal grandchild-grandparent
 N17,N5,maternal grandchild-grandparent
 N17,N8,maternal grandchild-grandparent
 N17,N9,child-parent

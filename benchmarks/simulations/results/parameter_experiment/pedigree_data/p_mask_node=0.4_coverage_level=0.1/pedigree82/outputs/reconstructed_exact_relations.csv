@@ -11,9 +11,9 @@ N0,N32,paternal grandparent-grandchild
 N0,N4,child-parent
 N0,N8,parent-child
 N0,N9,parent-child
-N1,N17,paternal grandparent-grandchild
-N1,N18,paternal grandparent-grandchild
-N1,N19,paternal grandparent-grandchild
+N1,N17,paternal aunt/uncle-nephew/niece
+N1,N18,paternal aunt/uncle-nephew/niece
+N1,N19,paternal aunt/uncle-nephew/niece
 N1,N21,paternal grandparent-grandchild
 N1,N22,paternal grandparent-grandchild
 N1,N32,paternal grandparent-grandchild

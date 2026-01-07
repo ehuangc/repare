@@ -23,6 +23,6 @@ N22,N5,paternal grandchild-grandparent
 N23,N24,parent-child
 N24,N9,maternal grandchild-grandparent
 N3,N4,parent-child
-N3,N5,paternal grandparent-grandchild
-N4,N5,paternal aunt/uncle-nephew/niece
+N3,N5,maternal grandparent-grandchild
+N4,N5,maternal aunt/uncle-nephew/niece
 N7,N9,paternal grandparent-grandchild

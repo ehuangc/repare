@@ -3,5 +3,5 @@ N16,N17,siblings
 N16,N19,maternal grandchild-grandparent
 N16,N2,maternal grandparent-grandchild
 N17,N19,maternal grandchild-grandparent
-N19,N2,paternal half-siblings
+N19,N2,paternal grandparent-grandchild
 N2,N9,parent-child

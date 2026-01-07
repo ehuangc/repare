@@ -30,10 +30,12 @@ N2,N24,maternal grandparent-grandchild
 N2,N26,paternal grandparent-grandchild
 N2,N27,paternal grandparent-grandchild
 N2,N28,paternal grandparent-grandchild
-N21,N39,maternal aunt/uncle-nephew/niece
+N21,N39,maternal grandparent-grandchild
 N21,N43,parent-child
-N24,N27,paternal grandchild-grandparent
-N24,N28,paternal grandchild-grandparent
+N24,N25,paternal grandchild-grandparent
+N24,N26,paternal nephew/niece-aunt/uncle
+N24,N27,paternal nephew/niece-aunt/uncle
+N24,N28,paternal nephew/niece-aunt/uncle
 N24,N45,paternal aunt/uncle-nephew/niece
 N24,N46,paternal aunt/uncle-nephew/niece
 N24,N47,paternal aunt/uncle-nephew/niece

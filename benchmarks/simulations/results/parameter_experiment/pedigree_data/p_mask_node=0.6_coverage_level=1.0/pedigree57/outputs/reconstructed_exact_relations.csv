@@ -1,5 +1,5 @@
 node1,node2,relation
-N0,N22,maternal grandchild-grandparent
+N0,N22,maternal grandparent-grandchild
 N10,N14,parent-child
 N10,N16,paternal grandparent-grandchild
 N10,N27,maternal grandparent-grandchild
@@ -31,4 +31,4 @@ N35,N38,siblings
 N36,N37,siblings
 N36,N38,siblings
 N37,N38,siblings
-N45,N9,paternal grandchild-grandparent
+N45,N9,paternal nephew/niece-aunt/uncle

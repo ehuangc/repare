@@ -2,4 +2,4 @@ node1,node2,relation
 N17,N18,parent-child
 N17,N19,parent-child
 N18,N19,siblings
-N20,N22,parent-child
+N20,N22,child-parent

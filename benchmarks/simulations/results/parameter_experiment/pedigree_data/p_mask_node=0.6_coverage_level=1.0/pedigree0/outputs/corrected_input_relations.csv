@@ -9,15 +9,15 @@ N11,N16,2,
 # Changed relations
 
 # Unchanged relations
-N1,N10,1,parent-child;child-parent
+N12,N13,1,siblings
 N11,N12,1,parent-child;child-parent
 N11,N13,1,parent-child;child-parent
-N12,N13,1,siblings
 N12,N16,1,parent-child;child-parent
+N1,N10,1,parent-child;child-parent
 N21,N23,1,parent-child;child-parent
 N12,N37,2,
-N13,N16,2,
 N13,N37,2,
+N13,N16,2,
 N23,N6,2,
 N27,N29,2,
 N1,N37,3,

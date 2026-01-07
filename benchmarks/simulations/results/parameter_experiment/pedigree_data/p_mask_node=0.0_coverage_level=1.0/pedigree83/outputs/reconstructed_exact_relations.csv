@@ -111,8 +111,8 @@ N21,N39,parent-child
 N21,N40,parent-child
 N21,N7,paternal grandchild-grandparent
 N21,N8,child-parent
-N22,N23,maternal aunt/uncle-nephew/niece
-N22,N24,maternal aunt/uncle-nephew/niece
+N22,N23,maternal half-siblings
+N22,N24,maternal half-siblings
 N23,N24,siblings
 N23,N7,paternal grandchild-grandparent
 N24,N7,paternal grandchild-grandparent

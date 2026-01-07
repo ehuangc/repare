@@ -12,10 +12,10 @@ N11,N13,maternal half-siblings
 N11,N2,child-parent
 N11,N9,child-parent
 N12,N13,siblings
-N12,N2,paternal half-siblings
+N12,N2,paternal nephew/niece-aunt/uncle
 N12,N28,maternal aunt/uncle-nephew/niece
 N12,N9,child-parent
-N13,N2,paternal half-siblings
+N13,N2,paternal nephew/niece-aunt/uncle
 N13,N28,parent-child
 N13,N9,child-parent
 N14,N15,parent-child

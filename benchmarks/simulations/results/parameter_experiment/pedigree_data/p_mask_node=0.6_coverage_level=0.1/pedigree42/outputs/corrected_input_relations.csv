@@ -10,23 +10,23 @@ id1,id2,degree,constraints
 N0,N4,2,
 
 # Unchanged relations
-N10,N11,1,parent-child;child-parent
-N10,N22,1,parent-child;child-parent
-N10,N23,1,parent-child;child-parent
-N11,N16,1,parent-child;child-parent
 N22,N23,1,siblings
-N3,N4,1,parent-child;child-parent
+N10,N23,1,parent-child;child-parent
+N10,N22,1,parent-child;child-parent
 N4,N9,1,parent-child;child-parent
-N10,N16,2,
-N11,N22,2,
+N10,N11,1,parent-child;child-parent
+N3,N4,1,parent-child;child-parent
+N11,N16,1,parent-child;child-parent
 N11,N23,2,
+N23,N4,2,
+N11,N22,2,
 N22,N4,2,
 N22,N9,2,
-N23,N4,2,
 N3,N9,2,
-N0,N11,3,
-N0,N9,3,
+N10,N16,2,
+N23,N9,3,
+N23,N3,3,
 N16,N23,3,
 N22,N3,3,
-N23,N3,3,
-N23,N9,3,
+N0,N11,3,
+N0,N9,3,

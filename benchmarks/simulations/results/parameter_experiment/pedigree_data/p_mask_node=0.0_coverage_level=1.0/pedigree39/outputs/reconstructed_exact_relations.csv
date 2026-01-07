@@ -256,7 +256,7 @@ N51,N53,parent-child
 N52,N53,siblings
 N52,N6,paternal grandchild-grandparent
 N53,N6,paternal grandchild-grandparent
-N54,N55,paternal aunt/uncle-nephew/niece
+N54,N55,paternal grandparent-grandchild
 N55,N9,maternal grandchild-grandparent
 N7,N8,parent-child
 N7,N9,parent-child

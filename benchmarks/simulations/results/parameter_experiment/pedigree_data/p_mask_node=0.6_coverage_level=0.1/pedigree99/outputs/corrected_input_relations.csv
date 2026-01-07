@@ -6,16 +6,16 @@ id1,id2,degree,constraints
 # Removed relations
 
 # Changed relations
-# N2,N9,1,parent-child;child-parent
-N2,N9,2,
+# N16,N9,1,parent-child;child-parent
+N16,N9,2,
 
 # Unchanged relations
-N12,N14,1,parent-child;child-parent
 N14,N18,1,parent-child;child-parent
-N16,N9,1,parent-child;child-parent
+N2,N9,1,parent-child;child-parent
+N12,N14,1,parent-child;child-parent
 N14,N9,2,
-N12,N18,3,
 N14,N2,3,
-N16,N2,3,
 N18,N2,3,
 N18,N9,3,
+N12,N18,3,
+N16,N2,3,

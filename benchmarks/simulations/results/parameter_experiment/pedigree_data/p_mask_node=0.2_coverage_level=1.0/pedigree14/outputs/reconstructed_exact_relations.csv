@@ -1,14 +1,14 @@
 node1,node2,relation
 N0,N14,maternal grandparent-grandchild
 N0,N15,maternal grandparent-grandchild
-N1,N14,maternal grandchild-grandparent
-N1,N15,maternal grandchild-grandparent
+N1,N14,paternal grandchild-grandparent
+N1,N15,paternal grandchild-grandparent
 N1,N17,maternal grandparent-grandchild
 N1,N20,paternal grandparent-grandchild
 N1,N21,paternal grandparent-grandchild
 N1,N23,maternal grandparent-grandchild
 N1,N24,maternal grandparent-grandchild
-N1,N35,paternal grandchild-grandparent
+N1,N35,maternal grandchild-grandparent
 N1,N5,parent-child
 N1,N6,parent-child
 N1,N7,parent-child
@@ -168,8 +168,8 @@ N53,N9,maternal grandchild-grandparent
 N54,N55,siblings
 N54,N9,maternal grandchild-grandparent
 N55,N9,maternal grandchild-grandparent
-N56,N58,parent-child
-N56,N59,parent-child
+N56,N58,paternal grandparent-grandchild
+N56,N59,paternal grandparent-grandchild
 N58,N59,siblings
 N58,N9,maternal grandchild-grandparent
 N59,N9,maternal grandchild-grandparent

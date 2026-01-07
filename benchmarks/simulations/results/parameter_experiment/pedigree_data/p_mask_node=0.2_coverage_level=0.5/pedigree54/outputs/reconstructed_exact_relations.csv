@@ -1,15 +1,14 @@
 node1,node2,relation
-N0,N10,maternal grandparent-grandchild
-N0,N11,maternal grandparent-grandchild
+N0,N10,paternal grandparent-grandchild
+N0,N11,paternal grandparent-grandchild
 N0,N13,paternal grandparent-grandchild
 N0,N14,paternal grandparent-grandchild
 N0,N15,paternal grandparent-grandchild
 N0,N4,parent-child
 N0,N5,parent-child
-N0,N6,parent-child
-N0,N7,parent-child
+N0,N6,paternal grandparent-grandchild
+N0,N7,paternal grandparent-grandchild
 N0,N9,parent-child
-N0,N9,maternal grandparent-grandchild
 N1,N10,maternal grandparent-grandchild
 N1,N11,maternal grandparent-grandchild
 N1,N6,parent-child
@@ -35,14 +34,12 @@ N14,N9,child-parent
 N15,N7,paternal grandchild-grandparent
 N15,N9,child-parent
 N4,N5,siblings
-N4,N6,paternal half-siblings
-N4,N7,paternal half-siblings
+N4,N6,paternal aunt/uncle-nephew/niece
+N4,N7,paternal aunt/uncle-nephew/niece
 N4,N9,paternal half-siblings
-N5,N6,paternal half-siblings
-N5,N7,paternal half-siblings
+N5,N6,paternal aunt/uncle-nephew/niece
+N5,N7,paternal aunt/uncle-nephew/niece
 N5,N9,paternal half-siblings
 N6,N7,siblings
 N6,N9,maternal aunt/uncle-nephew/niece
-N6,N9,paternal half-siblings
 N7,N9,parent-child
-N7,N9,paternal half-siblings

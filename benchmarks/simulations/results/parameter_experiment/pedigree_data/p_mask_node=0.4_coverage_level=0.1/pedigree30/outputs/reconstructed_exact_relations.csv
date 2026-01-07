@@ -6,12 +6,12 @@ N14,N15,siblings
 N14,N23,maternal half-siblings
 N14,N25,maternal half-siblings
 N14,N27,maternal aunt/uncle-nephew/niece
-N14,N6,paternal nephew/niece-aunt/uncle
+N14,N6,maternal aunt/uncle-nephew/niece
 N15,N23,maternal half-siblings
 N15,N25,maternal half-siblings
 N15,N27,parent-child
 N15,N3,maternal grandparent-grandchild
-N15,N6,paternal nephew/niece-aunt/uncle
+N15,N6,maternal aunt/uncle-nephew/niece
 N17,N3,paternal half-siblings
 N17,N32,maternal aunt/uncle-nephew/niece
 N17,N4,maternal grandchild-grandparent

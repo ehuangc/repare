@@ -11,6 +11,6 @@ N12,N16,paternal aunt/uncle-nephew/niece
 N12,N5,paternal grandchild-grandparent
 N12,N6,paternal nephew/niece-aunt/uncle
 N12,N9,child-parent
-N16,N23,maternal grandchild-grandparent
+N16,N23,maternal half-siblings
 N16,N9,paternal grandchild-grandparent
 N5,N6,parent-child

@@ -1,7 +1,7 @@
 node1,node2,relation
 N0,N18,paternal grandparent-grandchild
 N0,N5,parent-child
-N10,N11,child-parent
+N10,N11,parent-child
 N18,N25,paternal aunt/uncle-nephew/niece
 N18,N3,paternal grandchild-grandparent
 N18,N5,child-parent

@@ -30,8 +30,8 @@ N19,N45,maternal grandparent-grandchild
 N19,N47,paternal grandparent-grandchild
 N19,N48,paternal grandparent-grandchild
 N19,N49,paternal grandparent-grandchild
-N19,N53,maternal grandchild-grandparent
-N19,N56,paternal half-siblings
+N19,N53,paternal grandchild-grandparent
+N19,N56,paternal grandparent-grandchild
 N2,N9,parent-child
 N20,N21,siblings
 N20,N45,parent-child
@@ -40,7 +40,7 @@ N20,N48,paternal aunt/uncle-nephew/niece
 N20,N49,paternal aunt/uncle-nephew/niece
 N20,N5,maternal grandchild-grandparent
 N20,N51,paternal grandparent-grandchild
-N20,N56,maternal grandparent-grandchild
+N20,N56,paternal grandparent-grandchild
 N20,N6,maternal grandchild-grandparent
 N21,N45,maternal aunt/uncle-nephew/niece
 N21,N47,parent-child

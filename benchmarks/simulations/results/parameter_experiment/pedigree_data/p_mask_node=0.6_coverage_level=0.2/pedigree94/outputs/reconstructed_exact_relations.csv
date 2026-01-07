@@ -9,7 +9,7 @@ N11,N3,child-parent
 N11,N4,maternal half-siblings
 N11,N5,maternal half-siblings
 N17,N24,parent-child
-N17,N7,paternal half-siblings
+N17,N7,paternal grandparent-grandchild
 N19,N3,paternal grandchild-grandparent
 N19,N5,maternal grandchild-grandparent
 N3,N4,parent-child

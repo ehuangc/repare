@@ -7,12 +7,12 @@ N1,N21,maternal grandparent-grandchild
 N1,N4,parent-child
 N1,N6,parent-child
 N1,N7,parent-child
-N10,N11,parent-child
+N10,N11,paternal grandchild-grandparent
 N10,N14,paternal aunt/uncle-nephew/niece
 N10,N2,child-parent
 N10,N9,siblings
-N11,N2,maternal grandchild-grandparent
-N11,N9,maternal nephew/niece-aunt/uncle
+N11,N2,parent-child
+N11,N9,paternal grandparent-grandchild
 N14,N2,paternal grandchild-grandparent
 N14,N33,parent-child
 N14,N4,maternal nephew/niece-aunt/uncle

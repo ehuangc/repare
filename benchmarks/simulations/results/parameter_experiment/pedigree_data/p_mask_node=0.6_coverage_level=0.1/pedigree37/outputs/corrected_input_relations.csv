@@ -9,8 +9,8 @@ id1,id2,degree,constraints
 
 # Unchanged relations
 N5,N6,1,parent-child;child-parent
-N17,N3,2,
 N17,N6,2,
-N12,N2,3,
+N17,N3,2,
 N17,N2,3,
 N3,N6,3,
+N12,N2,3,

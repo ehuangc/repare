@@ -13,9 +13,9 @@ N16,N21,paternal aunt/uncle-nephew/niece
 N16,N23,parent-child
 N16,N24,maternal grandparent-grandchild
 N16,N3,maternal half-siblings
-N17,N2,paternal grandchild-grandparent
-N17,N24,child-parent
-N17,N27,maternal grandparent-grandchild
+N17,N2,paternal nephew/niece-aunt/uncle
+N17,N24,parent-child
+N17,N27,paternal grandparent-grandchild
 N17,N6,maternal grandparent-grandchild
 N22,N23,parent-child
 N24,N3,paternal grandparent-grandchild

@@ -32,7 +32,8 @@ N17,N29,paternal grandchild-grandparent
 N17,N31,maternal grandparent-grandchild
 N17,N33,maternal grandparent-grandchild
 N20,N21,parent-child
-N21,N34,paternal grandparent-grandchild
+N20,N34,paternal grandparent-grandchild
+N21,N34,parent-child
 N21,N7,paternal nephew/niece-aunt/uncle
 N23,N24,parent-child
 N23,N26,parent-child

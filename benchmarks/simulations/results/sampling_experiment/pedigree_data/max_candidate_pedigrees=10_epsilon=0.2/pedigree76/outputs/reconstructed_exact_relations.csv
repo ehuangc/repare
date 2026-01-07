@@ -6,9 +6,9 @@ N1,N7,parent-child
 N12,N18,maternal grandparent-grandchild
 N12,N19,maternal grandparent-grandchild
 N12,N21,parent-child
-N12,N26,maternal grandparent-grandchild
+N12,N26,maternal grandchild-grandparent
 N12,N4,paternal grandchild-grandparent
-N16,N25,maternal aunt/uncle-nephew/niece
+N16,N25,maternal half-siblings
 N16,N26,paternal grandparent-grandchild
 N16,N29,parent-child
 N16,N30,parent-child

@@ -7,7 +7,7 @@ N18,N28,parent-child
 N18,N3,paternal grandchild-grandparent
 N18,N5,paternal nephew/niece-aunt/uncle
 N18,N6,child-parent
-N2,N23,paternal nephew/niece-aunt/uncle
+N2,N23,paternal grandchild-grandparent
 N2,N28,maternal grandparent-grandchild
 N22,N3,maternal grandchild-grandparent
 N22,N5,child-parent
@@ -20,5 +20,5 @@ N28,N6,paternal grandchild-grandparent
 N3,N5,parent-child
 N3,N6,parent-child
 N5,N6,siblings
-N5,N8,paternal nephew/niece-aunt/uncle
-N6,N8,paternal nephew/niece-aunt/uncle
+N5,N8,paternal grandchild-grandparent
+N6,N8,paternal grandchild-grandparent

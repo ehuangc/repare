@@ -54,7 +54,7 @@ N17,N34,paternal aunt/uncle-nephew/niece
 N19,N2,paternal grandchild-grandparent
 N19,N33,paternal grandparent-grandchild
 N19,N34,paternal grandparent-grandchild
-N19,N8,paternal grandparent-grandchild
+N19,N8,maternal grandparent-grandchild
 N20,N21,parent-child
 N20,N22,parent-child
 N21,N22,siblings

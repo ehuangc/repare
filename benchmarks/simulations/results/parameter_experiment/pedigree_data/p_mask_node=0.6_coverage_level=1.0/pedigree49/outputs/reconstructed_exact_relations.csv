@@ -7,7 +7,7 @@ N15,N3,maternal nephew/niece-aunt/uncle
 N15,N4,maternal nephew/niece-aunt/uncle
 N15,N5,child-parent
 N17,N18,parent-child
-N18,N9,paternal nephew/niece-aunt/uncle
+N18,N9,paternal grandchild-grandparent
 N3,N4,siblings
 N3,N5,siblings
 N4,N5,siblings

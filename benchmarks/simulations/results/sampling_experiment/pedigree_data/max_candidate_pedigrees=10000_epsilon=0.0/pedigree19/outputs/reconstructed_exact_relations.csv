@@ -3,7 +3,7 @@ N0,N10,maternal grandparent-grandchild
 N0,N11,maternal grandparent-grandchild
 N0,N4,parent-child
 N0,N5,parent-child
-N1,N7,parent-child
+N1,N7,child-parent
 N10,N11,siblings
 N10,N15,maternal aunt/uncle-nephew/niece
 N10,N16,maternal aunt/uncle-nephew/niece

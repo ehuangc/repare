@@ -4,8 +4,8 @@ N15,N16,parent-child
 N16,N22,paternal grandchild-grandparent
 N20,N32,child-parent
 N20,N33,paternal nephew/niece-aunt/uncle
-N20,N35,paternal grandparent-grandchild
-N20,N50,maternal grandchild-grandparent
+N20,N35,maternal grandparent-grandchild
+N20,N50,maternal half-siblings
 N22,N23,siblings
 N22,N38,parent-child
 N22,N39,parent-child

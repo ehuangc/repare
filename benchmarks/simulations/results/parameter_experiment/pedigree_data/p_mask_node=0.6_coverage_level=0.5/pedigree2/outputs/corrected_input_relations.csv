@@ -10,11 +10,11 @@ id1,id2,degree,constraints
 # Unchanged relations
 N0,N6,1,parent-child;child-parent
 N1,N6,1,parent-child;child-parent
-N0,N10,2,
+N10,N27,2,
+N27,N6,2,
 N0,N27,2,
 N1,N27,2,
-N10,N27,2,
+N0,N10,2,
 N10,N3,2,
-N27,N6,2,
-N10,N6,3,
 N27,N3,3,
+N10,N6,3,

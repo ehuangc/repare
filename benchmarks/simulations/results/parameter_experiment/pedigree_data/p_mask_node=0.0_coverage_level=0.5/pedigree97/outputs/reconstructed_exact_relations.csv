@@ -23,9 +23,9 @@ N1,N20,maternal grandparent-grandchild
 N1,N3,parent-child
 N1,N4,parent-child
 N1,N5,parent-child
-N1,N6,maternal aunt/uncle-nephew/niece
-N1,N7,maternal aunt/uncle-nephew/niece
-N1,N8,maternal aunt/uncle-nephew/niece
+N1,N6,maternal grandparent-grandchild
+N1,N7,maternal grandparent-grandchild
+N1,N8,maternal grandparent-grandchild
 N10,N11,siblings
 N10,N13,paternal aunt/uncle-nephew/niece
 N10,N14,paternal aunt/uncle-nephew/niece

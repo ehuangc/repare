@@ -3,7 +3,7 @@ N0,N18,paternal grandparent-grandchild
 N0,N4,parent-child
 N0,N5,parent-child
 N0,N6,parent-child
-N1,N8,parent-child
+N1,N8,child-parent
 N10,N11,parent-child
 N10,N12,parent-child
 N10,N14,maternal grandparent-grandchild

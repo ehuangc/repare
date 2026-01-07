@@ -59,9 +59,9 @@ N18,N4,paternal nephew/niece-aunt/uncle
 N18,N6,paternal nephew/niece-aunt/uncle
 N20,N21,siblings
 N20,N39,paternal aunt/uncle-nephew/niece
-N20,N7,paternal nephew/niece-aunt/uncle
+N20,N7,paternal grandchild-grandparent
 N21,N39,parent-child
-N21,N7,paternal nephew/niece-aunt/uncle
+N21,N7,paternal grandchild-grandparent
 N22,N23,parent-child
 N22,N24,parent-child
 N23,N24,siblings

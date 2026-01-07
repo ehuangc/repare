@@ -119,10 +119,9 @@ N34,N4,maternal half-siblings
 N34,N5,maternal half-siblings
 N34,N6,maternal half-siblings
 N35,N36,parent-child
-N35,N55,paternal grandparent-grandchild
 N36,N46,maternal half-siblings
 N36,N47,maternal half-siblings
-N36,N55,paternal aunt/uncle-nephew/niece
+N36,N55,paternal grandparent-grandchild
 N38,N39,siblings
 N38,N4,paternal nephew/niece-aunt/uncle
 N38,N5,child-parent

@@ -58,12 +58,10 @@ N18,N36,parent-child
 N18,N4,paternal nephew/niece-aunt/uncle
 N18,N6,paternal nephew/niece-aunt/uncle
 N20,N21,siblings
-N20,N28,maternal half-siblings
 N20,N39,paternal aunt/uncle-nephew/niece
-N20,N7,paternal nephew/niece-aunt/uncle
-N21,N28,maternal half-siblings
+N20,N7,paternal aunt/uncle-nephew/niece
 N21,N39,parent-child
-N21,N7,paternal nephew/niece-aunt/uncle
+N21,N7,paternal aunt/uncle-nephew/niece
 N22,N23,parent-child
 N22,N24,parent-child
 N23,N24,siblings

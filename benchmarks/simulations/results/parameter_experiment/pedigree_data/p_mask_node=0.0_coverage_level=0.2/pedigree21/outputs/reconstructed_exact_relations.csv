@@ -40,8 +40,7 @@ N12,N21,parent-child
 N12,N22,parent-child
 N12,N23,parent-child
 N12,N24,paternal aunt/uncle-nephew/niece
-N12,N25,paternal aunt/uncle-nephew/niece
-N12,N26,paternal aunt/uncle-nephew/niece
+N12,N28,paternal aunt/uncle-nephew/niece
 N12,N29,maternal half-siblings
 N12,N3,paternal grandchild-grandparent
 N12,N30,maternal half-siblings
@@ -55,8 +54,9 @@ N13,N21,paternal aunt/uncle-nephew/niece
 N13,N22,paternal aunt/uncle-nephew/niece
 N13,N23,paternal aunt/uncle-nephew/niece
 N13,N24,parent-child
-N13,N25,parent-child
-N13,N26,parent-child
+N13,N25,paternal grandparent-grandchild
+N13,N26,paternal grandparent-grandchild
+N13,N28,paternal aunt/uncle-nephew/niece
 N13,N29,maternal half-siblings
 N13,N3,paternal grandchild-grandparent
 N13,N30,maternal half-siblings
@@ -69,9 +69,7 @@ N14,N21,paternal aunt/uncle-nephew/niece
 N14,N22,paternal aunt/uncle-nephew/niece
 N14,N23,paternal aunt/uncle-nephew/niece
 N14,N24,paternal aunt/uncle-nephew/niece
-N14,N25,paternal aunt/uncle-nephew/niece
-N14,N26,paternal aunt/uncle-nephew/niece
-N14,N28,paternal grandparent-grandchild
+N14,N28,parent-child
 N14,N29,maternal half-siblings
 N14,N3,paternal grandchild-grandparent
 N14,N30,maternal half-siblings
@@ -166,13 +164,12 @@ N23,N24,maternal half-siblings
 N23,N25,maternal half-siblings
 N23,N26,maternal half-siblings
 N23,N5,paternal grandchild-grandparent
-N24,N25,siblings
-N24,N26,siblings
+N24,N25,maternal half-siblings
+N24,N26,maternal half-siblings
 N24,N5,paternal grandchild-grandparent
 N25,N26,siblings
-N25,N5,paternal grandchild-grandparent
-N26,N5,paternal grandchild-grandparent
 N27,N28,parent-child
+N28,N5,paternal grandchild-grandparent
 N29,N30,siblings
 N29,N31,siblings
 N29,N6,paternal grandchild-grandparent

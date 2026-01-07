@@ -39,7 +39,7 @@ N18,N21,parent-child
 N20,N21,siblings
 N20,N4,paternal grandchild-grandparent
 N21,N4,paternal grandchild-grandparent
-N22,N24,paternal half-siblings
+N22,N24,paternal aunt/uncle-nephew/niece
 N24,N6,maternal grandchild-grandparent
 N26,N28,siblings
 N26,N7,maternal grandchild-grandparent

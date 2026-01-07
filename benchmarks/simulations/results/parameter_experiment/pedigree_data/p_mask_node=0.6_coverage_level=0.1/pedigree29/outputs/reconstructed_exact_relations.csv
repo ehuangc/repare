@@ -2,7 +2,7 @@ node1,node2,relation
 N1,N30,paternal grandparent-grandchild
 N1,N31,paternal grandparent-grandchild
 N1,N8,parent-child
-N12,N43,parent-child
+N12,N43,child-parent
 N23,N26,parent-child
 N23,N27,parent-child
 N26,N27,siblings
@@ -21,5 +21,5 @@ N30,N8,child-parent
 N31,N8,child-parent
 N5,N6,siblings
 N5,N8,paternal grandparent-grandchild
-N50,N56,paternal grandparent-grandchild
+N50,N56,paternal nephew/niece-aunt/uncle
 N51,N52,parent-child

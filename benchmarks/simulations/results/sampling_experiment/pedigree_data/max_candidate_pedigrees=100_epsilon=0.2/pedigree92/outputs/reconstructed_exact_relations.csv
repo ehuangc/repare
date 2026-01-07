@@ -2,7 +2,7 @@ node1,node2,relation
 N0,N15,paternal grandparent-grandchild
 N0,N4,parent-child
 N0,N5,parent-child
-N11,N19,maternal grandparent-grandchild
+N11,N19,maternal half-siblings
 N13,N15,maternal half-siblings
 N13,N21,maternal grandparent-grandchild
 N13,N22,maternal grandparent-grandchild

@@ -1,6 +1,6 @@
 node1,node2,relation
 N15,N16,parent-child
-N16,N22,maternal grandparent-grandchild
+N16,N22,paternal grandparent-grandchild
 N16,N7,maternal nephew/niece-aunt/uncle
 N16,N8,maternal nephew/niece-aunt/uncle
 N16,N9,child-parent

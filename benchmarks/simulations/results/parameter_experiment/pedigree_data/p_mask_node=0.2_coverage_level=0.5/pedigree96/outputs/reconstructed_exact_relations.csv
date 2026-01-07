@@ -34,7 +34,7 @@ N19,N4,paternal grandchild-grandparent
 N19,N5,maternal grandchild-grandparent
 N19,N8,paternal nephew/niece-aunt/uncle
 N19,N9,child-parent
-N3,N4,paternal grandchild-grandparent
+N3,N4,maternal grandchild-grandparent
 N3,N8,parent-child
 N3,N9,parent-child
 N4,N8,parent-child

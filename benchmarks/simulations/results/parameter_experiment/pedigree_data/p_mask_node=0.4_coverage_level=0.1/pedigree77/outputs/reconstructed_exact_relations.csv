@@ -1,15 +1,15 @@
 node1,node2,relation
 N10,N11,parent-child
-N10,N12,child-parent
-N10,N21,paternal half-siblings
-N10,N22,paternal half-siblings
-N10,N23,paternal grandchild-grandparent
-N11,N12,maternal grandchild-grandparent
+N10,N12,parent-child
+N10,N21,paternal grandparent-grandchild
+N10,N22,paternal grandparent-grandchild
+N10,N23,paternal grandparent-grandchild
+N11,N12,maternal half-siblings
 N11,N2,paternal grandchild-grandparent
 N12,N21,parent-child
 N12,N22,parent-child
-N12,N23,child-parent
-N12,N6,maternal grandchild-grandparent
+N12,N23,parent-child
+N12,N6,paternal grandchild-grandparent
 N14,N16,siblings
 N14,N2,paternal grandchild-grandparent
 N14,N25,parent-child
@@ -20,9 +20,9 @@ N16,N6,child-parent
 N2,N6,parent-child
 N2,N8,parent-child
 N2,N9,parent-child
-N21,N22,siblings
-N21,N23,paternal grandchild-grandparent
-N22,N23,paternal grandchild-grandparent
+N21,N22,paternal half-siblings
+N21,N23,siblings
+N22,N23,paternal half-siblings
 N24,N25,parent-child
 N25,N6,paternal grandchild-grandparent
 N6,N8,paternal half-siblings

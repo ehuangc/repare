@@ -5,16 +5,14 @@ N0,N6,parent-child
 N10,N9,siblings
 N11,N12,parent-child
 N12,N2,child-parent
-N16,N18,maternal aunt/uncle-nephew/niece
-N16,N19,maternal aunt/uncle-nephew/niece
+N16,N18,maternal grandparent-grandchild
+N16,N19,maternal grandparent-grandchild
 N16,N22,parent-child
 N16,N3,paternal half-siblings
 N16,N5,child-parent
 N17,N18,parent-child
 N17,N19,parent-child
 N18,N19,siblings
-N18,N5,maternal grandchild-grandparent
-N19,N5,maternal grandchild-grandparent
 N20,N22,parent-child
 N22,N5,maternal grandchild-grandparent
 N3,N5,maternal half-siblings

@@ -20,4 +20,4 @@ N21,N23,siblings
 N22,N23,siblings
 N24,N25,parent-child
 N25,N6,paternal grandchild-grandparent
-N6,N8,maternal grandparent-grandchild
+N6,N8,paternal nephew/niece-aunt/uncle

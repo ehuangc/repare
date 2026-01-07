@@ -6,7 +6,7 @@ N0,N8,parent-child
 N0,N9,parent-child
 N1,N13,maternal grandparent-grandchild
 N1,N7,parent-child
-N10,N20,maternal grandchild-grandparent
+N10,N20,paternal grandchild-grandparent
 N13,N7,child-parent
 N15,N16,parent-child
 N15,N23,maternal grandchild-grandparent

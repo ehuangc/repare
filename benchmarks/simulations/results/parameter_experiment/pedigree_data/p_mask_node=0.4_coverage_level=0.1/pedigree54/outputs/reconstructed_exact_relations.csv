@@ -9,7 +9,7 @@ N0,N7,parent-child
 N0,N9,child-parent
 N11,N6,maternal half-siblings
 N11,N7,child-parent
-N11,N9,paternal nephew/niece-aunt/uncle
+N11,N9,paternal grandchild-grandparent
 N12,N13,parent-child
 N12,N14,parent-child
 N12,N15,parent-child

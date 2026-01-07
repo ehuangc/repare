@@ -1,6 +1,6 @@
 node1,node2,relation
-N13,N16,paternal aunt/uncle-nephew/niece
-N13,N18,maternal half-siblings
+N13,N16,maternal grandchild-grandparent
+N13,N18,maternal aunt/uncle-nephew/niece
 N13,N4,paternal half-siblings
 N14,N15,parent-child
 N15,N16,maternal half-siblings

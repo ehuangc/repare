@@ -1,12 +1,12 @@
 node1,node2,relation
 N11,N9,child-parent
 N14,N15,parent-child
-N14,N16,child-parent
+N14,N16,parent-child
 N14,N24,maternal grandparent-grandchild
-N14,N27,paternal grandchild-grandparent
-N15,N16,paternal grandchild-grandparent
+N14,N27,paternal grandparent-grandchild
+N15,N16,paternal half-siblings
 N15,N24,parent-child
-N16,N27,child-parent
+N16,N27,parent-child
 N16,N4,maternal grandchild-grandparent
 N19,N20,siblings
 N19,N28,parent-child

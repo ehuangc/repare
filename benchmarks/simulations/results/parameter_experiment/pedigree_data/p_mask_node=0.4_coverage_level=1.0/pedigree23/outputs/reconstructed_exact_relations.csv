@@ -39,19 +39,16 @@ N17,N5,child-parent
 N18,N20,parent-child
 N18,N21,parent-child
 N18,N22,parent-child
-N18,N41,maternal grandparent-grandchild
 N18,N43,maternal grandparent-grandchild
 N2,N29,paternal grandparent-grandchild
 N20,N21,siblings
 N20,N22,siblings
-N20,N41,maternal aunt/uncle-nephew/niece
 N20,N43,maternal aunt/uncle-nephew/niece
 N20,N5,maternal grandchild-grandparent
 N21,N22,siblings
-N21,N41,maternal aunt/uncle-nephew/niece
+N21,N41,maternal grandparent-grandchild
 N21,N43,maternal aunt/uncle-nephew/niece
 N21,N5,maternal grandchild-grandparent
-N22,N41,maternal aunt/uncle-nephew/niece
 N22,N43,maternal aunt/uncle-nephew/niece
 N22,N5,maternal grandchild-grandparent
 N23,N24,siblings

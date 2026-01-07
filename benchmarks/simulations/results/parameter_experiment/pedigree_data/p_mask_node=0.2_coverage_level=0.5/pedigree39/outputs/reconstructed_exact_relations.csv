@@ -159,10 +159,10 @@ N34,N6,maternal half-siblings
 N34,N7,paternal grandchild-grandparent
 N35,N36,child-parent
 N35,N55,paternal aunt/uncle-nephew/niece
-N36,N46,paternal grandchild-grandparent
-N36,N47,maternal grandchild-grandparent
+N36,N46,maternal grandchild-grandparent
+N36,N47,paternal grandchild-grandparent
 N36,N55,paternal grandparent-grandchild
-N36,N7,maternal grandchild-grandparent
+N36,N7,paternal grandchild-grandparent
 N38,N39,siblings
 N38,N4,paternal nephew/niece-aunt/uncle
 N38,N5,child-parent

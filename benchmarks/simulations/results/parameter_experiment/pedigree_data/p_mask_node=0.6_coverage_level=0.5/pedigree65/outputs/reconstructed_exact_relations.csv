@@ -41,7 +41,7 @@ N19,N35,paternal grandchild-grandparent
 N23,N25,siblings
 N27,N29,siblings
 N30,N8,paternal grandchild-grandparent
-N35,N4,paternal grandchild-grandparent
+N35,N4,maternal grandchild-grandparent
 N36,N38,parent-child
 N38,N4,paternal grandchild-grandparent
 N4,N6,siblings

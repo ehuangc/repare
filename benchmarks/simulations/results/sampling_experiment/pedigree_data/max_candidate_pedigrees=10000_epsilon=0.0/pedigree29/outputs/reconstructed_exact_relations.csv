@@ -4,9 +4,9 @@ N1,N30,paternal half-siblings
 N1,N31,paternal half-siblings
 N1,N34,maternal aunt/uncle-nephew/niece
 N1,N8,child-parent
-N12,N37,maternal nephew/niece-aunt/uncle
-N12,N38,maternal grandparent-grandchild
-N12,N39,maternal grandparent-grandchild
+N12,N37,maternal half-siblings
+N12,N38,maternal aunt/uncle-nephew/niece
+N12,N39,maternal aunt/uncle-nephew/niece
 N12,N43,parent-child
 N22,N38,parent-child
 N22,N39,parent-child

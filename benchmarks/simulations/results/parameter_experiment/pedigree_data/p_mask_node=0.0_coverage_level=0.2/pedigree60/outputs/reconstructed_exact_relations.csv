@@ -154,7 +154,7 @@ N24,N25,siblings
 N24,N26,parent-child
 N24,N3,paternal grandchild-grandparent
 N24,N35,maternal aunt/uncle-nephew/niece
-N24,N36,parent-child
+N24,N36,paternal aunt/uncle-nephew/niece
 N24,N38,paternal aunt/uncle-nephew/niece
 N24,N39,paternal aunt/uncle-nephew/niece
 N24,N4,paternal nephew/niece-aunt/uncle
@@ -169,7 +169,6 @@ N25,N39,parent-child
 N25,N4,paternal nephew/niece-aunt/uncle
 N25,N5,paternal nephew/niece-aunt/uncle
 N25,N6,child-parent
-N26,N36,paternal half-siblings
 N26,N4,maternal grandchild-grandparent
 N26,N6,paternal grandchild-grandparent
 N27,N28,siblings

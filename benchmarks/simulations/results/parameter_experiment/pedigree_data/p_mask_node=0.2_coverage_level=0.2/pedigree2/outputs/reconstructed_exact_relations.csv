@@ -5,17 +5,17 @@ N0,N14,maternal grandparent-grandchild
 N0,N17,maternal grandparent-grandchild
 N0,N27,maternal grandparent-grandchild
 N0,N28,maternal grandparent-grandchild
-N0,N4,paternal grandchild-grandparent
+N0,N4,paternal grandparent-grandchild
 N0,N5,parent-child
 N0,N6,parent-child
 N0,N7,parent-child
-N0,N9,maternal grandchild-grandparent
 N1,N12,maternal grandparent-grandchild
 N1,N13,maternal grandparent-grandchild
 N1,N14,maternal grandparent-grandchild
 N1,N17,maternal grandparent-grandchild
 N1,N27,maternal grandparent-grandchild
 N1,N28,maternal grandparent-grandchild
+N1,N4,paternal grandparent-grandchild
 N1,N5,parent-child
 N1,N6,parent-child
 N1,N7,parent-child
@@ -26,13 +26,14 @@ N10,N19,parent-child
 N10,N21,paternal aunt/uncle-nephew/niece
 N10,N27,paternal aunt/uncle-nephew/niece
 N10,N28,paternal aunt/uncle-nephew/niece
-N10,N3,maternal half-siblings
+N10,N3,paternal half-siblings
 N10,N4,child-parent
 N10,N9,siblings
 N12,N13,siblings
 N12,N14,siblings
 N12,N27,maternal half-siblings
 N12,N28,maternal half-siblings
+N12,N3,paternal half-siblings
 N12,N4,child-parent
 N12,N5,child-parent
 N12,N6,maternal nephew/niece-aunt/uncle
@@ -41,7 +42,7 @@ N12,N9,paternal half-siblings
 N13,N14,siblings
 N13,N27,maternal half-siblings
 N13,N28,maternal half-siblings
-N13,N3,paternal grandparent-grandchild
+N13,N3,paternal half-siblings
 N13,N4,child-parent
 N13,N5,child-parent
 N13,N6,maternal nephew/niece-aunt/uncle
@@ -49,6 +50,7 @@ N13,N7,maternal nephew/niece-aunt/uncle
 N13,N9,paternal half-siblings
 N14,N27,maternal half-siblings
 N14,N28,maternal half-siblings
+N14,N3,paternal half-siblings
 N14,N4,child-parent
 N14,N5,child-parent
 N14,N6,maternal nephew/niece-aunt/uncle
@@ -74,8 +76,11 @@ N28,N5,child-parent
 N28,N6,maternal nephew/niece-aunt/uncle
 N28,N7,maternal nephew/niece-aunt/uncle
 N28,N9,child-parent
-N3,N4,paternal grandchild-grandparent
-N3,N9,maternal half-siblings
+N3,N4,child-parent
+N3,N9,paternal half-siblings
+N4,N5,paternal nephew/niece-aunt/uncle
+N4,N6,paternal nephew/niece-aunt/uncle
+N4,N7,paternal nephew/niece-aunt/uncle
 N4,N9,parent-child
 N5,N6,siblings
 N5,N7,siblings

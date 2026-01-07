@@ -1,5 +1,5 @@
 node1,node2,relation
-N0,N4,parent-child
+N0,N4,child-parent
 N10,N11,parent-child
 N10,N12,parent-child
 N10,N20,paternal grandparent-grandchild

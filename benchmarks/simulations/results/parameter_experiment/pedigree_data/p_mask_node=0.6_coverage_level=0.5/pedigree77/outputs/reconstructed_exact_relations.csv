@@ -8,11 +8,11 @@ N11,N12,siblings
 N11,N21,paternal aunt/uncle-nephew/niece
 N11,N22,paternal aunt/uncle-nephew/niece
 N11,N23,paternal aunt/uncle-nephew/niece
-N11,N6,paternal half-siblings
+N11,N6,paternal grandchild-grandparent
 N12,N21,parent-child
 N12,N22,parent-child
 N12,N23,parent-child
-N12,N6,paternal half-siblings
+N12,N6,paternal grandchild-grandparent
 N14,N25,parent-child
 N14,N6,child-parent
 N21,N22,siblings
@@ -20,4 +20,4 @@ N21,N23,siblings
 N22,N23,siblings
 N24,N25,parent-child
 N25,N6,paternal grandchild-grandparent
-N6,N8,maternal grandparent-grandchild
+N6,N8,paternal grandchild-grandparent

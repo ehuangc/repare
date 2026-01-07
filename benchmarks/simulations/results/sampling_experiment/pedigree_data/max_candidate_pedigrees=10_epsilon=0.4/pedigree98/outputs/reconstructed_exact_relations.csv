@@ -25,8 +25,8 @@ N20,N7,child-parent
 N22,N37,child-parent
 N22,N6,maternal half-siblings
 N22,N7,maternal half-siblings
-N26,N6,paternal nephew/niece-aunt/uncle
-N26,N7,paternal nephew/niece-aunt/uncle
+N26,N6,paternal half-siblings
+N26,N7,paternal half-siblings
 N28,N29,parent-child
 N28,N30,parent-child
 N29,N30,siblings

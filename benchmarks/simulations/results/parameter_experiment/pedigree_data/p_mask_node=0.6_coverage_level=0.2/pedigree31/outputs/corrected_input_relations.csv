@@ -11,21 +11,21 @@ N6,N9,2,
 N0,N3,1,
 
 # Unchanged relations
-N0,N5,1,parent-child;child-parent
-N0,N6,1,parent-child;child-parent
-N11,N6,1,parent-child;child-parent
-N14,N17,1,parent-child;child-parent
-N17,N9,1,parent-child;child-parent
 N3,N5,1,siblings
 N3,N6,1,siblings
 N5,N6,1,siblings
+N0,N5,1,parent-child;child-parent
+N0,N6,1,parent-child;child-parent
 N5,N9,1,parent-child;child-parent
-N0,N11,2,
-N0,N9,2,
-N11,N3,2,
-N11,N5,2,
+N11,N6,1,parent-child;child-parent
+N17,N9,1,parent-child;child-parent
+N14,N17,1,parent-child;child-parent
 N17,N5,2,
 N3,N9,2,
+N11,N3,2,
+N11,N5,2,
+N0,N9,2,
+N0,N11,2,
 N17,N3,3,
 N17,N6,3,
 N6,N9,3,

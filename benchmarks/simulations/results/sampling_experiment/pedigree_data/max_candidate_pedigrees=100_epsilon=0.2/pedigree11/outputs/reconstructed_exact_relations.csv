@@ -60,7 +60,7 @@ N20,N38,paternal aunt/uncle-nephew/niece
 N20,N4,paternal nephew/niece-aunt/uncle
 N20,N5,child-parent
 N21,N38,parent-child
-N21,N44,paternal grandparent-grandchild
+N21,N44,paternal aunt/uncle-nephew/niece
 N28,N29,parent-child
 N28,N30,parent-child
 N28,N33,parent-child

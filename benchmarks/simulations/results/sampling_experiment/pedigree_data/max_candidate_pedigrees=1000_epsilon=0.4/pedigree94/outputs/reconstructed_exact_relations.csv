@@ -22,7 +22,7 @@ N22,N3,paternal grandchild-grandparent
 N22,N5,paternal grandchild-grandparent
 N23,N24,parent-child
 N24,N9,maternal grandchild-grandparent
-N3,N4,maternal grandparent-grandchild
-N3,N5,maternal grandparent-grandchild
+N3,N4,maternal half-siblings
+N3,N5,maternal half-siblings
 N4,N5,siblings
-N7,N9,paternal aunt/uncle-nephew/niece
+N7,N9,paternal half-siblings

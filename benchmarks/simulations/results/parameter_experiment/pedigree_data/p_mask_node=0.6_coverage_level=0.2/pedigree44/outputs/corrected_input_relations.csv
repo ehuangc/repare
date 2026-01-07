@@ -8,29 +8,29 @@ id1,id2,degree,constraints
 # Changed relations
 
 # Unchanged relations
-N14,N15,1,parent-child;child-parent
-N14,N17,1,parent-child;child-parent
+N17,N8,1,parent-child;child-parent
 N15,N17,1,siblings
 N15,N8,1,parent-child;child-parent
 N17,N27,1,parent-child;child-parent
 N17,N28,1,parent-child;child-parent
-N17,N8,1,parent-child;child-parent
-N22,N23,1,parent-child;child-parent
+N14,N17,1,parent-child;child-parent
+N27,N28,1,siblings
+N14,N15,1,parent-child;child-parent
 N26,N27,1,parent-child;child-parent
 N26,N28,1,parent-child;child-parent
-N27,N28,1,siblings
 N4,N9,1,parent-child;child-parent
-N10,N23,2,
-N14,N27,2,
-N14,N28,2,
-N15,N27,2,
-N15,N28,2,
+N22,N23,1,parent-child;child-parent
 N27,N8,2,
 N28,N8,2,
-N4,N7,2,
 N8,N9,2,
-N15,N4,3,
+N15,N27,2,
+N15,N28,2,
+N14,N27,2,
+N14,N28,2,
+N4,N7,2,
+N10,N23,2,
+N4,N8,3,
 N17,N7,3,
 N17,N9,3,
-N4,N8,3,
 N7,N8,3,
+N15,N4,3,

@@ -52,8 +52,8 @@ N16,N9,maternal nephew/niece-aunt/uncle
 N17,N30,maternal aunt/uncle-nephew/niece
 N17,N8,maternal grandchild-grandparent
 N17,N9,maternal nephew/niece-aunt/uncle
-N19,N34,paternal grandparent-grandchild
-N19,N35,paternal grandparent-grandchild
+N19,N34,paternal half-siblings
+N19,N35,paternal half-siblings
 N23,N25,siblings
 N27,N28,siblings
 N27,N29,siblings

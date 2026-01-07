@@ -163,7 +163,6 @@ N3,N5,maternal grandparent-grandchild
 N3,N6,parent-child
 N30,N31,siblings
 N30,N4,child-parent
-N30,N5,maternal grandparent-grandchild
 N30,N6,paternal nephew/niece-aunt/uncle
 N30,N6,maternal grandchild-grandparent
 N31,N4,child-parent
@@ -180,6 +179,7 @@ N35,N5,child-parent
 N35,N6,maternal grandchild-grandparent
 N36,N5,child-parent
 N36,N6,maternal grandchild-grandparent
+N4,N5,maternal grandparent-grandchild
 N4,N5,paternal half-siblings
 N4,N6,siblings
 N4,N7,paternal half-siblings

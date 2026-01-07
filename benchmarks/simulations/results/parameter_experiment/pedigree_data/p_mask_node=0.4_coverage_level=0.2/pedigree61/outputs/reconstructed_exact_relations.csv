@@ -1,13 +1,13 @@
 node1,node2,relation
 N1,N7,parent-child
 N10,N13,siblings
-N10,N14,paternal aunt/uncle-nephew/niece
+N10,N14,maternal aunt/uncle-nephew/niece
 N10,N16,paternal aunt/uncle-nephew/niece
 N10,N17,paternal aunt/uncle-nephew/niece
 N10,N2,child-parent
 N10,N31,paternal aunt/uncle-nephew/niece
 N10,N9,siblings
-N13,N14,paternal aunt/uncle-nephew/niece
+N13,N14,maternal aunt/uncle-nephew/niece
 N13,N16,parent-child
 N13,N17,parent-child
 N13,N2,child-parent
@@ -16,13 +16,13 @@ N13,N31,parent-child
 N13,N9,siblings
 N14,N16,maternal grandparent-grandchild
 N14,N17,maternal grandparent-grandchild
-N14,N2,paternal grandchild-grandparent
+N14,N2,maternal grandchild-grandparent
 N14,N23,paternal grandparent-grandchild
 N14,N24,paternal grandparent-grandchild
 N14,N26,maternal grandparent-grandchild
-N14,N3,paternal grandparent-grandchild
+N14,N3,paternal nephew/niece-aunt/uncle
 N14,N5,parent-child
-N14,N9,paternal nephew/niece-aunt/uncle
+N14,N9,maternal nephew/niece-aunt/uncle
 N16,N17,siblings
 N16,N2,paternal grandchild-grandparent
 N16,N28,maternal aunt/uncle-nephew/niece

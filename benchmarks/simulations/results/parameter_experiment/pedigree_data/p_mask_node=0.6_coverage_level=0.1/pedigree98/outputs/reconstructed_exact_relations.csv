@@ -1,5 +1,5 @@
 node1,node2,relation
-N10,N11,paternal aunt/uncle-nephew/niece
+N10,N11,paternal grandparent-grandchild
 N11,N13,parent-child
 N11,N14,parent-child
 N11,N26,maternal grandparent-grandchild
@@ -14,4 +14,4 @@ N16,N29,parent-child
 N17,N29,paternal aunt/uncle-nephew/niece
 N20,N7,parent-child
 N26,N6,paternal nephew/niece-aunt/uncle
-N6,N7,paternal aunt/uncle-nephew/niece
+N6,N7,paternal half-siblings

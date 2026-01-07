@@ -21,7 +21,7 @@ N17,N3,maternal grandparent-grandchild
 N17,N4,maternal grandparent-grandchild
 N17,N8,child-parent
 N22,N23,parent-child
-N25,N8,paternal half-siblings
+N25,N8,paternal grandchild-grandparent
 N26,N27,parent-child
 N26,N28,parent-child
 N27,N28,siblings

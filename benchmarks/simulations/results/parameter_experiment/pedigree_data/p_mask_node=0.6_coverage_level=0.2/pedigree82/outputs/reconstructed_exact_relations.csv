@@ -12,7 +12,7 @@ N10,N12,parent-child
 N12,N4,child-parent
 N13,N14,parent-child
 N14,N4,paternal nephew/niece-aunt/uncle
-N19,N32,maternal grandparent-grandchild
+N19,N32,maternal half-siblings
 N19,N8,paternal nephew/niece-aunt/uncle
 N19,N9,paternal nephew/niece-aunt/uncle
 N21,N22,siblings

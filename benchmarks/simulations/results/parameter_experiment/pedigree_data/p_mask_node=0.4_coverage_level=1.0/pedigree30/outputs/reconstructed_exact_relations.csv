@@ -2,8 +2,8 @@ node1,node2,relation
 N10,N11,parent-child
 N10,N12,parent-child
 N11,N12,siblings
-N11,N9,paternal nephew/niece-aunt/uncle
-N12,N9,paternal nephew/niece-aunt/uncle
+N11,N9,paternal half-siblings
+N12,N9,paternal half-siblings
 N14,N15,siblings
 N14,N23,maternal half-siblings
 N14,N25,maternal half-siblings

@@ -17,11 +17,11 @@ N14,N9,maternal half-siblings
 N16,N17,siblings
 N16,N2,maternal grandchild-grandparent
 N16,N4,maternal grandchild-grandparent
-N17,N19,paternal grandparent-grandchild
+N17,N19,maternal grandparent-grandchild
 N17,N2,maternal grandchild-grandparent
 N17,N4,maternal grandchild-grandparent
-N19,N2,paternal grandchild-grandparent
-N19,N4,maternal grandchild-grandparent
+N19,N2,maternal grandchild-grandparent
+N19,N4,paternal grandchild-grandparent
 N2,N9,parent-child
 N3,N4,parent-child
 N5,N6,parent-child

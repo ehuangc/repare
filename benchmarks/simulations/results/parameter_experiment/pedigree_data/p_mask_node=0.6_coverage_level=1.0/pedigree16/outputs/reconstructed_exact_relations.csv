@@ -6,7 +6,7 @@ N11,N18,parent-child
 N11,N20,paternal grandparent-grandchild
 N11,N21,paternal grandparent-grandchild
 N11,N22,paternal grandparent-grandchild
-N11,N25,paternal grandchild-grandparent
+N11,N25,maternal grandchild-grandparent
 N13,N14,paternal half-siblings
 N13,N17,paternal half-siblings
 N13,N18,paternal half-siblings

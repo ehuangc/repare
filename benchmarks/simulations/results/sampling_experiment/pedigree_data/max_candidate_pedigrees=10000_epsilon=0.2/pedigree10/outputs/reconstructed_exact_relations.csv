@@ -9,8 +9,8 @@ N0,N19,paternal grandparent-grandchild
 N0,N20,paternal grandparent-grandchild
 N0,N4,parent-child
 N1,N12,maternal grandparent-grandchild
-N1,N15,maternal grandparent-grandchild
-N1,N16,maternal grandparent-grandchild
+N1,N15,maternal aunt/uncle-nephew/niece
+N1,N16,maternal aunt/uncle-nephew/niece
 N1,N6,parent-child
 N10,N11,siblings
 N10,N14,maternal aunt/uncle-nephew/niece

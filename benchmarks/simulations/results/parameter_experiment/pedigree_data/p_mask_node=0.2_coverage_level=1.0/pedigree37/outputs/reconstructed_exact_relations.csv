@@ -1,7 +1,7 @@
 node1,node2,relation
-N11,N12,parent-child
-N12,N2,maternal grandchild-grandparent
-N12,N8,maternal grandchild-grandparent
+N11,N12,child-parent
+N12,N2,maternal grandparent-grandchild
+N12,N8,paternal nephew/niece-aunt/uncle
 N14,N15,parent-child
 N14,N16,parent-child
 N14,N20,paternal grandparent-grandchild
@@ -11,18 +11,18 @@ N15,N16,siblings
 N15,N20,parent-child
 N15,N21,parent-child
 N15,N23,paternal aunt/uncle-nephew/niece
-N15,N24,maternal half-siblings
-N15,N3,maternal grandchild-grandparent
+N15,N24,maternal grandchild-grandparent
+N15,N3,maternal half-siblings
 N16,N20,paternal aunt/uncle-nephew/niece
 N16,N21,paternal aunt/uncle-nephew/niece
 N16,N23,parent-child
-N16,N24,maternal half-siblings
-N16,N3,maternal grandchild-grandparent
-N17,N2,maternal grandparent-grandchild
-N17,N24,parent-child
+N16,N24,maternal grandchild-grandparent
+N16,N3,maternal half-siblings
+N17,N2,paternal grandparent-grandchild
+N17,N24,child-parent
 N17,N25,paternal grandparent-grandchild
 N17,N27,paternal grandparent-grandchild
-N17,N3,paternal half-siblings
+N17,N3,paternal grandchild-grandparent
 N17,N6,maternal grandparent-grandchild
 N17,N7,maternal grandparent-grandchild
 N19,N20,parent-child
@@ -35,7 +35,7 @@ N20,N27,maternal half-siblings
 N21,N25,maternal half-siblings
 N21,N27,maternal half-siblings
 N22,N23,parent-child
-N24,N3,maternal grandchild-grandparent
+N24,N3,maternal grandparent-grandchild
 N25,N27,maternal half-siblings
 N3,N6,maternal grandparent-grandchild
 N3,N7,maternal grandparent-grandchild

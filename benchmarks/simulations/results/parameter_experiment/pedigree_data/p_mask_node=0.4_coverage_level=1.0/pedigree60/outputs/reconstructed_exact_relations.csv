@@ -1,7 +1,7 @@
 node1,node2,relation
 N0,N15,paternal grandparent-grandchild
 N0,N16,paternal grandparent-grandchild
-N0,N18,maternal grandparent-grandchild
+N0,N18,paternal grandparent-grandchild
 N0,N23,paternal grandparent-grandchild
 N0,N25,paternal grandparent-grandchild
 N0,N6,parent-child

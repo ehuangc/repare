@@ -59,11 +59,11 @@ N23,N3,maternal grandchild-grandparent
 N23,N4,maternal nephew/niece-aunt/uncle
 N24,N3,maternal grandchild-grandparent
 N24,N4,maternal nephew/niece-aunt/uncle
-N28,N50,maternal aunt/uncle-nephew/niece
-N28,N51,maternal aunt/uncle-nephew/niece
-N28,N52,maternal aunt/uncle-nephew/niece
+N28,N50,maternal half-siblings
+N28,N51,maternal half-siblings
+N28,N52,maternal half-siblings
 N28,N55,parent-child
-N28,N7,paternal grandparent-grandchild
+N28,N7,paternal grandchild-grandparent
 N29,N30,parent-child
 N3,N4,parent-child
 N31,N33,parent-child

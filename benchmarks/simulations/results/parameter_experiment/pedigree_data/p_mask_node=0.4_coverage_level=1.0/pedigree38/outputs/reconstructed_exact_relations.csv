@@ -32,5 +32,5 @@ N24,N5,maternal grandchild-grandparent
 N25,N27,parent-child
 N27,N5,paternal grandchild-grandparent
 N28,N7,paternal grandchild-grandparent
-N28,N9,maternal half-siblings
+N28,N9,maternal grandchild-grandparent
 N4,N5,siblings

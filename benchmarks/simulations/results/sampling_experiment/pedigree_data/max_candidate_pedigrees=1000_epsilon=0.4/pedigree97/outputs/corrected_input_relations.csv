@@ -9,20 +9,20 @@ N1,N20,2,
 # Changed relations
 
 # Unchanged relations
-N12,N13,1,parent-child;child-parent
-N12,N14,1,parent-child;child-parent
-N13,N14,1,siblings
-N18,N19,1,siblings
 N18,N20,1,siblings
 N19,N20,1,siblings
+N18,N19,1,siblings
+N12,N14,1,parent-child;child-parent
+N13,N14,1,siblings
+N12,N13,1,parent-child;child-parent
+N1,N6,2,
 N1,N18,2,
 N1,N19,2,
-N1,N6,2,
-N16,N6,2,
+N20,N6,2,
 N18,N6,2,
 N19,N6,2,
-N20,N6,2,
+N16,N6,2,
+N1,N20,3,
 N1,N14,3,
 N1,N16,3,
-N1,N20,3,
 N16,N20,3,

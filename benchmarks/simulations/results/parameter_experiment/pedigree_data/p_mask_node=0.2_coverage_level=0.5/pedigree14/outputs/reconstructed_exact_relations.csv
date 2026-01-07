@@ -122,7 +122,7 @@ N28,N58,parent-child
 N28,N59,parent-child
 N28,N8,maternal grandchild-grandparent
 N28,N9,child-parent
-N29,N31,parent-child
+N29,N31,child-parent
 N32,N33,parent-child
 N32,N34,parent-child
 N33,N34,siblings

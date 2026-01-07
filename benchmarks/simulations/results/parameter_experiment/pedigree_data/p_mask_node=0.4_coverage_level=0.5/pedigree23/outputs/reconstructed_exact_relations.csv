@@ -3,9 +3,7 @@ N0,N13,paternal grandparent-grandchild
 N0,N15,maternal grandparent-grandchild
 N0,N16,maternal grandparent-grandchild
 N0,N17,maternal grandparent-grandchild
-N0,N20,maternal grandparent-grandchild
-N0,N21,maternal grandparent-grandchild
-N0,N22,maternal grandparent-grandchild
+N0,N21,maternal grandchild-grandparent
 N0,N23,maternal grandparent-grandchild
 N0,N24,maternal grandparent-grandchild
 N0,N27,maternal grandparent-grandchild
@@ -15,25 +13,25 @@ N12,N13,maternal half-siblings
 N12,N2,child-parent
 N13,N2,child-parent
 N13,N29,parent-child
-N13,N5,paternal nephew/niece-aunt/uncle
+N13,N5,paternal grandchild-grandparent
 N15,N16,siblings
 N15,N17,siblings
 N15,N23,paternal aunt/uncle-nephew/niece
 N15,N24,paternal aunt/uncle-nephew/niece
-N15,N33,paternal half-siblings
+N15,N33,paternal nephew/niece-aunt/uncle
 N15,N36,maternal aunt/uncle-nephew/niece
 N15,N38,maternal aunt/uncle-nephew/niece
 N15,N5,child-parent
 N16,N17,siblings
 N16,N23,paternal aunt/uncle-nephew/niece
 N16,N24,paternal aunt/uncle-nephew/niece
-N16,N33,paternal half-siblings
+N16,N33,paternal nephew/niece-aunt/uncle
 N16,N36,parent-child
 N16,N38,maternal aunt/uncle-nephew/niece
 N16,N5,child-parent
 N17,N23,paternal aunt/uncle-nephew/niece
 N17,N24,paternal aunt/uncle-nephew/niece
-N17,N33,paternal half-siblings
+N17,N33,paternal nephew/niece-aunt/uncle
 N17,N36,maternal aunt/uncle-nephew/niece
 N17,N38,parent-child
 N17,N5,child-parent
@@ -47,14 +45,14 @@ N20,N21,siblings
 N20,N22,siblings
 N20,N41,maternal aunt/uncle-nephew/niece
 N20,N43,paternal aunt/uncle-nephew/niece
-N20,N5,maternal nephew/niece-aunt/uncle
+N20,N5,maternal half-siblings
 N21,N22,siblings
 N21,N41,maternal aunt/uncle-nephew/niece
 N21,N43,paternal aunt/uncle-nephew/niece
-N21,N5,maternal nephew/niece-aunt/uncle
+N21,N5,maternal half-siblings
 N22,N41,maternal aunt/uncle-nephew/niece
 N22,N43,parent-child
-N22,N5,maternal nephew/niece-aunt/uncle
+N22,N5,maternal half-siblings
 N23,N24,siblings
 N23,N27,maternal half-siblings
 N23,N5,paternal grandchild-grandparent

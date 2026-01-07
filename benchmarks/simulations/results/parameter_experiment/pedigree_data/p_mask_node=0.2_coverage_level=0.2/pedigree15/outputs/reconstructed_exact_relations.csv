@@ -8,7 +8,7 @@ N1,N7,parent-child
 N11,N12,parent-child
 N11,N23,paternal grandparent-grandchild
 N12,N23,parent-child
-N12,N8,paternal nephew/niece-aunt/uncle
+N12,N8,paternal half-siblings
 N13,N15,parent-child
 N13,N26,maternal grandparent-grandchild
 N13,N28,paternal grandparent-grandchild

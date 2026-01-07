@@ -6,10 +6,10 @@ N0,N8,parent-child
 N1,N13,maternal grandparent-grandchild
 N1,N7,parent-child
 N13,N7,child-parent
-N16,N23,paternal aunt/uncle-nephew/niece
+N16,N23,maternal aunt/uncle-nephew/niece
 N16,N8,child-parent
 N18,N20,parent-child
 N18,N21,parent-child
 N20,N21,siblings
-N23,N8,paternal grandchild-grandparent
+N23,N8,maternal grandchild-grandparent
 N7,N8,paternal half-siblings

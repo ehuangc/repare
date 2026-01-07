@@ -113,7 +113,7 @@ N28,N9,maternal nephew/niece-aunt/uncle
 N29,N30,parent-child
 N29,N31,parent-child
 N3,N37,maternal grandparent-grandchild
-N3,N4,paternal grandchild-grandparent
+N3,N4,maternal nephew/niece-aunt/uncle
 N3,N9,parent-child
 N30,N31,siblings
 N30,N6,paternal grandchild-grandparent

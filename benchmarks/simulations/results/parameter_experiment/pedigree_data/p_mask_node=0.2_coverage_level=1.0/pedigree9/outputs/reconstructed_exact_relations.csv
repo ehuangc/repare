@@ -11,23 +11,22 @@ N0,N7,parent-child
 N12,N13,siblings
 N12,N15,maternal half-siblings
 N12,N16,maternal half-siblings
-N12,N19,maternal half-siblings
+N12,N19,parent-child
 N12,N3,paternal grandchild-grandparent
 N12,N4,child-parent
 N12,N5,paternal nephew/niece-aunt/uncle
 N13,N15,maternal half-siblings
 N13,N16,maternal half-siblings
-N13,N19,maternal half-siblings
+N13,N19,paternal aunt/uncle-nephew/niece
 N13,N3,paternal grandchild-grandparent
 N13,N4,child-parent
 N13,N5,paternal nephew/niece-aunt/uncle
 N15,N16,siblings
-N15,N19,maternal half-siblings
 N15,N22,paternal aunt/uncle-nephew/niece
 N15,N23,paternal aunt/uncle-nephew/niece
 N15,N6,child-parent
 N15,N7,paternal nephew/niece-aunt/uncle
-N16,N19,maternal half-siblings
+N16,N19,maternal grandparent-grandchild
 N16,N22,paternal aunt/uncle-nephew/niece
 N16,N23,paternal aunt/uncle-nephew/niece
 N16,N6,child-parent

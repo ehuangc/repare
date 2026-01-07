@@ -61,18 +61,14 @@ N21,N39,maternal aunt/uncle-nephew/niece
 N21,N42,parent-child
 N21,N43,parent-child
 N23,N24,siblings
-N23,N25,paternal grandchild-grandparent
-N23,N26,paternal nephew/niece-aunt/uncle
-N23,N27,paternal nephew/niece-aunt/uncle
-N23,N28,paternal nephew/niece-aunt/uncle
+N23,N27,paternal grandchild-grandparent
+N23,N28,paternal grandchild-grandparent
 N23,N45,parent-child
 N23,N46,parent-child
 N23,N47,parent-child
 N23,N48,parent-child
-N24,N25,paternal grandchild-grandparent
-N24,N26,paternal nephew/niece-aunt/uncle
-N24,N27,paternal nephew/niece-aunt/uncle
-N24,N28,paternal nephew/niece-aunt/uncle
+N24,N27,paternal grandchild-grandparent
+N24,N28,paternal grandchild-grandparent
 N24,N45,paternal aunt/uncle-nephew/niece
 N24,N46,paternal aunt/uncle-nephew/niece
 N24,N47,paternal aunt/uncle-nephew/niece

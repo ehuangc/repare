@@ -10,14 +10,14 @@ id1,id2,degree,constraints
 N12,N16,2,
 
 # Unchanged relations
-N1,N10,1,parent-child;child-parent
+N12,N13,1,siblings
 N11,N12,1,parent-child;child-parent
 N11,N13,1,parent-child;child-parent
-N12,N13,1,siblings
+N1,N10,1,parent-child;child-parent
 N21,N23,1,parent-child;child-parent
 N23,N6,2,
-N1,N37,3,
 N12,N37,3,
-N13,N16,3,
 N13,N37,3,
+N13,N16,3,
+N1,N37,3,
 N27,N29,3,

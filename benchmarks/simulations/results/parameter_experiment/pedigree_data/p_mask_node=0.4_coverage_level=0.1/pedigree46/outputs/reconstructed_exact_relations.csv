@@ -1,6 +1,6 @@
 node1,node2,relation
 N10,N12,parent-child
-N12,N22,maternal grandparent-grandchild
+N12,N22,paternal grandparent-grandchild
 N12,N5,paternal grandchild-grandparent
 N12,N7,paternal grandchild-grandparent
 N15,N34,paternal grandchild-grandparent

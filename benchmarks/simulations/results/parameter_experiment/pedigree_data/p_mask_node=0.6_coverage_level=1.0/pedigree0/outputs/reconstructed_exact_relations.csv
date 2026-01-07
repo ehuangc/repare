@@ -5,9 +5,9 @@ N11,N13,parent-child
 N11,N16,paternal grandparent-grandchild
 N12,N13,siblings
 N12,N16,parent-child
-N12,N37,maternal half-siblings
+N12,N37,maternal nephew/niece-aunt/uncle
 N13,N16,paternal aunt/uncle-nephew/niece
-N13,N37,maternal half-siblings
+N13,N37,maternal nephew/niece-aunt/uncle
 N21,N23,parent-child
-N23,N6,maternal half-siblings
-N27,N29,paternal aunt/uncle-nephew/niece
+N23,N6,maternal nephew/niece-aunt/uncle
+N27,N29,paternal nephew/niece-aunt/uncle

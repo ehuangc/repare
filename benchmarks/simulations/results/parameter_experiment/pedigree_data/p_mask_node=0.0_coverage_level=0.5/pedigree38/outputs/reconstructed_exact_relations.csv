@@ -8,17 +8,18 @@ N1,N19,paternal grandparent-grandchild
 N1,N20,paternal grandparent-grandchild
 N1,N7,parent-child
 N1,N8,parent-child
+N10,N11,maternal grandparent-grandchild
 N10,N11,paternal half-siblings
 N10,N12,parent-child
 N10,N13,parent-child
 N10,N2,child-parent
 N10,N22,maternal grandparent-grandchild
 N10,N28,maternal grandparent-grandchild
-N10,N9,maternal half-siblings
-N11,N12,maternal half-siblings
-N11,N13,maternal half-siblings
+N10,N9,maternal nephew/niece-aunt/uncle
+N11,N12,maternal nephew/niece-aunt/uncle
+N11,N13,maternal nephew/niece-aunt/uncle
 N11,N2,child-parent
-N11,N9,child-parent
+N11,N9,maternal grandchild-grandparent
 N12,N13,siblings
 N12,N2,paternal grandchild-grandparent
 N12,N22,maternal aunt/uncle-nephew/niece

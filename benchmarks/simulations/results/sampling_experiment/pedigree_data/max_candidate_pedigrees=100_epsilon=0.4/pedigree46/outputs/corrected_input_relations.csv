@@ -1,71 +1,69 @@
 id1,id2,degree,constraints
-# Final inconsistency count: 5
+# Final inconsistency count: 3
 # Note: 3rd-degree relations are not explicitly reconstructed and will not appear as modified here
 # Added relations
-N12,N6,2,
-N12,N8,2,
 N29,N6,2,
 
 # Removed relations
 
 # Changed relations
-# N18,N9,1,parent-child;child-parent
-N18,N9,2,
-N18,N9,2,
+# N12,N5,1,parent-child;child-parent
+N12,N5,2,
+# N18,N5,1,parent-child;child-parent
+N18,N5,2,
 
 # Unchanged relations
-N10,N12,1,parent-child;child-parent
-N12,N5,1,parent-child;child-parent
-N18,N5,1,parent-child;child-parent
-N28,N29,1,siblings
-N28,N30,1,siblings
-N29,N30,1,siblings
-N32,N34,1,siblings
+N5,N8,1,siblings
+N6,N8,1,siblings
+N7,N8,1,siblings
+N8,N9,1,siblings
 N5,N6,1,siblings
 N5,N7,1,siblings
-N5,N8,1,siblings
 N5,N9,1,siblings
 N6,N7,1,siblings
-N6,N8,1,siblings
 N6,N9,1,siblings
-N7,N8,1,siblings
 N7,N9,1,siblings
-N8,N9,1,siblings
-N10,N22,2,
-N12,N18,2,
-N12,N22,2,
+N18,N9,1,parent-child;child-parent
+N10,N12,1,parent-child;child-parent
+N28,N30,1,siblings
+N28,N29,1,siblings
+N32,N34,1,siblings
+N29,N30,1,siblings
+N18,N8,2,
 N12,N7,2,
 N12,N9,2,
-N15,N32,2,
-N15,N34,2,
-N18,N39,2,
-N18,N6,2,
-N18,N7,2,
-N18,N8,2,
-N22,N5,2,
-N28,N6,2,
-N30,N6,2,
-N32,N39,2,
-N32,N7,2,
-N34,N7,2,
 N39,N5,2,
 N39,N9,2,
-N12,N39,3,
-N12,N6,3,
+N18,N6,2,
+N18,N7,2,
+N22,N5,2,
+N28,N6,2,
+N34,N7,2,
+N30,N6,2,
+N32,N7,2,
+N12,N18,2,
+N18,N39,2,
+N12,N22,2,
+N32,N39,2,
+N10,N22,2,
+N15,N34,2,
+N15,N32,2,
 N12,N8,3,
-N18,N22,3,
+N39,N8,3,
 N22,N8,3,
-N22,N9,3,
-N28,N5,3,
 N28,N8,3,
-N28,N9,3,
-N29,N6,3,
-N29,N8,3,
-N30,N5,3,
-N30,N7,3,
-N34,N39,3,
 N34,N8,3,
-N34,N9,3,
+N29,N8,3,
+N12,N6,3,
 N39,N6,3,
 N39,N7,3,
-N39,N8,3,
+N22,N9,3,
+N28,N5,3,
+N28,N9,3,
+N34,N9,3,
+N30,N5,3,
+N30,N7,3,
+N29,N6,3,
+N12,N39,3,
+N34,N39,3,
+N18,N22,3,

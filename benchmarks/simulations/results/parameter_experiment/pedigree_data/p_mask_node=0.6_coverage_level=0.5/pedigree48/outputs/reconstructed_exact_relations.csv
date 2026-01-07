@@ -1,8 +1,8 @@
 node1,node2,relation
-N1,N30,maternal grandparent-grandchild
-N1,N33,maternal grandchild-grandparent
-N1,N35,maternal grandparent-grandchild
-N1,N36,maternal grandparent-grandchild
+N1,N30,maternal half-siblings
+N1,N33,paternal half-siblings
+N1,N35,maternal half-siblings
+N1,N36,maternal half-siblings
 N11,N12,siblings
 N11,N23,parent-child
 N11,N24,parent-child
@@ -18,7 +18,7 @@ N12,N28,parent-child
 N12,N35,paternal half-siblings
 N12,N36,paternal half-siblings
 N12,N4,paternal grandchild-grandparent
-N2,N8,child-parent
+N2,N8,parent-child
 N21,N23,parent-child
 N21,N24,parent-child
 N23,N24,siblings
@@ -31,4 +31,4 @@ N30,N4,child-parent
 N35,N36,siblings
 N35,N4,paternal grandchild-grandparent
 N36,N4,paternal grandchild-grandparent
-N4,N8,maternal grandparent-grandchild
+N4,N8,paternal grandparent-grandchild

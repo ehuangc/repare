@@ -66,7 +66,7 @@ N20,N6,maternal nephew/niece-aunt/uncle
 N20,N7,child-parent
 N20,N8,paternal nephew/niece-aunt/uncle
 N20,N9,child-parent
-N3,N4,maternal half-siblings
+N3,N4,maternal aunt/uncle-nephew/niece
 N3,N8,parent-child
 N3,N9,parent-child
 N4,N8,parent-child

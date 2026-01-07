@@ -4,7 +4,7 @@ N1,N19,paternal half-siblings
 N1,N20,paternal half-siblings
 N1,N7,child-parent
 N11,N9,child-parent
-N14,N15,maternal grandparent-grandchild
+N14,N15,paternal grandchild-grandparent
 N14,N16,parent-child
 N14,N27,paternal grandparent-grandchild
 N15,N16,maternal grandparent-grandchild

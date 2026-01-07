@@ -2,47 +2,47 @@ node1,node2,relation
 N1,N9,parent-child
 N10,N11,siblings
 N10,N19,parent-child
-N10,N21,paternal aunt/uncle-nephew/niece
 N10,N22,paternal aunt/uncle-nephew/niece
-N10,N3,parent-child
-N10,N4,maternal grandparent-grandchild
-N10,N5,parent-child
-N10,N6,maternal grandparent-grandchild
+N10,N3,child-parent
+N10,N4,maternal half-siblings
+N10,N5,child-parent
+N10,N6,maternal half-siblings
 N11,N19,paternal aunt/uncle-nephew/niece
-N11,N21,parent-child
+N11,N21,paternal grandparent-grandchild
 N11,N22,parent-child
-N11,N3,paternal aunt/uncle-nephew/niece
-N11,N5,paternal aunt/uncle-nephew/niece
+N11,N3,child-parent
+N11,N4,maternal half-siblings
+N11,N5,child-parent
+N11,N6,maternal half-siblings
 N12,N13,parent-child
 N12,N14,parent-child
-N13,N14,siblings
+N13,N14,paternal half-siblings
 N13,N3,maternal grandchild-grandparent
 N13,N4,maternal nephew/niece-aunt/uncle
-N13,N5,maternal half-siblings
+N13,N5,maternal grandparent-grandchild
 N13,N6,child-parent
-N14,N3,maternal grandchild-grandparent
-N14,N4,maternal nephew/niece-aunt/uncle
-N14,N5,maternal half-siblings
-N14,N6,child-parent
+N14,N4,maternal grandchild-grandparent
+N14,N5,maternal grandchild-grandparent
 N15,N17,paternal grandchild-grandparent
 N15,N24,paternal nephew/niece-aunt/uncle
 N15,N25,paternal nephew/niece-aunt/uncle
 N17,N24,parent-child
 N17,N25,parent-child
 N17,N9,paternal grandchild-grandparent
-N19,N3,paternal half-siblings
-N19,N5,paternal half-siblings
+N19,N3,paternal grandchild-grandparent
+N19,N5,paternal grandchild-grandparent
 N20,N21,parent-child
 N20,N22,parent-child
-N21,N22,siblings
-N23,N24,paternal grandparent-grandchild
-N23,N25,paternal grandparent-grandchild
+N21,N22,maternal half-siblings
+N22,N3,paternal grandchild-grandparent
+N22,N5,paternal grandchild-grandparent
+N23,N24,paternal aunt/uncle-nephew/niece
+N23,N25,paternal aunt/uncle-nephew/niece
 N24,N25,siblings
 N3,N4,parent-child
 N3,N5,maternal grandparent-grandchild
-N3,N5,paternal half-siblings
 N3,N6,parent-child
-N4,N5,maternal aunt/uncle-nephew/niece
+N4,N5,paternal half-siblings
 N4,N6,siblings
-N5,N6,child-parent
+N5,N6,paternal half-siblings
 N7,N9,parent-child

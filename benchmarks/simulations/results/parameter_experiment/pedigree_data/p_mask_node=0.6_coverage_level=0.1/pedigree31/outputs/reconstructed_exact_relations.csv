@@ -11,4 +11,4 @@ N17,N9,child-parent
 N3,N5,siblings
 N3,N6,siblings
 N5,N6,siblings
-N5,N9,maternal grandparent-grandchild
+N5,N9,paternal grandparent-grandchild

@@ -37,8 +37,8 @@ N18,N36,parent-child
 N18,N4,paternal nephew/niece-aunt/uncle
 N18,N6,paternal nephew/niece-aunt/uncle
 N20,N28,maternal aunt/uncle-nephew/niece
-N20,N39,paternal nephew/niece-aunt/uncle
-N20,N7,maternal grandchild-grandparent
+N20,N39,maternal grandchild-grandparent
+N20,N7,paternal nephew/niece-aunt/uncle
 N22,N24,parent-child
 N24,N7,paternal grandchild-grandparent
 N26,N4,maternal grandchild-grandparent

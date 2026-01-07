@@ -9,7 +9,7 @@ N16,N3,maternal grandchild-grandparent
 N16,N4,maternal grandchild-grandparent
 N16,N8,child-parent
 N16,N9,maternal nephew/niece-aunt/uncle
-N3,N4,maternal half-siblings
+N3,N4,maternal grandchild-grandparent
 N3,N8,parent-child
 N3,N9,parent-child
 N4,N8,parent-child

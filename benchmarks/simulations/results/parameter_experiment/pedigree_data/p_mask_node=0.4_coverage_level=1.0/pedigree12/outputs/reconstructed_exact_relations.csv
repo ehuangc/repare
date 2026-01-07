@@ -12,16 +12,16 @@ N11,N13,paternal aunt/uncle-nephew/niece
 N12,N13,siblings
 N12,N28,paternal aunt/uncle-nephew/niece
 N13,N28,paternal aunt/uncle-nephew/niece
-N16,N17,parent-child
-N16,N31,maternal grandparent-grandchild
-N17,N30,paternal grandparent-grandchild
-N17,N31,maternal grandparent-grandchild
+N16,N17,maternal grandchild-grandparent
+N16,N31,paternal grandchild-grandparent
+N17,N30,maternal nephew/niece-aunt/uncle
+N17,N31,maternal nephew/niece-aunt/uncle
 N17,N4,child-parent
 N19,N32,parent-child
 N19,N35,maternal grandparent-grandchild
 N23,N38,parent-child
-N30,N31,paternal grandparent-grandchild
-N30,N4,maternal grandchild-grandparent
+N30,N31,siblings
+N30,N4,maternal grandparent-grandchild
 N32,N6,paternal grandchild-grandparent
 N34,N35,parent-child
 N35,N6,maternal grandchild-grandparent

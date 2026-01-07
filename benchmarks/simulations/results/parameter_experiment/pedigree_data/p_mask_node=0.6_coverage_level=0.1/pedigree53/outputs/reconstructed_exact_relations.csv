@@ -6,7 +6,7 @@ N18,N26,parent-child
 N18,N28,parent-child
 N18,N3,paternal grandchild-grandparent
 N18,N6,paternal grandchild-grandparent
-N2,N23,paternal nephew/niece-aunt/uncle
+N2,N23,maternal aunt/uncle-nephew/niece
 N2,N28,maternal half-siblings
 N22,N3,maternal grandchild-grandparent
 N22,N5,child-parent

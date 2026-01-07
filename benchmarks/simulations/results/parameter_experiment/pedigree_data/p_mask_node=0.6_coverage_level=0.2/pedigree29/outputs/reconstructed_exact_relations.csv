@@ -1,9 +1,9 @@
 node1,node2,relation
-N1,N28,maternal grandparent-grandchild
+N1,N28,maternal aunt/uncle-nephew/niece
 N1,N30,paternal grandparent-grandchild
 N1,N31,paternal grandparent-grandchild
 N1,N8,parent-child
-N12,N43,child-parent
+N12,N43,parent-child
 N23,N26,parent-child
 N23,N27,parent-child
 N23,N50,maternal grandparent-grandchild

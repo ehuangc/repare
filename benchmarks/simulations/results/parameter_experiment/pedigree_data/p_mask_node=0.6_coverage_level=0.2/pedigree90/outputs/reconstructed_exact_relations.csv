@@ -6,4 +6,4 @@ N10,N9,child-parent
 N17,N4,paternal grandchild-grandparent
 N17,N8,child-parent
 N4,N8,parent-child
-N6,N8,maternal aunt/uncle-nephew/niece
+N6,N8,maternal grandparent-grandchild

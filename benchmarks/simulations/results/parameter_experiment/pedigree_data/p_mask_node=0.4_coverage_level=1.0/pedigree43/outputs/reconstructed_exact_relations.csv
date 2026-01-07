@@ -2,8 +2,8 @@ node1,node2,relation
 N1,N18,maternal grandparent-grandchild
 N1,N19,maternal grandparent-grandchild
 N1,N20,maternal grandparent-grandchild
-N1,N22,maternal half-siblings
-N1,N23,maternal half-siblings
+N1,N22,maternal aunt/uncle-nephew/niece
+N1,N23,maternal aunt/uncle-nephew/niece
 N10,N3,paternal grandchild-grandparent
 N10,N4,paternal nephew/niece-aunt/uncle
 N10,N5,paternal nephew/niece-aunt/uncle

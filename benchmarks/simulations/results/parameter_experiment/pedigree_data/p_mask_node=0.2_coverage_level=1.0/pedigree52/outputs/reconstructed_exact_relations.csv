@@ -16,8 +16,8 @@ N10,N27,maternal grandparent-grandchild
 N10,N28,maternal grandparent-grandchild
 N11,N12,siblings
 N11,N13,siblings
-N11,N21,parent-child
-N11,N22,parent-child
+N11,N21,maternal aunt/uncle-nephew/niece
+N11,N22,maternal aunt/uncle-nephew/niece
 N11,N24,paternal aunt/uncle-nephew/niece
 N11,N25,paternal aunt/uncle-nephew/niece
 N11,N27,maternal aunt/uncle-nephew/niece

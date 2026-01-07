@@ -8,12 +8,8 @@ N10,N4,siblings
 N11,N12,parent-child
 N11,N13,parent-child
 N12,N13,siblings
-N12,N6,paternal grandchild-grandparent
-N12,N7,child-parent
-N12,N8,paternal nephew/niece-aunt/uncle
-N13,N6,paternal grandchild-grandparent
-N13,N7,child-parent
-N13,N8,paternal nephew/niece-aunt/uncle
+N12,N7,paternal grandchild-grandparent
+N13,N7,paternal grandchild-grandparent
 N14,N15,parent-child
 N14,N16,parent-child
 N14,N20,paternal grandparent-grandchild

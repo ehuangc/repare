@@ -14,7 +14,7 @@ N14,N26,maternal aunt/uncle-nephew/niece
 N16,N17,siblings
 N16,N29,parent-child
 N17,N29,paternal aunt/uncle-nephew/niece
-N20,N7,child-parent
+N20,N7,parent-child
 N26,N6,paternal half-siblings
-N26,N7,paternal nephew/niece-aunt/uncle
-N6,N7,paternal nephew/niece-aunt/uncle
+N26,N7,paternal half-siblings
+N6,N7,paternal half-siblings

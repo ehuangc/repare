@@ -1,19 +1,19 @@
 node1,node2,relation
-N0,N13,paternal grandchild-grandparent
+N0,N13,paternal grandparent-grandchild
 N0,N15,maternal grandparent-grandchild
 N0,N16,maternal grandparent-grandchild
 N0,N17,maternal grandparent-grandchild
-N0,N20,maternal grandchild-grandparent
+N0,N21,maternal grandchild-grandparent
 N0,N23,maternal grandparent-grandchild
 N0,N24,maternal grandparent-grandchild
 N0,N27,maternal grandparent-grandchild
 N0,N5,parent-child
 N11,N12,parent-child
-N12,N13,maternal half-siblings
+N12,N13,maternal grandchild-grandparent
 N12,N2,child-parent
-N13,N2,child-parent
-N13,N29,child-parent
-N13,N5,maternal grandparent-grandchild
+N13,N2,parent-child
+N13,N29,parent-child
+N13,N5,paternal grandchild-grandparent
 N15,N16,siblings
 N15,N17,siblings
 N15,N23,paternal aunt/uncle-nephew/niece
@@ -40,15 +40,19 @@ N18,N21,parent-child
 N18,N22,parent-child
 N18,N41,maternal grandparent-grandchild
 N18,N43,paternal grandparent-grandchild
+N2,N29,paternal half-siblings
 N20,N21,siblings
 N20,N22,siblings
 N20,N41,maternal aunt/uncle-nephew/niece
 N20,N43,paternal aunt/uncle-nephew/niece
+N20,N5,maternal half-siblings
 N21,N22,siblings
 N21,N41,maternal aunt/uncle-nephew/niece
 N21,N43,paternal aunt/uncle-nephew/niece
+N21,N5,maternal half-siblings
 N22,N41,maternal aunt/uncle-nephew/niece
 N22,N43,parent-child
+N22,N5,maternal half-siblings
 N23,N24,siblings
 N23,N27,maternal half-siblings
 N23,N5,paternal grandchild-grandparent

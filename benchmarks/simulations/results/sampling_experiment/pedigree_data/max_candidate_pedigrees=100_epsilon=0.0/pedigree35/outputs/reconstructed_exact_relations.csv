@@ -25,13 +25,13 @@ N12,N28,parent-child
 N12,N3,child-parent
 N12,N4,child-parent
 N12,N9,siblings
-N13,N15,child-parent
-N13,N31,paternal aunt/uncle-nephew/niece
-N13,N33,paternal aunt/uncle-nephew/niece
-N13,N34,paternal aunt/uncle-nephew/niece
-N15,N31,paternal grandparent-grandchild
-N15,N33,paternal grandparent-grandchild
-N15,N34,paternal grandparent-grandchild
+N13,N15,parent-child
+N13,N31,paternal grandparent-grandchild
+N13,N33,maternal grandparent-grandchild
+N13,N34,maternal grandparent-grandchild
+N15,N31,paternal aunt/uncle-nephew/niece
+N15,N33,maternal aunt/uncle-nephew/niece
+N15,N34,maternal aunt/uncle-nephew/niece
 N15,N5,paternal grandchild-grandparent
 N15,N7,paternal nephew/niece-aunt/uncle
 N17,N3,paternal grandparent-grandchild

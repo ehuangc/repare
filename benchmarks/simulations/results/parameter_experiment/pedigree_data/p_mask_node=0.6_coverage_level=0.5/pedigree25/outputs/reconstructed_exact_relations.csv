@@ -1,5 +1,5 @@
 node1,node2,relation
-N0,N13,paternal grandparent-grandchild
+N0,N13,paternal aunt/uncle-nephew/niece
 N0,N16,maternal grandparent-grandchild
 N0,N8,parent-child
 N16,N8,child-parent

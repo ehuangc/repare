@@ -1,8 +1,8 @@
 node1,node2,relation
-N1,N18,paternal grandparent-grandchild
-N1,N19,paternal grandparent-grandchild
-N1,N20,paternal grandparent-grandchild
-N1,N7,parent-child
+N1,N18,paternal half-siblings
+N1,N19,paternal half-siblings
+N1,N20,paternal half-siblings
+N1,N7,child-parent
 N11,N9,child-parent
 N14,N15,parent-child
 N14,N16,parent-child
