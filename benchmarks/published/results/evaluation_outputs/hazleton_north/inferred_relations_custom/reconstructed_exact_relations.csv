@@ -14,7 +14,7 @@ NC1m,SP3m,paternal grandparent-grandchild
 NC2f,NC4m,parent-child
 NC2f,SE1m,parent-child
 NC2f,SP2m,paternal grandparent-grandchild
-NC3f,NC6m,paternal nephew/niece-aunt/uncle
+NC3f,NC6m,maternal grandchild-grandparent
 NC3f,NC7f,paternal grandparent-grandchild
 NC3f,NC8m,paternal grandparent-grandchild
 NC3f,NE1m,parent-child

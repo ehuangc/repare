@@ -1,6 +1,6 @@
-site,relation_data,Pairwise Relation Accuracy,Relation Precision,Relation Recall,Relation F1,Pairwise Degree Accuracy,Degree Precision,Degree Recall,Degree F1,Connectivity R-squared,Published Pedigree Input Inconsistencies,Inferred Pedigree Input Inconsistencies
-hazleton_north,inferred_relations_coeffs.csv,0.984873949579832,0.8695652173913043,0.8695652173913043,0.8695652173913043,1.0,1.0,1.0,1.0,1.0,1,1
-hazleton_north,inferred_relations_custom.csv,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1,1
-nepluyevsky,inferred_relations_KIN.csv,0.989247311827957,0.9342105263157895,0.9342105263157895,0.9342105263157895,1.0,1.0,1.0,1.0,1.0,4,4
-nepluyevsky,inferred_relations_custom.csv,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,4,4
-gurgy,inferred_relations_READv2.csv,0.9846716998398536,0.7876106194690266,0.726530612244898,0.7558386411889597,0.9954243880118966,0.9911504424778761,0.9180327868852459,0.9531914893617022,0.9599589521172576,14,17
+site,relation_data,Pairwise Relation Accuracy,Relation Precision,Relation Recall,Relation F1,Pairwise Degree Accuracy,Degree Precision,Degree Recall,Degree F1,Connectivity R-squared,Published Pedigree Input Inconsistencies,Inferred Pedigree Input Inconsistencies,3rd-Degree Published Pedigree Input Inconsistencies,3rd-Degree Inferred Pedigree Input Inconsistencies
+hazleton_north,inferred_relations_coeffs.csv,0.973109243697479,0.7681159420289855,0.7681159420289855,0.7681159420289855,1.0,1.0,1.0,1.0,1.0,1,1,2,2
+hazleton_north,inferred_relations_custom.csv,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1,1,2,2
+nepluyevsky,inferred_relations_KIN.csv,0.989247311827957,0.9342105263157895,0.9342105263157895,0.9342105263157895,1.0,1.0,1.0,1.0,1.0,4,4,12,11
+nepluyevsky,inferred_relations_custom.csv,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,4,4,12,12
+gurgy,inferred_relations_READv2.csv,0.9910775566231984,0.8841201716738197,0.8408163265306122,0.8619246861924686,0.997254632807138,0.9914163090128756,0.9506172839506173,0.9705882352941176,0.9827095475051794,14,14,81,67

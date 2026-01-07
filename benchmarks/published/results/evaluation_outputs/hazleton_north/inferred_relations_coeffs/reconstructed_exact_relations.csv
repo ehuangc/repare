@@ -4,11 +4,11 @@ NC1m,NC7f,paternal grandparent-grandchild
 NC1m,NC8m,paternal grandparent-grandchild
 NC1m,NE2m,parent-child
 NC1m,SC2m,parent-child
-NC1m,SC3m,parent-child
+NC1m,SC3m,child-parent
 NC1m,SC5m,paternal grandparent-grandchild
 NC1m,SC6m,paternal grandparent-grandchild
 NC1m,SC7m,paternal grandparent-grandchild
-NC1m,SE2m,paternal grandparent-grandchild
+NC1m,SE2m,paternal half-siblings
 NC1m,SP1m,parent-child
 NC1m,SP3m,paternal grandparent-grandchild
 NC2f,NC4m,parent-child
@@ -23,7 +23,7 @@ NC3f,SC5m,paternal grandparent-grandchild
 NC3f,SP3m,paternal grandparent-grandchild
 NC4m,NE2m,paternal half-siblings
 NC4m,SC2m,paternal half-siblings
-NC4m,SC3m,paternal half-siblings
+NC4m,SC3m,paternal grandchild-grandparent
 NC4m,SE1m,maternal grandchild-grandparent
 NC4m,SP1m,paternal half-siblings
 NC7f,NC8m,siblings
@@ -35,11 +35,11 @@ NC8m,NC9m,maternal grandchild-grandparent
 NC8m,NE2m,child-parent
 NC8m,SC5m,paternal half-siblings
 NC8m,SP3m,siblings
-NC9m,SC2m,maternal grandchild-grandparent
+NC9m,SC2m,paternal grandchild-grandparent
 NC9m,SP3m,maternal grandparent-grandchild
 NE1m,NE2m,maternal grandparent-grandchild
 NE2m,SC2m,paternal half-siblings
-NE2m,SC3m,paternal half-siblings
+NE2m,SC3m,paternal grandchild-grandparent
 NE2m,SC5m,parent-child
 NE2m,SP1m,paternal half-siblings
 NE2m,SP3m,parent-child
@@ -47,18 +47,18 @@ SC1f,SC2m,parent-child
 SC1f,SC6m,paternal grandparent-grandchild
 SC1f,SC7m,paternal grandparent-grandchild
 SC1f,SP1m,parent-child
-SC2m,SC3m,paternal half-siblings
+SC2m,SC3m,paternal grandchild-grandparent
 SC2m,SC6m,paternal aunt/uncle-nephew/niece
 SC2m,SC7m,paternal aunt/uncle-nephew/niece
 SC2m,SP1m,siblings
 SC3m,SC8m,paternal grandparent-grandchild
 SC3m,SC9f,paternal grandparent-grandchild
 SC3m,SE2m,parent-child
-SC3m,SP1m,paternal half-siblings
+SC3m,SP1m,paternal grandparent-grandchild
 SC4f,SC8m,paternal grandparent-grandchild
 SC4f,SC9f,paternal grandparent-grandchild
 SC4f,SE2m,parent-child
-SC4f,SE3m,parent-child
+SC4f,SE3m,child-parent
 SC5m,SP3m,paternal half-siblings
 SC6m,SC7m,siblings
 SC6m,SP1m,paternal nephew/niece-aunt/uncle
@@ -67,4 +67,4 @@ SC8m,SC9f,siblings
 SC8m,SE2m,child-parent
 SC9f,SE2m,child-parent
 SE1m,SP2m,parent-child
-SE2m,SE3m,maternal half-siblings
+SE2m,SE3m,maternal grandchild-grandparent
