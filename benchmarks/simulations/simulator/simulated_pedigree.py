@@ -384,15 +384,22 @@ class SimulatedPedigree:
         # Remove unrelated entries
         relations_df = relations_df[relations_df["degree"] != "Unrelated"]
 
+        def has_first_or_second_degree_relation(df: pd.DataFrame) -> bool:
+            return df["degree"].isin(["1", "2"]).any()
+
         empty_iters = 0
-        # Ensure at least 2 nodes and 1 relation in input data
-        while len(nodes_df) < 2 or len(relations_df) < 1:
-            relations_df = self._ground_truth_relations_df.sample(n=1, axis=0, random_state=empty_iters)
-            relations_df = relations_df.apply(corrupt_relation, axis=1)
-            relations_df = relations_df[relations_df["degree"] != "Unrelated"]
+        # Ensure at least 1 1st/2nd-degree relation in input data
+        while not has_first_or_second_degree_relation(relations_df):
+            additional_relation_df = self._ground_truth_relations_df.sample(n=1, axis=0, random_state=empty_iters)
+            additional_relation_df = additional_relation_df.apply(corrupt_relation, axis=1)
+            if additional_relation_df["degree"].iloc[0] not in ["1", "2"]:
+                empty_iters += 1
+                continue
+
+            relations_df = pd.concat([relations_df, additional_relation_df], ignore_index=True)
             nodes = relations_df["id1"].tolist() + relations_df["id2"].tolist()
             nodes_df = self._ground_truth_nodes_df.loc[self._ground_truth_nodes_df["id"].isin(nodes)]
-            empty_iters += 1
+            assert has_first_or_second_degree_relation(relations_df)
 
         # Sort IDs lexicographically for consistency
         # All simulated constraints are symmetric so they don't need to flipped
