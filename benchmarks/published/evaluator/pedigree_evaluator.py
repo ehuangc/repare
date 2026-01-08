@@ -48,8 +48,6 @@ class PedigreeEvaluator:
         relation_counts: defaultdict[tuple[str, str], defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
         for id1, id2, degree, constraints, _ in published_relations_df.itertuples(index=False):
             if constraints:
-                # Ensure only one constraint (exact relation) per node pair
-                assert ";" not in constraints
                 id1, id2, relation = self._sort_relation(id1, id2, constraints)
                 relation_counts[(id1, id2)][relation] += 1
             else:
@@ -193,9 +191,12 @@ class PedigreeEvaluator:
             "2": "2",  # Symmetric
         }
         if id2 < id1:
-            return id2, id1, flipped_relations[relation]
+            relations = [r.strip() for r in relation.split(";")]
+            flipped = [flipped_relations[r] for r in relations]
+            return id2, id1, ";".join(flipped)
         else:
-            return id1, id2, relation
+            relations = [r.strip() for r in relation.split(";")]
+            return id1, id2, ";".join(relations)
 
     @staticmethod
     def _run_algorithm(nodes_path: str, relations_path: str, outputs_dir: Path | str) -> Pedigree:
@@ -215,7 +216,7 @@ class PedigreeEvaluator:
         return self._published_pedigree
 
     def _fill_uncertain_relations(self) -> None:
-        uncertain_to_exact_relations = {
+        degree_to_possible_relations = {
             "1": ["parent-child", "child-parent", "siblings"],
             "2": [
                 "maternal aunt/uncle-nephew/niece",
@@ -234,10 +235,14 @@ class PedigreeEvaluator:
 
         for (id1, id2), relation_counts_between_nodes in self._published_relation_counts.items():
             for uncertain_relation, count in list(relation_counts_between_nodes.items()):  # Cast to list to copy items
-                if uncertain_relation not in uncertain_to_exact_relations:
+                if ";" not in uncertain_relation and uncertain_relation not in degree_to_possible_relations:
                     continue
 
-                for exact_relation in uncertain_to_exact_relations[uncertain_relation]:
+                if ";" in uncertain_relation:
+                    possible_relations = [r.strip() for r in uncertain_relation.split(";")]
+                else:
+                    possible_relations = degree_to_possible_relations[uncertain_relation]
+                for exact_relation in possible_relations:
                     available_count = self._algorithm_relation_counts[(id1, id2)][exact_relation]
                     assign_count = min(count, available_count)
                     self._published_relation_counts[(id1, id2)][exact_relation] += assign_count

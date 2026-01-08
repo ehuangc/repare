@@ -36,6 +36,6 @@ GLN270B,GLN319,paternal grandparent-grandchild,None
 GLN270B,GLN322,paternal aunt/uncle-nephew/niece,paternal half-siblings
 GLN279,GLN282,paternal aunt/uncle-nephew/niece,None
 GLN288,GLN289B,parent-child,child-parent
-GLN288,GLN291,2,None
+GLN288,GLN291,maternal grandchild-grandparent;paternal grandchild-grandparent,None
 GLN301,GLN309,paternal aunt/uncle-nephew/niece,paternal grandparent-grandchild
 GLN306,GLN309,paternal aunt/uncle-nephew/niece,None

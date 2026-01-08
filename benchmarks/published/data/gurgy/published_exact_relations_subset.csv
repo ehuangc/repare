@@ -33,5 +33,5 @@ GLN291,GLN301,2,paternal aunt/uncle-nephew/niece,True
 GLN306,GLN301,1,siblings,True
 GLN306,GLN309,2,paternal aunt/uncle-nephew/niece,True
 GLN301,GLN309,2,paternal aunt/uncle-nephew/niece,True
-GLN291,GLN288,2,,
+GLN291,GLN288,2,maternal grandparent-grandchild;paternal grandparent-grandchild,True
 GLN288,GLN289B,1,parent-child,True

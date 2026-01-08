@@ -1,6 +1,6 @@
 # Published pedigree inconsistencies: 3, inferred pedigree inconsistencies: 1
 id1,id2,published_relation,inferred_relation
 GLN288,GLN289B,parent-child,child-parent
-GLN288,GLN291,2,None
+GLN288,GLN291,maternal grandchild-grandparent;paternal grandchild-grandparent,None
 GLN301,GLN309,paternal aunt/uncle-nephew/niece,paternal grandparent-grandchild
 GLN306,GLN309,paternal aunt/uncle-nephew/niece,None
