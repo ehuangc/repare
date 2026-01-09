@@ -1,4 +1,4 @@
-node1,node2,relation
+id1,id2,relation
 GLN201,GLN202,child-parent
 GLN201,GLN315,paternal grandchild-grandparent
 GLN201,GLN317,paternal grandchild-grandparent

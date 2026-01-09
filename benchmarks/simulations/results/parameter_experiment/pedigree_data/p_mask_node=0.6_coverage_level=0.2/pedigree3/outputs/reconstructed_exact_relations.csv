@@ -1,4 +1,4 @@
-node1,node2,relation
+id1,id2,relation
 N16,N17,siblings
 N16,N19,paternal half-siblings
 N16,N2,maternal grandparent-grandchild

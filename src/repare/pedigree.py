@@ -1472,7 +1472,7 @@ class Pedigree:
         """
         non_placeholder_nodes = sorted(self.get_non_placeholder_nodes())
         with open(path, "w") as file:
-            file.write("node1,node2,relation\n")
+            file.write("id1,id2,relation\n")
             for i in range(len(non_placeholder_nodes)):
                 for j in range(i + 1, len(non_placeholder_nodes)):
                     node1 = non_placeholder_nodes[i]

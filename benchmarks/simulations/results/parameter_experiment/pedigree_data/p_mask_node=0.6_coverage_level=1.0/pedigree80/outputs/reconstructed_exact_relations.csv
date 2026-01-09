@@ -1,4 +1,4 @@
-node1,node2,relation
+id1,id2,relation
 N12,N27,maternal grandparent-grandchild
 N12,N30,paternal nephew/niece-aunt/uncle
 N12,N32,paternal grandparent-grandchild

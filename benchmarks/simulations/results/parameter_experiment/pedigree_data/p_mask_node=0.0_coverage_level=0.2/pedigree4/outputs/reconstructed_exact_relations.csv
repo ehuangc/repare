@@ -1,4 +1,4 @@
-node1,node2,relation
+id1,id2,relation
 N0,N1,paternal half-siblings
 N0,N11,paternal grandparent-grandchild
 N0,N13,maternal grandparent-grandchild

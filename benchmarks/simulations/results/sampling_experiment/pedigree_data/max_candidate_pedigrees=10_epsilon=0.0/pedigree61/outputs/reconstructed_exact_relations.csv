@@ -1,4 +1,4 @@
-node1,node2,relation
+id1,id2,relation
 N1,N7,child-parent
 N10,N13,siblings
 N10,N14,maternal aunt/uncle-nephew/niece

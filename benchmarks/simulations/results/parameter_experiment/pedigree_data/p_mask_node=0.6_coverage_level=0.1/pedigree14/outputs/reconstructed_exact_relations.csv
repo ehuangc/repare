@@ -1,4 +1,4 @@
-node1,node2,relation
+id1,id2,relation
 N16,N17,maternal grandparent-grandchild
 N17,N4,maternal grandparent-grandchild
 N19,N21,parent-child

@@ -1,4 +1,4 @@
-node1,node2,relation
+id1,id2,relation
 N15,N16,parent-child
 N15,N22,paternal grandparent-grandchild
 N16,N22,paternal aunt/uncle-nephew/niece
