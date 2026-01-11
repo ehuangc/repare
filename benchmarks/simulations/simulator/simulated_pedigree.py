@@ -346,6 +346,14 @@ class SimulatedPedigree:
         # Remove unrelated entries
         self._ground_truth_relations_df = relations_df[relations_df["degree"] != "Unrelated"].copy()
 
+        swap_mask = self._ground_truth_relations_df["id1"] > self._ground_truth_relations_df["id2"]
+        self._ground_truth_relations_df.loc[swap_mask, ["id1", "id2"]] = self._ground_truth_relations_df.loc[
+            swap_mask, ["id2", "id1"]
+        ].values
+        self._ground_truth_relations_df = self._ground_truth_relations_df.sort_values(
+            by=["degree", "id1", "id2", "constraints"], kind="stable"
+        ).reset_index(drop=True)
+
         nodes_to_mask = [node for node in nodes_df["id"] if self._rng.random() < self._p_mask_node]
         nodes_df = nodes_df.loc[~nodes_df["id"].isin(nodes_to_mask)]
         relations_df = relations_df.loc[
@@ -355,7 +363,7 @@ class SimulatedPedigree:
         # Ensure only the first (closest) relation is kept for each pair of nodes to simulate e.g., READv2 outputs
         relations_df["pair"] = relations_df.apply(lambda row: tuple(sorted([row["id1"], row["id2"]])), axis=1)
         relations_df = (
-            relations_df.sort_values(by=["pair", "degree"])
+            relations_df.sort_values(by=["pair", "degree"], kind="stable")
             .drop_duplicates(subset="pair", keep="first")
             .drop(columns=["pair"])
         )
@@ -387,13 +395,12 @@ class SimulatedPedigree:
         def has_first_or_second_degree_relation(df: pd.DataFrame) -> bool:
             return df["degree"].isin(["1", "2"]).any()
 
-        empty_iters = 0
         # Ensure at least 1 1st/2nd-degree relation in input data
         while not has_first_or_second_degree_relation(relations_df):
-            additional_relation_df = self._ground_truth_relations_df.sample(n=1, axis=0, random_state=empty_iters)
+            sample_idx = self._rng.randrange(len(self._ground_truth_relations_df))
+            additional_relation_df = self._ground_truth_relations_df.iloc[[sample_idx]]
             additional_relation_df = additional_relation_df.apply(corrupt_relation, axis=1)
             if additional_relation_df["degree"].iloc[0] not in ["1", "2"]:
-                empty_iters += 1
                 continue
 
             relations_df = pd.concat([relations_df, additional_relation_df], ignore_index=True)
