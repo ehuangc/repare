@@ -346,6 +346,8 @@ class SimulatedPedigree:
         # Remove unrelated entries
         self._ground_truth_relations_df = relations_df[relations_df["degree"] != "Unrelated"].copy()
 
+        # Sort IDs lexicographically for consistency
+        # All ground truth constraints are symmetric so they don't need to be flipped
         swap_mask = self._ground_truth_relations_df["id1"] > self._ground_truth_relations_df["id2"]
         self._ground_truth_relations_df.loc[swap_mask, ["id1", "id2"]] = self._ground_truth_relations_df.loc[
             swap_mask, ["id2", "id1"]
