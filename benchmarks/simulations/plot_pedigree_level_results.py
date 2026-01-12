@@ -38,8 +38,8 @@ def plot_regressions(
     coverage_level: float,
 ) -> None:
     metric_columns: dict[str, str] = {
-        "Relation F1": "Relation F1",
-        "Degree F1": "Degree F1",
+        "Relation F1": "Relation F1 Score",
+        "Degree F1": "Degree F1 Score",
     }
     feature_columns: dict[str, str] = {
         "Total Node Count": "Pedigree Size (# of Individuals)",
