@@ -8,4 +8,4 @@ id1,id2,degree,constraints
 # Changed relations
 
 # Unchanged relations
-N1,N6,1,parent-child;child-parent
+N5,N6,1,parent-child;child-parent
