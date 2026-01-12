@@ -76,6 +76,9 @@ seaborn = ">=0.13.2,<0.14"
 pygraphviz = ">=1.14,<2"
 python = ">=3.10,<=3.13"
 
+[tool.pixi.feature.benchmark.dependencies]
+openpyxl = ">=3.1.5,<4"
+
 [tool.pytest.ini_options]
 pythonpath = [
     ".",
