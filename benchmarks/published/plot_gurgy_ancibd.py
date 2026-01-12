@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
@@ -69,32 +68,31 @@ def plot_pairs(ibd_df: pd.DataFrame, output_path: Path, title: str, *, categorie
         "3rd-degree+/unrelated": "lightgray",
     }
 
-    with mpl.rc_context({"figure.constrained_layout.h_pad": 0.15, "figure.constrained_layout.w_pad": 0.15}):
-        fig, ax = plt.subplots(figsize=(9, 7), constrained_layout=True)
-        sns.scatterplot(
-            data=plot_df,
-            x="sum_ibd_gt12",
-            y="n_ibd_gt12",
-            hue="category",
-            hue_order=categories,
-            palette=palette,
-            s=45,
-            alpha=0.8,
-            edgecolor="black",
-            linewidth=0.4,
-            ax=ax,
-        )
+    fig, ax = plt.subplots(figsize=(9, 7), constrained_layout=True)
+    sns.scatterplot(
+        data=plot_df,
+        x="sum_ibd_gt12",
+        y="n_ibd_gt12",
+        hue="category",
+        hue_order=categories,
+        palette=palette,
+        s=45,
+        alpha=0.8,
+        edgecolor="black",
+        linewidth=0.4,
+        ax=ax,
+    )
 
-        ax.set_xlabel("Total Length of IBD segments >12 cM (cM)", fontsize=16)
-        ax.set_ylabel("# of IBD Segments >12 cM", fontsize=16)
-        ax.set_title(title, fontsize=18)
-        ax.tick_params(axis="both", labelsize=14)
-        ax.grid(True, linewidth=0.8, alpha=0.4)
-        ax.legend(title="Relatedness", loc="lower right", title_fontsize=14, fontsize=12)
-        sns.despine(ax=ax)
+    ax.set_xlabel("Total Length of IBD segments >12 cM (cM)", fontsize=16)
+    ax.set_ylabel("# of IBD Segments >12 cM", fontsize=16)
+    ax.set_title(title, fontsize=18)
+    ax.tick_params(axis="both", labelsize=14)
+    ax.grid(True, linewidth=0.8, alpha=0.4)
+    ax.legend(title="Relatedness", loc="lower right", title_fontsize=14, fontsize=12)
+    sns.despine(ax=ax)
 
-        fig.savefig(output_path, dpi=600, bbox_inches="tight")
-        plt.close(fig)
+    fig.savefig(output_path, dpi=600, bbox_inches="tight")
+    plt.close(fig)
 
 
 def main() -> None:

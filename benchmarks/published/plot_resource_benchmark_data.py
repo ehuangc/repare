@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -42,72 +41,60 @@ def _aggregate_by_relations(results_df: pd.DataFrame) -> pd.DataFrame:
 
 def plot_relations_vs_runtime(results_df: pd.DataFrame, *, output_path: Path) -> None:
     grouped = _aggregate_by_relations(results_df)
-    with mpl.rc_context(
-        {
-            "figure.constrained_layout.h_pad": 0.1,
-            "figure.constrained_layout.w_pad": 0.15,
-        }
-    ):
-        fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
+    fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
 
-        for dataset, subset in grouped.groupby("dataset"):
-            ax.errorbar(
-                subset["num_first_and_second_degree_relations"],
-                subset["runtime_mean"] / 60.0,
-                yerr=subset["runtime_ci"] / 60.0,
-                fmt="-o",
-                label=dataset,
-                capsize=10,
-                markersize=10,
-                elinewidth=8,
-            )
+    for dataset, subset in grouped.groupby("dataset"):
+        ax.errorbar(
+            subset["num_first_and_second_degree_relations"],
+            subset["runtime_mean"] / 60.0,
+            yerr=subset["runtime_ci"] / 60.0,
+            fmt="-o",
+            label=dataset,
+            capsize=10,
+            markersize=10,
+            elinewidth=8,
+        )
 
-        ax.set_xlabel("# of 1st- and 2nd-Degree Relations", fontsize=16)
-        ax.set_ylabel("Runtime (minutes)", fontsize=16)
-        ax.set_title("Runtime vs. Relations", fontsize=18)
-        ax.tick_params(axis="both", labelsize=14)
-        ax.grid(True, linewidth=0.8, alpha=0.4)
-        ax.set_xlim(left=0)
-        ax.set_ylim(bottom=-2)
-        sns.despine(ax=ax)
+    ax.set_xlabel("# of 1st- and 2nd-Degree Relations", fontsize=16)
+    ax.set_ylabel("Runtime (minutes)", fontsize=16)
+    ax.set_title("Runtime vs. Relations", fontsize=18)
+    ax.tick_params(axis="both", labelsize=14)
+    ax.grid(True, linewidth=0.8, alpha=0.4)
+    ax.set_xlim(left=0)
+    ax.set_ylim(bottom=-2)
+    sns.despine(ax=ax)
 
-        fig.savefig(output_path, bbox_inches="tight")
-        plt.close(fig)
+    fig.savefig(output_path, bbox_inches="tight")
+    plt.close(fig)
 
 
 def plot_rss_vs_relations(results_df: pd.DataFrame, *, output_path: Path) -> None:
     grouped = _aggregate_by_relations(results_df)
-    with mpl.rc_context(
-        {
-            "figure.constrained_layout.h_pad": 0.1,
-            "figure.constrained_layout.w_pad": 0.15,
-        }
-    ):
-        fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
+    fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
 
-        for dataset, subset in grouped.groupby("dataset"):
-            ax.errorbar(
-                subset["num_first_and_second_degree_relations"],
-                subset["peak_mean"],
-                yerr=subset["peak_ci"],
-                fmt="-o",
-                label=dataset,
-                capsize=10,
-                markersize=10,
-                elinewidth=8,
-            )
+    for dataset, subset in grouped.groupby("dataset"):
+        ax.errorbar(
+            subset["num_first_and_second_degree_relations"],
+            subset["peak_mean"],
+            yerr=subset["peak_ci"],
+            fmt="-o",
+            label=dataset,
+            capsize=10,
+            markersize=10,
+            elinewidth=8,
+        )
 
-        ax.set_xlabel("# of 1st- and 2nd-Degree Relations", fontsize=16)
-        ax.set_ylabel("Peak RSS (MB)", fontsize=16)
-        ax.set_title("Peak Resident Set Size (RSS) vs. Relations", fontsize=18)
-        ax.tick_params(axis="both", labelsize=14)
-        ax.grid(True, linewidth=0.8, alpha=0.4)
-        ax.set_xlim(left=0)
-        ax.set_ylim(bottom=0)
-        sns.despine(ax=ax)
+    ax.set_xlabel("# of 1st- and 2nd-Degree Relations", fontsize=16)
+    ax.set_ylabel("Peak RSS (MB)", fontsize=16)
+    ax.set_title("Peak Resident Set Size (RSS) vs. Relations", fontsize=18)
+    ax.tick_params(axis="both", labelsize=14)
+    ax.grid(True, linewidth=0.8, alpha=0.4)
+    ax.set_xlim(left=0)
+    ax.set_ylim(bottom=0)
+    sns.despine(ax=ax)
 
-        fig.savefig(output_path, bbox_inches="tight")
-        plt.close(fig)
+    fig.savefig(output_path, bbox_inches="tight")
+    plt.close(fig)
 
 
 def plot_results(results_path: Path | str) -> None:
