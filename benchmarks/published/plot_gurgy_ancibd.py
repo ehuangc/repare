@@ -68,7 +68,7 @@ def plot_pairs(ibd_df: pd.DataFrame, output_path: Path, title: str, *, categorie
         "3rd-degree+/unrelated": "lightgray",
     }
 
-    fig, ax = plt.subplots(figsize=(9, 7), constrained_layout=True)
+    fig, ax = plt.subplots(figsize=(9, 6.5), constrained_layout=True)
     sns.scatterplot(
         data=plot_df,
         x="sum_ibd_gt12",
@@ -76,7 +76,7 @@ def plot_pairs(ibd_df: pd.DataFrame, output_path: Path, title: str, *, categorie
         hue="category",
         hue_order=categories,
         palette=palette,
-        s=45,
+        s=75,
         alpha=0.8,
         edgecolor="black",
         linewidth=0.4,
@@ -88,7 +88,7 @@ def plot_pairs(ibd_df: pd.DataFrame, output_path: Path, title: str, *, categorie
     ax.set_title(title, fontsize=18)
     ax.tick_params(axis="both", labelsize=14)
     ax.grid(True, linewidth=0.8, alpha=0.4)
-    ax.legend(title="Relatedness", loc="lower right", title_fontsize=14, fontsize=12)
+    ax.legend(title="Pedigree Relatedness", loc="lower right", title_fontsize=12, fontsize=12)
     sns.despine(ax=ax)
 
     fig.savefig(output_path, dpi=600, bbox_inches="tight")
