@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import seaborn as sns
 
@@ -25,17 +24,11 @@ def _aggregate_by_relations(results_df: pd.DataFrame) -> pd.DataFrame:
     grouped = results_df.groupby(["dataset", "num_first_and_second_degree_relations"], as_index=False).agg(
         runtime_mean=("runtime_seconds", "mean"),
         runtime_std=("runtime_seconds", "std"),
-        runtime_count=("runtime_seconds", "count"),
         peak_mean=("peak_memory_mb", "mean"),
         peak_std=("peak_memory_mb", "std"),
-        peak_count=("peak_memory_mb", "count"),
     )
     grouped["runtime_std"] = grouped["runtime_std"].fillna(0.0)
     grouped["peak_std"] = grouped["peak_std"].fillna(0.0)
-    grouped["runtime_count"] = grouped["runtime_count"].clip(lower=1)
-    grouped["peak_count"] = grouped["peak_count"].clip(lower=1)
-    grouped["runtime_ci"] = 1.96 * grouped["runtime_std"] / np.sqrt(grouped["runtime_count"])
-    grouped["peak_ci"] = 1.96 * grouped["peak_std"] / np.sqrt(grouped["peak_count"])
     return grouped.sort_values(["dataset", "num_first_and_second_degree_relations"])
 
 
@@ -47,7 +40,7 @@ def plot_relations_vs_runtime(results_df: pd.DataFrame, *, output_path: Path) ->
         ax.errorbar(
             subset["num_first_and_second_degree_relations"],
             subset["runtime_mean"] / 60.0,
-            yerr=subset["runtime_ci"] / 60.0,
+            yerr=subset["runtime_std"] / 60.0,
             fmt="-o",
             label=dataset,
             capsize=10,
@@ -76,7 +69,7 @@ def plot_rss_vs_relations(results_df: pd.DataFrame, *, output_path: Path) -> Non
         ax.errorbar(
             subset["num_first_and_second_degree_relations"],
             subset["peak_mean"],
-            yerr=subset["peak_ci"],
+            yerr=subset["peak_std"],
             fmt="-o",
             label=dataset,
             capsize=10,
