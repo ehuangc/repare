@@ -49,7 +49,7 @@ def plot_relations_vs_runtime(results_df: pd.DataFrame, *, output_path: Path) ->
         )
 
     ax.set_xlabel("# of 1st- and 2nd-Degree Relations", fontsize=16)
-    ax.set_ylabel("Runtime (minutes)", fontsize=16)
+    ax.set_ylabel("Mean Runtime (minutes)", fontsize=16)
     ax.set_title("Runtime vs. Relations", fontsize=18)
     ax.tick_params(axis="both", labelsize=14)
     ax.grid(True, linewidth=0.8, alpha=0.4)
@@ -78,7 +78,7 @@ def plot_rss_vs_relations(results_df: pd.DataFrame, *, output_path: Path) -> Non
         )
 
     ax.set_xlabel("# of 1st- and 2nd-Degree Relations", fontsize=16)
-    ax.set_ylabel("Peak RSS (MB)", fontsize=16)
+    ax.set_ylabel("Mean Peak RSS (MB)", fontsize=16)
     ax.set_title("Peak Resident Set Size (RSS) vs. Relations", fontsize=18)
     ax.tick_params(axis="both", labelsize=14)
     ax.grid(True, linewidth=0.8, alpha=0.4)
