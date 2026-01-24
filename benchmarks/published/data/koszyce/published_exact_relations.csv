@@ -1,0 +1,16 @@
+# Data from Lefeuvre et al. 2024 Fig. 7
+# Some 2nd-degree relations are uncertain because the 1st-degree relation between K14 and the mother of K10/11 is uncertain
+id1,id2,degree,constraints,force_constraints
+K1,K2,1,parent-child,True
+K2,K10,1,child-parent,True
+K5,K14,1,child-parent,True
+K5,K15,1,siblings,True
+K10,K11,1,siblings,True
+K14,K15,1,parent-child,True
+K2,K11,2,paternal nephew/niece-aunt/uncle,True
+K5,K10,2,paternal half-siblings,True
+K5,K11,2,paternal half-siblings,True
+K10,K14,2,maternal nephew/niece-aunt/uncle;maternal grandchild-grandparent;maternal half-siblings,True
+K10,K15,2,paternal half-siblings,True
+K11,K14,2,maternal nephew/niece-aunt/uncle;maternal grandchild-grandparent;maternal half-siblings,True
+K11,K15,2,paternal half-siblings,True

@@ -1,0 +1,14 @@
+id1,id2,relation
+K1,K2,parent-child
+K10,K11,siblings
+K10,K14,maternal grandchild-grandparent
+K10,K15,paternal half-siblings
+K10,K2,parent-child
+K10,K5,paternal half-siblings
+K11,K14,maternal grandchild-grandparent
+K11,K15,paternal half-siblings
+K11,K2,paternal aunt/uncle-nephew/niece
+K11,K5,paternal half-siblings
+K14,K15,parent-child
+K14,K5,parent-child
+K15,K5,siblings

@@ -17,6 +17,7 @@ def main():
             ("hazleton_north", "inferred_relations_custom.csv"),
             ("nepluyevsky", "inferred_relations_KIN.csv"),
             ("nepluyevsky", "inferred_relations_custom.csv"),
+            ("koszyce", "inferred_relations_custom.csv"),
             ("gurgy", "inferred_relations_READv2.csv"),
         ]
     ):
