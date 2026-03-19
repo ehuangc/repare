@@ -8,7 +8,7 @@ curl -O https://raw.githubusercontent.com/ehuangc/repare/main/repare-environment
 conda env create -f repare-environment.yml
 conda activate repare
 ```
-repare uses PyGraphviz to plot reconstructed pedigrees. Since PyGraphviz relies on Graphviz which cannot be installed using `pip`, we recommend installing repare and its dependencies in a fresh conda environment, as shown above. This conda-based installation method automatically installs Graphviz and ensures PyGraphviz is linked to it.
+repare uses PyGraphviz to plot reconstructed pedigrees. Since PyGraphviz relies on Graphviz which cannot be installed using pip, we recommend installing repare and its dependencies in a fresh conda environment, as shown above. This conda-based installation method automatically installs Graphviz and ensures PyGraphviz is linked to it.
 
 To install conda, see [this page](https://www.anaconda.com/docs/getting-started/miniconda/install).
 
@@ -90,19 +90,19 @@ repare -n NODES -r RELATIONS [-o OUTPUT] [-m MAX_CANDIDATE_PEDIGREES] [-e EPSILO
 </p>
 
 ## Reproducibility
-We recommend using [pixi](https://pixi.sh/) to reproduce the results in this repo.
+We recommend using [Pixi](https://pixi.sh/) to reproduce the results in this repo.
 ```
 git clone https://github.com/ehuangc/repare.git
 cd repare
 pixi shell
 ```
 
-Once in the pixi shell, you can run the script(s) corresponding to the results you'd like to reproduce. For example:
+Once in the Pixi shell, you can run the script(s) corresponding to the results you'd like to reproduce. For example:
 ```
 python benchmarks/published/run_parameter_experiment.py
 exit
 ```
-To install pixi, see [this page](https://pixi.sh/latest/installation/).
+To install Pixi, see [this page](https://pixi.sh/latest/installation/).
 
 ## Citation
 If you use repare in your work, please cite our preprint:
