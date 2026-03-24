@@ -87,7 +87,7 @@ def plot_regressions(
         fig.text(
             0.5,
             1.045,
-            f"p(Mask Node)={p_mask_node}, Simulated Sequence Coverage={coverage_level}x",
+            f"p(Mask Node)={p_mask_node}, Simulated Sequence Coverage={coverage_level}×",
             ha="center",
             va="top",
             fontsize=16,
@@ -117,7 +117,7 @@ def plot_histograms(results_df: pd.DataFrame, *, histogram_output_path: Path) ->
             0.5,
             1.07,
             f"p(Mask Node)={results_df['p(Mask Node)'].iloc[0]}, "
-            f"Simulated Sequence Coverage={results_df['Coverage Level'].iloc[0]}x",
+            f"Simulated Sequence Coverage={results_df['Coverage Level'].iloc[0]}×",
             ha="center",
             va="top",
             fontsize=16,

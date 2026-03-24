@@ -119,7 +119,7 @@ def plot_results(results_dir: Path | str) -> None:
         plt.ylabel("p(Mask Node)", fontsize=16, labelpad=10)
         ax.tick_params(axis="x", labelsize=14)
         ax.tick_params(axis="y", labelsize=14)
-        ax.set_xticklabels([f"{value}x" for value in heatmap_data.columns])
+        ax.set_xticklabels([f"{value}×" for value in heatmap_data.columns])
 
         plt.savefig(plots_dir / f"{metric.lower().replace(' ', '_')}_heatmap.pdf", bbox_inches="tight")
 
