@@ -150,7 +150,7 @@ def main() -> None:
     published_ibd = label_ibd_pairs(ibd_df, published_pairs, unknown_category=unknown_category)
     plot_pairs(
         published_ibd,
-        output_dir / "ancibd_published.pdf",
+        output_dir / "ancibd_published.svg",
         "Gurgy ancIBD Pairs (Published Pedigree)",
         categories=categories,
     )
@@ -164,7 +164,7 @@ def main() -> None:
     reconstructed_ibd = label_ibd_pairs(ibd_df, reconstructed_pairs, unknown_category=unknown_category)
     plot_pairs(
         reconstructed_ibd,
-        output_dir / "ancibd_repare.pdf",
+        output_dir / "ancibd_repare.svg",
         "Gurgy ancIBD Pairs (repare-Reconstructed Pedigree)",
         categories=categories,
     )
