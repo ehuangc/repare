@@ -52,7 +52,7 @@ def label_ibd_pairs(
 
 def plot_pairs(ibd_df: pd.DataFrame, output_path: Path, title: str, *, categories: list[str]) -> None:
     # Plot the 2nd-degree direct lineage last so those points sit on top
-    target_category = "2nd-degree related, direct lineage"
+    target_category = "2nd-degree, direct lineage"
     plot_df = (
         ibd_df.assign(_plot_priority=ibd_df["category"].eq(target_category))
         .sort_values("_plot_priority", kind="stable")
@@ -61,10 +61,10 @@ def plot_pairs(ibd_df: pd.DataFrame, output_path: Path, title: str, *, categorie
 
     base_palette = sns.color_palette(n_colors=10)
     palette = {
-        "1st-degree related, direct lineage": base_palette[0],
-        "1st-degree related": base_palette[2],
-        "2nd-degree related, direct lineage": base_palette[1],
-        "2nd-degree related": base_palette[4],
+        "1st-degree, direct lineage": base_palette[0],
+        "1st-degree": base_palette[2],
+        "2nd-degree, direct lineage": base_palette[1],
+        "2nd-degree": base_palette[4],
         "3rd-degree+/unrelated": "lightgray",
     }
 
@@ -112,32 +112,32 @@ def main() -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     ibd_df = load_ibd_table(ibd_path)
     categories = [
-        "1st-degree related, direct lineage",
-        "1st-degree related",
-        "2nd-degree related, direct lineage",
-        "2nd-degree related",
+        "1st-degree, direct lineage",
+        "1st-degree",
+        "2nd-degree, direct lineage",
+        "2nd-degree",
         "3rd-degree+/unrelated",
     ]
     relation_to_category: dict[str, str] = {
-        "child-parent": "1st-degree related, direct lineage",
-        "parent-child": "1st-degree related, direct lineage",
-        "parent-child;child-parent": "1st-degree related, direct lineage",
-        "child-parent;parent-child": "1st-degree related, direct lineage",
-        "siblings": "1st-degree related",
-        "1": "1st-degree related",
-        "paternal half-siblings": "2nd-degree related",
-        "maternal half-siblings": "2nd-degree related",
-        "paternal grandchild-grandparent": "2nd-degree related, direct lineage",
-        "paternal grandparent-grandchild": "2nd-degree related, direct lineage",
-        "maternal grandchild-grandparent": "2nd-degree related, direct lineage",
-        "maternal grandparent-grandchild": "2nd-degree related, direct lineage",
-        "maternal grandparent-grandchild;paternal grandparent-grandchild": "2nd-degree related, direct lineage",
-        "maternal grandchild-grandparent;paternal grandchild-grandparent": "2nd-degree related, direct lineage",
-        "paternal nephew/niece-aunt/uncle": "2nd-degree related",
-        "paternal aunt/uncle-nephew/niece": "2nd-degree related",
-        "maternal nephew/niece-aunt/uncle": "2nd-degree related",
-        "maternal aunt/uncle-nephew/niece": "2nd-degree related",
-        "2": "2nd-degree related",
+        "child-parent": "1st-degree, direct lineage",
+        "parent-child": "1st-degree, direct lineage",
+        "parent-child;child-parent": "1st-degree, direct lineage",
+        "child-parent;parent-child": "1st-degree, direct lineage",
+        "siblings": "1st-degree",
+        "1": "1st-degree",
+        "paternal half-siblings": "2nd-degree",
+        "maternal half-siblings": "2nd-degree",
+        "paternal grandchild-grandparent": "2nd-degree, direct lineage",
+        "paternal grandparent-grandchild": "2nd-degree, direct lineage",
+        "maternal grandchild-grandparent": "2nd-degree, direct lineage",
+        "maternal grandparent-grandchild": "2nd-degree, direct lineage",
+        "maternal grandparent-grandchild;paternal grandparent-grandchild": "2nd-degree, direct lineage",
+        "maternal grandchild-grandparent;paternal grandchild-grandparent": "2nd-degree, direct lineage",
+        "paternal nephew/niece-aunt/uncle": "2nd-degree",
+        "paternal aunt/uncle-nephew/niece": "2nd-degree",
+        "maternal nephew/niece-aunt/uncle": "2nd-degree",
+        "maternal aunt/uncle-nephew/niece": "2nd-degree",
+        "2": "2nd-degree",
     }
     unknown_category = categories[-1]
 
