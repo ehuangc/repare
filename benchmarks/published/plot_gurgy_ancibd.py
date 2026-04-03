@@ -68,7 +68,7 @@ def plot_pairs(ibd_df: pd.DataFrame, output_path: Path, title: str, *, categorie
         "3rd-degree+/unrelated": "lightgray",
     }
 
-    fig, ax = plt.subplots(figsize=(9, 6.5), constrained_layout=True)
+    fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
     sns.scatterplot(
         data=plot_df,
         x="sum_ibd_gt12",
