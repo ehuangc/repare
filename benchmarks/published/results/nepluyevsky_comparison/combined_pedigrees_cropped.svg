@@ -960,7 +960,7 @@
     </clipPath>
   </defs>
 </g>
-    <text x="5" y="20" font-size="20" font-family="sans-serif" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">A</text>
-    <text x="5" y="269.90363" font-size="20" font-family="sans-serif" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">B</text>
+    <text x="5" y="10" font-size="10" font-family="sans-serif" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">A</text>
+    <text x="5" y="259.90363" font-size="10" font-family="sans-serif" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">B</text>
   </g>
 </svg>

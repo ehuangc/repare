@@ -991,7 +991,7 @@
   </clipPath>
  </defs>
 </g>
-    <text x="5" y="20" font-size="20" font-family="sans-serif" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">A</text>
-    <text x="5" y="512.3995199999999" font-size="20" font-family="sans-serif" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">B</text>
+    <text x="5" y="22" font-size="22" font-family="sans-serif" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">A</text>
+    <text x="5" y="514.3995199999999" font-size="22" font-family="sans-serif" font-weight="bold" letter-spacing="0" text-anchor="start" fill="black">B</text>
   </g>
 </svg>

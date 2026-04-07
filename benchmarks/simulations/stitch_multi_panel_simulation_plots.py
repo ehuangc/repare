@@ -5,7 +5,7 @@ import svgutils.transform as st
 from lxml import etree
 
 
-def stitch_pair(top_path: Path, bottom_path: Path, output_path: Path) -> None:
+def stitch_pair(top_path: Path, bottom_path: Path, output_path: Path, label_size: int) -> None:
     top = sc.SVG(str(top_path))
     bottom = sc.SVG(str(bottom_path))
     # st.fromfile preserves original pt dimensions; sc.SVG inflates them to px
@@ -16,7 +16,6 @@ def stitch_pair(top_path: Path, bottom_path: Path, output_path: Path) -> None:
     bottom_w = float(bottom_fig.width.replace("pt", ""))
     bottom_h = float(bottom_fig.height.replace("pt", ""))
 
-    label_size = 20
     gap = 16
     bottom_y = top_h + gap
 
@@ -48,6 +47,7 @@ def main():
             plots_dir / "degree_f1_heatmap.svg",
             plots_dir / "relation_f1_heatmap.svg",
             plots_dir / output_name,
+            label_size=22,
         )
 
 
