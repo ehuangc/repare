@@ -52,7 +52,7 @@ def plot_results(results_dir: Path | str) -> None:
         # Max candidate pedigrees increases from left to right
         heatmap_data = heatmap_data.sort_index(axis=1, ascending=True)
 
-        plt.figure(figsize=(8, 6))
+        plt.figure(figsize=(8, 6.5), constrained_layout=True)
         # Set vmin and vmax so relation and degree F1 scores are on the same color scale
         ax = sns.heatmap(
             heatmap_data,
