@@ -75,6 +75,7 @@ scikit-learn = ">=1.7.2,<2"
 seaborn = ">=0.13.2,<0.14"
 pygraphviz = ">=1.14,<2"
 python = ">=3.10,<=3.13"
+svgutils = ">=0.3.4,<0.4"
 
 [tool.pixi.feature.benchmark.dependencies]
 openpyxl = ">=3.1.5,<4"
