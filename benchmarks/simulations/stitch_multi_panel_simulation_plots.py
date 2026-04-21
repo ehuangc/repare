@@ -44,8 +44,8 @@ def main():
     for experiment, output_name in pairs:
         plots_dir = results_dir / experiment / "plots"
         stitch_pair(
-            plots_dir / "degree_f1_heatmap.svg",
             plots_dir / "relation_f1_heatmap.svg",
+            plots_dir / "degree_f1_heatmap.svg",
             plots_dir / output_name,
             label_size=22,
         )
