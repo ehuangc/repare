@@ -13,6 +13,7 @@ def main():
     """
     Compare the Nepluyevsky inferred and published pedigrees by plotting and writing relation differences.
     """
+    print("Beginning pedigree comparison for Nepluyevsky...")
     script_dir = Path(__file__).resolve().parent
     data_dir = script_dir / "data" / "nepluyevsky"
     results_dir = script_dir / "results" / "nepluyevsky_comparison"
@@ -50,6 +51,7 @@ def main():
         evaluator=evaluator,
         path=results_dir / "relation_differences.csv",
     )
+    print(f"Finished pedigree comparison. Outputs written to {results_dir.resolve()}.")
 
 
 if __name__ == "__main__":

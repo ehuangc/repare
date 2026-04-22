@@ -134,7 +134,7 @@ def main():
             )
 
     pd.DataFrame(results).to_csv(results_path, index=False)
-    print(f"\nBenchmark complete. Results saved to {results_path}.")
+    print(f"Finished resource benchmark. Outputs written to {results_dir.resolve()}.")
 
 
 if __name__ == "__main__":

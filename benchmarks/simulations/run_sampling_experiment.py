@@ -101,6 +101,7 @@ def main():
                 epsilon=epsilon,
                 num_simulations=100,
             )
+    print(f"Finished sampling experiment. Outputs written to {results_dir.resolve()}.")
 
 
 if __name__ == "__main__":

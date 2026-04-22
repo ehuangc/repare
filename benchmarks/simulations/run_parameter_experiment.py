@@ -77,6 +77,7 @@ def main():
             run_experiment(
                 results_dir=results_dir, p_mask_node=p_mask_node, coverage_level=coverage_level, num_simulations=100
             )
+    print(f"Finished parameter experiment. Outputs written to {results_dir.resolve()}.")
 
 
 if __name__ == "__main__":

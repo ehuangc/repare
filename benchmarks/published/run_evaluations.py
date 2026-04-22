@@ -47,6 +47,8 @@ def main():
                     file.write(",".join(["site", "relation_data"] + list(metrics)) + "\n")
                 file.write(f"{site},{relations_file_name}," + ",".join([str(value) for value in values]) + "\n")
 
+    print(f"Finished evaluations. Outputs written to {evaluation_outputs_dir.resolve()}.")
+
 
 if __name__ == "__main__":
     main()
