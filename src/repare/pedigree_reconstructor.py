@@ -170,7 +170,7 @@ class PedigreeReconstructor:
         if not self._relation_data["degree"].isin(["1", "2", "3"]).all():
             raise ValueError("Degree must be 1, 2, or 3.")
         if not self._relation_data["force_constraints"].isin(["True", "False", ""]).all():
-            raise ValueError('can_have_children value must be "True", "False", or empty.')
+            raise ValueError('force_constraints value must be "True", "False", or empty.')
 
         self._relation_data["pair_degree"] = self._relation_data.apply(
             lambda row: tuple(sorted([row["id1"], row["id2"], row["degree"]])), axis=1
